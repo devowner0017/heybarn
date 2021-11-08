@@ -1,11 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames'
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { injectIntl, intlShape } from '../../util/reactIntl';
 import { isScrollingDisabled } from '../../ducks/UI.duck';
 import config from '../../config';
+import { getListingsById } from '../../ducks/marketplaceData.duck';
+
 import {
   Page,
   SectionHero,
@@ -16,6 +19,8 @@ import {
   LayoutWrapperMain,
   LayoutWrapperFooter,
   Footer,
+  SectionRecommendation,
+  NamedLink,
 } from '../../components';
 import { TopbarContainer } from '../../containers';
 
@@ -24,7 +29,7 @@ import twitterImage from '../../assets/saunatimeTwitter-600x314.jpg';
 import css from './LandingPage.module.css';
 
 export const LandingPageComponent = props => {
-  const { history, intl, location, scrollingDisabled } = props;
+  const { history, intl, location, scrollingDisabled, pageListings, pageAdverts } = props;
 
   // Schema for search engines (helps them to understand what this page is about)
   // http://schema.org
@@ -33,7 +38,6 @@ export const LandingPageComponent = props => {
   const schemaTitle = intl.formatMessage({ id: 'LandingPage.schemaTitle' }, { siteTitle });
   const schemaDescription = intl.formatMessage({ id: 'LandingPage.schemaDescription' });
   const schemaImage = `${config.canonicalRootURL}${facebookImage}`;
-
   return (
     <Page
       className={css.root}
@@ -62,11 +66,31 @@ export const LandingPageComponent = props => {
             <SectionHero className={css.hero} history={history} location={location} />
           </div>
           <ul className={css.sections}>
-            <li className={css.section}>
-              <div className={css.sectionContentFirstChild}>
-                <SectionLocations />
-              </div>
-            </li>
+            {!!pageListings?.length && (
+              <li className={css.section}>
+                <div className={css.sectionContent}>
+                  <SectionRecommendation
+                    listings={pageListings}
+                    heading={'Find unique spaces near you'}
+                    linkName={'NewListingPage'}
+                    linkText={'List your space'}
+                  />
+                </div>
+              </li>
+            )}
+            {!!pageAdverts?.length && (
+              <li className={css.section}>
+                <div className={classNames(css.sectionContent)}>
+                  <SectionRecommendation
+                    listings={pageAdverts}
+                    heading={'Find a new exciting idea for your property'}
+                    reversed
+                    linkName={'NewAdvertPage'}
+                    linkText={'Advertise your need'}
+                  />
+                </div>
+              </li>
+            )}
             <li className={css.section}>
               <div className={css.sectionContent}>
                 <SectionHowItWorks />
@@ -96,8 +120,16 @@ LandingPageComponent.propTypes = {
 };
 
 const mapStateToProps = state => {
+  const { currentPageListingsResultIds, currentPageAdvertsResultIds } = state.LandingPage;
+  const pageListings =
+    currentPageListingsResultIds && getListingsById(state, currentPageListingsResultIds);
+  const pageAdverts =
+    currentPageAdvertsResultIds && getListingsById(state, currentPageAdvertsResultIds);
+
   return {
     scrollingDisabled: isScrollingDisabled(state),
+    pageListings,
+    pageAdverts,
   };
 };
 
@@ -107,10 +139,9 @@ const mapStateToProps = state => {
 // lifecycle hook.
 //
 // See: https://github.com/ReactTraining/react-router/issues/4671
-const LandingPage = compose(
-  withRouter,
-  connect(mapStateToProps),
-  injectIntl
-)(LandingPageComponent);
+const LandingPage = compose(withRouter, connect(mapStateToProps), injectIntl)(LandingPageComponent);
+LandingPage.loadData = params => {
+  return loadData(params);
+};
 
 export default LandingPage;

@@ -17,7 +17,7 @@ const ContactDetailsPage = loadable(() => import(/* webpackChunkName: "ContactDe
 const EditListingPage = loadable(() => import(/* webpackChunkName: "EditListingPage" */ './containers/EditListingPage/EditListingPage'));
 const EmailVerificationPage = loadable(() => import(/* webpackChunkName: "EmailVerificationPage" */ './containers/EmailVerificationPage/EmailVerificationPage'));
 const InboxPage = loadable(() => import(/* webpackChunkName: "InboxPage" */ './containers/InboxPage/InboxPage'));
-const LandingPage = loadable(() => import(/* webpackChunkName: "LandingPage" */ './containers/LandingPage/LandingPage'));
+const LandingPage = loadable(() => import(/* webpackChunkName: "LandingPage" */ /* webpackPrefetch: true */  './containers/LandingPage/LandingPage'));
 const ListingPage = loadable(() => import(/* webpackChunkName: "ListingPage" */ /* webpackPrefetch: true */ './containers/ListingPage/ListingPage'));
 const ManageListingsPage = loadable(() => import(/* webpackChunkName: "ManageListingsPage" */ './containers/ManageListingsPage/ManageListingsPage'));
 const PasswordChangePage = loadable(() => import(/* webpackChunkName: "PasswordChangePage" */ './containers/PasswordChangePage/PasswordChangePage'));
@@ -62,6 +62,8 @@ const routeConfiguration = () => {
       path: '/',
       name: 'LandingPage',
       component: LandingPage,
+      loadData: pageDataLoadingAPI.LandingPage.loadData,
+
     },
     {
       path: '/about',
@@ -100,6 +102,42 @@ const routeConfiguration = () => {
       component: ListingPage,
       loadData: pageDataLoadingAPI.ListingPage.loadData,
     },
+
+    
+
+  {
+      path: '/a',
+      name: 'AdvertBasePage',
+      component: RedirectToLandingPage,
+    },
+    {
+      path: '/a/:slug/:id',
+      name: 'AdvertPage',
+      component: ListingPage,
+      loadData: pageDataLoadingAPI.ListingPage.loadData,
+    },
+    {
+      path: '/a/:slug/:id/checkout',
+      name: 'CheckoutPage',
+      auth: true,
+      component: CheckoutPage,
+      setInitialValues: pageDataLoadingAPI.CheckoutPage.setInitialValues,
+    },
+    {
+      path: '/a/:slug/:id/:variant',
+      name: 'AdvertPageVariant',
+      auth: true,
+      authPage: 'LoginPage',
+      component: ListingPage,
+      loadData: pageDataLoadingAPI.ListingPage.loadData,
+    },
+
+    
+
+
+
+
+
     {
       path: '/l/new',
       name: 'NewListingPage',
@@ -107,7 +145,18 @@ const routeConfiguration = () => {
       component: () => (
         <NamedRedirect
           name="EditListingPage"
-          params={{ slug: draftSlug, id: draftId, type: 'new', tab: 'description' }}
+          params={{ slug: draftSlug, id: draftId, type: 'new', tab: 'description', listingType: "listing" }}
+        />
+      ),
+    },
+     {
+      path: '/a/new',
+      name: 'NewAdvertPage',
+      auth: true,
+      component: () => (
+        <NamedRedirect
+          name="EditAdvertPage"
+          params={{ slug: draftSlug, id: draftId, type: 'new', tab: 'description' , listingType: "listing"}}
         />
       ),
     },
@@ -125,12 +174,34 @@ const routeConfiguration = () => {
       component: EditListingPage,
       loadData: pageDataLoadingAPI.EditListingPage.loadData,
     },
+  {
+      path: '/a/:slug/:id/:type/:tab',
+      name: 'EditAdvertPage',
+      auth: true,
+      component: EditListingPage,
+      loadData: pageDataLoadingAPI.EditListingPage.loadData,
+    },
+    {
+      path: '/a/:slug/:id/:type/:tab/:returnURLType',
+      name: 'EditAdvertStripeOnboardingPage',
+      auth: true,
+      component: EditListingPage,
+      loadData: pageDataLoadingAPI.EditListingPage.loadData,
+    },
 
     // Canonical path should be after the `/l/new` path since they
     // conflict and `new` is not a valid listing UUID.
     {
       path: '/l/:id',
       name: 'ListingPageCanonical',
+      component: ListingPage,
+      loadData: pageDataLoadingAPI.ListingPage.loadData,
+    },
+    // Canonical path should be after the `/l/new` path since they
+    // conflict and `new` is not a valid listing UUID.
+    {
+      path: '/a/:id',
+      name: 'AdvertPageCanonical',
       component: ListingPage,
       loadData: pageDataLoadingAPI.ListingPage.loadData,
     },
@@ -235,7 +306,15 @@ const routeConfiguration = () => {
       auth: true,
       authPage: 'LoginPage',
       component: ManageListingsPage,
-      loadData: pageDataLoadingAPI.ManageListingsPage.loadData,
+      loadData: pageDataLoadingAPI.ManageListingsPage.loadListingData,
+    },
+    {
+      path: '/adverts',
+      name: 'ManageAdvertsPage',
+      auth: true,
+      authPage: 'LoginPage',
+      component: ManageListingsPage,
+      loadData: pageDataLoadingAPI.ManageListingsPage.loadAdvertData,
     },
     {
       path: '/account',

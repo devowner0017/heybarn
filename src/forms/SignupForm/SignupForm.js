@@ -24,6 +24,8 @@ const SignupFormComponent = props => (
         invalid,
         intl,
         onOpenTermsOfService,
+        stage,
+        setSignupStage,
       } = fieldRenderProps;
 
       // email
@@ -107,6 +109,14 @@ const SignupFormComponent = props => (
       });
       const lastNameRequired = validators.required(lastNameRequiredMessage);
 
+      // bio
+      const bioLabel = intl.formatMessage({
+        id: 'SignupForm.bioLabel',
+      });
+      const bioPlaceholder = intl.formatMessage({
+        id: 'SignupForm.bioPlaceholder',
+      });
+
       const classes = classNames(rootClassName || css.root, className);
       const submitInProgress = inProgress;
       const submitDisabled = invalid || submitInProgress;
@@ -131,49 +141,69 @@ const SignupFormComponent = props => (
 
       return (
         <Form className={classes} onSubmit={handleSubmit}>
-          <div>
-            <FieldTextInput
-              type="email"
-              id={formId ? `${formId}.email` : 'email'}
-              name="email"
-              autoComplete="email"
-              label={emailLabel}
-              placeholder={emailPlaceholder}
-              validate={validators.composeValidators(emailRequired, emailValid)}
-            />
-            <div className={css.name}>
+          {stage === 1 && (
+            <div>
               <FieldTextInput
-                className={css.firstNameRoot}
-                type="text"
-                id={formId ? `${formId}.fname` : 'fname'}
-                name="fname"
-                autoComplete="given-name"
-                label={firstNameLabel}
-                placeholder={firstNamePlaceholder}
-                validate={firstNameRequired}
+                type="email"
+                id={formId ? `${formId}.email` : 'email'}
+                name="email"
+                autoComplete="email"
+                label={emailLabel}
+                placeholder={emailPlaceholder}
+                validate={validators.composeValidators(emailRequired, emailValid)}
               />
+              <div className={css.name}>
+                <FieldTextInput
+                  className={css.firstNameRoot}
+                  type="text"
+                  id={formId ? `${formId}.fname` : 'fname'}
+                  name="fname"
+                  autoComplete="given-name"
+                  label={firstNameLabel}
+                  placeholder={firstNamePlaceholder}
+                  validate={firstNameRequired}
+                />
+                <FieldTextInput
+                  className={css.lastNameRoot}
+                  type="text"
+                  id={formId ? `${formId}.lname` : 'lname'}
+                  name="lname"
+                  autoComplete="family-name"
+                  label={lastNameLabel}
+                  placeholder={lastNamePlaceholder}
+                  validate={lastNameRequired}
+                />
+              </div>
               <FieldTextInput
-                className={css.lastNameRoot}
-                type="text"
-                id={formId ? `${formId}.lname` : 'lname'}
-                name="lname"
-                autoComplete="family-name"
-                label={lastNameLabel}
-                placeholder={lastNamePlaceholder}
-                validate={lastNameRequired}
+                className={css.password}
+                type="password"
+                id={formId ? `${formId}.password` : 'password'}
+                name="password"
+                autoComplete="new-password"
+                label={passwordLabel}
+                placeholder={passwordPlaceholder}
+                validate={passwordValidators}
               />
             </div>
-            <FieldTextInput
-              className={css.password}
-              type="password"
-              id={formId ? `${formId}.password` : 'password'}
-              name="password"
-              autoComplete="new-password"
-              label={passwordLabel}
-              placeholder={passwordPlaceholder}
-              validate={passwordValidators}
-            />
-          </div>
+          )}
+          {stage === 2 && (
+            <div>
+              <FieldTextInput
+                className={css.bio}
+                type="textarea"
+                id={formId ? `${formId}.bio` : 'bio'}
+                name="bio"
+                label={bioLabel}
+                placeholder={bioPlaceholder}
+                labelClassName={css.secondLabel}
+              />
+              <p className={css.bioExplanationWrapper}>
+                <span className={css.termsText}>
+                  <FormattedMessage id="SignupForm.bioExplanation" />
+                </span>
+              </p>
+            </div>
+          )}
 
           <div className={css.bottomWrapper}>
             <p className={css.bottomWrapperText}>
@@ -184,9 +214,35 @@ const SignupFormComponent = props => (
                 />
               </span>
             </p>
-            <PrimaryButton type="submit" inProgress={submitInProgress} disabled={submitDisabled}>
-              <FormattedMessage id="SignupForm.signUp" />
-            </PrimaryButton>
+            {stage === 2 ? (
+              <>
+                <PrimaryButton
+                  type="submit"
+                  inProgress={submitInProgress}
+                  disabled={submitDisabled}
+                >
+                  <FormattedMessage id="SignupForm.signUp" />
+                </PrimaryButton>
+                <div
+                  className={css.backButton}
+                  onClick={e => {
+                    setSignupStage(1);
+                  }}
+                >
+                  Back to previous step
+                </div>
+              </>
+            ) : (
+              <PrimaryButton
+                disabled={submitDisabled}
+                onClick={e => {
+                  e.preventDefault();
+                  setSignupStage(2);
+                }}
+              >
+                <FormattedMessage id="SignupForm.next" />
+              </PrimaryButton>
+            )}
           </div>
         </Form>
       );

@@ -26,6 +26,7 @@ const i18n = {
 // search off by removing keyword filter config from filters array in marketplace-custom-config.js
 const sortSearchByDistance = false;
 
+const listingTypes={advert: ["advert", '"need'], listing: ["listing", "space"]}
 // API supports custom processes to be used in booking process.
 // We need to specify it when we are initiating a new order
 // (or fetching price information by calling 'initiateSpeculative' endpoint).
@@ -230,6 +231,9 @@ const config = {
   usingSSL,
   maps,
   custom,
+
+// NEW BELOW HERE
+  listingTypes,
 };
 
 export default config;

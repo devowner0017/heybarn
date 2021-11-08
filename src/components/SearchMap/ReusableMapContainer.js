@@ -26,10 +26,13 @@ class ReusableMapContainer extends React.Component {
       }
       // If no className is given, we use some defaults, which makes it easier to debug loading.
       const mapLayoutClassName = props.className || css.defaultMapLayout;
-
+      const initClass = props.mapClass;
       this.el = window.reusableSearchMapElement;
       this.el.id = 'search-map';
-      this.el.classList.add(mapLayoutClassName);
+      mapLayoutClassName.split(' ').map(cl => {
+        this.el.classList.add(cl);
+      });
+      this.el.classList.add(initClass);
     }
 
     this.mountNode = null;
@@ -40,8 +43,15 @@ class ReusableMapContainer extends React.Component {
     this.renderSearchMap();
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     this.renderSearchMap();
+    const { mapClass: prevClass } = prevProps;
+    const currClass = this.props.mapClass;
+    if (prevClass !== currClass) {
+      this.el.classList.remove(prevClass);
+      this.el.classList.add(currClass);
+      this.props.onReattach();
+    }
   }
 
   componentWillUnmount() {

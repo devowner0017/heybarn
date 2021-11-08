@@ -5,10 +5,13 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@babel/runtime": "^7.11.2",
+    "@emotion/react": "latest",
+    "@emotion/styled": "latest",
     "@formatjs/intl-relativetimeformat": "^4.2.1",
     "@loadable/component": "^5.14.1",
     "@loadable/server": "^5.14.2",
     "@mapbox/polyline": "^1.1.1",
+    "@mui/material": "latest",
     "@sentry/browser": "5.20.1",
     "@sentry/node": "5.20.1",
     "array-includes": "^3.1.3",

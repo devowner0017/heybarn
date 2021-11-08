@@ -57,7 +57,6 @@ const Footer = props => {
   const { rootClassName, className, intl } = props;
   const socialMediaLinks = renderSocialMediaLinks(intl);
   const classes = classNames(rootClassName || css.root, className);
-
   return (
     <div className={classes}>
       <div className={css.topBorderWrapper}>
@@ -82,11 +81,6 @@ const Footer = props => {
             <div className={css.infoLinks}>
               <ul className={css.list}>
                 <li className={css.listItem}>
-                  <NamedLink name="NewListingPage" className={css.link}>
-                    <FormattedMessage id="Footer.toNewListingPage" />
-                  </NamedLink>
-                </li>
-                <li className={css.listItem}>
                   <NamedLink name="AboutPage" className={css.link}>
                     <FormattedMessage id="Footer.toAboutPage" />
                   </NamedLink>
@@ -108,7 +102,7 @@ const Footer = props => {
                 </li>
               </ul>
             </div>
-            <div className={css.searches}>
+            {/* <div className={css.searches}>
               <ul className={css.list}>
                 <li className={css.listItem}>
                   <NamedLink
@@ -171,8 +165,8 @@ const Footer = props => {
                   </NamedLink>
                 </li>
               </ul>
-            </div>
-            <div className={css.searchesExtra}>
+            </div> */}
+            {/* <div className={css.searchesExtra}>
               <ul className={css.list}>
                 <li className={css.listItem}>
                   <NamedLink
@@ -235,7 +229,7 @@ const Footer = props => {
                   </NamedLink>
                 </li>
               </ul>
-            </div>
+            </div> */}
             <div className={css.extraLinks}>
               <div className={css.someLinks}>{socialMediaLinks}</div>
               <div className={css.legalMatters}>
@@ -256,7 +250,7 @@ const Footer = props => {
           </div>
           <div className={css.copyrightAndTermsMobile}>
             <NamedLink name="LandingPage" className={css.organizationCopyrightMobile}>
-              <FormattedMessage id="Footer.copyright" />
+              <FormattedMessage id="Footer.copyright" values={{ year: new Date().getFullYear() }} />
             </NamedLink>
             <div className={css.tosAndPrivacyMobile}>
               <NamedLink name="PrivacyPolicyPage" className={css.privacy}>

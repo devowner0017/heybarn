@@ -5,9 +5,12 @@ import { FormattedMessage } from '../../util/reactIntl';
 import { ensureOwnListing } from '../../util/data';
 import { findOptionsForSelectFilter } from '../../util/search';
 import { LISTING_STATE_DRAFT } from '../../util/types';
+import { getPropByName, capitalizeFirstLetter } from '../../util/userHelpers';
 import { ListingLink } from '../../components';
 import { EditListingDescriptionForm } from '../../forms';
+import { propTypes } from '../../util/types';
 import config from '../../config';
+import _ from 'lodash';
 
 import css from './EditListingDescriptionPanel.module.css';
 
@@ -15,7 +18,9 @@ const EditListingDescriptionPanel = props => {
   const {
     className,
     rootClassName,
+    currentUser,
     listing,
+    listingType,
     disabled,
     ready,
     onSubmit,
@@ -25,7 +30,6 @@ const EditListingDescriptionPanel = props => {
     updateInProgress,
     errors,
   } = props;
-
   const classes = classNames(rootClassName || css.root, className);
   const currentListing = ensureOwnListing(listing);
   const { description, title, publicData } = currentListing.attributes;
@@ -37,7 +41,12 @@ const EditListingDescriptionPanel = props => {
       values={{ listingTitle: <ListingLink listing={listing} /> }}
     />
   ) : (
-    <FormattedMessage id="EditListingDescriptionPanel.createListingTitle" />
+    <>
+      <FormattedMessage
+        id={`EditListingDescriptionPanel.create${listingType}Title`}
+        values={{ name: getPropByName(currentUser, 'firstName') }}
+      />
+    </>
   );
 
   const categoryOptions = findOptionsForSelectFilter('category', config.custom.filters);
@@ -53,7 +62,7 @@ const EditListingDescriptionPanel = props => {
           const updateValues = {
             title: title.trim(),
             description,
-            publicData: { category },
+            publicData: { listingType, category },
           };
 
           onSubmit(updateValues);
@@ -92,6 +101,9 @@ EditListingDescriptionPanel.propTypes = {
   panelUpdated: bool.isRequired,
   updateInProgress: bool.isRequired,
   errors: object.isRequired,
+
+  isAdvert: bool.isRequired,
+  currentUser: propTypes.currentUser.isRequired,
 };
 
 export default EditListingDescriptionPanel;

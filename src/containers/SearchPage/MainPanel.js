@@ -168,6 +168,8 @@ class MainPanel extends Component {
       showAsModalMaxWidth,
       filterConfig,
       sortConfig,
+      mapSwitch,
+      isMapOpen
     } = this.props;
 
     const primaryFilters = filterConfig.filter(f => f.group === 'primary');
@@ -198,7 +200,6 @@ class MainPanel extends Component {
     const hasPaginationInfo = !!pagination && pagination.totalItems != null;
     const totalItems = searchParamsAreInSync && hasPaginationInfo ? pagination.totalItems : 0;
     const listingsAreLoaded = !searchInProgress && searchParamsAreInSync && hasPaginationInfo;
-
     const sortBy = mode => {
       const conflictingFilterActive = isAnyFilterActive(
         sortConfig.conflictingFilters,
@@ -229,6 +230,7 @@ class MainPanel extends Component {
 
     return (
       <div className={classes}>
+        {mapSwitch}
         <SearchFiltersPrimary
           className={css.searchFiltersPrimary}
           sortByComponent={sortBy('desktop')}
@@ -326,6 +328,7 @@ class MainPanel extends Component {
               pagination={listingsAreLoaded ? pagination : null}
               search={searchParamsForPagination}
               setActiveListing={onActivateListing}
+              isMapOpen={isMapOpen}
             />
           </div>
         )}

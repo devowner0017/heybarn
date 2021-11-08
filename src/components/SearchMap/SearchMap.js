@@ -127,7 +127,10 @@ export class SearchMapComponent extends Component {
       mapsConfig,
       activeListingId,
       messages,
+      isMapOpen,
+      mapClass
     } = this.props;
+
     const classes = classNames(rootClassName || css.root, className);
 
     const listingsWithLocation = originalListings.filter(l => !!l.attributes.geolocation);
@@ -165,13 +168,14 @@ export class SearchMapComponent extends Component {
     //   reusableMapHiddenHandle={REUSABLE_MAP_HIDDEN_HANDLE}
     //   zoom={zoom}
     // />
-
     return isMapsLibLoaded() ? (
       <ReusableMapContainer
         className={reusableContainerClassName}
+        mapClass={mapClass}
         reusableMapHiddenHandle={REUSABLE_MAP_HIDDEN_HANDLE}
         onReattach={forceUpdateHandler}
         messages={messages}
+        isMapOpen={isMapOpen}
       >
         <SearchMapWithMapbox
           id={id}

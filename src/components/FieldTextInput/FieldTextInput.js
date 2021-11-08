@@ -23,6 +23,7 @@ class FieldTextInputComponent extends Component {
       onUnmount,
       isUncontrolled,
       inputRef,
+      labelClassName,
       ...rest
     } = this.props;
     /* eslint-enable no-unused-vars */
@@ -82,7 +83,11 @@ class FieldTextInputComponent extends Component {
     const classes = classNames(rootClassName || css.root, className);
     return (
       <div className={classes}>
-        {label ? <label htmlFor={id}>{label}</label> : null}
+        {label ? (
+          <label htmlFor={id} className={labelClassName}>
+            {label}
+          </label>
+        ) : null}
         {isTextarea ? <ExpandingTextarea {...inputProps} /> : <input {...inputProps} />}
         <ValidationError fieldMeta={fieldMeta} />
       </div>

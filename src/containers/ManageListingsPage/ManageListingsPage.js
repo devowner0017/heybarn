@@ -10,11 +10,12 @@ import {
   Page,
   PaginationLinks,
   UserNav,
-  LayoutSingleColumn,
   LayoutWrapperTopbar,
-  LayoutWrapperMain,
+  LayoutWrapperManageListingsSideNav,
+  LayoutSideNavigation,
   LayoutWrapperFooter,
   Footer,
+  LayoutWrapperMain,
 } from '../../components';
 import { TopbarContainer } from '../../containers';
 
@@ -49,13 +50,13 @@ export class ManageListingsPageComponent extends Component {
       scrollingDisabled,
       intl,
     } = this.props;
-
+    const listingType = location.pathname.startsWith('/adverts') ? 'advert' : 'listing';
     const hasPaginationInfo = !!pagination && pagination.totalItems != null;
     const listingsAreLoaded = !queryInProgress && hasPaginationInfo;
 
     const loadingResults = (
       <h2>
-        <FormattedMessage id="ManageListingsPage.loadingOwnListings" />
+        <FormattedMessage id={`ManageListingsPage.loadingOwn${listingType}s`} />
       </h2>
     );
 
@@ -68,7 +69,7 @@ export class ManageListingsPageComponent extends Component {
     const noResults =
       listingsAreLoaded && pagination.totalItems === 0 ? (
         <h1 className={css.title}>
-          <FormattedMessage id="ManageListingsPage.noResults" />
+          <FormattedMessage id={`ManageListingsPage.noResults${listingType}`} />
         </h1>
       ) : null;
 
@@ -76,7 +77,7 @@ export class ManageListingsPageComponent extends Component {
       listingsAreLoaded && pagination.totalItems > 0 ? (
         <h1 className={css.title}>
           <FormattedMessage
-            id="ManageListingsPage.youHaveListings"
+            id={`ManageListingsPage.youHave${listingType}`}
             values={{ count: pagination.totalItems }}
           />
         </h1>
@@ -99,7 +100,7 @@ export class ManageListingsPageComponent extends Component {
     const closingErrorListingId = !!closingListingError && closingListingError.listingId;
     const openingErrorListingId = !!openingListingError && openingListingError.listingId;
 
-    const title = intl.formatMessage({ id: 'ManageListingsPage.title' });
+    const title = intl.formatMessage({ id: `ManageListingsPage.title${listingType}` });
 
     const panelWidth = 62.5;
     // Render hints for responsive image
@@ -111,11 +112,12 @@ export class ManageListingsPageComponent extends Component {
 
     return (
       <Page title={title} scrollingDisabled={scrollingDisabled}>
-        <LayoutSingleColumn>
+        <LayoutSideNavigation>
           <LayoutWrapperTopbar>
-            <TopbarContainer currentPage="ManageListingsPage" />
-            <UserNav selectedPageName="ManageListingsPage" />
+            <TopbarContainer currentPage={`Manage${_.capitalize(listingType)}sPage`} />
+            <UserNav selectedPageName={`Manage${_.capitalize(listingType)}sPage`} />
           </LayoutWrapperTopbar>
+          <LayoutWrapperManageListingsSideNav currentTab={`${_.capitalize(listingType)}sTab`} />
           <LayoutWrapperMain>
             {queryInProgress ? loadingResults : null}
             {queryListingsError ? queryError : null}
@@ -144,7 +146,7 @@ export class ManageListingsPageComponent extends Component {
           <LayoutWrapperFooter>
             <Footer />
           </LayoutWrapperFooter>
-        </LayoutSingleColumn>
+        </LayoutSideNavigation>
       </Page>
     );
   }
@@ -221,10 +223,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const ManageListingsPage = compose(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
   injectIntl
 )(ManageListingsPageComponent);
 

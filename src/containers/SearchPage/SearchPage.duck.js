@@ -212,15 +212,16 @@ export const loadData = (params, search) => {
     latlng: ['origin'],
     latlngBounds: ['bounds'],
   });
-  const { page = 1, address, origin, ...rest } = queryParams;
+  const { page = 1, address, origin, pub_listingType = 'listing', ...rest } = queryParams;
   const originMaybe = config.sortSearchByDistance && origin ? { origin } : {};
   return searchListings({
     ...rest,
     ...originMaybe,
     page,
+    pub_listingType,
     perPage: RESULT_PAGE_SIZE,
     include: ['author', 'images'],
-    'fields.listing': ['title', 'geolocation', 'price'],
+    'fields.listing': ['title', 'geolocation', 'price', 'publicData'],
     'fields.user': ['profile.displayName', 'profile.abbreviatedName'],
     'fields.image': ['variants.landscape-crop', 'variants.landscape-crop2x'],
     'limit.images': 1,

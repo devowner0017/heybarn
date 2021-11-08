@@ -106,6 +106,7 @@ export const validURLParamsForExtendedData = (params, filters) => {
 // extract search parameters, including a custom URL params
 // which are validated by mapping the values to marketplace custom config.
 export const pickSearchParamsOnly = (params, filters, sortConfig) => {
+  params && delete params.pub_listingType;
   const { address, origin, bounds, ...rest } = params || {};
   const boundsMaybe = bounds ? { bounds } : {};
   const originMaybe = config.sortSearchByDistance && origin ? { origin } : {};

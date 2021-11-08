@@ -11,6 +11,7 @@
 .root {
   /* Positioning */
   composes: coverEverything;
+  z-index: 1;
 }
 
 .overlay {
@@ -18,13 +19,13 @@
   composes: coverEverything;
 
   /* Overlay background style */
-  background-color: var(--matterColorLight);
+  background-color: var(--matterColorAnti);
   opacity: 0.9;
 }
 
 .overlayContent {
   @apply --marketplaceH4FontStyles;
-  color: var(--matterColor);
+  color: var(--matterColorLight);
 
   /* Positioning */
   composes: coverEverything;

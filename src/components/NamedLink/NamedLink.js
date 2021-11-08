@@ -26,8 +26,7 @@ import { pathByRouteName, findRouteByRouteName } from '../../util/routes';
 
 export const NamedLinkComponent = props => {
   const { name, params, title } = props;
-  const routes = routeConfiguration();
-
+const routes = routeConfiguration();
   const onOver = () => {
     const { component: Page } = findRouteByRouteName(name, routes);
     // Loadable Component has a "preload" function.
@@ -38,6 +37,7 @@ export const NamedLinkComponent = props => {
 
   // Link props
   const { to, children } = props;
+
   const pathname = pathByRouteName(name, routes, params);
   const { match } = props;
   const active = match.url && match.url === pathname;
@@ -49,7 +49,6 @@ export const NamedLinkComponent = props => {
     style,
     title,
   };
-
   return (
     <Link onMouseOver={onOver} onTouchStart={onOver} to={{ pathname, ...to }} {...aElemProps}>
       {children}

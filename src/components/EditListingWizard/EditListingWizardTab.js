@@ -50,7 +50,7 @@ const pathParamsToNextTab = (params, tab, marketplaceTabs) => {
 };
 
 // When user has update draft listing, he should be redirected to next EditListingWizardTab
-const redirectAfterDraftUpdate = (listingId, params, tab, marketplaceTabs, history) => {
+const redirectAfterDraftUpdate = (listingId, params, tab, marketplaceTabs, history, isAdvert) => {
   const currentPathParams = {
     ...params,
     type: LISTING_PAGE_PARAM_TYPE_DRAFT,
@@ -61,13 +61,23 @@ const redirectAfterDraftUpdate = (listingId, params, tab, marketplaceTabs, histo
   // Replace current "new" path to "draft" path.
   // Browser's back button should lead to editing current draft instead of creating a new one.
   if (params.type === LISTING_PAGE_PARAM_TYPE_NEW) {
-    const draftURI = createResourceLocatorString('EditListingPage', routes, currentPathParams, {});
+    const draftURI = createResourceLocatorString(
+      isAdvert ? 'EditAdvertPage' : 'EditListingPage',
+      routes,
+      currentPathParams,
+      {}
+    );
     history.replace(draftURI);
   }
 
   // Redirect to next tab
   const nextPathParams = pathParamsToNextTab(currentPathParams, tab, marketplaceTabs);
-  const to = createResourceLocatorString('EditListingPage', routes, nextPathParams, {});
+  const to = createResourceLocatorString(
+    isAdvert ? 'EditAdvertPage' : 'EditListingPage',
+    routes,
+    nextPathParams,
+    {}
+  );
   history.push(to);
 };
 
@@ -94,8 +104,10 @@ const EditListingWizardTab = props => {
     updatedTab,
     updateInProgress,
     intl,
+    currentUser,
+    isAdvert,
+    listingType,
   } = props;
-
   const { type } = params;
   const isNewURI = type === LISTING_PAGE_PARAM_TYPE_NEW;
   const isDraftURI = type === LISTING_PAGE_PARAM_TYPE_DRAFT;
@@ -129,7 +141,14 @@ const EditListingWizardTab = props => {
             handleCreateFlowTabScrolling(false);
 
             // After successful saving of draft data, user should be redirected to next tab
-            redirectAfterDraftUpdate(r.data.data.id.uuid, params, tab, marketplaceTabs, history);
+            redirectAfterDraftUpdate(
+              r.data.data.id.uuid,
+              params,
+              tab,
+              marketplaceTabs,
+              history,
+              isAdvert
+            );
           } else {
             handlePublishListing(currentListing.id);
           }
@@ -153,6 +172,9 @@ const EditListingWizardTab = props => {
       // newListingPublished and fetchInProgress are flags for the last wizard tab
       ready: newListingPublished,
       disabled: fetchInProgress,
+      currentUser,
+      isAdvert,
+      listingType,
     };
   };
 

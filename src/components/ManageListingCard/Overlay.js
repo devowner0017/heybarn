@@ -6,7 +6,6 @@ import css from './Overlay.module.css';
 
 const Overlay = props => {
   const { className, rootClassName, message, errorMessage, children } = props;
-
   const classes = classNames(rootClassName || css.root, className);
 
   return (

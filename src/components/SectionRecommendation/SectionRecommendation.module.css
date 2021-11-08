@@ -1,0 +1,45 @@
+@import '../../styles/propertySets.css';
+
+:root {
+  --gutter: 20px;
+}
+.root {
+  display: flex;
+  flex-flow: column wrap;
+}
+
+.listingCards {
+  max-width: 100%;
+  @apply --marketplaceCardGridContainer;
+}
+
+.userCards {
+  max-width: 100%;
+  @apply --marketplaceCardUserGridContainer;
+}
+
+.listingCard {
+  @apply --marketplaceDefaultListingCard;
+}
+.title {
+  @apply --marketplaceH1FontStyles;
+  display: flex;
+  flex-direction: column;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.reversedTitle {
+  margin-left: auto;
+}
+.sliderWrapper {
+  max-height: 400px;
+  width: 100%;
+  min-width: 0;
+}
+.reversedListingCard {
+  align-items: flex-end;
+}
+.recommendationLink {
+  @apply --marketplaceH4FontStyles;
+}

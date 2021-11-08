@@ -38,6 +38,7 @@ import {
 import MenuIcon from './MenuIcon';
 import Overlay from './Overlay';
 import css from './ManageListingCard.module.css';
+import { getPropByName } from '../../util/userHelpers';
 
 // Menu content needs the same padding
 const MENU_CONTENT_OFFSET = -12;
@@ -125,7 +126,7 @@ export const ManageListingCardComponent = props => {
     renderSizes,
     availabilityEnabled,
   } = props;
-  const classes = classNames(rootClassName || css.root, className);
+
   const currentListing = ensureOwnListing(listing);
   const id = currentListing.id.uuid;
   const { title = '', price, state } = currentListing.attributes;
@@ -140,11 +141,14 @@ export const ManageListingCardComponent = props => {
     [css.menuItemDisabled]: !!actionsInProgressListingId,
   });
 
+  const listingType = getPropByName(currentListing, 'listingType');
   const { formattedPrice, priceTitle } = priceData(price, intl);
-
   const hasError = hasOpeningError || hasClosingError;
   const thisListingInProgress =
     actionsInProgressListingId && actionsInProgressListingId.uuid === id;
+
+  const hasOverlay = isDraft || isClosed || isPendingApproval || thisListingInProgress || hasError;
+  const classes = classNames(rootClassName || css.root, className, { [css.darkArrow]: hasOverlay });
 
   const onOverListingLink = () => {
     // Enforce preloading of ListingPage (loadable component)
@@ -167,8 +171,11 @@ export const ManageListingCardComponent = props => {
   const unitType = config.bookingUnitType;
   const isNightly = unitType === LINE_ITEM_NIGHT;
   const isDaily = unitType === LINE_ITEM_DAY;
+  const isWeekly = true;
 
-  const unitTranslationKey = isNightly
+  const unitTranslationKey = isWeekly
+    ? 'ManageListingCard.perWeek'
+    : isNightly
     ? 'ManageListingCard.perNight'
     : isDaily
     ? 'ManageListingCard.perDay'
@@ -176,6 +183,62 @@ export const ManageListingCardComponent = props => {
 
   return (
     <div className={classes}>
+      {isDraft ? (
+        <React.Fragment>
+          <div className={classNames({ [css.draftNoImage]: !firstImage })} />
+          <Overlay
+            message={intl.formatMessage(
+              { id: 'ManageListingCard.draftOverlayText' },
+              { listingTitle: title }
+            )}
+          >
+            <NamedLink
+              className={css.finishListingDraftLink}
+              name="EditListingPage"
+              params={{ id, slug, type: LISTING_PAGE_PARAM_TYPE_DRAFT, tab: 'photos' }}
+            >
+              <FormattedMessage id="ManageListingCard.finishListingDraft" />
+            </NamedLink>
+          </Overlay>
+        </React.Fragment>
+      ) : null}
+      {isClosed ? (
+        <Overlay
+          message={intl.formatMessage(
+            { id: `ManageListingCard.closed${listingType}` },
+            { listingTitle: title }
+          )}
+        >
+          <button
+            className={css.openListingButton}
+            disabled={!!actionsInProgressListingId}
+            onClick={event => {
+              event.preventDefault();
+              event.stopPropagation();
+              if (!actionsInProgressListingId) {
+                onOpenListing(currentListing.id);
+              }
+            }}
+          >
+            <FormattedMessage id={`ManageListingCard.open${listingType}`} />
+          </button>
+        </Overlay>
+      ) : null}
+      {isPendingApproval ? (
+        <Overlay
+          message={intl.formatMessage(
+            { id: 'ManageListingCard.pendingApproval' },
+            { listingTitle: title }
+          )}
+        />
+      ) : null}
+      {thisListingInProgress ? (
+        <Overlay>
+          <IconSpinner />
+        </Overlay>
+      ) : hasError ? (
+        <Overlay errorMessage={intl.formatMessage({ id: 'ManageListingCard.actionFailed' })} />
+      ) : null}
       <div
         className={css.threeToTwoWrapper}
         tabIndex={0}
@@ -205,7 +268,7 @@ export const ManageListingCardComponent = props => {
         <div className={classNames(css.menuOverlayWrapper, { [css.menuOverlayOpen]: isMenuOpen })}>
           <div className={classNames(css.menuOverlay)} />
           <div className={css.menuOverlayContent}>
-            <FormattedMessage id="ManageListingCard.viewListing" />
+            <FormattedMessage id={`ManageListingCard.view${listingType}`} />
           </div>
         </div>
         <div className={css.menubarWrapper}>
@@ -240,89 +303,16 @@ export const ManageListingCardComponent = props => {
                       }
                     }}
                   >
-                    <FormattedMessage id="ManageListingCard.closeListing" />
+                    <FormattedMessage id={`ManageListingCard.close${listingType}`} />
                   </InlineTextButton>
                 </MenuItem>
               </MenuContent>
             </Menu>
           </div>
         </div>
-        {isDraft ? (
-          <React.Fragment>
-            <div className={classNames({ [css.draftNoImage]: !firstImage })} />
-            <Overlay
-              message={intl.formatMessage(
-                { id: 'ManageListingCard.draftOverlayText' },
-                { listingTitle: title }
-              )}
-            >
-              <NamedLink
-                className={css.finishListingDraftLink}
-                name="EditListingPage"
-                params={{ id, slug, type: LISTING_PAGE_PARAM_TYPE_DRAFT, tab: 'photos' }}
-              >
-                <FormattedMessage id="ManageListingCard.finishListingDraft" />
-              </NamedLink>
-            </Overlay>
-          </React.Fragment>
-        ) : null}
-        {isClosed ? (
-          <Overlay
-            message={intl.formatMessage(
-              { id: 'ManageListingCard.closedListing' },
-              { listingTitle: title }
-            )}
-          >
-            <button
-              className={css.openListingButton}
-              disabled={!!actionsInProgressListingId}
-              onClick={event => {
-                event.preventDefault();
-                event.stopPropagation();
-                if (!actionsInProgressListingId) {
-                  onOpenListing(currentListing.id);
-                }
-              }}
-            >
-              <FormattedMessage id="ManageListingCard.openListing" />
-            </button>
-          </Overlay>
-        ) : null}
-        {isPendingApproval ? (
-          <Overlay
-            message={intl.formatMessage(
-              { id: 'ManageListingCard.pendingApproval' },
-              { listingTitle: title }
-            )}
-          />
-        ) : null}
-        {thisListingInProgress ? (
-          <Overlay>
-            <IconSpinner />
-          </Overlay>
-        ) : hasError ? (
-          <Overlay errorMessage={intl.formatMessage({ id: 'ManageListingCard.actionFailed' })} />
-        ) : null}
       </div>
 
       <div className={css.info}>
-        <div className={css.price}>
-          {formattedPrice ? (
-            <React.Fragment>
-              <div className={css.priceValue} title={priceTitle}>
-                {formattedPrice}
-              </div>
-              <div className={css.perUnit}>
-                <FormattedMessage id={unitTranslationKey} />
-              </div>
-            </React.Fragment>
-          ) : (
-            <div className={css.noPrice}>
-              <FormattedMessage id="ManageListingCard.priceNotSet" />
-            </div>
-          )}
-        </div>
-
         <div className={css.mainInfo}>
           <div className={css.titleWrapper}>
             <InlineTextButton
@@ -344,10 +334,27 @@ export const ManageListingCardComponent = props => {
             name="EditListingPage"
             params={{ id, slug, type: editListingLinkType, tab: 'description' }}
           >
-            <FormattedMessage id="ManageListingCard.editListing" />
+            <FormattedMessage id={`ManageListingCard.edit${listingType}`} />
           </NamedLink>
 
-          {availabilityEnabled ? (
+          <div className={css.price}>
+            {formattedPrice ? (
+              <React.Fragment>
+                <div className={css.priceValue} title={priceTitle}>
+                  {formattedPrice}
+                </div>
+                <div className={css.perUnit}>
+                  <FormattedMessage id={unitTranslationKey} />
+                </div>
+              </React.Fragment>
+            ) : (
+              <div className={css.noPrice}>
+                <FormattedMessage id="ManageListingCard.priceNotSet" />
+              </div>
+            )}
+          </div>
+
+          {/* {availabilityEnabled ? (
             <React.Fragment>
               <span className={css.manageLinksSeparator}>{' • '}</span>
 
@@ -359,7 +366,7 @@ export const ManageListingCardComponent = props => {
                 <FormattedMessage id="ManageListingCard.manageAvailability" />
               </NamedLink>
             </React.Fragment>
-          ) : null}
+          ) : null} */}
         </div>
       </div>
     </div>
@@ -395,11 +402,8 @@ ManageListingCardComponent.propTypes = {
 
   // from withRouter
   history: shape({
-    push: func.isRequired,
+    sh: func.isRequired,
   }).isRequired,
 };
 
-export default compose(
-  withRouter,
-  injectIntl
-)(ManageListingCardComponent);
+export default compose(withRouter, injectIntl)(ManageListingCardComponent);

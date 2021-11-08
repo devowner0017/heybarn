@@ -39,12 +39,12 @@
   margin: 24px auto 0 auto;
 
   @media (--viewportMedium) {
-    margin: 48px auto 0 auto;
+    margin: 30px auto 0 auto;
   }
 
   @media (--viewportLarge) {
-    margin: 80px auto 0 auto;
-    max-width: 62.5vw;
+    margin: 40px auto 0 auto;
+    max-width: 100%;
   }
 }
 
@@ -63,10 +63,15 @@
 .listingCards {
   padding: 0 24px 96px 24px;
 
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-gap: 1rem;
+  grid-auto-flow: dense;
+
   @media (--viewportMedium) {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    /* display: flex; */
+    /* flex-direction: row;
+    flex-wrap: wrap; */
   }
 
   @media (--viewportLarge) {
@@ -77,7 +82,7 @@
 .listingCard {
   margin-bottom: 36px;
   flex-basis: 100%;
-
+  width: 100%;
   @media (--viewportMedium) {
     /**
      * resultPanel: 62.5vw from 1024px = 640px
@@ -91,8 +96,8 @@
      *
      * flex-basis: calc((100%/columnCount) - (guttersBetweenColumns / columnCount))
      */
-    flex-basis: calc(50% - 12px);
-    margin-right: 24px;
+    /* flex-basis: calc(50% - 12px);
+    margin-right: 24px; */
   }
 
   @media (--viewportXLarge) {
@@ -110,8 +115,8 @@
      *
      * flex-basis: calc((100%/columnCount) - (guttersBetweenColumns / columnCount))
      */
-    flex-basis: calc(33.33% - 16px);
-    margin-right: 24px;
+    /* flex-basis: calc(33.33% - 16px);
+    margin-right: 24px; */
   }
 }
 

@@ -5,11 +5,15 @@
 
 .listingCards {
   padding: 0 24px 96px 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-gap: 1rem;
+  grid-auto-flow: dense;
 
   @media (--viewportMedium) {
-    display: flex;
+    /* display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap: wrap; */
   }
 
   @media (--viewportLarge) {
@@ -17,6 +21,9 @@
   }
 }
 
+.mapOpenListingCards{ 
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
 .listingCard {
   margin-bottom: 36px;
   flex-basis: 100%;
@@ -36,8 +43,8 @@
 
     * flex-basis: calc((100%/columnCount) - (guttersBetweenColumns / columnCount))
     */
-    flex-basis: calc(50% - 12px);
-    margin-right: 24px;
+    /* flex-basis: calc(50% - 12px);
+    margin-right: 24px; */
   }
 
   @media (--viewportXLarge) {
@@ -56,8 +63,8 @@
      * flex-basis: calc((100%/columnCount) - (guttersBetweenColumns / columnCount))
      */
 
-    flex-basis: calc(33.33% - 16px);
-    margin-right: 24px;
+    /* flex-basis: calc(33.33% - 16px);
+    margin-right: 24px; */
   }
 }
 

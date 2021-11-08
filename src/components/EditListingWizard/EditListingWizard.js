@@ -13,6 +13,7 @@ import {
   LISTING_PAGE_PARAM_TYPE_NEW,
   LISTING_PAGE_PARAM_TYPES,
 } from '../../util/urlHelpers';
+import { LISTING_STATE_DRAFT } from '../../util/types';
 import { ensureCurrentUser, ensureListing } from '../../util/data';
 
 import { Modal, NamedRedirect, Tabs, StripeConnectAccountStatusBox } from '../../components';
@@ -275,6 +276,7 @@ class EditListingWizard extends Component {
       stripeAccountError,
       stripeAccountLinkError,
       currentUser,
+      isAdvert,
       ...rest
     } = this.props;
 
@@ -285,6 +287,11 @@ class EditListingWizard extends Component {
     const rootClasses = rootClassName || css.root;
     const classes = classNames(rootClasses, className);
     const currentListing = ensureListing(listing);
+    const { publicData } = currentListing.attributes;
+
+    const isDraft = currentListing.id && currentListing.attributes.state === LISTING_STATE_DRAFT;
+
+    const listingType = isDraft ? publicData.listingType : isAdvert ? 'advert' : 'listing';
     const tabsStatus = tabsActive(isNewListingFlow, currentListing);
 
     // If selectedTab is not active, redirect to the beginning of wizard
@@ -294,7 +301,12 @@ class EditListingWizard extends Component {
         .reverse()
         .find(t => tabsStatus[t]);
 
-      return <NamedRedirect name="EditListingPage" params={{ ...params, tab: nearestActiveTab }} />;
+      return (
+        <NamedRedirect
+          name={isAdvert ? 'EditAdvertPage' : 'EditListingPage'}
+          params={{ ...params, tab: nearestActiveTab }}
+        />
+      );
     }
 
     const { width } = viewport;
@@ -314,7 +326,7 @@ class EditListingWizard extends Component {
     }
 
     const tabLink = tab => {
-      return { name: 'EditListingPage', params: { ...params, tab } };
+      return { name: isAdvert ? 'EditAdvertPage' : 'EditListingPage', params: { ...params, tab } };
     };
 
     const formDisabled = getAccountLinkInProgress;
@@ -363,7 +375,9 @@ class EditListingWizard extends Component {
 
     // Redirect from success URL to basic path for StripePayoutPage
     if (returnedNormallyFromStripe && stripeConnected && !requirementsMissing) {
-      return <NamedRedirect name="EditListingPage" params={pathParams} />;
+      return (
+        <NamedRedirect name={isAdvert ? 'EditAdvertPage' : 'EditListingPage'} params={pathParams} />
+      );
     }
 
     return (
@@ -392,6 +406,9 @@ class EditListingWizard extends Component {
                 handleCreateFlowTabScrolling={this.handleCreateFlowTabScrolling}
                 handlePublishListing={this.handlePublishListing}
                 fetchInProgress={fetchInProgress}
+                currentUser={ensuredCurrentUser}
+                isAdvert={isAdvert}
+                listingType={listingType}
               />
             );
           })}

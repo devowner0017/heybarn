@@ -189,7 +189,7 @@
 }
 
 .profileMenuContent {
-  min-width: 276px;
+  min-width: 360px !important;
   padding-top: 20px;
 }
 
@@ -321,4 +321,18 @@
       background-color: var(--matterColorDark);
     }
   }
+}
+.profileMenuWrapper {
+  display: flex;
+}
+.menuAvatar {
+  padding: 0 1rem 1rem 1rem;
+}
+.nameWrapper {
+}
+.emailWrapper {
+  @apply --marketplaceTinyFontStyles;
+}
+.profileLink {
+  text-decoration: underline;
 }

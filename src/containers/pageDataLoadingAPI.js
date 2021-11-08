@@ -2,12 +2,14 @@
  * Export loadData calls from ducks modules of different containers
  */
 import { setInitialValues as CheckoutPageInitialValues } from './CheckoutPage/CheckoutPage.duck';
+import { loadData as LandingPageLoader } from './LandingPage/LandingPage.duck';
 import { loadData as ContactDetailsPageLoader } from './ContactDetailsPage/ContactDetailsPage.duck';
 import { loadData as EditListingPageLoader } from './EditListingPage/EditListingPage.duck';
 import { loadData as EmailVerificationPageLoader } from './EmailVerificationPage/EmailVerificationPage.duck';
 import { loadData as InboxPageLoader } from './InboxPage/InboxPage.duck';
 import { loadData as ListingPageLoader } from './ListingPage/ListingPage.duck';
-import { loadData as ManageListingsPageLoader } from './ManageListingsPage/ManageListingsPage.duck';
+import { loadListingData as ManageListingsPageLoader } from './ManageListingsPage/ManageListingsPage.duck';
+import { loadAdvertData as ManageAdvertsPageLoader } from './ManageListingsPage/ManageListingsPage.duck';
 import { loadData as PaymentMethodsPageLoader } from './PaymentMethodsPage/PaymentMethodsPage.duck';
 import { loadData as ProfilePageLoader } from './ProfilePage/ProfilePage.duck';
 import { loadData as SearchPageLoader } from './SearchPage/SearchPage.duck';
@@ -19,6 +21,9 @@ import {
 
 const getPageDataLoadingAPI = () => {
   return {
+    LandingPage: {
+      loadData: LandingPageLoader,
+    },
     CheckoutPage: {
       setInitialValues: CheckoutPageInitialValues,
     },
@@ -38,7 +43,8 @@ const getPageDataLoadingAPI = () => {
       loadData: ListingPageLoader,
     },
     ManageListingsPage: {
-      loadData: ManageListingsPageLoader,
+      loadListingData: ManageListingsPageLoader,
+      loadAdvertData: ManageAdvertsPageLoader,
     },
     PaymentMethodsPage: {
       loadData: PaymentMethodsPageLoader,

@@ -56,7 +56,10 @@ export class AuthenticationPageComponent extends Component {
       authInfo: Cookies.get('st-authinfo')
         ? JSON.parse(Cookies.get('st-authinfo').replace('j:', ''))
         : null,
+      signupStage: 1,
     };
+    this.setSignupStage = this.setSignupStage.bind(this);
+
   }
 
   componentDidMount() {
@@ -64,7 +67,9 @@ export class AuthenticationPageComponent extends Component {
     // because we don't want to show the error message e.g. after page refresh
     Cookies.remove('st-autherror');
   }
-
+  setSignupStage(val) {
+    this.setState({ signupStage: val });
+  }
   render() {
     const {
       authInProgress,
@@ -315,6 +320,8 @@ export class AuthenticationPageComponent extends Component {
             onSubmit={handleSubmitSignup}
             inProgress={authInProgress}
             onOpenTermsOfService={() => this.setState({ tosModalOpen: true })}
+            stage={this.state.signupStage}
+            setSignupStage={this.setSignupStage}
           />
         )}
 
@@ -502,10 +509,7 @@ const mapDispatchToProps = dispatch => ({
 // See: https://github.com/ReactTraining/react-router/issues/4671
 const AuthenticationPage = compose(
   withRouter,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
   injectIntl
 )(AuthenticationPageComponent);
 

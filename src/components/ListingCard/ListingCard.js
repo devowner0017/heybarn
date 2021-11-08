@@ -12,6 +12,7 @@ import config from '../../config';
 import { NamedLink, ResponsiveImage } from '../../components';
 
 import css from './ListingCard.module.css';
+import { capitalize } from 'lodash';
 
 const MIN_LENGTH_FOR_LONG_WORDS = 10;
 
@@ -42,11 +43,12 @@ class ListingImage extends Component {
 const LazyImage = lazyLoadWithDimensions(ListingImage, { loadAfterInitialRendering: 3000 });
 
 export const ListingCardComponent = props => {
-  const { className, rootClassName, intl, listing, renderSizes, setActiveListing } = props;
+  const { className, rootClassName, intl, listing, renderSizes, setActiveListing , minInfo} = props;
   const classes = classNames(rootClassName || css.root, className);
   const currentListing = ensureListing(listing);
   const id = currentListing.id.uuid;
-  const { title = '', price } = currentListing.attributes;
+  const { title = '', price, publicData } = currentListing.attributes;
+  const { listingType } = publicData || {};
   const slug = createSlug(title);
   const author = ensureUser(listing.author);
   const authorName = author.attributes.profile.displayName;
@@ -58,19 +60,22 @@ export const ListingCardComponent = props => {
   const unitType = config.bookingUnitType;
   const isNightly = unitType === LINE_ITEM_NIGHT;
   const isDaily = unitType === LINE_ITEM_DAY;
-
-  const unitTranslationKey = isNightly
+  const isWeekly = true;
+  const unitTranslationKey = isWeekly
+    ? 'ListingCard.perWeek'
+    : isNightly
     ? 'ListingCard.perNight'
     : isDaily
     ? 'ListingCard.perDay'
     : 'ListingCard.perUnit';
 
   return (
-    <NamedLink className={classes} name="ListingPage" params={{ id, slug }}>
+    <NamedLink className={classes} name={`${capitalize(listingType)}Page`} params={{ id, slug }} >
       <div
         className={css.threeToTwoWrapper}
         onMouseEnter={() => setActiveListing(currentListing.id)}
         onMouseLeave={() => setActiveListing(null)}
+        id="listingCard"
       >
         <div className={css.aspectWrapper}>
           <LazyImage
@@ -82,27 +87,31 @@ export const ListingCardComponent = props => {
           />
         </div>
       </div>
-      <div className={css.info}>
-        <div className={css.price}>
-          <div className={css.priceValue} title={priceTitle}>
-            {formattedPrice}
+      {minInfo ? (
+        'TEST'
+      ) : (
+        <div className={css.info}>
+          <div className={css.price}>
+            <div className={css.priceValue} title={priceTitle}>
+              {formattedPrice}
+            </div>
+            <div className={css.perUnit}>
+              <FormattedMessage id={unitTranslationKey} />
+            </div>
           </div>
-          <div className={css.perUnit}>
-            <FormattedMessage id={unitTranslationKey} />
+          <div className={css.mainInfo}>
+            <div className={css.title}>
+              {richText(title, {
+                longWordMinLength: MIN_LENGTH_FOR_LONG_WORDS,
+                longWordClass: css.longWord,
+              })}
+            </div>
+            <div className={css.authorInfo}>
+              <FormattedMessage id="ListingCard.hostedBy" values={{ authorName }} />
+            </div>
           </div>
         </div>
-        <div className={css.mainInfo}>
-          <div className={css.title}>
-            {richText(title, {
-              longWordMinLength: MIN_LENGTH_FOR_LONG_WORDS,
-              longWordClass: css.longWord,
-            })}
-          </div>
-          <div className={css.authorInfo}>
-            <FormattedMessage id="ListingCard.hostedBy" values={{ authorName }} />
-          </div>
-        </div>
-      </div>
+      )}
     </NamedLink>
   );
 };

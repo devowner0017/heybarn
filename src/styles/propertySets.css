@@ -89,15 +89,15 @@
 
   --marketplaceHeroTitleFontStyles: {
     font-weight: var(--fontWeightBold);
-    font-size: 36px;
-    line-height: 36px;
+    font-size: 30px;
+    line-height: 30px;
     letter-spacing: -0.7px;
     /* margin-top + n * line-height + margin-bottom => x * 6px */
     margin-top: 25px;
     margin-bottom: 14px;
 
     @media (--viewportMedium) {
-      font-size: 64px;
+      font-size: 54px;
       line-height: 64px;
       letter-spacing: -1.5px;
       /* margin-top + n * line-height + margin-bottom => x * 8px */
@@ -804,6 +804,74 @@
 
     @media (--viewportMedium) {
       margin-top: 32px;
+    }
+  }
+
+  --marketplaceCardGridContainer {
+    /* margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: space-between; */
+    box-sizing: border-box;
+    max-width: 100%;
+    width: 100%;
+    display: grid;
+    grid-auto-rows: 1fr;
+
+    grid-template-columns: repeat(1, 1fr);
+    grid-gap: 0.3rem;
+
+    @media (min-width: 500px) {
+      grid-template-columns: repeat(2, 1fr);
+      /* grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr)); */
+      grid-gap: 0.3rem;
+    }
+    @media (min-width: 600px) {
+      grid-template-columns: repeat(3, 1fr);
+      grid-gap: 0.3rem;
+    }
+
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 0.5rem;
+    }
+    /* @media (min-width: 850px) {
+      grid-template-columns: repeat(6, 1fr);
+      grid-gap: 0.5rem;
+    } */
+    @media (--viewportLarge) {
+      grid-template-columns: repeat(4, 1fr);
+      /* grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr)); */
+      grid-gap: 1rem;
+    }
+
+    &::before {
+      content: '';
+      width: 0;
+      padding-bottom: 100%;
+      grid-row: 1 / 1;
+      grid-column: 1 / 1;
+    }
+
+    & > *:first-child {
+      grid-row: 1 / 1;
+      grid-column: 1 / 1;
+    }
+  }
+
+  --marketplaceDefaultListingCard {
+    max-width: 100%;
+    &:nth-of-type(2n) {
+      @media screen and (min-width: 1024px) and (max-width: 1920px) {
+        margin-right: 0;
+      }
+    }
+
+    &:nth-of-type(3n) {
+      @media (--viewportXLarge) {
+        margin-right: 0;
+      }
     }
   }
 }

@@ -52,6 +52,8 @@ import SectionHostMaybe from './SectionHostMaybe';
 import SectionRulesMaybe from './SectionRulesMaybe';
 import SectionMapMaybe from './SectionMapMaybe';
 import css from './ListingPage.module.css';
+import { capitalizeFirstLetter } from '../../util/userHelpers';
+import { capitalize } from 'lodash';
 
 const MIN_LENGTH_FOR_LONG_WORDS_IN_TITLE = 16;
 
@@ -241,7 +243,7 @@ export class ListingPageComponent extends Component {
       title = '',
       publicData,
     } = currentListing.attributes;
-
+    const typeOfLIsting = publicData.listingType;
     const richTitle = (
       <span>
         {richText(title, {
@@ -331,7 +333,6 @@ export class ListingPageComponent extends Component {
     const authorDisplayName = userDisplayNameAsString(ensuredAuthor, '');
 
     const { formattedPrice, priceTitle } = priceData(price, intl);
-
     const handleBookingSubmit = values => {
       const isCurrentlyClosed = currentListing.attributes.state === LISTING_STATE_CLOSED;
       if (isOwnListing || isCurrentlyClosed) {
@@ -368,7 +369,7 @@ export class ListingPageComponent extends Component {
     const hostLink = (
       <NamedLink
         className={css.authorNameLink}
-        name="ListingPage"
+        name={`${capitalize(typeOfLIsting)}Page`}
         params={params}
         to={{ hash: '#host' }}
       >

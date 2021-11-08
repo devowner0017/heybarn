@@ -8,7 +8,7 @@ import { compose } from 'redux';
 
 import { FormattedMessage } from '../../util/reactIntl';
 import { withViewport } from '../../util/contextHelpers';
-import { LayoutWrapperSideNav } from '../../components';
+import { LayoutWrapperSideNav } from '..';
 
 import { createGlobalState } from './hookGlobalState';
 
@@ -55,7 +55,7 @@ const scrollToTab = (currentTab, scrollLeft, setScrollLeft) => {
   }
 };
 
-const LayoutWrapperAccountSettingsSideNavComponent = props => {
+const LayoutWrapperManageListingsSideNavComponent = props => {
   const [scrollLeft, setScrollLeft] = useGlobalState('scrollLeft');
   useEffect(() => {
     const { currentTab, viewport } = props;
@@ -82,35 +82,27 @@ const LayoutWrapperAccountSettingsSideNavComponent = props => {
 
   const tabs = [
     {
-      text: <FormattedMessage id="LayoutWrapperAccountSettingsSideNav.contactDetailsTabTitle" />,
-      selected: currentTab === 'ContactDetailsPage',
-      id: 'ContactDetailsPageTab',
+      text: <FormattedMessage id="LayoutWrapperManageListingsSideNav.managelistingTab" />,
+      selected: currentTab === 'ListingsTab',
+      id: 'ManageListingsPage',
       linkProps: {
-        name: 'ContactDetailsPage',
+        name: 'ManageListingsPage',
       },
     },
     {
-      text: <FormattedMessage id="LayoutWrapperAccountSettingsSideNav.passwordTabTitle" />,
-      selected: currentTab === 'PasswordChangePage',
-      id: 'PasswordChangePageTab',
+      text: <FormattedMessage id="LayoutWrapperManageListingsSideNav.manageadvertTab" />,
+      selected: currentTab === 'AdvertsTab',
+      id: 'AdvertsTab',
       linkProps: {
-        name: 'PasswordChangePage',
+        name: 'ManageAdvertsPage',
       },
     },
     {
-      text: <FormattedMessage id="LayoutWrapperAccountSettingsSideNav.paymentMethodsTabTitle" />,
-      selected: currentTab === 'PaymentMethodsPage',
-      id: 'PaymentMethodsPageTab',
+      text: <FormattedMessage id="LayoutWrapperManageListingsSideNav.inboxTab" />,
+      selected: currentTab === 'InboxTab',
+      id: 'InboxTab',
       linkProps: {
-        name: 'PaymentMethodsPage',
-      },
-    },
-    {
-      text: <FormattedMessage id="LayoutWrapperAccountSettingsSideNav.paymentsTabTitle" />,
-      selected: currentTab === 'StripePayoutPage',
-      id: 'StripePayoutPageTab',
-      linkProps: {
-        name: 'StripePayoutPage',
+        name: 'InboxBasePage',
       },
     },
   ];
@@ -118,14 +110,14 @@ const LayoutWrapperAccountSettingsSideNavComponent = props => {
   return <LayoutWrapperSideNav tabs={tabs} />;
 };
 
-LayoutWrapperAccountSettingsSideNavComponent.defaultProps = {
+LayoutWrapperManageListingsSideNavComponent.defaultProps = {
   className: null,
   rootClassName: null,
   children: null,
   currentTab: null,
 };
 
-LayoutWrapperAccountSettingsSideNavComponent.propTypes = {
+LayoutWrapperManageListingsSideNavComponent.propTypes = {
   children: node,
   className: string,
   rootClassName: string,
@@ -138,8 +130,8 @@ LayoutWrapperAccountSettingsSideNavComponent.propTypes = {
   }).isRequired,
 };
 
-const LayoutWrapperAccountSettingsSideNav = compose(withViewport)(
-  LayoutWrapperAccountSettingsSideNavComponent
+const LayoutWrapperManageListingsSideNav = compose(withViewport)(
+  LayoutWrapperManageListingsSideNavComponent
 );
 
-export default LayoutWrapperAccountSettingsSideNav;
+export default LayoutWrapperManageListingsSideNav;

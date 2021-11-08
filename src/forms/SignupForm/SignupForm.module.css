@@ -52,3 +52,13 @@
     cursor: pointer;
   }
 }
+
+.backButton {
+  @apply --marketplaceModalHelperText;
+  text-decoration: underline;
+  margin-top: 1rem;
+}
+.secondLabel {
+  margin-top: 0.5rem;
+  margin-bottom: 2rem;
+}

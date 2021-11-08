@@ -11,7 +11,6 @@ const Tab = props => {
     [css.selectedLink]: selected,
     [css.disabled]: disabled,
   });
-
   return (
     <div id={id} className={className}>
       <NamedLink className={linkClasses} {...linkProps}>

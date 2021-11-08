@@ -22,7 +22,11 @@
 }
 
 .sectionImages {
+      margin: 0 auto;
+    max-width: 1600px;
 }
+
+
 
 .threeToTwoWrapper {
   /* Layout */
@@ -256,13 +260,14 @@
 
   /* Rendering context to the same lavel as listing image */
   position: relative;
-
   /* Flex would give too much width by default. */
   width: 60px;
 
   @media (--viewportMedium) {
     position: absolute;
+    padding-left: 20px;
     top: -49px;
+    left: clamp(-75px, calc((1128px - 100vw) / 2), 16px);
     margin-left: 0;
     margin-top: 0;
   }

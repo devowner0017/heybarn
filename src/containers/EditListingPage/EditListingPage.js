@@ -85,7 +85,7 @@ export const EditListingPageComponent = props => {
     stripeAccount,
     updateStripeAccountError,
   } = props;
-
+  const isAdvert = props.location?.pathname?.startsWith('/a/');
   const { id, type, returnURLType } = params;
   const isNewURI = type === LISTING_PAGE_PARAM_TYPE_NEW;
   const isDraftURI = type === LISTING_PAGE_PARAM_TYPE_DRAFT;
@@ -180,6 +180,7 @@ export const EditListingPageComponent = props => {
           id="EditListingWizard"
           className={css.wizard}
           params={params}
+          isAdvert={isAdvert}
           disabled={disableForm}
           errors={errors}
           fetchInProgress={fetchInProgress}

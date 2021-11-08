@@ -221,15 +221,21 @@ export const queryListingsError = e => ({
 // Throwing error for new (loadData may need that info)
 export const queryOwnListings = queryParams => (dispatch, getState, sdk) => {
   dispatch(queryListingsRequest(queryParams));
-
   const { perPage, ...rest } = queryParams;
   const params = { ...rest, per_page: perPage };
-
+  const listingType = queryParams.pub_listingType;
   return sdk.ownListings
     .query(params)
     .then(response => {
-      dispatch(addOwnEntities(response));
-      dispatch(queryListingsSuccess(response));
+      const filteredResults = response.data.data.filter(r => {
+        const responseListingType = r.attributes.publicData.listingType;
+        return responseListingType === listingType;
+      });
+      let alteredResponse = response;
+      alteredResponse.data.data = filteredResults;
+      alteredResponse.data.meta.totalItems = filteredResults.length;
+      dispatch(addOwnEntities(alteredResponse));
+      dispatch(queryListingsSuccess(alteredResponse));
       return response;
     })
     .catch(e => {
@@ -266,12 +272,27 @@ export const openListing = listingId => (dispatch, getState, sdk) => {
     });
 };
 
-export const loadData = (params, search) => {
+export const loadListingData = (params, search) => {
   const queryParams = parse(search);
   const page = queryParams.page || 1;
   return queryOwnListings({
     ...queryParams,
     page,
+    pub_listingType: 'listing',
+    perPage: RESULT_PAGE_SIZE,
+    include: ['images'],
+    'fields.image': ['variants.landscape-crop', 'variants.landscape-crop2x'],
+    'limit.images': 1,
+  });
+};
+
+export const loadAdvertData = (params, search) => {
+  const queryParams = parse(search);
+  const page = queryParams.page || 1;
+  return queryOwnListings({
+    ...queryParams,
+    page,
+    pub_listingType: 'advert',
     perPage: RESULT_PAGE_SIZE,
     include: ['images'],
     'fields.image': ['variants.landscape-crop', 'variants.landscape-crop2x'],

@@ -17,6 +17,8 @@ import {
 import { TopbarSearchForm } from '../../forms';
 
 import css from './TopbarDesktop.module.css';
+import { AvatarMedium } from '../Avatar/Avatar';
+import ProfileSettingsPage from '../../containers/ProfileSettingsPage/ProfileSettingsPage';
 
 const TopbarDesktop = props => {
   const {
@@ -37,7 +39,8 @@ const TopbarDesktop = props => {
   useEffect(() => {
     setMounted(true);
   }, []);
-
+  const { firstName, lastName } = currentUser?.attributes?.profile || {};
+  const { email } = currentUser?.attributes || {};
   const authenticatedOnClientSide = mounted && isAuthenticated;
   const isAuthenticatedOrJustHydrated = isAuthenticated || !mounted;
 
@@ -79,32 +82,21 @@ const TopbarDesktop = props => {
         <Avatar className={css.avatar} user={currentUser} disableProfileLink />
       </MenuLabel>
       <MenuContent className={css.profileMenuContent}>
-        <MenuItem key="ManageListingsPage">
-          <NamedLink
-            className={classNames(css.yourListingsLink, currentPageClass('ManageListingsPage'))}
-            name="ManageListingsPage"
-          >
-            <span className={css.menuItemBorder} />
-            <FormattedMessage id="TopbarDesktop.yourListingsLink" />
-          </NamedLink>
-        </MenuItem>
-        <MenuItem key="ProfileSettingsPage">
-          <NamedLink
-            className={classNames(css.profileSettingsLink, currentPageClass('ProfileSettingsPage'))}
-            name="ProfileSettingsPage"
-          >
-            <span className={css.menuItemBorder} />
-            <FormattedMessage id="TopbarDesktop.profileSettingsLink" />
-          </NamedLink>
-        </MenuItem>
-        <MenuItem key="AccountSettingsPage">
-          <NamedLink
-            className={classNames(css.yourListingsLink, currentPageClass('AccountSettingsPage'))}
-            name="AccountSettingsPage"
-          >
-            <span className={css.menuItemBorder} />
-            <FormattedMessage id="TopbarDesktop.accountSettingsLink" />
-          </NamedLink>
+        <MenuItem key="Profile">
+          <div className={css.profileMenuWrapper}>
+            <div className={css.menuAvatar}>
+              <AvatarMedium className={css.bigAvatar} user={currentUser} disableProfileLink />
+            </div>
+            <div className={css.profileInfoWrapper}>
+              <div className={css.nameWrapper}>
+                {firstName} {lastName}
+              </div>
+              <div className={css.emailWrapper}>{email}</div>
+              <div className={css.profileLink}>
+                <NamedLink name={"ProfileSettingsPage"}>View account</NamedLink>
+              </div>
+            </div>
+          </div>
         </MenuItem>
         <MenuItem key="logout">
           <InlineTextButton rootClassName={css.logoutButton} onClick={onLogout}>
@@ -145,6 +137,11 @@ const TopbarDesktop = props => {
       <NamedLink className={css.createListingLink} name="NewListingPage">
         <span className={css.createListing}>
           <FormattedMessage id="TopbarDesktop.createListing" />
+        </span>
+      </NamedLink>
+      <NamedLink className={css.createListingLink} name="NewAdvertPage">
+        <span className={css.createListing}>
+          <FormattedMessage id="TopbarDesktop.createAdvert" />
         </span>
       </NamedLink>
       {inboxLink}

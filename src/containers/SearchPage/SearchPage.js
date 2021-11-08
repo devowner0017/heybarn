@@ -17,6 +17,11 @@ import { manageDisableScrolling, isScrollingDisabled } from '../../ducks/UI.duck
 import { SearchMap, ModalInMobile, Page } from '../../components';
 import { TopbarContainer } from '../../containers';
 
+import Stack from '@mui/material/Stack';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import SwitchUnstyled, { switchUnstyledClasses } from '@mui/core/SwitchUnstyled';
+
 import { searchMapListings, setActiveListing } from './SearchPage.duck';
 import {
   pickSearchParamsOnly,
@@ -37,6 +42,12 @@ export class SearchPageComponent extends Component {
     this.state = {
       isSearchMapOpenOnMobile: props.tab === 'map',
       isMobileModalOpen: false,
+      isMapOpen: false,
+      mapOpening: false,
+      mapOpened: false,
+      mapClosing: false,
+      mapClosed: true,
+      mapState: css.mapClosed,
     };
 
     this.searchMapListingsInProgress = false;
@@ -44,6 +55,7 @@ export class SearchPageComponent extends Component {
     this.onMapMoveEnd = debounce(this.onMapMoveEnd.bind(this), SEARCH_WITH_MAP_DEBOUNCE);
     this.onOpenMobileModal = this.onOpenMobileModal.bind(this);
     this.onCloseMobileModal = this.onCloseMobileModal.bind(this);
+    this.onOpenMap = this.onOpenMap.bind(this);
   }
 
   // Callback to determine if new search is needed
@@ -99,6 +111,28 @@ export class SearchPageComponent extends Component {
     this.setState({ isMobileModalOpen: false });
   }
 
+  handleOpenMap() {
+    this.setState({ isMapOpen: true, mapState: css.mapOpened });
+    setTimeout(() => {
+      this.setState({ mapState: css.mapOpened });
+    }, 1000);
+  }
+
+  handleCloseMap() {
+    this.setState({ isMapOpen: false, mapState: css.mapClosed });
+    setTimeout(() => {
+      this.setState({ mapState: css.mapClosed });
+    }, 1000);
+  }
+
+  onOpenMap() {
+    if (!!this.state.isMapOpen) {
+      this.handleCloseMap();
+    } else {
+      this.handleOpenMap();
+    }
+  }
+
   render() {
     const {
       intl,
@@ -117,12 +151,12 @@ export class SearchPageComponent extends Component {
       activeListingId,
       onActivateListing,
     } = this.props;
+    const { isMapOpen, mapClosed, mapClosing, mapOpened, mapOpening } = this.state;
     // eslint-disable-next-line no-unused-vars
     const { mapSearch, page, ...searchInURL } = parse(location.search, {
       latlng: ['origin'],
       latlngBounds: ['bounds'],
     });
-
     // urlQueryParams doesn't contain page specific url params
     // like mapSearch, page or origin (origin depends on config.sortSearchByDistance)
     const urlQueryParams = pickSearchParamsOnly(searchInURL, filterConfig, sortConfig);
@@ -157,6 +191,26 @@ export class SearchPageComponent extends Component {
 
     // N.B. openMobileMap button is sticky.
     // For some reason, stickyness doesn't work on Safari, if the element is <button>
+    const label = { inputProps: { 'aria-label': 'Show map' } };
+
+    const mapSwitch = (
+      <FormControlLabel
+        className={css.mapSwitch}
+        control={
+          <Switch
+            checked={this.state.isMapOpen}
+            onChange={_ => {
+              this.onOpenMap();
+            }}
+            inputProps={{ 'aria-label': 'Show map' }}
+            {...label}
+          />
+        }
+        labelPlacement="start"
+        label="Show map"
+      />
+    );
+
     return (
       <Page
         scrollingDisabled={scrollingDisabled}
@@ -169,7 +223,7 @@ export class SearchPageComponent extends Component {
           currentPage="SearchPage"
           currentSearchParams={urlQueryParams}
         />
-        <div className={css.container}>
+        <div className={classNames(css.container, { [css.mapOpenContainer]: isMapOpen })}>
           <MainPanel
             urlQueryParams={validQueryParams}
             listings={listings}
@@ -185,6 +239,8 @@ export class SearchPageComponent extends Component {
             searchParamsForPagination={parse(location.search)}
             showAsModalMaxWidth={MODAL_BREAKPOINT}
             history={history}
+            mapSwitch={mapSwitch}
+            isMapOpen={isMapOpen}
           />
           <ModalInMobile
             className={css.mapPanel}
@@ -194,10 +250,17 @@ export class SearchPageComponent extends Component {
             showAsModalMaxWidth={MODAL_BREAKPOINT}
             onManageDisableScrolling={onManageDisableScrolling}
           >
-            <div className={css.mapWrapper}>
+            <div className={classNames(css.mapWrapper)}>
               {shouldShowSearchMap ? (
                 <SearchMap
-                  reusableContainerClassName={css.map}
+                  reusableContainerClassName={classNames(
+                    css.map
+                    // { [css.mapClosing]: mapClosing },
+                    // { [css.mapClosed]: mapClosed },
+                    // { [css.mapOpening]: mapOpening },
+                    // { [css.mapOpened]: mapOpened }
+                  )}
+                  mapClass={this.state.mapState}
                   activeListingId={activeListingId}
                   bounds={bounds}
                   center={origin}
@@ -301,10 +364,7 @@ const mapDispatchToProps = dispatch => ({
 // See: https://github.com/ReactTraining/react-router/issues/4671
 const SearchPage = compose(
   withRouter,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
   injectIntl
 )(SearchPageComponent);
 

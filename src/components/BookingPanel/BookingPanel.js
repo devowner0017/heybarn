@@ -87,13 +87,16 @@ const BookingPanel = props => {
 
   const isNightly = unitType === LINE_ITEM_NIGHT;
   const isDaily = unitType === LINE_ITEM_DAY;
+  const isWeekly = true;
 
-  const unitTranslationKey = isNightly
-    ? 'BookingPanel.perNight'
-    : isDaily
-    ? 'BookingPanel.perDay'
-    : 'BookingPanel.perUnit';
-
+  const unitTranslationKey = isWeekly
+  ? 'BookingPanel.perWeek'
+  : isNightly
+  ? 'BookingPanel.perNight'
+  : isDaily
+  ? 'BookingPanel.perDay'
+  : 'BookingPanel.perUnit';
+  
   const classes = classNames(rootClassName || css.root, className);
   const titleClasses = classNames(titleClassName || css.bookingTitle);
 
@@ -108,6 +111,8 @@ const BookingPanel = props => {
         onManageDisableScrolling={onManageDisableScrolling}
       >
         <div className={css.modalHeading}>
+          {/* TODO: DELETE */}
+          <h1 className={css.title}>{title}</h1>
           <h1 className={css.title}>{title}</h1>
           <div className={css.author}>
             <FormattedMessage id="BookingPanel.hostedBy" values={{ name: authorDisplayName }} />
@@ -115,6 +120,7 @@ const BookingPanel = props => {
         </div>
 
         <div className={css.bookingHeading}>
+          {/* TODO: PUT PRICES IN HERE */}
           <h2 className={titleClasses}>{title}</h2>
           {subTitleText ? <div className={css.bookingHelp}>{subTitleText}</div> : null}
         </div>
