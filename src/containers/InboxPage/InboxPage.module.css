@@ -62,7 +62,7 @@
     background-color: transparent;
   }
   @media (--viewportLargeWithPaddings) {
-    padding: 113px 0 82px calc((100% - 1056px) / 2);
+    padding: 109px 0 82px max( calc((100% - 1600px) / 2), 20px);
   }
 }
 
@@ -138,6 +138,7 @@
 .itemList {
   margin: 0;
   padding: 0;
+  max-width: 1200px;
 }
 
 @keyframes loadingSpinnerFadeIn {
@@ -172,11 +173,11 @@
   padding-bottom: 12px;
 
   border-bottom-style: solid;
-  border-bottom-width: 1px;
+  border-bottom-width: 2px;
   border-bottom-color: var(--matterColorNegative);
 
   &:last-child {
-    border-bottom: none;
+    /* border-bottom: none; */
   }
 
   @media (--viewportLarge) {
@@ -215,7 +216,10 @@
     margin-right: 15px;
   }
 }
+.listingName{
+  @apply --marketplaceTinyFontStyles;
 
+}
 .rowNotificationDot {
   width: 6px;
   height: 6px;
@@ -316,7 +320,7 @@
 .lastTransitionedAt {
   @apply --marketplaceTinyFontStyles;
 
-  margin-top: 4px;
+  /* margin-top: 4px; */
   text-align: right;
   color: var(--matterColor);
 }

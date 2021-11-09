@@ -194,9 +194,9 @@ BookingInfoMaybe.propTypes = {
 
 export const InboxItem = props => {
   const { unitType, type, tx, intl, stateData } = props;
-  const { customer, provider } = tx;
+  const { customer, provider, listing } = tx;
   const isOrder = type === 'order';
-
+  const listingTitle = listing?.attributes?.title;
   const otherUser = isOrder ? provider : customer;
   const otherUserDisplayName = <UserDisplayName user={otherUser} intl={intl} />;
   const isOtherUserBanned = otherUser.attributes.banned;
@@ -224,13 +224,16 @@ export const InboxItem = props => {
           <div className={classNames(css.itemUsername, stateData.nameClassName)}>
             {otherUserDisplayName}
           </div>
-          <BookingInfoMaybe
+          <div className={classNames(css.listingName)}>
+            {listingTitle}
+            {/* <BookingInfoMaybe
             bookingClassName={stateData.bookingClassName}
             intl={intl}
             isOrder={isOrder}
             tx={tx}
             unitType={unitType}
-          />
+          /> */}
+          </div>
         </div>
         <div className={css.itemState}>
           <div className={classNames(css.stateName, stateData.stateClassName)}>
@@ -285,7 +288,8 @@ export const InboxPageComponent = props => {
   const toTxItem = tx => {
     const type = isOrders ? 'order' : 'sale';
     const stateData = txState(intl, tx, type);
-
+    console.log(tx);
+    console.log(stateData);
     // Render InboxItem only if the latest transition of the transaction is handled in the `txState` function.
     return stateData ? (
       <li key={tx.id.uuid} className={css.listItem}>
@@ -436,9 +440,6 @@ const mapStateToProps = state => {
   };
 };
 
-const InboxPage = compose(
-  connect(mapStateToProps),
-  injectIntl
-)(InboxPageComponent);
+const InboxPage = compose(connect(mapStateToProps), injectIntl)(InboxPageComponent);
 
 export default InboxPage;

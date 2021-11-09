@@ -37,7 +37,8 @@ import {
   LayoutWrapperMain,
   LayoutWrapperFooter,
   Footer,
-  BookingPanel,
+  ContactPanel,
+  // BookingPanel,
 } from '../../components';
 import { TopbarContainer, NotFoundPage } from '../../containers';
 
@@ -88,10 +89,49 @@ export class ListingPageComponent extends Component {
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.submitContactUser = this.submitContactUser.bind(this);
     this.onContactUser = this.onContactUser.bind(this);
     this.onSubmitEnquiry = this.onSubmitEnquiry.bind(this);
   }
 
+  submitContactUser(values) {
+    const {
+      history,
+      getListing,
+      params,
+      callSetInitialValues,
+      onInitializeCardPaymentData,
+    } = this.props;
+    const listingId = new UUID(params.id);
+    const listing = getListing(listingId);
+
+    const { bookingDates, ...bookingData } = values;
+
+    const initialValues = {
+      listing,
+      bookingData,
+      confirmPaymentError: null,
+    };
+    const saveToSessionStorage = !this.props.currentUser;
+    const routes = routeConfiguration();
+    // Customize checkout page state with current listing and selected bookingDates
+    const { setInitialValues } = findRouteByRouteName('OrderInitPage', routes);
+
+    callSetInitialValues(setInitialValues, initialValues, saveToSessionStorage);
+
+    // Clear previous Stripe errors from store if there is any
+    onInitializeCardPaymentData();
+
+    // Redirect to CheckoutPage
+    history.push(
+      createResourceLocatorString(
+        'OrderInitPage',
+        routes,
+        { id: listing.id.uuid, slug: createSlug(listing.attributes.title) },
+        {}
+      )
+    );
+  }
   handleSubmit(values) {
     const {
       history,
@@ -333,6 +373,17 @@ export class ListingPageComponent extends Component {
     const authorDisplayName = userDisplayNameAsString(ensuredAuthor, '');
 
     const { formattedPrice, priceTitle } = priceData(price, intl);
+
+    // TO EXCHANGE DETAILS
+    const handleContactUser = values => {
+      const isCurrentlyClosed = currentListing.attributes.state === LISTING_STATE_CLOSED;
+      if (isOwnListing || isCurrentlyClosed) {
+        window.scrollTo(0, 0);
+      } else {
+        this.submitContactUser(values);
+      }
+    };
+
     const handleBookingSubmit = values => {
       const isCurrentlyClosed = currentListing.attributes.state === LISTING_STATE_CLOSED;
       if (isOwnListing || isCurrentlyClosed) {
@@ -458,7 +509,24 @@ export class ListingPageComponent extends Component {
                     onManageDisableScrolling={onManageDisableScrolling}
                   />
                 </div>
-                <BookingPanel
+                <ContactPanel
+                  className={css.bookingPanel}
+                  listing={currentListing}
+                  isOwnListing={isOwnListing}
+                  unitType={unitType}
+                  onSubmit={handleContactUser}
+                  title={bookingTitle}
+                  subTitle={bookingSubTitle}
+                  authorDisplayName={authorDisplayName}
+                  onManageDisableScrolling={onManageDisableScrolling}
+                  timeSlots={timeSlots}
+                  fetchTimeSlotsError={fetchTimeSlotsError}
+                  onFetchTransactionLineItems={onFetchTransactionLineItems}
+                  lineItems={lineItems}
+                  fetchLineItemsInProgress={fetchLineItemsInProgress}
+                  fetchLineItemsError={fetchLineItemsError}
+                />
+                {/* <BookingPanel
                   className={css.bookingPanel}
                   listing={currentListing}
                   isOwnListing={isOwnListing}
@@ -474,7 +542,7 @@ export class ListingPageComponent extends Component {
                   lineItems={lineItems}
                   fetchLineItemsInProgress={fetchLineItemsInProgress}
                   fetchLineItemsError={fetchLineItemsError}
-                />
+                /> */}
               </div>
             </div>
           </LayoutWrapperMain>
@@ -613,10 +681,7 @@ const mapDispatchToProps = dispatch => ({
 // See: https://github.com/ReactTraining/react-router/issues/4671
 const ListingPage = compose(
   withRouter,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
   injectIntl
 )(ListingPageComponent);
 

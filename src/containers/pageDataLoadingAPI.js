@@ -18,6 +18,11 @@ import {
   loadData as TransactionPageLoader,
   setInitialValues as TransactionPageInitialValues,
 } from './TransactionPage/TransactionPage.duck';
+import {
+  loadData as TransactionInitPageLoader,
+  setInitialValues as TransactionInitPageInitialValues,
+} from './TransactionInitPage/TransactionInitPage.duck';
+
 
 const getPageDataLoadingAPI = () => {
   return {
@@ -61,6 +66,10 @@ const getPageDataLoadingAPI = () => {
     TransactionPage: {
       loadData: TransactionPageLoader,
       setInitialValues: TransactionPageInitialValues,
+    },
+    TransactionInitPage: {
+      loadData: TransactionInitPageLoader,
+      setInitialValues: TransactionInitPageInitialValues,
     },
   };
 };

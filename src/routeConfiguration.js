@@ -31,6 +31,7 @@ const SearchPage = loadable(() => import(/* webpackChunkName: "SearchPage" */ /*
 const StripePayoutPage = loadable(() => import(/* webpackChunkName: "StripePayoutPage" */ './containers/StripePayoutPage/StripePayoutPage'));
 const TermsOfServicePage = loadable(() => import(/* webpackChunkName: "TermsOfServicePage" */ './containers/TermsOfServicePage/TermsOfServicePage'));
 const TransactionPage = loadable(() => import(/* webpackChunkName: "TransactionPage" */ './containers/TransactionPage/TransactionPage'));
+const TransactionInitPage = loadable(() => import(/* webpackChunkName: "TransactionPage" */ './containers/TransactionInitPage/TransactionInitPage'));
 
 // Styleguide helps you to review current components and develop new ones
 const StyleguidePage = loadable(() => import(/* webpackChunkName: "StyleguidePage" */ './containers/StyleguidePage/StyleguidePage'));
@@ -272,6 +273,29 @@ const routeConfiguration = () => {
       authPage: 'LoginPage',
       component: props => <NamedRedirect name="OrderDetailsPage" params={{ ...props.params }} />,
     },
+    // NEW PAGES FOR INITIALIZING THE EXCHANGE OF CONTACT INfo
+    {
+      path: '/order/:id/initial',
+      name: 'OrderInitPage',
+      auth: true,
+      authPage: 'LoginPage',
+      component: TransactionInitPage,
+      extraProps: { transactionRole: 'customer' },
+      loadData: params =>
+        pageDataLoadingAPI.TransactionInitPage.loadData({ ...params, transactionRole: 'customer' }),
+      setInitialValues: pageDataLoadingAPI.TransactionInitPage.setInitialValues,
+    },
+    {
+      path: '/sale/:id/initial',
+      name: 'SaleInitPage',
+      auth: true,
+      authPage: 'LoginPage',
+      component: TransactionInitPage,
+      extraProps: { transactionRole: 'provider' },
+      loadData: params =>
+        pageDataLoadingAPI.TransactionInitPage.loadData({ ...params, transactionRole: 'provider' }),
+      setInitialValues: pageDataLoadingAPI.TransactionInitPage.setInitialValues,
+    },
     {
       path: '/order/:id/details',
       name: 'OrderDetailsPage',
@@ -290,7 +314,7 @@ const routeConfiguration = () => {
       authPage: 'LoginPage',
       component: props => <NamedRedirect name="SaleDetailsPage" params={{ ...props.params }} />,
     },
-    {
+     {
       path: '/sale/:id/details',
       name: 'SaleDetailsPage',
       auth: true,
