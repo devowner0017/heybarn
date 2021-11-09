@@ -180,6 +180,8 @@
   "EditListingAvailabilityForm.updateFailed": "Failed to update listing. Please try again.",
   "EditListingAvailabilityPanel.title": "Edit the availability of {listingTitle}",
   "EditListingAvailabilityPanel.createListingTitle": "When is it available?",
+  "EditListingDescriptionForm.preferredUseLabel": "Preferred Use",
+  "EditListingDescriptionForm.preferredUsePlaceholder": "Select...",
   "EditListingDescriptionForm.categoryLabel": "Sauna type",
   "EditListingDescriptionForm.categoryPlaceholder": "Choose the type of your sauna…",
   "EditListingDescriptionForm.categoryRequired": "You need to select a category for your sauna.",
@@ -209,6 +211,8 @@
   "EditListingLocationForm.optionalText": "• optional",
   "EditListingLocationForm.showListingFailed": "Fetching listing data failed",
   "EditListingLocationForm.updateFailed": "Failed to update listing. Please try again.",
+  "EditListingLocationForm.locRegionLabel": "Region",
+  "EditListingLocationForm.locRegionPlaceholder": "Select...",
   "EditListingLocationPanel.createListingTitle": "Where's your sauna?",
   "EditListingLocationPanel.title": "Edit the location of {listingTitle}",
   "EditListingPage.loadingListingData": "Loading listing data…",
@@ -1144,5 +1148,6 @@
   "UserCard.showFullBioLink": "more",
   "UserCard.viewProfileLink": "View profile",
   "UserDisplayName.banned": "Banned user",
-  "UserDisplayName.deleted": "Deleted user"
+  "UserDisplayName.deleted": "Deleted user",
+  "SelectField.required": "This is a required field"
 }

@@ -288,8 +288,6 @@ export const InboxPageComponent = props => {
   const toTxItem = tx => {
     const type = isOrders ? 'order' : 'sale';
     const stateData = txState(intl, tx, type);
-    console.log(tx);
-    console.log(stateData);
     // Render InboxItem only if the latest transition of the transaction is handled in the `txState` function.
     return stateData ? (
       <li key={tx.id.uuid} className={css.listItem}>

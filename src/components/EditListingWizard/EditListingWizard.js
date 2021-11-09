@@ -39,9 +39,9 @@ const availabilityMaybe = config.enableAvailability ? [AVAILABILITY] : [];
 // and listing publishing happens after last panel.
 export const TABS = [
   DESCRIPTION,
+  LOCATION,
   FEATURES,
   POLICY,
-  LOCATION,
   PRICING,
   ...availabilityMaybe,
   PHOTOS,
@@ -57,12 +57,12 @@ const tabLabel = (intl, tab) => {
   let key = null;
   if (tab === DESCRIPTION) {
     key = 'EditListingWizard.tabLabelDescription';
+  } else if (tab === LOCATION) {
+    key = 'EditListingWizard.tabLabelLocation';
   } else if (tab === FEATURES) {
     key = 'EditListingWizard.tabLabelFeatures';
   } else if (tab === POLICY) {
     key = 'EditListingWizard.tabLabelPolicy';
-  } else if (tab === LOCATION) {
-    key = 'EditListingWizard.tabLabelLocation';
   } else if (tab === PRICING) {
     key = 'EditListingWizard.tabLabelPricing';
   } else if (tab === AVAILABILITY) {
@@ -96,12 +96,12 @@ const tabCompleted = (tab, listing) => {
   switch (tab) {
     case DESCRIPTION:
       return !!(description && title);
+    case LOCATION:
+      return !!(geolocation && publicData && publicData.location && publicData.location.address);
     case FEATURES:
       return !!(publicData && publicData.amenities);
     case POLICY:
       return !!(publicData && typeof publicData.rules !== 'undefined');
-    case LOCATION:
-      return !!(geolocation && publicData && publicData.location && publicData.location.address);
     case PRICING:
       return !!price;
     case AVAILABILITY:
@@ -555,7 +555,4 @@ EditListingWizard.propTypes = {
   intl: intlShape.isRequired,
 };
 
-export default compose(
-  withViewport,
-  injectIntl
-)(EditListingWizard);
+export default compose(withViewport, injectIntl)(EditListingWizard);

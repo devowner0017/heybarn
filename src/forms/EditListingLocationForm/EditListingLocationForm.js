@@ -13,6 +13,7 @@ import {
 import { Form, LocationAutocompleteInputField, Button, FieldTextInput } from '../../components';
 
 import css from './EditListingLocationForm.module.css';
+import CustomCategorySelectFieldMaybe from '../EditListingDescriptionForm/CustomCategorySelectFieldMaybe';
 
 const identity = v => v;
 
@@ -33,8 +34,8 @@ export const EditListingLocationFormComponent = props => (
         updateInProgress,
         fetchErrors,
         values,
+        locRegionOptions,
       } = formRenderProps;
-
       const titleRequiredMessage = intl.formatMessage({ id: 'EditListingLocationForm.address' });
       const addressPlaceholderMessage = intl.formatMessage({
         id: 'EditListingLocationForm.addressPlaceholder',
@@ -50,12 +51,12 @@ export const EditListingLocationFormComponent = props => (
         id: 'EditListingLocationForm.optionalText',
       });
 
-      const buildingMessage = intl.formatMessage(
-        { id: 'EditListingLocationForm.building' },
+      const locRegionLabel = intl.formatMessage(
+        { id: 'EditListingLocationForm.locRegionLabel' },
         { optionalText: optionalText }
       );
-      const buildingPlaceholderMessage = intl.formatMessage({
-        id: 'EditListingLocationForm.buildingPlaceholder',
+      const locRegionPlaceholder = intl.formatMessage({
+        id: 'EditListingLocationForm.locRegionPlaceholder',
       });
 
       const { updateListingError, showListingsError } = fetchErrors || {};
@@ -98,14 +99,14 @@ export const EditListingLocationFormComponent = props => (
               autocompletePlaceSelected(addressNotRecognizedMessage)
             )}
           />
-
-          <FieldTextInput
-            className={css.building}
-            type="text"
-            name="building"
-            id="building"
-            label={buildingMessage}
-            placeholder={buildingPlaceholderMessage}
+          <CustomCategorySelectFieldMaybe
+            id="locRegion"
+            name="locRegion"
+            options={locRegionOptions}
+            label={locRegionLabel}
+            placeholder={locRegionPlaceholder}
+            intl={intl}
+            showRequired
           />
 
           <Button

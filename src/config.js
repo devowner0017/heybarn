@@ -26,7 +26,7 @@ const i18n = {
 // search off by removing keyword filter config from filters array in marketplace-custom-config.js
 const sortSearchByDistance = false;
 
-const listingTypes={advert: ["advert", '"need'], listing: ["listing", "space"]}
+const listingTypes = { advert: ['advert', '"need'], listing: ['listing', 'space'] };
 // API supports custom processes to be used in booking process.
 // We need to specify it when we are initiating a new order
 // (or fetching price information by calling 'initiateSpeculative' endpoint).
@@ -140,7 +140,7 @@ const maps = {
     // Limit location autocomplete to a one or more countries
     // using ISO 3166 alpha 2 country codes separated by commas.
     // If you want to limit the autocomplete, uncomment this value:
-    // countryLimit: ['AU'],
+    countryLimit: ['AU', 'NZ'],
   },
 
   // When fuzzy locations are enabled, coordinates on maps are
@@ -232,7 +232,7 @@ const config = {
   maps,
   custom,
 
-// NEW BELOW HERE
+  // NEW BELOW HERE
   listingTypes,
 };
 

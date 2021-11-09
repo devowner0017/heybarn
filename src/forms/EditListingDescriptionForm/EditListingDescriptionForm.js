@@ -19,6 +19,7 @@ const EditListingDescriptionFormComponent = props => (
     render={formRenderProps => {
       const {
         categories,
+        preferredUse,
         className,
         disabled,
         ready,
@@ -45,6 +46,13 @@ const EditListingDescriptionFormComponent = props => (
           maxLength: TITLE_MAX_LENGTH,
         }
       );
+
+      const preferredUseLabel = intl.formatMessage({
+        id: 'EditListingDescriptionForm.preferredUseLabel',
+      });
+      const preferredUsePlaceholder = intl.formatMessage({
+        id: 'EditListingDescriptionForm.preferredUsePlaceholder',
+      });
 
       const descriptionMessage = intl.formatMessage({
         id: 'EditListingDescriptionForm.description',
@@ -110,10 +118,13 @@ const EditListingDescriptionFormComponent = props => (
           />
 
           <CustomCategorySelectFieldMaybe
-            id="category"
-            name="category"
-            categories={categories}
+            id="preferredUse"
+            name="preferredUse"
+            options={preferredUse}
+            label={preferredUseLabel}
+            placeholder={preferredUsePlaceholder}
             intl={intl}
+            showRequired
           />
 
           <Button

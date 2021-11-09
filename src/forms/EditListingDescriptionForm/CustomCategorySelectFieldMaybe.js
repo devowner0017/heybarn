@@ -5,30 +5,25 @@ import { FieldSelect } from '../../components';
 import css from './EditListingDescriptionForm.module.css';
 
 const CustomCategorySelectFieldMaybe = props => {
-  const { name, id, categories, intl } = props;
-  const categoryLabel = intl.formatMessage({
-    id: 'EditListingDescriptionForm.categoryLabel',
-  });
-  const categoryPlaceholder = intl.formatMessage({
-    id: 'EditListingDescriptionForm.categoryPlaceholder',
-  });
-  const categoryRequired = required(
+  const { name, id, options, label, placeholder, showRequired, requiredMessage, intl } = props;
+
+  const requiredValidation = required(
     intl.formatMessage({
-      id: 'EditListingDescriptionForm.categoryRequired',
+      id: requiredMessage || 'SelectField.required',
     })
   );
-  return categories ? (
+  return options ? (
     <FieldSelect
       className={css.category}
       name={name}
       id={id}
-      label={categoryLabel}
-      validate={categoryRequired}
+      label={label}
+      validate={showRequired && requiredValidation}
     >
       <option disabled value="">
-        {categoryPlaceholder}
+        {placeholder}
       </option>
-      {categories.map(c => (
+      {options.map(c => (
         <option key={c.key} value={c.key}>
           {c.label}
         </option>

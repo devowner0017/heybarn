@@ -6,8 +6,9 @@ import { LISTING_STATE_DRAFT } from '../../util/types';
 import { ensureOwnListing } from '../../util/data';
 import { ListingLink } from '../../components';
 import { EditListingLocationForm } from '../../forms';
-
+import config from '../../config';
 import css from './EditListingLocationPanel.module.css';
+import { findOptionsForSelectFilter } from '../../util/search';
 
 class EditListingLocationPanel extends Component {
   constructor(props) {
@@ -24,16 +25,15 @@ class EditListingLocationPanel extends Component {
     const { listing } = this.props;
     const currentListing = ensureOwnListing(listing);
     const { geolocation, publicData } = currentListing.attributes;
-
+    const { locRegion } = publicData;
     // Only render current search if full place object is available in the URL params
     // TODO bounds are missing - those need to be queried directly from Google Places
-    const locationFieldsPresent =
-      publicData && publicData.location && publicData.location.address && geolocation;
+    const locationFieldsPresent = publicData?.location?.address && geolocation;
     const location = publicData && publicData.location ? publicData.location : {};
-    const { address, building } = location;
+    const { address } = location;
 
     return {
-      building,
+      locRegion,
       location: locationFieldsPresent
         ? {
             search: address,
@@ -71,6 +71,7 @@ class EditListingLocationPanel extends Component {
     ) : (
       <FormattedMessage id="EditListingLocationPanel.createListingTitle" />
     );
+    const locRegionOptions = findOptionsForSelectFilter('locRegion', config.custom.filters);
 
     return (
       <div className={classes}>
@@ -79,19 +80,19 @@ class EditListingLocationPanel extends Component {
           className={css.form}
           initialValues={this.state.initialValues}
           onSubmit={values => {
-            const { building = '', location } = values;
+            const { location, locRegion } = values;
             const {
               selectedPlace: { address, origin },
             } = location;
             const updateValues = {
               geolocation: origin,
               publicData: {
-                location: { address, building },
+                location: { address },
+                locRegion: locRegion,
               },
             };
             this.setState({
               initialValues: {
-                building,
                 location: { search: address, selectedPlace: { address, origin } },
               },
             });
@@ -104,6 +105,7 @@ class EditListingLocationPanel extends Component {
           updated={panelUpdated}
           updateInProgress={updateInProgress}
           fetchErrors={errors}
+          locRegionOptions={locRegionOptions}
         />
       </div>
     );
