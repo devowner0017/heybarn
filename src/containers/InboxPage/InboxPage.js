@@ -445,14 +445,12 @@ export const InboxPageComponent = props => {
             currentPage="InboxPage"
           />
         </LayoutWrapperTopbar>
-        <LayoutWrapperSideNav className={css.navigation}>
+        <LayoutWrapperSideNav className={css.navigation}>{nav}</LayoutWrapperSideNav>
+        <LayoutWrapperMain className={css.inboxPageWrapper}>
+          {error}
           <h1 className={css.title}>
             <FormattedMessage id="InboxPage.title" />
           </h1>
-          {nav}
-        </LayoutWrapperSideNav>
-        <LayoutWrapperMain>
-          {error}
           <ul className={css.itemList}>
             {!fetchInProgress ? (
               transactions.map(toTxItem)

@@ -104,11 +104,12 @@ export const TransactionPageComponent = props => {
     signRentalAgreementInProgress,
     signRentalAgreementError,
     onSignRentalAgreement,
+    relatedListing,
   } = props;
-  console.log('🚀 | file: TransactionPage.js | line 85 | props', props);
 
   const currentTransaction = ensureTransaction(transaction);
   const currentListing = ensureListing(currentTransaction.listing);
+  const ensuredRelated = ensureListing(relatedListing);
   const isProviderRole = transactionRole === PROVIDER;
   const isCustomerRole = transactionRole === CUSTOMER;
 
@@ -239,7 +240,6 @@ export const TransactionPageComponent = props => {
 
   // TransactionPanel is presentational component
   // that currently handles showing everything inside layout's main view area.
-  console.log('🚀 | file: TransactionPage.js | line 220 | isDataAvailable', isDataAvailable);
   const panel = isDataAvailable ? (
     <TransactionPanel
       className={detailsClassName}
@@ -290,6 +290,7 @@ export const TransactionPageComponent = props => {
       signRentalAgreementInProgress={signRentalAgreementInProgress}
       signRentalAgreementError={signRentalAgreementError}
       onSignRentalAgreement={onSignRentalAgreement}
+      ensuredRelated={ensuredRelated}
     />
   ) : (
     loadingOrFailedFetching
@@ -416,9 +417,13 @@ const mapStateToProps = state => {
 
     signRentalAgreementInProgress,
     signRentalAgreementError,
+    relatedListingRef,
   } = state.TransactionPage;
   const { currentUser } = state.user;
-
+  const relatedListing = getMarketplaceEntities(
+    state,
+    relatedListingRef ? [relatedListingRef] : []
+  );
   const transactions = getMarketplaceEntities(state, transactionRef ? [transactionRef] : []);
   const transaction = transactions.length > 0 ? transactions[0] : null;
 
@@ -460,6 +465,7 @@ const mapStateToProps = state => {
 
     signRentalAgreementInProgress,
     signRentalAgreementError,
+    relatedListing: relatedListing?.length ? relatedListing[0] : null,
   };
 };
 

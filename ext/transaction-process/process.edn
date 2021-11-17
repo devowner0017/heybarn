@@ -54,21 +54,6 @@
    :to :state/rental-agreement-discussion}
 
 
-
-  {:name :transition/host-sends-agreement,
-   :actor :actor.role/provider,
-    :actions
-   [
-     {:name :action/create-booking,
-     :config {:observe-availability? false}}
-    {:name :action/privileged-update-metadata}
-    {:name :action/update-protected-data}
-
-    ],
-   :from :state/rental-agreement-discussion,
-   :to :state/rental-agreement-sent
-   :privileged? true}
-
   {:name :transition/host-cancels-during-rad,
    :actor :actor.role/provider,
    :actions [],
@@ -88,6 +73,20 @@
    :to :state/cancelled-during-rad}
 
 
+  {:name :transition/host-sends-agreement,
+   :actor :actor.role/provider,
+    :actions
+   [
+     {:name :action/create-booking,
+     :config {:observe-availability? false}}
+    {:name :action/privileged-set-line-items}
+    {:name :action/privileged-update-metadata}
+    {:name :action/update-protected-data}
+
+    ],
+   :from :state/rental-agreement-discussion,
+   :to :state/rental-agreement-sent
+   :privileged? true}
 
 
   {:name :transition/renter-signs-rental-agreement,

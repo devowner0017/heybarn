@@ -38,6 +38,7 @@ import {
 } from '../../util/data';
 import { addMarketplaceEntities } from '../../ducks/marketplaceData.duck';
 import { fetchCurrentUserNotifications } from '../../ducks/user.duck';
+import { getPropByName } from '../../util/userHelpers';
 
 const { UUID } = sdkTypes;
 
@@ -51,6 +52,8 @@ export const SET_INITIAL_VALUES = 'app/TransactionPage/SET_INITIAL_VALUES';
 export const FETCH_TRANSACTION_REQUEST = 'app/TransactionPage/FETCH_TRANSACTION_REQUEST';
 export const FETCH_TRANSACTION_SUCCESS = 'app/TransactionPage/FETCH_TRANSACTION_SUCCESS';
 export const FETCH_TRANSACTION_ERROR = 'app/TransactionPage/FETCH_TRANSACTION_ERROR';
+
+export const FETCH_RELATED_LISTING_SUCCESS = 'app/TransactionPage/FETCH_RELATED_LISTING_SUCCESS';
 
 export const FETCH_TRANSITIONS_REQUEST = 'app/TransactionPage/FETCH_TRANSITIONS_REQUEST';
 export const FETCH_TRANSITIONS_SUCCESS = 'app/TransactionPage/FETCH_TRANSITIONS_SUCCESS';
@@ -150,6 +153,7 @@ const initialState = {
   lineItems: null,
   fetchLineItemsInProgress: false,
   fetchLineItemsError: null,
+  relatedListingRef: null,
 };
 
 // Merge entity arrays using ids, so that conflicting items in newer array (b) overwrite old values (a).
@@ -177,6 +181,10 @@ export default function checkoutPageReducer(state = initialState, action = {}) {
       console.error(payload); // eslint-disable-line
       return { ...state, fetchTransactionInProgress: false, fetchTransactionError: payload };
 
+    case FETCH_RELATED_LISTING_SUCCESS: {
+      const relatedListingRef = { id: payload.data.data.id, type: 'listing' };
+      return { ...state, relatedListingRef };
+    }
     case FETCH_TRANSITIONS_REQUEST:
       return { ...state, fetchTransitionsInProgress: true, fetchTransitionsError: null };
     case FETCH_TRANSITIONS_SUCCESS:
@@ -349,6 +357,11 @@ const fetchTransactionSuccess = response => ({
 });
 const fetchTransactionError = e => ({ type: FETCH_TRANSACTION_ERROR, error: true, payload: e });
 
+const fetchRelatedListingSuccess = response => ({
+  type: FETCH_RELATED_LISTING_SUCCESS,
+  payload: response,
+});
+
 const fetchTransitionsRequest = () => ({ type: FETCH_TRANSITIONS_REQUEST });
 const fetchTransitionsSuccess = response => ({
   type: FETCH_TRANSITIONS_SUCCESS,
@@ -472,14 +485,46 @@ export const fetchTransaction = (id, txRole) => (dispatch, getState, sdk) => {
     )
     .then(response => {
       txResponse = response;
+      console.log(
+        '🚀 | file: TransactionPage.duck.js | line 475 | fetchTransaction | txResponse',
+        txResponse
+      );
       const listingId = listingRelationship(response).id;
       const entities = updatedEntities({}, response.data);
       const listingRef = { id: listingId, type: 'listing' };
       const transactionRef = { id, type: 'transaction' };
       const denormalised = denormalisedEntities(entities, [listingRef, transactionRef]);
       const listing = denormalised[0];
+      console.log(
+        '🚀 | file: TransactionPage.duck.js | line 483 | fetchTransaction | listing',
+        listing
+      );
       const transaction = denormalised[1];
-
+      console.log(
+        '🚀 | file: TransactionPage.duck.js | line 485 | fetchTransaction | transaction',
+        transaction
+      );
+      const relatedListingId = getPropByName(transaction, 'selectedListingId');
+      console.log(
+        '🚀 | file: TransactionPage.duck.js | line 496 | fetchTransaction | relatedListingId',
+        relatedListingId
+      );
+      if (!!relatedListingId) {
+        sdk.listings
+          .show({
+            id: relatedListingId,
+            include: ['author', 'author.profileImage', 'images'],
+            ...IMAGE_VARIANTS,
+          })
+          .then(relatedListingResponse => {
+            console.log(
+              '🚀 | file: TransactionPage.duck.js | line 504 | fetchTransaction | relatedListingResponse',
+              relatedListingResponse
+            );
+            dispatch(addMarketplaceEntities(relatedListingResponse));
+            dispatch(fetchRelatedListingSuccess(relatedListingResponse));
+          });
+      }
       // Fetch time slots for transactions that are in enquired state
       const canFetchTimeslots =
         txRole === 'customer' &&
@@ -502,11 +547,11 @@ export const fetchTransaction = (id, txRole) => (dispatch, getState, sdk) => {
         return response;
       }
     })
-    .then(response => {
+    .then(transactionListingresponse => {
       dispatch(addMarketplaceEntities(txResponse));
-      dispatch(addMarketplaceEntities(response));
+      dispatch(addMarketplaceEntities(transactionListingresponse));
       dispatch(fetchTransactionSuccess(txResponse));
-      return response;
+      return transactionListingresponse;
     })
     .catch(e => {
       dispatch(fetchTransactionError(storableError(e)));
@@ -587,46 +632,6 @@ export const declineCommunication = data => (dispatch, getState, sdk) => {
     });
 };
 
-export const sendRentalAgreement = data => (dispatch, getState, sdk) => {
-  // TODO: Add booking data to params here
-  const { txId, listingId } = data;
-
-  dispatch(sendRentalAgreementRequest());
-  const bookingData = {
-    startDate: moment()
-      .add(1, 'days')
-      .toISOString(),
-    endDate: moment()
-      .add(30, 'days')
-      .toISOString(),
-  };
-  const bodyParams = {
-    id: txId.uuid,
-    transition: TRANSITION_HOST_SENDS_AGREEMENT,
-    params: {
-      listingId: listingId.uuid,
-      bookingStart: bookingData.startDate,
-      bookingEnd: bookingData.endDate,
-    },
-  };
-  const queryParams = { expand: true };
-  return transitionPrivilegedSimple({ bodyParams, bookingData, queryParams })
-    .then(response => {
-      dispatch(addMarketplaceEntities(response));
-      dispatch(sendRentalAgreementSuccess());
-      dispatch(fetchCurrentUserNotifications());
-      return response;
-    })
-    .catch(e => {
-      dispatch(sendRentalAgreementError(storableError(e)));
-      log.error(e, 'host-sends-agreement-failed', {
-        txId,
-        transition: TRANSITION_HOST_SENDS_AGREEMENT,
-      });
-      throw e;
-    });
-};
-
 export const cancelDuringRad = data => (dispatch, getState, sdk) => {
   const { txId, actor } = data;
   dispatch(cancelDuringRadRequest());
@@ -652,7 +657,7 @@ export const cancelDuringRad = data => (dispatch, getState, sdk) => {
     .catch(e => {
       dispatch(cancelDuringRadError(storableError(e)));
       log.error(e, 'cancel-during-rad-failed', {
-        txId: id,
+        txId: txId,
         transition:
           actor === 'provider'
             ? TRANSITION_HOST_CANCELS_DURING_RAD
@@ -660,6 +665,61 @@ export const cancelDuringRad = data => (dispatch, getState, sdk) => {
       });
       throw e;
     });
+};
+
+export const sendRentalAgreement = data => (dispatch, getState, sdk) => {
+  // TODO: Add booking data to params here
+  const { txId, listingId } = data;
+
+  dispatch(sendRentalAgreementRequest());
+  const bookingData = {
+    startDate: moment()
+      .add(1, 'days')
+      .toISOString(),
+    endDate: moment()
+      .add(30, 'days')
+      .toISOString(),
+  };
+  const bodyParams = {
+    id: txId.uuid,
+    transition: TRANSITION_HOST_SENDS_AGREEMENT,
+    params: {
+      listingId: listingId.uuid,
+      bookingStart: bookingData.startDate,
+      bookingEnd: bookingData.endDate,
+    },
+  };
+  console.log("🚀 | file: TransactionPage.duck.js | line 692 | bodyParams", bodyParams);
+  const queryParams = { expand: true };
+
+  const handleSucces = response => {
+    console.log('🚀 | file: TransactionPage.duck.js | line 697 | response', response);
+    const entities = denormalisedResponseEntities(response);
+    const order = entities[0];
+
+    dispatch(addMarketplaceEntities(response));
+    dispatch(sendRentalAgreementSuccess());
+    dispatch(fetchCurrentUserNotifications());
+    return order;
+  };
+
+  const handleError = e => {
+  console.log("🚀 | file: TransactionPage.duck.js | line 707 | e", e);
+    dispatch(sendRentalAgreementError(storableError(e)));
+    const transactionIdMaybe = txId ? { transactionId: txId.uuid } : {};
+    log.error(e, 'host-sends-agreement-failed', {
+      ...transactionIdMaybe,
+      listingId: bodyParams?.params?.listingId?.uuid,
+      bookingStart: bodyParams.bookingStart,
+      bookingEnd: bodyParams.bookingEnd,
+    });
+    throw e;
+  };
+
+  // transition privileged
+  return transitionPrivileged({ bookingData, bodyParams, queryParams })
+    .then(handleSucces)
+    .catch(handleError);
 };
 
 export const signRentalAgreement = data => (dispatch, getState, sdk) => {
@@ -678,6 +738,7 @@ export const signRentalAgreement = data => (dispatch, getState, sdk) => {
   const bodyParams = {
     id: txId.uuid,
     transition: TRANSITION_RENTER_SIGNS_RENTAL_AGREEMENT,
+    params: {},
   };
   const queryParams = { expand: true };
   return transitionPrivilegedSimple({ bodyParams, queryParams })

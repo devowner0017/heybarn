@@ -38,11 +38,10 @@ import {
 import { TopbarContainer } from '..';
 
 import {
-  acceptSale,
-  declineSale,
   stripeCustomer,
   sendMessage,
   createTransaction,
+  getOwnListingsById,
 } from './TransactionInitPage.duck';
 import { types as sdkTypes } from '../../util/sdkLoader';
 import css from './TransactionInitPage.module.css';
@@ -77,37 +76,30 @@ export const TransactionInitPageComponent = props => {
     totalMessagePages,
     oldestMessagePageFetched,
     showListingError,
-    history,
     intl,
     messages,
     onManageDisableScrolling,
-    onSendMessage,
-    onSendReview,
-    onShowMoreMessages,
     params,
     scrollingDisabled,
-    sendMessageError,
-    sendMessageInProgress,
-    sendReviewError,
-    sendReviewInProgress,
     transaction,
     transactionRole,
-    acceptInProgress,
-    acceptSaleError,
-    declineInProgress,
-    declineSaleError,
     processTransitions,
-    callSetInitialValues,
-    onInitializeCardPaymentData,
-
     stripeCustomerFetched,
-    requestedListing,
-    requestedAdvert,
     guest,
     host,
-    contactingAs,
+    listings,
+    queryInProgress,
   } = props;
-  console.log('🚀 | file: TransactionInitPage.js | line 110 | props', props);
+  console.log('🚀 | file: TransactionInitPage.js | line 91 | props', props);
+  console.log('🚀 | file: TransactionInitPage.js | line 92 | listings', listings);
+  const [showCreateListingPopup, setShowCreateListingPopup] = useState(null);
+  const [selectedListingId, setSelectedListingId] = useState(null);
+  const [selectedListing, setSelectedListing] = useState(null);
+  console.log('🚀 | file: TransactionInitPage.js | line 98 | selectedListing', selectedListing);
+  console.log('🚀 | file: TransactionInitPage.js | line 97 | selectedListingId', selectedListingId);
+  if (!queryInProgress && !listings.length && !showCreateListingPopup) {
+    setShowCreateListingPopup(true);
+  }
   const [savedPaymentIntents, setSavedPaymentIntents] = useState(null);
   const [stripeFunction, setStripeFunction] = useState(null);
   const [submittingPlatformFee, setSubmittingPlatformFee] = useState(null);
@@ -123,35 +115,14 @@ export const TransactionInitPageComponent = props => {
    */
   const loadInitialData = () => {
     const { fetchStripeCustomer } = props;
-
     // Fetch currentUser with stripeCustomer entity
     // Note: since there's need for data loading in "componentWillMount" function,
     //       this is added here instead of loadData static function.
     fetchStripeCustomer();
   };
+
   const onStripeInitialized = stripe => {
     setStripeFunction(stripe);
-    // this.stripe = stripe;
-    // const { paymentIntent, onRetrievePaymentIntent } = this.props;
-    // const tx = this.state.pageData ? this.state.pageData.transaction : null;
-    // // We need to get up to date PI, if booking is created but payment is not expired.
-    // const shouldFetchPaymentIntent =
-    //   this.stripe &&
-    //   !paymentIntent &&
-    //   tx &&
-    //   tx.id &&
-    //   tx.booking &&
-    //   tx.booking.id &&
-    //   txIsPaymentPending(tx) &&
-    //   !checkIsPaymentExpired(tx);
-    // if (shouldFetchPaymentIntent) {
-    //   const { stripePaymentIntentClientSecret } =
-    //     tx.attributes.protectedData && tx.attributes.protectedData.stripePaymentIntents
-    //       ? tx.attributes.protectedData.stripePaymentIntents.default
-    //       : {};
-    //   // Fetch up to date PaymentIntent from Stripe
-    //   onRetrievePaymentIntent({ stripe, stripePaymentIntentClientSecret });
-    // }
   };
 
   const listingId = new UUID(rawParams.id);
@@ -181,14 +152,20 @@ export const TransactionInitPageComponent = props => {
   const isDataAvailable = currentUser && hasGuestAndHost;
   const hasRequiredData = hasGuestAndHost;
   const canShowPage = hasRequiredData && !isOwnListing;
-  const shouldRedirect = currentUser?.id?.uuid && !isDataAvailable && !canShowPage;
+  const shouldRedirect =
+    currentUser?.id?.uuid && currentListing?.id?.uuid && !isDataAvailable && !canShowPage;
 
   // Redirect back to ListingPage if data is missing.
   // Redirection must happen before any data format error is thrown (e.g. wrong currency)
   if (shouldRedirect) {
     // eslint-disable-next-line no-console
     console.error('Missing or invalid data for checkout, redirecting back to listing page.', {});
-    return <NamedRedirect name="ListingPage" params={{ ...params }} />;
+    return (
+      <NamedRedirect
+        name="ListingPage"
+        params={{ ...params, slug: currentListing?.attributes?.title }}
+      />
+    );
   }
 
   const detailsClassName = classNames(css.tabContent, css.tabContentVisible);
@@ -325,30 +302,19 @@ export const TransactionInitPageComponent = props => {
     };
 
     // // Step 3: CREATE A TRANSACTION
-
     // // Parameter should contain { paymentIntent, transactionId } returned in step 2
     const fnCreateTransactionObject = fnParams => {
-      console.log('🚀 | file: TransactionInitPage.js | line 325 | fnParams', fnParams);
-      const tx = onCreateTransaction({ listingId: listingId.uuid });
-      console.log('🚀 | file: TransactionInitPage.js | line 323 | tx', tx);
+      const tx = onCreateTransaction({
+        listingId: listingId.uuid,
+        protectedData: {
+          selectedListingId: selectedListing.id.uuid,
+        },
+      });
       return tx;
-      //   const params = {
-      //     stripePaymentIntentClientSecret:
-      //       savedPaymentIntents?.client_secret || fnParams?.payment_intent?.client_secret,
-      //     stripe,
-      //     paymentParams,
-      //   };
-      //   createdPaymentIntent = fnParams.paymentIntent;
-      //   return onConfirmPayment({
-      //     ...fnParams,
-      //     ...params,
-      //   });
     };
 
     // Step 4: send initial message
     const fnSendMessage = fnParams => {
-      console.log('🚀 | file: TransactionInitPage.js | line 353 | fnParams', fnParams);
-      console.log('🚀 | file: TransactionInitPage.js | line 355 | message', message);
       if (message) {
         return onSendMessage({
           ...fnParams,
@@ -429,13 +395,11 @@ export const TransactionInitPageComponent = props => {
   };
 
   const handleSubmitPlatformFee = values => {
-    console.log('🚀 | file: TransactionInitPage.js | line 432 | values', values);
     if (submittingPlatformFee) {
       return;
     }
     setSubmittingPlatformFee(true);
     const { history, currentUser, dispatch } = props;
-    console.log('🚀 | file: TransactionInitPage.js | line 436 | props', props);
     const { card, paymentMethod, formValues, message } = values;
     const {
       name,
@@ -482,7 +446,6 @@ export const TransactionInitPageComponent = props => {
     };
     handlePaymentIntent(requestPaymentParams)
       .then(res => {
-        console.log('🚀 | file: TransactionInitPage.js | line 473 | res', res);
         const { orderId, messageSuccess, paymentMethodSaved } = res;
         setSubmittingPlatformFee(false);
 
@@ -521,16 +484,36 @@ export const TransactionInitPageComponent = props => {
     ensureStripeCustomer(currentUser.stripeCustomer).attributes.stripeCustomerId &&
     ensurePaymentMethodCard(currentUser.stripeCustomer.defaultPaymentMethod).id
   );
+  const selectListing = (
+    <select
+      onChange={e => {
+        const listingId = e.target.value;
+        setSelectedListingId(listingId);
+        setSelectedListing(listings.find(l => l.id.uuid === listingId));
+      }}
+    >
+      <option disabled value="" selected>
+        Select A Listing
+      </option>
+      {listings.map(l => (
+        <option key={l.id.uuid} value={l.id.uuid}>
+          {l.attributes.title}
+        </option>
+      ))}
+    </select>
+  );
   // const paymentForm = showPaymentForm ? (
   const paymentForm = true ? (
     <StripePaymentFormPlatformFee
       className={css.paymentForm}
       onSubmit={handleSubmitPlatformFee}
       inProgress={submittingPlatformFee}
+      disabled={showCreateListingPopup || !selectedListing}
       formId="TransactionInitPagePaymentForm"
-      paymentInfo={intl.formatMessage({
-        id: 'TransactionInitPage.paymentInfo',
-      })}
+      // Message above submit button
+      // paymentInfo={intl.formatMessage({
+      //   id: 'TransactionInitPage.paymentInfo',
+      // })}
       // authorDisplayName={currentAuthor.attributes.profile.displayName}
       authorDisplayName={'currentAuthor'}
       showInitialMessageInput={false}
@@ -572,6 +555,10 @@ export const TransactionInitPageComponent = props => {
       transactionRole={transactionRole}
       nextTransitions={processTransitions}
       paymentForm={paymentForm}
+      showCreateListingPopup={showCreateListingPopup}
+      setShowCreateListingPopup={setShowCreateListingPopup}
+      selectListing={selectListing}
+      selectedListing={selectedListing}
     />
   ) : (
     loadingOrFailedFetching
@@ -690,10 +677,12 @@ const mapStateToProps = state => {
     stripeCustomerFetched,
     guest,
     host,
-    requestedListing,
-    requestedAdvert,
+    currentPageResultIds,
+    queryInProgress,
   } = state.TransactionInitPage;
   const { currentUser } = state.user;
+
+  const listings = currentPageResultIds && getOwnListingsById(state, currentPageResultIds);
 
   const getListing = id => {
     const ref = { id, type: 'listing' };
@@ -706,6 +695,7 @@ const mapStateToProps = state => {
   return {
     currentUser,
     getListing,
+    listings,
     showListingError,
     acceptSaleError,
     declineSaleError,
@@ -734,8 +724,7 @@ const mapStateToProps = state => {
     stripeCustomerFetched,
     guest,
     host,
-    requestedListing,
-    requestedAdvert,
+    queryInProgress,
   };
 };
 
@@ -743,8 +732,6 @@ const mapDispatchToProps = dispatch => {
   return {
     dispatch,
     fetchStripeCustomer: () => dispatch(stripeCustomer()),
-    onAcceptSale: transactionId => dispatch(acceptSale(transactionId)),
-    onDeclineSale: transactionId => dispatch(declineSale(transactionId)),
     onManageDisableScrolling: (componentId, disableScrolling) =>
       dispatch(manageDisableScrolling(componentId, disableScrolling)),
     callSetInitialValues: (setInitialValues, values) => dispatch(setInitialValues(values)),

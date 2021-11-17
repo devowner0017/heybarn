@@ -1,6 +1,8 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
+
 import { FormattedMessage } from '../../util/reactIntl';
-import { ResponsiveImage, Modal, ImageCarousel } from '../../components';
+import { ResponsiveImage, Modal, ImageCarousel, InlineTextButton } from '../../components';
 import ActionBarMaybe from './ActionBarMaybe';
 
 import css from './ListingPage.module.css';
@@ -16,6 +18,7 @@ const SectionImages = props => {
     onImageCarouselClose,
     onManageDisableScrolling,
   } = props;
+  const history = useHistory();
 
   const hasImages = listing.images && listing.images.length > 0;
   const firstImage = hasImages ? listing.images[0] : null;
@@ -39,6 +42,16 @@ const SectionImages = props => {
 
   return (
     <div className={css.sectionImages}>
+      <InlineTextButton
+        className={css.backButton}
+        onClick={e => {
+          e.preventDefault();
+          history.goBack();
+        }}
+      >
+        Back to search
+      </InlineTextButton>
+
       <div className={css.threeToTwoWrapper}>
         <div className={css.aspectWrapper} onClick={handleViewPhotosClick}>
           {actionBar}

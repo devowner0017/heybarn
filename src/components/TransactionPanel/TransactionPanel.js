@@ -237,10 +237,16 @@ export class TransactionPanelComponent extends Component {
       signRentalAgreementInProgress,
       signRentalAgreementError,
       onSignRentalAgreement,
+
+      ensuredRelated,
     } = this.props;
 
     const currentTransaction = ensureTransaction(transaction);
     const currentListing = ensureListing(currentTransaction.listing);
+    const relatedTitle = ensuredRelated.attributes.title;
+    const relatedFirstImage =
+      ensuredRelated.images && ensuredRelated.images.length > 0 ? ensuredRelated.images[0] : null;
+
     const currentProvider = ensureUser(currentTransaction.provider);
     const currentCustomer = ensureUser(currentTransaction.customer);
     const isCustomer = transactionRole === 'customer';
@@ -308,6 +314,7 @@ export class TransactionPanelComponent extends Component {
           headingState: HEADING_RENTAL_AGREEMENT_DISCUSSION,
           showDetailCardHeadings: true,
           showRentalAgreementButtons: true,
+          allowMessages: true,
         };
       }
       // ****
@@ -337,7 +344,8 @@ export class TransactionPanelComponent extends Component {
           headingState: HEADING_RENTAL_AGREEMENT_SENT,
           showRentalSignatureButtons: isCustomer && hasCorrectNextTransition,
           // TODO: Fix breakdowns
-          showBreakdowns: false,
+          showBreakdowns: true,
+          allowMessages: true,
         };
       }
       // ****
@@ -359,6 +367,8 @@ export class TransactionPanelComponent extends Component {
         return {
           headingState: HEADING_RENTAL_AGREEMENT_FINALIZED,
           showBookingPanel: isCustomer && !isProviderBanned && hasCorrectNextTransition,
+          showBreakdowns: true,
+          allowMessages: true,
         };
       }
       // ****
@@ -367,38 +377,15 @@ export class TransactionPanelComponent extends Component {
           headingState: HEADING_DELIVERED,
           showDetailCardHeadings: isCustomer,
           showAddress: isCustomer,
+          showBreakdowns: true,
+          allowMessages: true,
         };
       } else if (txIsPaymentPending(tx)) {
         return {
           headingState: HEADING_PAYMENT_PENDING,
           showDetailCardHeadings: isCustomer,
-        };
-      } else if (txIsPaymentExpired(tx)) {
-        return {
-          headingState: HEADING_PAYMENT_EXPIRED,
-          showDetailCardHeadings: isCustomer,
-        };
-      } else if (txIsRequested(tx)) {
-        return {
-          headingState: HEADING_REQUESTED,
-          showDetailCardHeadings: isCustomer,
-          showSaleButtons: isProvider && !isCustomerBanned,
-        };
-      } else if (txIsAccepted(tx)) {
-        return {
-          headingState: HEADING_ACCEPTED,
-          showDetailCardHeadings: isCustomer,
-          showAddress: isCustomer,
-        };
-      } else if (txIsDeclined(tx)) {
-        return {
-          headingState: HEADING_DECLINED,
-          showDetailCardHeadings: isCustomer,
-        };
-      } else if (txIsCanceled(tx)) {
-        return {
-          headingState: HEADING_CANCELED,
-          showDetailCardHeadings: isCustomer,
+          showBreakdowns: true,
+          allowMessages: true,
         };
       } else {
         return {
@@ -432,8 +419,11 @@ export class TransactionPanelComponent extends Component {
     const unitType = config.bookingUnitType;
     const isNightly = unitType === LINE_ITEM_NIGHT;
     const isDaily = unitType === LINE_ITEM_DAY;
+    const isWeekly = true;
 
-    const unitTranslationKey = isNightly
+    const unitTranslationKey = isWeekly
+      ? 'TransactionInitPanel.perWeek'
+      : isNightly
       ? 'TransactionPanel.perNight'
       : isDaily
       ? 'TransactionPanel.perDay'
@@ -527,7 +517,11 @@ export class TransactionPanelComponent extends Component {
       />
     );
     const showSendMessageForm =
-      !isCustomerBanned && !isCustomerDeleted && !isProviderBanned && !isProviderDeleted;
+      !isCustomerBanned &&
+      !isCustomerDeleted &&
+      !isProviderBanned &&
+      !isProviderDeleted &&
+      stateData.allowMessages;
 
     const sendMessagePlaceholder = intl.formatMessage(
       { id: 'TransactionPanel.sendMessagePlaceholder' },
@@ -558,11 +552,6 @@ export class TransactionPanelComponent extends Component {
               provider={currentProvider}
               isCustomer={isCustomer}
             />
-            {isProvider ? (
-              <div className={css.avatarWrapperProviderDesktop}>
-                <AvatarLarge user={currentCustomer} className={css.avatarDesktop} />
-              </div>
-            ) : null}
             <PanelHeading
               panelHeadingState={stateData.headingState}
               transactionRole={transactionRole}
@@ -619,9 +608,9 @@ export class TransactionPanelComponent extends Component {
                 onBlur={this.onSendMessageFormBlur}
                 onSubmit={this.onMessageSubmit}
               />
-            ) : (
-              <div className={css.sendingMessageNotAllowed}>{sendingMessageNotAllowed}</div>
-            )}
+            ) : null
+            // <div className={css.sendingMessageNotAllowed}>{sendingMessageNotAllowed}</div>
+            }
             {stateData.showAcceptCommunicationButtons ? (
               <div className={css.mobileActionButtons}>{acceptCommunicationButtons}</div>
             ) : null}
@@ -653,25 +642,6 @@ export class TransactionPanelComponent extends Component {
                 geolocation={geolocation}
                 showAddress={stateData.showAddress}
               />
-              {stateData.showBookingPanel ? (
-                <BookingPanel
-                  className={css.bookingPanel}
-                  titleClassName={css.bookingTitle}
-                  isOwnListing={false}
-                  listing={currentListing}
-                  title={listingTitle}
-                  subTitle={bookingSubTitle}
-                  authorDisplayName={authorDisplayName}
-                  onSubmit={onSubmitBookingRequest}
-                  onManageDisableScrolling={onManageDisableScrolling}
-                  timeSlots={timeSlots}
-                  fetchTimeSlotsError={fetchTimeSlotsError}
-                  onFetchTransactionLineItems={onFetchTransactionLineItems}
-                  lineItems={lineItems}
-                  fetchLineItemsInProgress={fetchLineItemsInProgress}
-                  fetchLineItemsError={fetchLineItemsError}
-                />
-              ) : null}
               {stateData.showBreakdowns && (
                 <BreakdownMaybe
                   className={css.breakdownContainer}
@@ -692,6 +662,21 @@ export class TransactionPanelComponent extends Component {
                 <div className={css.desktopActionButtons}>{saleButtons}</div>
               ) : null}
             </div>
+            {ensuredRelated && (
+              <div className={css.detailCard}>
+                <DetailCardImage
+                  avatarWrapperClassName={css.avatarWrapperDesktop}
+                  listingTitle={relatedTitle}
+                  image={relatedFirstImage}
+                  provider={currentProvider}
+                  isCustomer={isCustomer}
+                />
+                <DetailCardHeadingsMaybe
+                  showDetailCardHeadings={stateData.showDetailCardHeadings}
+                  listingTitle={relatedTitle}
+                />
+              </div>
+            )}
           </div>
         </div>
         <ReviewModal

@@ -104,7 +104,7 @@ const routeConfiguration = () => {
       loadData: pageDataLoadingAPI.ListingPage.loadData,
     },
 
-    
+
 
   {
       path: '/a',
@@ -133,7 +133,7 @@ const routeConfiguration = () => {
       loadData: pageDataLoadingAPI.ListingPage.loadData,
     },
 
-    
+
 
 
 
@@ -275,14 +275,25 @@ const routeConfiguration = () => {
     },
     // NEW PAGES FOR INITIALIZING THE EXCHANGE OF CONTACT INfo
     {
-      path: '/transaction/:id/initial',
-      name: 'TransactionInitPage',
+      path: '/transaction/a/:id/initial',
+      name: 'TransactionInitPageA',
+      auth: true,
+      authPage: 'LoginPage',
+      component: TransactionInitPage,
+      extraProps: { transactionRole: 'provider' },
+      loadData: params =>
+        pageDataLoadingAPI.TransactionInitPage.loadData({ ...params, listingType: 'listing' }),
+      setInitialValues: pageDataLoadingAPI.TransactionInitPage.setInitialValues,
+    },
+    {
+      path: '/transaction/l/:id/initial',
+      name: 'TransactionInitPageL',
       auth: true,
       authPage: 'LoginPage',
       component: TransactionInitPage,
       extraProps: { transactionRole: 'customer' },
       loadData: params =>
-        pageDataLoadingAPI.TransactionInitPage.loadData({ ...params, transactionRole: 'customer' }),
+        pageDataLoadingAPI.TransactionInitPage.loadData({ ...params, listingType: 'advert' }),
       setInitialValues: pageDataLoadingAPI.TransactionInitPage.setInitialValues,
     },
     {

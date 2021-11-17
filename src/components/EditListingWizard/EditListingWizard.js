@@ -214,7 +214,7 @@ class EditListingWizard extends Component {
   }
 
   handlePublishListing(id) {
-    const { onPublishListingDraft, currentUser, stripeAccount } = this.props;
+    const { onPublishListingDraft, currentUser, stripeAccount, isAdvert } = this.props;
 
     const stripeConnected =
       currentUser && currentUser.stripeAccount && !!currentUser.stripeAccount.id;
@@ -226,7 +226,7 @@ class EditListingWizard extends Component {
       (hasRequirements(stripeAccountData, 'past_due') ||
         hasRequirements(stripeAccountData, 'currently_due'));
 
-    if (stripeConnected && !requirementsMissing) {
+    if ((stripeConnected && !requirementsMissing) || isAdvert) {
       onPublishListingDraft(id);
     } else {
       this.setState({

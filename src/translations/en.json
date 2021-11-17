@@ -777,6 +777,11 @@
   "ReviewModal.description": "Reviews are an important part of the Heybarn community. Please share what went well and what could have been improved.",
   "ReviewModal.later": "Later",
   "ReviewModal.title": "Leave a review for {revieweeName}",
+
+  "CreateListingModal.description": "Reviews are an important part of the Heybarn community. Please share what went well and what could have been improved.",
+  "CreateListingModal.later": "Later",
+  "CreateListingModal.title": "Leave a review for {revieweeName}",
+
   "SavedCardDetails.cancel": "Cancel",
   "SavedCardDetails.deletePaymentMethod": "Remove payment card",
   "SavedCardDetails.expiredCardText": "This payment card has expired",
@@ -1131,6 +1136,21 @@
   "TransactionPanel.p_rentalAgreementSentTitle": "Too easy! Your rental agreement has been sent to {customerName} for countersigning.",
   "TransactionPanel.p_rentalAgreementSentSubTitle": "Feel free to give them a nudge to keep things moving if you don't hear back soon!",
 
+  "TransactionPanel.c_hostDeclinedTitle": "Sorry, {providerName} doesn't think that this is the right advert for them",
+  "TransactionPanel.c_hostDeclinedSubTitle": "Other hosts are looking...",
+  "TransactionPanel.p_hostDeclinedTitle": "Done. We'll let {customerName} know that this was not the advert for you.",
+  "TransactionPanel.p_hostDeclinedSubTitle": "What about these other listings?",
+
+  "TransactionPanel.c_renterDeclinedTitle": "Done. We've (politely) let {providerName} know that you're not interested",
+  "TransactionPanel.c_renterDeclinedSubTitle": "How about taking a look at some other options?",
+  "TransactionPanel.p_renterDeclinedTitle": "Sorry. {customerName} doesn't think that this is the right listing for them",
+  "TransactionPanel.p_renterDeclinedSubTitle": "More renters are searching...",
+
+  "TransactionPanel.c_cancelledDuringRadTitle": "This agreement has been cancelled",
+  "TransactionPanel.c_cancelledDuringRadSubTitle": "How about taking a look at some other options?",
+  "TransactionPanel.p_cancelledDuringRadTitle": "This agreement has been cancelled",
+  "TransactionPanel.p_cancelledDuringRadSubTitle": "More renters are searching...",
+
   "TransactionPanel.acceptButton": "Accept",
   "TransactionPanel.acceptButton": "Accept",
   "TransactionPanel.acceptButton": "Accept",
@@ -1216,6 +1236,7 @@
   "TransactionInitPanel.paymentMethodsPageLink": "payment methods page",
   "TransactionInitPanel.perDay": "per day",
   "TransactionInitPanel.perNight": "per night",
+  "TransactionInitPanel.perWeek": "per week",
   "TransactionInitPanel.perUnit": "per unit",
   "TransactionInitPanel.requestToBook": "Request to book",
   "TransactionInitPanel.saleAcceptedTitle": "You accepted a request from {customerName} to book {listingLink}.",

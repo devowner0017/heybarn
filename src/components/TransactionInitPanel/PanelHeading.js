@@ -50,9 +50,9 @@ const HeadingCustomer = props => {
         </span>
       </h1>
       {subId && (
-          <div className={css.subTitle}>
-            <FormattedMessage id={subId} values={subValues} />
-          </div>
+        <div className={css.subTitle}>
+          <FormattedMessage id={subId} values={subValues} />
+        </div>
       )}
       <ListingDeletedInfoMaybe listingDeleted={listingDeleted} />
     </React.Fragment>
@@ -115,7 +115,7 @@ const PanelHeading = props => {
   console.log(props);
   const isCustomer = props.transactionRole === 'customer';
 
-  const defaultRootClassName = isCustomer ? css.headingOrder : css.headingSale;
+  const defaultRootClassName = css.heading;
   const titleClasses = classNames(rootClassName || defaultRootClassName, className);
   const listingLink = createListingLink(listingId, listingTitle, listingDeleted);
 

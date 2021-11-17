@@ -118,7 +118,6 @@ export class ListingPageComponent extends Component {
     // const { bookingDates, ...bookingData } = values;
 
     const initialValues = {
-      
       contactingAs,
       host: listing.author,
       guest: currentUser,
@@ -128,7 +127,10 @@ export class ListingPageComponent extends Component {
     const saveToSessionStorage = !this.props.currentUser;
     const routes = routeConfiguration();
     // Customize checkout page state with current listing and selected bookingDates
-    const { setInitialValues } = findRouteByRouteName('TransactionInitPage', routes);
+    const { setInitialValues } = findRouteByRouteName(
+      `TransactionInitPage${typeOfLIsting === 'listing' ? 'L' : 'A'}`,
+      routes
+    );
     console.log(
       '🚀 | file: ListingPage.js | line 120 | ListingPageComponent | submitContactUser | setInitialValues',
       setInitialValues
@@ -141,7 +143,7 @@ export class ListingPageComponent extends Component {
     // Redirect to CheckoutPage
     history.push(
       createResourceLocatorString(
-        'TransactionInitPage',
+        `TransactionInitPage${typeOfLIsting === 'listing' ? 'L' : 'A'}`,
         routes,
         { id: listing.id.uuid, slug: createSlug(listing.attributes.title) },
         {}

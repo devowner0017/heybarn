@@ -244,15 +244,16 @@ export const fetchCurrentUserHasListings = () => (dispatch, getState, sdk) => {
   const params = {
     // Since we are only interested in if the user has
     // listings, we only need at most one result.
+    authorId: currentUser.id,
+    pub_listingType: 'listing',
     page: 1,
     per_page: 1,
   };
 
-  return sdk.ownListings
+  return sdk.listings
     .query(params)
     .then(response => {
       const hasListings = response.data.data && response.data.data.length > 0;
-
       const hasPublishedListings =
         hasListings &&
         ensureOwnListing(response.data.data[0]).attributes.state !== LISTING_STATE_DRAFT;

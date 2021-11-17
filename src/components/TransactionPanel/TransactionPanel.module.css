@@ -142,7 +142,7 @@
 }
 
 /* PanelHeadings subcomponent */
-.headingOrder {
+.heading {
   margin: 29px 24px 0 24px;
 
   @media (--viewportMedium) {

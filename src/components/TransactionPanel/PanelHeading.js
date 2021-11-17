@@ -135,7 +135,7 @@ const PanelHeading = props => {
 
   const isCustomer = props.transactionRole === 'customer';
 
-  const defaultRootClassName = isCustomer ? css.headingOrder : css.headingSale;
+  const defaultRootClassName = css.heading;
   const titleClasses = classNames(rootClassName || defaultRootClassName, className);
   const listingLink = createListingLink(listingId, listingTitle, listingDeleted);
 
@@ -249,7 +249,7 @@ const PanelHeading = props => {
           {!listingDeleted ? (
             <p className={css.transactionInfoMessage}>
               <FormattedMessage
-                id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_cancelledDureingRadSubTitle`}
+                id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_cancelledDuringRadSubTitle`}
               />
             </p>
           ) : null}

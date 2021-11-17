@@ -283,7 +283,10 @@ class StripePaymentFormPlatformFee extends Component {
     });
   }
   handleSubmit(values) {
-    console.log("🚀 | file: StripePaymentFormPlatformFee.js | line 286 | StripePaymentFormPlatformFee | handleSubmit | values", values);
+    console.log(
+      '🚀 | file: StripePaymentFormPlatformFee.js | line 286 | StripePaymentFormPlatformFee | handleSubmit | values',
+      values
+    );
     const {
       onSubmit,
       inProgress,
@@ -333,6 +336,7 @@ class StripePaymentFormPlatformFee extends Component {
       form,
       hasHandledCardPayment,
       defaultPaymentMethod,
+      disabled,
     } = formRenderProps;
 
     this.finalFormAPI = form;
@@ -341,7 +345,7 @@ class StripePaymentFormPlatformFee extends Component {
     const billingDetailsNeeded = !(hasHandledCardPayment || confirmPaymentError);
     const billingDetailsKnown = hasHandledCardPayment || ensuredDefaultPaymentMethod;
     const onetimePaymentNeedsAttention = !billingDetailsKnown && !this.state.cardValueValid;
-    const submitDisabled = invalid || onetimePaymentNeedsAttention || submitInProgress;
+    const submitDisabled = disabled || invalid || onetimePaymentNeedsAttention || submitInProgress;
     const hasCardError = this.state.error && !submitInProgress;
     const hasPaymentErrors = confirmCardPaymentError || confirmPaymentError;
     const classes = classNames(rootClassName || css.root, className);

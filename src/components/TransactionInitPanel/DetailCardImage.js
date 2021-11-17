@@ -15,6 +15,7 @@ const DetailCardImage = props => {
     provider,
     isCustomer,
   } = props;
+  console.log("🚀 | file: DetailCardImage.js | line 18 | props", props);
   const classes = classNames(rootClassName || css.detailCardImageWrapper, className);
   return (
     <React.Fragment>

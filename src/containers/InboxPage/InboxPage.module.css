@@ -62,7 +62,7 @@
     background-color: transparent;
   }
   @media (--viewportLargeWithPaddings) {
-    padding: 109px 0 82px max( calc((100% - 1600px) / 2), 20px);
+    padding: 109px 0 82px max(calc((100% - 1600px) / 2), 20px);
   }
 }
 
@@ -73,16 +73,17 @@
 
   /* Layout */
   margin-top: 0;
-  margin-bottom: 0;
+  margin-bottom: 20px;
 
   @media (--viewportMedium) {
     padding-bottom: 10px;
     margin-top: 0;
-    margin-bottom: 0;
+    margin-bottom: 40px;
   }
 
   @media (--viewportLarge) {
     padding-bottom: 0;
+    margin-bottom: 80px;
   }
 }
 
@@ -181,7 +182,7 @@
   }
 
   @media (--viewportLarge) {
-    margin-bottom: 16px;
+    margin-bottom: 30px;
     padding-bottom: 7px;
   }
 }
@@ -216,9 +217,8 @@
     margin-right: 15px;
   }
 }
-.listingName{
+.listingName {
   @apply --marketplaceTinyFontStyles;
-
 }
 .rowNotificationDot {
   width: 6px;
@@ -390,5 +390,12 @@
   & .stateName,
   & .lastTransitionedAt {
     color: var(--matterColorAnti);
+  }
+}
+.inboxPageWrapper {
+  @media (--viewportLarge) {
+    max-width: 1045px;
+    margin-right: 20%;
+    padding: 40px 150px 82px 150px;
   }
 }

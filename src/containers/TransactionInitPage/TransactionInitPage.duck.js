@@ -1,21 +1,8 @@
 import pick from 'lodash/pick';
-import pickBy from 'lodash/pickBy';
-import isEmpty from 'lodash/isEmpty';
-import moment from 'moment';
 import config from '../../config';
 import { types as sdkTypes } from '../../util/sdkLoader';
-import { isTransactionsTransitionInvalidTransition, storableError } from '../../util/errors';
-import {
-  txIsEnquired,
-  getReview1Transition,
-  getReview2Transition,
-  txIsInFirstReviewBy,
-  TRANSITION_ACCEPT,
-  TRANSITION_DECLINE,
-  TRANSITION_HOST_FEE_PAID,
-  TRANSITION_RENTER_FEE_PAID,
-} from '../../util/transaction';
-import { transactionLineItems } from '../../util/api';
+import { storableError } from '../../util/errors';
+import { TRANSITION_HOST_FEE_PAID, TRANSITION_RENTER_FEE_PAID } from '../../util/transaction';
 import * as log from '../../util/log';
 import {
   updatedEntities,
@@ -23,16 +10,9 @@ import {
   denormalisedResponseEntities,
 } from '../../util/data';
 import { addMarketplaceEntities } from '../../ducks/marketplaceData.duck';
-import {
-  fetchCurrentUser,
-  fetchCurrentUserHasOrdersSuccess,
-  fetchCurrentUserNotifications,
-} from '../../ducks/user.duck';
+import { fetchCurrentUser, fetchCurrentUserHasOrdersSuccess } from '../../ducks/user.duck';
 
 const { UUID } = sdkTypes;
-
-const MESSAGES_PAGE_SIZE = 100;
-const CUSTOMER = 'customer';
 
 // ================ Action types ================ //
 
@@ -57,6 +37,12 @@ export const STRIPE_CUSTOMER_REQUEST = 'app/TransactionInitPage/STRIPE_CUSTOMER_
 export const STRIPE_CUSTOMER_SUCCESS = 'app/TransactionInitPage/STRIPE_CUSTOMER_SUCCESS';
 export const STRIPE_CUSTOMER_ERROR = 'app/TransactionInitPage/STRIPE_CUSTOMER_ERROR';
 
+export const FETCH_LISTINGS_REQUEST = 'app/TransactionInitPage/FETCH_LISTINGS_REQUEST';
+export const FETCH_LISTINGS_SUCCESS = 'app/TransactionInitPage/FETCH_LISTINGS_SUCCESS';
+export const FETCH_LISTINGS_ERROR = 'app/TransactionInitPage/FETCH_LISTINGS_ERROR';
+
+export const ADD_OWN_ENTITIES = 'app/TransactionInitPage/ADD_OWN_ENTITIES';
+
 // ================ Reducer ================ //
 
 const initialState = {
@@ -70,15 +56,22 @@ const initialState = {
   guest: null,
   host: null,
   contactingAs: null,
+
+  queryParams: null,
+  queryInProgress: false,
+  queryListingsError: null,
+  ownEntities: {},
+  currentPageResultIds: null,
 };
 
-// Merge entity arrays using ids, so that conflicting items in newer array (b) overwrite old values (a).
-// const a = [{ id: { uuid: 1 } }, { id: { uuid: 3 } }];
-// const b = [{ id: : { uuid: 2 } }, { id: : { uuid: 1 } }];
-// mergeEntityArrays(a, b)
-// => [{ id: { uuid: 3 } }, { id: : { uuid: 2 } }, { id: : { uuid: 1 } }]
-const mergeEntityArrays = (a, b) => {
-  return a.filter(aEntity => !b.find(bEntity => aEntity.id.uuid === bEntity.id.uuid)).concat(b);
+const resultIds = data => data.data.map(l => l.id);
+
+const merge = (state, sdkResponse) => {
+  const apiResponse = sdkResponse.data;
+  return {
+    ...state,
+    ownEntities: updatedEntities({ ...state.ownEntities }, apiResponse),
+  };
 };
 
 export default function checkoutPageReducer(state = initialState, action = {}) {
@@ -100,20 +93,6 @@ export default function checkoutPageReducer(state = initialState, action = {}) {
       console.error(payload); // eslint-disable-line no-console
       return { ...state, initiateOrderError: payload };
 
-    case ACCEPT_SALE_REQUEST:
-      return { ...state, acceptInProgress: true, acceptSaleError: null, declineSaleError: null };
-    case ACCEPT_SALE_SUCCESS:
-      return { ...state, acceptInProgress: false };
-    case ACCEPT_SALE_ERROR:
-      return { ...state, acceptInProgress: false, acceptSaleError: payload };
-
-    case DECLINE_SALE_REQUEST:
-      return { ...state, declineInProgress: true, declineSaleError: null, acceptSaleError: null };
-    case DECLINE_SALE_SUCCESS:
-      return { ...state, declineInProgress: false };
-    case DECLINE_SALE_ERROR:
-      return { ...state, declineInProgress: false, declineSaleError: payload };
-
     case STRIPE_CUSTOMER_REQUEST:
       return { ...state, stripeCustomerFetched: false };
     case STRIPE_CUSTOMER_SUCCESS:
@@ -122,6 +101,29 @@ export default function checkoutPageReducer(state = initialState, action = {}) {
       console.error(payload); // eslint-disable-line no-console
       return { ...state, stripeCustomerFetchError: payload };
 
+    case FETCH_LISTINGS_REQUEST:
+      return {
+        ...state,
+        queryParams: payload.queryParams,
+        queryInProgress: true,
+        queryListingsError: null,
+        currentPageResultIds: [],
+      };
+    case FETCH_LISTINGS_SUCCESS:
+      return {
+        ...state,
+        currentPageResultIds: resultIds(payload.data),
+        pagination: payload.data.meta,
+        queryInProgress: false,
+      };
+    case FETCH_LISTINGS_ERROR:
+      // eslint-disable-next-line no-console
+      console.error(payload);
+      return { ...state, queryInProgress: false, queryListingsError: payload };
+
+    case ADD_OWN_ENTITIES:
+      return merge(state, payload);
+
     default:
       return state;
   }
@@ -129,14 +131,24 @@ export default function checkoutPageReducer(state = initialState, action = {}) {
 
 // ================ Selectors ================ //
 
-export const acceptOrDeclineInProgress = state => {
-  return state.TransactionInitPage.acceptInProgress || state.TransactionInitPage.declineInProgress;
+/**
+ * Get the denormalised own listing entities with the given IDs
+ *
+ * @param {Object} state the full Redux store
+ * @param {Array<UUID>} listingIds listing IDs to select from the store
+ */
+export const getOwnListingsById = (state, listingIds) => {
+  const { ownEntities } = state.TransactionInitPage;
+  const resources = listingIds.map(id => ({
+    id,
+    type: 'ownListing',
+  }));
+  const throwIfNotFound = false;
+  return denormalisedEntities(ownEntities, resources, throwIfNotFound);
 };
 
 // ================ Action creators ================ //
 export const setInitialValues = initialValues => {
-  console.log('🚀 | file: TransactionInitPage.duck.js | line 120 | initialValues', initialValues);
-
   return {
     type: SET_INITIAL_VALUES,
     payload: pick(initialValues, Object.keys(initialState)),
@@ -167,15 +179,21 @@ const initiateOrderError = e => ({
   payload: e,
 });
 
-// ================ OLD ================ //
+export const queryListingsRequest = queryParams => ({
+  type: FETCH_LISTINGS_REQUEST,
+  payload: { queryParams },
+});
 
-const acceptSaleRequest = () => ({ type: ACCEPT_SALE_REQUEST });
-const acceptSaleSuccess = () => ({ type: ACCEPT_SALE_SUCCESS });
-const acceptSaleError = e => ({ type: ACCEPT_SALE_ERROR, error: true, payload: e });
+export const queryListingsSuccess = response => ({
+  type: FETCH_LISTINGS_SUCCESS,
+  payload: { data: response.data },
+});
 
-const declineSaleRequest = () => ({ type: DECLINE_SALE_REQUEST });
-const declineSaleSuccess = () => ({ type: DECLINE_SALE_SUCCESS });
-const declineSaleError = e => ({ type: DECLINE_SALE_ERROR, error: true, payload: e });
+export const queryListingsError = e => ({
+  type: FETCH_LISTINGS_ERROR,
+  error: true,
+  payload: e,
+});
 
 export const stripeCustomerRequest = () => ({ type: STRIPE_CUSTOMER_REQUEST });
 export const stripeCustomerSuccess = () => ({ type: STRIPE_CUSTOMER_SUCCESS });
@@ -228,19 +246,10 @@ export const showListing = (listingId, isOwn = false) => (dispatch, getState, sd
     });
 };
 
-// ================ OLD ================ //
-
-const listingRelationship = txResponse => {
-  return txResponse.data.data.relationships.listing.data;
-};
-
 export const createTransaction = orderParams => (dispatch, getState, sdk) => {
-  console.log(
-    '🚀 | file: TransactionInitPage.duck.js | line 235 | initiateOrder | orderParams',
-    orderParams
-  );
   dispatch(initiateOrderRequest());
 
+  // TODO UPDATE THIS WHEN WE BUILD THE OTHER SIDE OF THE MARKETPLACE
   const isRequestFromHost = false;
   const transition = isRequestFromHost ? TRANSITION_HOST_FEE_PAID : TRANSITION_RENTER_FEE_PAID;
 
@@ -276,58 +285,9 @@ export const createTransaction = orderParams => (dispatch, getState, sdk) => {
     .catch(handleError);
 };
 
-export const acceptSale = id => (dispatch, getState, sdk) => {
-  if (acceptOrDeclineInProgress(getState())) {
-    return Promise.reject(new Error('Accept or decline already in progress'));
-  }
-  dispatch(acceptSaleRequest());
-
-  return sdk.transactions
-    .transition({ id, transition: TRANSITION_ACCEPT, params: {} }, { expand: true })
-    .then(response => {
-      dispatch(addMarketplaceEntities(response));
-      dispatch(acceptSaleSuccess());
-      dispatch(fetchCurrentUserNotifications());
-      return response;
-    })
-    .catch(e => {
-      dispatch(acceptSaleError(storableError(e)));
-      log.error(e, 'accept-sale-failed', {
-        txId: id,
-        transition: TRANSITION_ACCEPT,
-      });
-      throw e;
-    });
-};
-export const declineSale = id => (dispatch, getState, sdk) => {
-  if (acceptOrDeclineInProgress(getState())) {
-    return Promise.reject(new Error('Accept or decline already in progress'));
-  }
-  dispatch(declineSaleRequest());
-
-  return sdk.transactions
-    .transition({ id, transition: TRANSITION_DECLINE, params: {} }, { expand: true })
-    .then(response => {
-      dispatch(addMarketplaceEntities(response));
-      dispatch(declineSaleSuccess());
-      dispatch(fetchCurrentUserNotifications());
-      return response;
-    })
-    .catch(e => {
-      dispatch(declineSaleError(storableError(e)));
-      log.error(e, 'reject-sale-failed', {
-        txId: id,
-        transition: TRANSITION_DECLINE,
-      });
-      throw e;
-    });
-};
-
 export const sendMessage = params => (dispatch, getState, sdk) => {
-  console.log('🚀 | file: TransactionInitPage.duck.js | line 327 | params', params);
   const message = params.message;
   const orderId = params.id;
-
   if (message) {
     return sdk.messages
       .send({ transactionId: orderId, content: message })
@@ -347,7 +307,6 @@ export const sendMessage = params => (dispatch, getState, sdk) => {
 // We need to fetch currentUser with correct params to include relationship
 export const stripeCustomer = () => (dispatch, getState, sdk) => {
   dispatch(stripeCustomerRequest());
-
   return dispatch(fetchCurrentUser({ include: ['stripeCustomer.defaultPaymentMethod'] }))
     .then(response => {
       dispatch(stripeCustomerSuccess());
@@ -357,21 +316,58 @@ export const stripeCustomer = () => (dispatch, getState, sdk) => {
     });
 };
 
-const isNonEmpty = value => {
-  return typeof value === 'object' || Array.isArray(value) ? !isEmpty(value) : !!value;
+// This works the same way as addMarketplaceEntities,
+// but we don't want to mix own listings with searched listings
+// (own listings data contains different info - e.g. exact location etc.)
+export const addOwnEntities = sdkResponse => ({
+  type: ADD_OWN_ENTITIES,
+  payload: sdkResponse,
+});
+
+export const fetchOwnListings = listingType => (dispatch, getState, sdk) => {
+  dispatch(queryListingsRequest());
+  const { currentUser } = getState().user;
+  if (!currentUser) return null;
+  const params = {
+    authorId: currentUser.id,
+    per_page: 100,
+    include: ['images'],
+    'fields.image': ['variants.landscape-crop', 'variants.landscape-crop2x'],
+    'limit.images': 1,
+  };
+  return sdk.ownListings
+    .query(params)
+    .then(response => {
+      console.log('🚀 | file: TransactionInitPage.duck.js | line 334 | params', params);
+      console.log('🚀 | file: TransactionInitPage.duck.js | line 336 | response', response);
+      const filteredResults = response.data.data.filter(r => {
+        const responseListingType = r.attributes.publicData.listingType;
+        return responseListingType === listingType;
+      });
+      let alteredResponse = response;
+      alteredResponse.data.data = filteredResults;
+      alteredResponse.data.meta.totalItems = filteredResults.length;
+      dispatch(addOwnEntities(alteredResponse));
+      dispatch(queryListingsSuccess(alteredResponse));
+      return response;
+    })
+    .catch(e => {
+      dispatch(queryListingsError(storableError(e)));
+      throw e;
+    });
 };
+
 // loadData is a collection of async calls that need to be made
 // before page has all the info it needs to render itself
 export const loadData = params => (dispatch, getState) => {
-  const listingId = new UUID(params.id);
+  const { id, listingType } = params;
+  const listingId = new UUID(id);
 
-  console.log(params);
-  const state = getState().TransactionInitPage;
   // In case a transaction reference is found from a previous
   // data load -> clear the state. Otherwise keep the non-null
   // and non-empty values which may have been set from a previous page.
   // const initialValues = txRef ? {} : pickBy(state, isNonEmpty);
   // dispatch(setInitialValues(initialValues));
 
-  return Promise.all([dispatch(showListing(listingId))]);
+  return Promise.all([dispatch(showListing(listingId)), dispatch(fetchOwnListings(listingType))]);
 };
