@@ -3,7 +3,7 @@ import { FormattedMessage } from '../../util/reactIntl';
 import classNames from 'classnames';
 import { PrimaryButton, SecondaryButton } from '../../components';
 
-import css from './TransactionPanel.module.css';
+import css from './TransactionInitPanel.module.css';
 
 // Functional component as a helper to build ActionButtons for
 // provider when state is preauthorized
@@ -24,12 +24,12 @@ const SaleActionButtonsMaybe = props => {
 
   const acceptErrorMessage = acceptSaleError ? (
     <p className={css.actionError}>
-      <FormattedMessage id="TransactionPanel.acceptSaleFailed" />
+      <FormattedMessage id="TransactionInitPanel.acceptSaleFailed" />
     </p>
   ) : null;
   const declineErrorMessage = declineSaleError ? (
     <p className={css.actionError}>
-      <FormattedMessage id="TransactionPanel.declineSaleFailed" />
+      <FormattedMessage id="TransactionInitPanel.declineSaleFailed" />
     </p>
   ) : null;
 
@@ -47,14 +47,14 @@ const SaleActionButtonsMaybe = props => {
           disabled={buttonsDisabled}
           onClick={onDeclineSale}
         >
-          <FormattedMessage id="TransactionPanel.declineButton" />
+          <FormattedMessage id="TransactionInitPanel.declineButton" />
         </SecondaryButton>
         <PrimaryButton
           inProgress={acceptInProgress}
           disabled={buttonsDisabled}
           onClick={onAcceptSale}
         >
-          <FormattedMessage id="TransactionPanel.acceptButton" />
+          <FormattedMessage id="TransactionInitPanel.acceptButton" />
         </PrimaryButton>
       </div>
     </div>

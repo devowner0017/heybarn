@@ -109,6 +109,9 @@ class FilterPopup extends Component {
       initialValues,
       keepDirtyOnReinitialize,
       contentPlacementOffset,
+      prevValues,
+      setFormValues,
+      onFieldChanges,
     } = this.props;
 
     const classes = classNames(rootClassName || css.root, className);
@@ -154,6 +157,9 @@ class FilterPopup extends Component {
                 onSubmit={this.handleSubmit}
                 onCancel={this.handleCancel}
                 onClear={this.handleClear}
+                prevValues={prevValues}
+                setFormValues={setFormValues}
+                onFieldChanges={onFieldChanges}
               >
                 {children}
               </FilterForm>

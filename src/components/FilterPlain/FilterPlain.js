@@ -47,6 +47,9 @@ class FilterPlainComponent extends Component {
       initialValues,
       keepDirtyOnReinitialize,
       contentPlacementOffset,
+      prevValues,
+      setFormValues,
+      onFieldChanges,
     } = this.props;
     const classes = classNames(rootClassName || css.root, className);
 
@@ -76,6 +79,9 @@ class FilterPlainComponent extends Component {
             onChange={this.handleChange}
             initialValues={initialValues}
             keepDirtyOnReinitialize={keepDirtyOnReinitialize}
+            prevValues={prevValues}
+            setFormValues={setFormValues}
+            onFieldChanges={onFieldChanges}
           >
             {children}
           </FilterForm>

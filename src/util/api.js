@@ -103,6 +103,17 @@ export const transitionPrivileged = body => {
   return post('/api/transition-privileged', body);
 };
 
+// Transition a transaction with a SIMPLE privileged transition.
+//
+// This transitions a transaction from one state to the next without
+//  requiring booking data or line items
+//
+// See `server/api/transition-privileged.js` to see what data should
+// be sent in the body.
+export const transitionPrivilegedSimple = body => {
+  return post('/api/transition-privileged-simple', body);
+};
+
 // Create user with identity provider (e.g. Facebook or Google)
 //
 // If loginWithIdp api call fails and user can't authenticate to Flex with idp
@@ -114,4 +125,20 @@ export const transitionPrivileged = body => {
 // be sent in the body.
 export const createUserWithIdp = body => {
   return post('/api/auth/create-user-with-idp', body);
+};
+
+// After accepting a booking, close the listing
+//
+export const closeAcceptedListing = body => {
+  return post('/api/close-accepted-listing', body);
+};
+
+// Create payment intent for takinga  reservation fee
+//
+export const createReservationCharge = body => {
+  return post('/api/create-reservation-charge', body);
+};
+
+export const receiveReservationPayment = body => {
+  return post('/api/receive-reservation-payment', body);
 };

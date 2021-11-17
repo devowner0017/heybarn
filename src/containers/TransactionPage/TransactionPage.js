@@ -34,6 +34,11 @@ import {
   sendReview,
   fetchMoreMessages,
   fetchTransactionLineItems,
+  acceptCommunication,
+  declineCommunication,
+  sendRentalAgreement,
+  cancelDuringRad,
+  signRentalAgreement,
 } from './TransactionPage.duck';
 import css from './TransactionPage.module.css';
 
@@ -81,7 +86,26 @@ export const TransactionPageComponent = props => {
     lineItems,
     fetchLineItemsInProgress,
     fetchLineItemsError,
+
+    onAcceptCommunication,
+    onDeclineCommunication,
+    acceptCommunicationInProgress,
+    declineCommunicationInProgress,
+    acceptCommunicationError,
+    declineCommunicationError,
+
+    onSendRentalAgreement,
+    onCancelDuringRad,
+    sendRentalAgreementInProgress,
+    sendRentalAgreementError,
+    cancelDuringRadInProgress,
+    cancelDuringRadError,
+
+    signRentalAgreementInProgress,
+    signRentalAgreementError,
+    onSignRentalAgreement,
   } = props;
+  console.log('🚀 | file: TransactionPage.js | line 85 | props', props);
 
   const currentTransaction = ensureTransaction(transaction);
   const currentListing = ensureListing(currentTransaction.listing);
@@ -215,6 +239,7 @@ export const TransactionPageComponent = props => {
 
   // TransactionPanel is presentational component
   // that currently handles showing everything inside layout's main view area.
+  console.log('🚀 | file: TransactionPage.js | line 220 | isDataAvailable', isDataAvailable);
   const panel = isDataAvailable ? (
     <TransactionPanel
       className={detailsClassName}
@@ -250,6 +275,21 @@ export const TransactionPageComponent = props => {
       lineItems={lineItems}
       fetchLineItemsInProgress={fetchLineItemsInProgress}
       fetchLineItemsError={fetchLineItemsError}
+      onAcceptCommunication={onAcceptCommunication}
+      onDeclineCommunication={onDeclineCommunication}
+      acceptCommunicationInProgress={acceptCommunicationInProgress}
+      declineCommunicationInProgress={declineCommunicationInProgress}
+      acceptCommunicationError={acceptCommunicationError}
+      declineCommunicationError={declineCommunicationError}
+      onSendRentalAgreement={onSendRentalAgreement}
+      onCancelDuringRad={onCancelDuringRad}
+      sendRentalAgreementInProgress={sendRentalAgreementInProgress}
+      sendRentalAgreementError={sendRentalAgreementError}
+      cancelDuringRadInProgress={cancelDuringRadInProgress}
+      cancelDuringRadError={cancelDuringRadError}
+      signRentalAgreementInProgress={signRentalAgreementInProgress}
+      signRentalAgreementError={signRentalAgreementError}
+      onSignRentalAgreement={onSignRentalAgreement}
     />
   ) : (
     loadingOrFailedFetching
@@ -364,6 +404,18 @@ const mapStateToProps = state => {
     lineItems,
     fetchLineItemsInProgress,
     fetchLineItemsError,
+
+    acceptCommunicationInProgress,
+    declineCommunicationInProgress,
+    acceptCommunicationError,
+    declineCommunicationError,
+    sendRentalAgreementInProgress,
+    sendRentalAgreementError,
+    cancelDuringRadInProgress,
+    cancelDuringRadError,
+
+    signRentalAgreementInProgress,
+    signRentalAgreementError,
   } = state.TransactionPage;
   const { currentUser } = state.user;
 
@@ -396,11 +448,29 @@ const mapStateToProps = state => {
     lineItems,
     fetchLineItemsInProgress,
     fetchLineItemsError,
+
+    acceptCommunicationInProgress,
+    declineCommunicationInProgress,
+    acceptCommunicationError,
+    declineCommunicationError,
+    sendRentalAgreementInProgress,
+    sendRentalAgreementError,
+    cancelDuringRadInProgress,
+    cancelDuringRadError,
+
+    signRentalAgreementInProgress,
+    signRentalAgreementError,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
+    onAcceptCommunication: transactionId => dispatch(acceptCommunication(transactionId)),
+    onDeclineCommunication: transactionId => dispatch(declineCommunication(transactionId)),
+    onSendRentalAgreement: transactionId => dispatch(sendRentalAgreement(transactionId)),
+    onCancelDuringRad: transactionId => dispatch(cancelDuringRad(transactionId)),
+    onSignRentalAgreement: transactionId => dispatch(signRentalAgreement(transactionId)),
+
     onAcceptSale: transactionId => dispatch(acceptSale(transactionId)),
     onDeclineSale: transactionId => dispatch(declineSale(transactionId)),
     onShowMoreMessages: txId => dispatch(fetchMoreMessages(txId)),
@@ -418,10 +488,7 @@ const mapDispatchToProps = dispatch => {
 
 const TransactionPage = compose(
   withRouter,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
   injectIntl
 )(TransactionPageComponent);
 

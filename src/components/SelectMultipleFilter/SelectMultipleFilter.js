@@ -91,6 +91,10 @@ class SelectMultipleFilter extends Component {
       showAsPopup,
       ...rest
     } = this.props;
+    console.log(
+      '🚀 | file: SelectMultipleFilter.js | line 93 | SelectMultipleFilter | render | rest',
+      rest
+    );
 
     const classes = classNames(rootClassName || css.root, className);
 

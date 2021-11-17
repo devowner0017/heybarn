@@ -20,6 +20,7 @@ import SearchPage from './SearchPage/SearchPage.duck';
 import StripePayoutPage from './StripePayoutPage/StripePayoutPage.duck';
 import TransactionPage from './TransactionPage/TransactionPage.duck';
 import TransactionInitPage from './TransactionInitPage/TransactionInitPage.duck';
+import PlatformFee from './TransactionInitPage/PlatformFee.duck';
 
 export {
   LandingPage,
@@ -39,4 +40,5 @@ export {
   StripePayoutPage,
   TransactionPage,
   TransactionInitPage,
+  PlatformFee,
 };

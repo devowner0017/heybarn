@@ -1,23 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import classNames from 'classnames';
 import { FormattedMessage, intlShape, injectIntl } from '../../util/reactIntl';
-import { createResourceLocatorString, findRouteByRouteName } from '../../util/routes';
-import routeConfiguration from '../../routeConfiguration';
 import { propTypes } from '../../util/types';
-import { ensureListing, ensureTransaction } from '../../util/data';
-import { dateFromAPIToLocalNoon } from '../../util/dates';
 import { createSlug } from '../../util/urlHelpers';
 import { txIsPaymentPending } from '../../util/transaction';
 import { getMarketplaceEntities } from '../../ducks/marketplaceData.duck';
 import { isScrollingDisabled, manageDisableScrolling } from '../../ducks/UI.duck';
 import { initializeCardPaymentData } from '../../ducks/stripe.duck.js';
+import { StripePaymentFormPlatformFee } from '../../forms';
+import { confirmCardPayment, retrievePaymentIntent } from '../../ducks/stripe.duck';
+import routeConfiguration from '../../routeConfiguration';
+import { pathByRouteName, findRouteByRouteName } from '../../util/routes';
+
+import { initiateOrder, confirmPayment } from './PlatformFee.duck';
+import {
+  ensureUser,
+  ensureListing,
+  ensureCurrentUser,
+  ensureTransaction,
+  ensureStripeCustomer,
+  ensurePaymentMethodCard,
+} from '../../util/data';
 import {
   NamedRedirect,
-  TransactionPanel,
+  TransactionInitPanel,
   Page,
   LayoutSingleColumn,
   LayoutWrapperTopbar,
@@ -30,27 +40,43 @@ import { TopbarContainer } from '..';
 import {
   acceptSale,
   declineSale,
+  stripeCustomer,
   sendMessage,
-  sendReview,
-  fetchMoreMessages,
-  fetchTransactionLineItems,
+  createTransaction,
 } from './TransactionInitPage.duck';
+import { types as sdkTypes } from '../../util/sdkLoader';
 import css from './TransactionInitPage.module.css';
 
+const { UUID } = sdkTypes;
 const PROVIDER = 'provider';
 const CUSTOMER = 'customer';
+const STRIPE_PI_USER_ACTIONS_DONE_STATUSES = ['processing', 'requires_capture', 'succeeded'];
 
+// Payment charge options
+const ONETIME_PAYMENT = 'ONETIME_PAYMENT';
+const PAY_AND_SAVE_FOR_LATER_USE = 'PAY_AND_SAVE_FOR_LATER_USE';
+const USE_SAVED_CARD = 'USE_SAVED_CARD';
+
+const initializeOrderPage = (initialValues, routes, dispatch) => {
+  const OrderPage = findRouteByRouteName('OrderDetailsPage', routes);
+
+  // Transaction is already created, but if the initial message
+  // sending failed, we tell it to the OrderDetailsPage.
+  dispatch(OrderPage.setInitialValues(initialValues));
+};
 // TransactionInitPage handles data loading for Sale and Order views to transaction pages in Inbox.
 export const TransactionInitPageComponent = props => {
   const {
     currentUser,
+    getListing,
+    params: rawParams,
     initialMessageFailedToTransaction,
     savePaymentMethodFailed,
     fetchMessagesError,
     fetchMessagesInProgress,
     totalMessagePages,
     oldestMessagePageFetched,
-    fetchTransactionError,
+    showListingError,
     history,
     intl,
     messages,
@@ -70,122 +96,99 @@ export const TransactionInitPageComponent = props => {
     acceptSaleError,
     declineInProgress,
     declineSaleError,
-    onAcceptSale,
-    onDeclineSale,
-    timeSlots,
-    fetchTimeSlotsError,
     processTransitions,
     callSetInitialValues,
     onInitializeCardPaymentData,
-    onFetchTransactionLineItems,
-    lineItems,
-    fetchLineItemsInProgress,
-    fetchLineItemsError,
+
+    stripeCustomerFetched,
+    requestedListing,
+    requestedAdvert,
+    guest,
+    host,
+    contactingAs,
   } = props;
+  console.log('🚀 | file: TransactionInitPage.js | line 110 | props', props);
+  const [savedPaymentIntents, setSavedPaymentIntents] = useState(null);
+  const [stripeFunction, setStripeFunction] = useState(null);
+  const [submittingPlatformFee, setSubmittingPlatformFee] = useState(null);
+  useEffect(_ => {
+    if (window) {
+      loadInitialData();
+    }
+  }, []);
+
+  /**
+   * Load initial data for the page
+   *
+   */
+  const loadInitialData = () => {
+    const { fetchStripeCustomer } = props;
+
+    // Fetch currentUser with stripeCustomer entity
+    // Note: since there's need for data loading in "componentWillMount" function,
+    //       this is added here instead of loadData static function.
+    fetchStripeCustomer();
+  };
+  const onStripeInitialized = stripe => {
+    setStripeFunction(stripe);
+    // this.stripe = stripe;
+    // const { paymentIntent, onRetrievePaymentIntent } = this.props;
+    // const tx = this.state.pageData ? this.state.pageData.transaction : null;
+    // // We need to get up to date PI, if booking is created but payment is not expired.
+    // const shouldFetchPaymentIntent =
+    //   this.stripe &&
+    //   !paymentIntent &&
+    //   tx &&
+    //   tx.id &&
+    //   tx.booking &&
+    //   tx.booking.id &&
+    //   txIsPaymentPending(tx) &&
+    //   !checkIsPaymentExpired(tx);
+    // if (shouldFetchPaymentIntent) {
+    //   const { stripePaymentIntentClientSecret } =
+    //     tx.attributes.protectedData && tx.attributes.protectedData.stripePaymentIntents
+    //       ? tx.attributes.protectedData.stripePaymentIntents.default
+    //       : {};
+    //   // Fetch up to date PaymentIntent from Stripe
+    //   onRetrievePaymentIntent({ stripe, stripePaymentIntentClientSecret });
+    // }
+  };
+
+  const listingId = new UUID(rawParams.id);
+  const currentListing = ensureListing(getListing(listingId));
+  const currentAuthor = ensureUser(currentListing.author);
 
   const currentTransaction = ensureTransaction(transaction);
-  const currentListing = ensureListing(currentTransaction.listing);
   const isProviderRole = transactionRole === PROVIDER;
   const isCustomerRole = transactionRole === CUSTOMER;
-
-  const redirectToCheckoutPageWithInitialValues = (initialValues, listing) => {
-    const routes = routeConfiguration();
-    // Customize checkout page state with current listing and selected bookingDates
-    const { setInitialValues } = findRouteByRouteName('CheckoutPage', routes);
-    callSetInitialValues(setInitialValues, initialValues);
-
-    // Clear previous Stripe errors from store if there is any
-    onInitializeCardPaymentData();
-
-    // Redirect to CheckoutPage
-    history.push(
-      createResourceLocatorString(
-        'CheckoutPage',
-        routes,
-        { id: currentListing.id.uuid, slug: createSlug(currentListing.attributes.title) },
-        {}
-      )
-    );
-  };
-
-  // If payment is pending, redirect to CheckoutPage
-  if (
-    txIsPaymentPending(currentTransaction) &&
-    isCustomerRole &&
-    currentTransaction.attributes.lineItems
-  ) {
-    const currentBooking = ensureListing(currentTransaction.booking);
-
-    const initialValues = {
-      listing: currentListing,
-      // Transaction with payment pending should be passed to CheckoutPage
-      transaction: currentTransaction,
-      // Original bookingData content is not available,
-      // but it is already used since booking is created.
-      // (E.g. quantity is used when booking is created.)
-      bookingData: {},
-      bookingDates: {
-        bookingStart: dateFromAPIToLocalNoon(currentBooking.attributes.start),
-        bookingEnd: dateFromAPIToLocalNoon(currentBooking.attributes.end),
-      },
-    };
-
-    redirectToCheckoutPageWithInitialValues(initialValues, currentListing);
-  }
-
-  // Customer can create a booking, if the tx is in "enquiry" state.
-  const handleSubmitBookingRequest = values => {
-    const { bookingDates, ...bookingData } = values;
-
-    const initialValues = {
-      listing: currentListing,
-      // enquired transaction should be passed to CheckoutPage
-      transaction: currentTransaction,
-      bookingData,
-      bookingDates: {
-        bookingStart: bookingDates.startDate,
-        bookingEnd: bookingDates.endDate,
-      },
-      confirmPaymentError: null,
-    };
-
-    redirectToCheckoutPageWithInitialValues(initialValues, currentListing);
-  };
 
   const deletedListingTitle = intl.formatMessage({
     id: 'TransactionInitPage.deletedListing',
   });
   const listingTitle = currentListing.attributes.deleted
     ? deletedListingTitle
-    : currentListing.attributes.title;
+    : currentListing.attributes.title || '';
 
   // Redirect users with someone else's direct link to their own inbox/sales or inbox/orders page.
-  const isDataAvailable =
+  const isOwnListing =
     currentUser &&
-    currentTransaction.id &&
-    currentTransaction.id.uuid === params.id &&
-    currentTransaction.attributes.lineItems &&
-    currentTransaction.customer &&
-    currentTransaction.provider &&
-    !fetchTransactionError;
+    currentUser.id &&
+    currentAuthor &&
+    currentAuthor.id &&
+    currentAuthor.id.uuid === currentUser.id.uuid;
 
-  const isOwnSale =
-    isDataAvailable &&
-    isProviderRole &&
-    currentUser.id.uuid === currentTransaction.provider.id.uuid;
-  const isOwnOrder =
-    isDataAvailable &&
-    isCustomerRole &&
-    currentUser.id.uuid === currentTransaction.customer.id.uuid;
+  const hasGuestAndHost = !!(guest?.id && host?.id);
+  const isDataAvailable = currentUser && hasGuestAndHost;
+  const hasRequiredData = hasGuestAndHost;
+  const canShowPage = hasRequiredData && !isOwnListing;
+  const shouldRedirect = currentUser?.id?.uuid && !isDataAvailable && !canShowPage;
 
-  if (isDataAvailable && isProviderRole && !isOwnSale) {
+  // Redirect back to ListingPage if data is missing.
+  // Redirection must happen before any data format error is thrown (e.g. wrong currency)
+  if (shouldRedirect) {
     // eslint-disable-next-line no-console
-    console.error('Tried to access a sale that was not owned by the current user');
-    return <NamedRedirect name="InboxPage" params={{ tab: 'sales' }} />;
-  } else if (isDataAvailable && isCustomerRole && !isOwnOrder) {
-    // eslint-disable-next-line no-console
-    console.error('Tried to access an order that was not owned by the current user');
-    return <NamedRedirect name="InboxPage" params={{ tab: 'orders' }} />;
+    console.error('Missing or invalid data for checkout, redirecting back to listing page.', {});
+    return <NamedRedirect name="ListingPage" params={{ ...params }} />;
   }
 
   const detailsClassName = classNames(css.tabContent, css.tabContentVisible);
@@ -197,7 +200,7 @@ export const TransactionInitPageComponent = props => {
     ? 'TransactionInitPage.loadingOrderData'
     : 'TransactionInitPage.loadingSaleData';
 
-  const loadingOrFailedFetching = fetchTransactionError ? (
+  const loadingOrFailedFetching = showListingError ? (
     <p className={css.error}>
       <FormattedMessage id={`${fetchErrorMessage}`} />
     </p>
@@ -213,13 +216,351 @@ export const TransactionInitPageComponent = props => {
     initialMessageFailedToTransaction.uuid === currentTransaction.id.uuid
   );
 
+  const handlePaymentIntent = handlePaymentParams => {
+    const {
+      currentUser,
+      stripeCustomerFetched,
+      onInitiateOrder,
+      onConfirmCardPayment,
+      onConfirmPayment,
+      onSendMessage,
+      onSavePaymentMethod,
+      onCreateTransaction,
+    } = props;
+
+    const {
+      message,
+      paymentIntent,
+      selectedPaymentMethod,
+      saveAfterOnetimePayment,
+      card,
+      formValues,
+      stripe,
+    } = handlePaymentParams;
+
+    const ensuredCurrentUser = ensureCurrentUser(currentUser);
+    const ensuredStripeCustomer = ensureStripeCustomer(ensuredCurrentUser.stripeCustomer);
+
+    const ensuredDefaultPaymentMethod = ensurePaymentMethodCard(
+      ensuredStripeCustomer.defaultPaymentMethod
+    );
+
+    let createdPaymentIntent = null;
+
+    const hasDefaultPaymentMethod = !!(
+      stripeCustomerFetched &&
+      ensuredStripeCustomer.attributes.stripeCustomerId &&
+      ensuredDefaultPaymentMethod.id
+    );
+    const stripePaymentMethodId = hasDefaultPaymentMethod
+      ? ensuredDefaultPaymentMethod.attributes.stripePaymentMethodId
+      : null;
+    const paymentFlow = (selectedPaymentMethod, saveAfterOnetimePayment) => {
+      // Payment mode could be 'replaceCard', but without explicit saveAfterOnetimePayment flag,
+      // we'll handle it as one-time payment
+      return selectedPaymentMethod === 'defaultCard'
+        ? USE_SAVED_CARD
+        : saveAfterOnetimePayment
+        ? PAY_AND_SAVE_FOR_LATER_USE
+        : ONETIME_PAYMENT;
+    };
+    const selectedPaymentFlow = paymentFlow(selectedPaymentMethod, saveAfterOnetimePayment);
+
+    // Step 1: initiate order by requesting payment from Marketplace API
+    const fnRequestPayment = fnParams => {
+      // fnParams should be { listingId, bookingStart, bookingEnd }
+      const hasPaymentIntents = savedPaymentIntents;
+
+      // If paymentIntent exists, order has been initiated previously.
+      return hasPaymentIntents
+        ? Promise.resolve(storedTx)
+        : onInitiateOrder({
+            ...fnParams,
+            listingId: listingId.uuid,
+          });
+    };
+
+    // Step 2: pay using Stripe SDK
+    const fnConfirmCardPayment = fnParams => {
+      // fnParams should be returned transaction entity
+
+      if (fnParams.id) {
+        setSavedPaymentIntents(fnParams);
+      }
+
+      const { stripe, card, billingDetails, paymentIntent } = handlePaymentParams;
+      const stripeElementMaybe = selectedPaymentFlow !== USE_SAVED_CARD ? { card } : {};
+
+      // Note: payment_method could be set here for USE_SAVED_CARD flow.
+      // { payment_method: stripePaymentMethodId }
+      // However, we have set it already on API side, when PaymentIntent was created.
+      const paymentParams =
+        selectedPaymentFlow !== USE_SAVED_CARD
+          ? {
+              payment_method: {
+                billing_details: billingDetails,
+                card: card,
+              },
+            }
+          : {};
+
+      const params = {
+        stripePaymentIntentClientSecret:
+          savedPaymentIntents?.client_secret || fnParams.client_secret,
+        stripe,
+        ...stripeElementMaybe,
+        paymentParams,
+      };
+
+      // If paymentIntent status is not waiting user action,
+      // confirmCardPayment has been called previously.
+      const hasPaymentIntentUserActionsDone =
+        paymentIntent && STRIPE_PI_USER_ACTIONS_DONE_STATUSES.includes(paymentIntent.status);
+      return hasPaymentIntentUserActionsDone
+        ? Promise.resolve({
+            transactionId: order.id,
+            paymentIntent,
+          })
+        : onConfirmCardPayment(params);
+    };
+
+    // // Step 3: CREATE A TRANSACTION
+
+    // // Parameter should contain { paymentIntent, transactionId } returned in step 2
+    const fnCreateTransactionObject = fnParams => {
+      console.log('🚀 | file: TransactionInitPage.js | line 325 | fnParams', fnParams);
+      const tx = onCreateTransaction({ listingId: listingId.uuid });
+      console.log('🚀 | file: TransactionInitPage.js | line 323 | tx', tx);
+      return tx;
+      //   const params = {
+      //     stripePaymentIntentClientSecret:
+      //       savedPaymentIntents?.client_secret || fnParams?.payment_intent?.client_secret,
+      //     stripe,
+      //     paymentParams,
+      //   };
+      //   createdPaymentIntent = fnParams.paymentIntent;
+      //   return onConfirmPayment({
+      //     ...fnParams,
+      //     ...params,
+      //   });
+    };
+
+    // Step 4: send initial message
+    const fnSendMessage = fnParams => {
+      console.log('🚀 | file: TransactionInitPage.js | line 353 | fnParams', fnParams);
+      console.log('🚀 | file: TransactionInitPage.js | line 355 | message', message);
+      if (message) {
+        return onSendMessage({
+          ...fnParams,
+          message,
+        });
+      } else {
+        return Promise.resolve({
+          ...fnParams,
+        });
+      }
+    };
+
+    // Step 5: optionally save card as defaultPaymentMethod
+    const fnSavePaymentMethod = fnParams => {
+      const pi = createdPaymentIntent || savedPaymentIntents;
+
+      if (selectedPaymentFlow === PAY_AND_SAVE_FOR_LATER_USE) {
+        return onSavePaymentMethod(ensuredStripeCustomer, pi.payment_method)
+          .then(response => {
+            if (response.errors) {
+              return {
+                ...fnParams,
+                paymentMethodSaved: false,
+              };
+            }
+            return {
+              ...fnParams,
+              paymentMethodSaved: true,
+            };
+          })
+          .catch(e => {
+            // Real error cases are catched already in paymentMethods page.
+            return {
+              ...fnParams,
+              paymentMethodSaved: false,
+            };
+          });
+      } else {
+        return Promise.resolve({
+          ...fnParams,
+          paymentMethodSaved: true,
+        });
+      }
+    };
+
+    // Here we create promise calls in sequence
+    // This is pretty much the same as:
+    // fnRequestPayment({...initialParams})
+    //   .then(result => fnConfirmCardPayment({...result}))
+    //   .then(result => fnConfirmPayment({...result}))
+    const applyAsync = (acc, val) => acc.then(val);
+    const composeAsync = (...funcs) => x => funcs.reduce(applyAsync, Promise.resolve(x));
+    const handlePaymentIntentCreation = composeAsync(
+      fnRequestPayment,
+      fnConfirmCardPayment,
+      fnCreateTransactionObject,
+      fnSendMessage,
+      fnSavePaymentMethod
+    );
+
+    // Note: optionalPaymentParams contains Stripe paymentMethod,
+    // but that can also be passed on Step 2
+    // stripe.confirmCardPayment(stripe, { payment_method: stripePaymentMethodId })
+    const optionalPaymentParams =
+      selectedPaymentFlow === USE_SAVED_CARD && hasDefaultPaymentMethod
+        ? {
+            paymentMethod: stripePaymentMethodId,
+          }
+        : selectedPaymentFlow === PAY_AND_SAVE_FOR_LATER_USE
+        ? { setupPaymentMethodForSaving: true }
+        : {};
+
+    const orderParams = {
+      ...optionalPaymentParams,
+    };
+
+    return handlePaymentIntentCreation(orderParams);
+  };
+
+  const handleSubmitPlatformFee = values => {
+    console.log('🚀 | file: TransactionInitPage.js | line 432 | values', values);
+    if (submittingPlatformFee) {
+      return;
+    }
+    setSubmittingPlatformFee(true);
+    const { history, currentUser, dispatch } = props;
+    console.log('🚀 | file: TransactionInitPage.js | line 436 | props', props);
+    const { card, paymentMethod, formValues, message } = values;
+    const {
+      name,
+      addressLine1,
+      addressLine2,
+      postal,
+      city,
+      state,
+      country,
+      saveAfterOnetimePayment,
+    } = formValues;
+
+    // Billing address is recommended.
+    // However, let's not assume that <StripePaymentAddress> data is among formValues.
+    // Read more about this from Stripe's docs
+    // https://stripe.com/docs/stripe-js/reference#stripe-handle-card-payment-no-element
+    const addressMaybe =
+      addressLine1 && postal
+        ? {
+            address: {
+              city: city,
+              country: country,
+              line1: addressLine1,
+              line2: addressLine2,
+              postal_code: postal,
+              state: state,
+            },
+          }
+        : {};
+
+    const billingDetails = {
+      name,
+      email: ensureCurrentUser(currentUser).attributes.email,
+      ...addressMaybe,
+    };
+
+    const requestPaymentParams = {
+      stripe: stripeFunction,
+      card,
+      billingDetails,
+      selectedPaymentMethod: paymentMethod,
+      saveAfterOnetimePayment: !!saveAfterOnetimePayment,
+      message,
+    };
+    handlePaymentIntent(requestPaymentParams)
+      .then(res => {
+        console.log('🚀 | file: TransactionInitPage.js | line 473 | res', res);
+        const { orderId, messageSuccess, paymentMethodSaved } = res;
+        setSubmittingPlatformFee(false);
+
+        const routes = routeConfiguration();
+        const initialMessageFailedToTransaction = messageSuccess ? null : orderId;
+        const orderDetailsPath = pathByRouteName('OrderDetailsPage', routes, { id: orderId.uuid });
+        const initialValues = {
+          initialMessageFailedToTransaction,
+          savePaymentMethodFailed: !paymentMethodSaved,
+        };
+
+        initializeOrderPage(initialValues, routes, dispatch);
+        history.push(orderDetailsPath);
+      })
+      .catch(err => {
+        console.error(err);
+        setSubmittingPlatformFee(false);
+      });
+  };
+
+  // If paymentIntent status is not waiting user action,
+  // confirmCardPayment has been called previously.
+  const hasPaymentIntentUserActionsDone = true;
+  // paymentIntent && STRIPE_PI_USER_ACTIONS_DONE_STATUSES.includes(paymentIntent.status);
+
+  // Get first and last name of the current user and use it in the StripePaymentForm to autofill the name field
+  const userName =
+    currentUser && currentUser.attributes
+      ? `${currentUser.attributes.profile.firstName} ${currentUser.attributes.profile.lastName}`
+      : null;
+  const initalValuesForStripePayment = {
+    name: userName,
+  };
+  const hasDefaultPaymentMethod = !!(
+    stripeCustomerFetched &&
+    ensureStripeCustomer(currentUser.stripeCustomer).attributes.stripeCustomerId &&
+    ensurePaymentMethodCard(currentUser.stripeCustomer.defaultPaymentMethod).id
+  );
+  // const paymentForm = showPaymentForm ? (
+  const paymentForm = true ? (
+    <StripePaymentFormPlatformFee
+      className={css.paymentForm}
+      onSubmit={handleSubmitPlatformFee}
+      inProgress={submittingPlatformFee}
+      formId="TransactionInitPagePaymentForm"
+      paymentInfo={intl.formatMessage({
+        id: 'TransactionInitPage.paymentInfo',
+      })}
+      // authorDisplayName={currentAuthor.attributes.profile.displayName}
+      authorDisplayName={'currentAuthor'}
+      showInitialMessageInput={false}
+      initialValues={initalValuesForStripePayment}
+      // initiateOrderError={initiateOrderError}
+      initiateOrderError={null}
+      // confirmCardPaymentError={confirmCardPaymentError}
+      confirmCardPaymentError={null}
+      // confirmPaymentError={confirmPaymentError}
+      confirmPaymentError={null}
+      // hasHandledCardPayment={hasPaymentIntentUserActionsDone}
+      hasHandledCardPayment={false}
+      // loadingData={!stripeCustomerFetched}
+      loadingData={false}
+      defaultPaymentMethod={
+        hasDefaultPaymentMethod ? currentUser.stripeCustomer.defaultPaymentMethod : null
+      }
+      paymentIntent={null}
+      // paymentIntent={paymentIntent}
+      onStripeInitialized={onStripeInitialized}
+      showInitialMessageInput={true}
+    />
+  ) : null;
   // TransactionPanel is presentational component
   // that currently handles showing everything inside layout's main view area.
   const panel = isDataAvailable ? (
-    <TransactionPanel
+    <TransactionInitPanel
       className={detailsClassName}
       currentUser={currentUser}
-      transaction={currentTransaction}
+      currentListing={currentListing}
       fetchMessagesInProgress={fetchMessagesInProgress}
       totalMessagePages={totalMessagePages}
       oldestMessagePageFetched={oldestMessagePageFetched}
@@ -227,29 +568,10 @@ export const TransactionInitPageComponent = props => {
       initialMessageFailed={initialMessageFailed}
       savePaymentMethodFailed={savePaymentMethodFailed}
       fetchMessagesError={fetchMessagesError}
-      sendMessageInProgress={sendMessageInProgress}
-      sendMessageError={sendMessageError}
-      sendReviewInProgress={sendReviewInProgress}
-      sendReviewError={sendReviewError}
       onManageDisableScrolling={onManageDisableScrolling}
-      onShowMoreMessages={onShowMoreMessages}
-      onSendMessage={onSendMessage}
-      onSendReview={onSendReview}
       transactionRole={transactionRole}
-      onAcceptSale={onAcceptSale}
-      onDeclineSale={onDeclineSale}
-      acceptInProgress={acceptInProgress}
-      declineInProgress={declineInProgress}
-      acceptSaleError={acceptSaleError}
-      declineSaleError={declineSaleError}
       nextTransitions={processTransitions}
-      onSubmitBookingRequest={handleSubmitBookingRequest}
-      timeSlots={timeSlots}
-      fetchTimeSlotsError={fetchTimeSlotsError}
-      onFetchTransactionLineItems={onFetchTransactionLineItems}
-      lineItems={lineItems}
-      fetchLineItemsInProgress={fetchLineItemsInProgress}
-      fetchLineItemsError={fetchLineItemsError}
+      paymentForm={paymentForm}
     />
   ) : (
     loadingOrFailedFetching
@@ -277,7 +599,7 @@ export const TransactionInitPageComponent = props => {
 
 TransactionInitPageComponent.defaultProps = {
   currentUser: null,
-  fetchTransactionError: null,
+  showListingError: null,
   acceptSaleError: null,
   declineSaleError: null,
   transaction: null,
@@ -297,7 +619,7 @@ TransactionInitPageComponent.propTypes = {
   params: shape({ id: string }).isRequired,
   transactionRole: oneOf([PROVIDER, CUSTOMER]).isRequired,
   currentUser: propTypes.currentUser,
-  fetchTransactionError: propTypes.error,
+  showListingError: propTypes.error,
   acceptSaleError: propTypes.error,
   declineSaleError: propTypes.error,
   acceptInProgress: bool.isRequired,
@@ -341,7 +663,7 @@ TransactionInitPageComponent.propTypes = {
 
 const mapStateToProps = state => {
   const {
-    fetchTransactionError,
+    showListingError,
     acceptSaleError,
     declineSaleError,
     acceptInProgress,
@@ -364,15 +686,27 @@ const mapStateToProps = state => {
     lineItems,
     fetchLineItemsInProgress,
     fetchLineItemsError,
+
+    stripeCustomerFetched,
+    guest,
+    host,
+    requestedListing,
+    requestedAdvert,
   } = state.TransactionInitPage;
   const { currentUser } = state.user;
 
+  const getListing = id => {
+    const ref = { id, type: 'listing' };
+    const listings = getMarketplaceEntities(state, [ref]);
+    return listings.length === 1 ? listings[0] : null;
+  };
   const transactions = getMarketplaceEntities(state, transactionRef ? [transactionRef] : []);
   const transaction = transactions.length > 0 ? transactions[0] : null;
 
   return {
     currentUser,
-    fetchTransactionError,
+    getListing,
+    showListingError,
     acceptSaleError,
     declineSaleError,
     acceptInProgress,
@@ -396,32 +730,40 @@ const mapStateToProps = state => {
     lineItems,
     fetchLineItemsInProgress,
     fetchLineItemsError,
+
+    stripeCustomerFetched,
+    guest,
+    host,
+    requestedListing,
+    requestedAdvert,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
+    dispatch,
+    fetchStripeCustomer: () => dispatch(stripeCustomer()),
     onAcceptSale: transactionId => dispatch(acceptSale(transactionId)),
     onDeclineSale: transactionId => dispatch(declineSale(transactionId)),
-    onShowMoreMessages: txId => dispatch(fetchMoreMessages(txId)),
-    onSendMessage: (txId, message) => dispatch(sendMessage(txId, message)),
     onManageDisableScrolling: (componentId, disableScrolling) =>
       dispatch(manageDisableScrolling(componentId, disableScrolling)),
-    onSendReview: (role, tx, reviewRating, reviewContent) =>
-      dispatch(sendReview(role, tx, reviewRating, reviewContent)),
     callSetInitialValues: (setInitialValues, values) => dispatch(setInitialValues(values)),
     onInitializeCardPaymentData: () => dispatch(initializeCardPaymentData()),
-    onFetchTransactionLineItems: (bookingData, listingId, isOwnListing) =>
-      dispatch(fetchTransactionLineItems(bookingData, listingId, isOwnListing)),
+    onSendMessage: params => dispatch(sendMessage(params)),
+
+    onInitiateOrder: params => dispatch(initiateOrder(params)),
+    onCreateTransaction: params => dispatch(createTransaction(params)),
+    onRetrievePaymentIntent: params => dispatch(retrievePaymentIntent(params)),
+    onConfirmCardPayment: params => dispatch(confirmCardPayment(params)),
+    onConfirmPayment: params => dispatch(confirmPayment(params)),
+    onSavePaymentMethod: (stripeCustomer, stripePaymentMethodId) =>
+      dispatch(savePaymentMethod(stripeCustomer, stripePaymentMethodId)),
   };
 };
 
 const TransactionInitPage = compose(
   withRouter,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
   injectIntl
 )(TransactionInitPageComponent);
 

@@ -1,3 +1,6 @@
+import { flatMap } from 'lodash';
+import { nestedRegions } from './nzRegions';
+
 /*
  * Marketplace specific configuration.
  *
@@ -32,7 +35,6 @@
  *         and tie them with correct extended data key
  *         (i.e. pub_<key> or meta_<key>).
  */
-
 export const filters = [
   {
     id: 'dates',
@@ -99,7 +101,7 @@ export const filters = [
   {
     id: 'preferredUse',
     label: 'Preferred Use',
-    type: 'SelectSingleFilter',
+    type: 'SelectMultipleFilter',
     group: 'primary',
     queryParamNames: ['pub_preferredUse'],
     listingType: ['listing', 'advert'],
@@ -140,25 +142,24 @@ export const filters = [
   {
     id: 'locIsland',
     label: 'Island',
-    type: 'SelectSingleFilter',
+    type: 'SelectRegionFilter',
     group: 'primary',
-    queryParamNames: ['pub_locIsland'],
+    queryParamNames: ['pub_locIsland', 'pub_locRegion', 'pub_locDistrict'],
     listingType: ['listing', 'advert'],
     config: {
       // "key" is the option you see in Flex Console.
       // "label" is set here for the UI only.
       // Note: label is not added through the translation files
       // to make filter customizations a bit easier.
-      options: [
-        { key: 'northIsland', label: 'North Island' },
-        { key: 'southIsland', label: 'South Island' },
-      ],
+      options: nestedRegions.map(island => {
+        return { key: island.key, label: island.label };
+      }),
     },
   },
   {
     id: 'locRegion',
     label: 'Region',
-    type: 'SelectSingleFilter',
+    type: null,
     group: 'primary',
     queryParamNames: ['pub_locRegion'],
     listingType: ['listing', 'advert'],
@@ -167,26 +168,17 @@ export const filters = [
       // "label" is set here for the UI only.
       // Note: label is not added through the translation files
       // to make filter customizations a bit easier.
-      options: [
-        { key: 'bayOfPlenty', label: 'Bay of Plenty Region' },
-        { key: 'hawkesBay', label: "Hawke's Bay Region" },
-        { key: 'manawatu', label: 'Manawatū-Whanganui Region' },
-        { key: 'northland', label: 'Northland Region' },
-        { key: 'taranaki', label: 'Taranaki Region' },
-        { key: 'waikato', label: 'Waikato Region' },
-        { key: 'mixed', label: 'Mixed' },
-        { key: 'unitaryAuthority', label: 'Unitary Authority' },
-        { key: 'canterbury', label: 'Canterbury Region' },
-        { key: 'otago', label: 'Otago Region' },
-        { key: 'southland', label: 'Southland Region' },
-        { key: 'westCoast', label: 'West Coast Region' },
-      ],
+      options: nestedRegions.flatMap(island => {
+        return island.subdivs.map(region => {
+          return { key: region.key, label: region.label, parent: island.key };
+        });
+      }),
     },
   },
   {
     id: 'locDistrict',
     label: 'District',
-    type: 'SelectSingleFilter',
+    type: null,
     group: 'primary',
     queryParamNames: ['pub_locDistrict'],
     listingType: ['listing', 'advert'],
@@ -195,83 +187,13 @@ export const filters = [
       // "label" is set here for the UI only.
       // Note: label is not added through the translation files
       // to make filter customizations a bit easier.
-      options: [
-        { key: 'kawerau', label: 'Kawerau District' },
-        { key: 'opotiki', label: 'Ōpōtiki District' },
-        { key: 'westernBayOfPlenty', label: 'Western Bay of Plenty District' },
-        { key: 'whakatane', label: 'Whakatane District' },
-        { key: 'centralHawkesBay', label: "Central Hawke's Bay District" },
-        { key: 'hastings', label: 'Hastings District' },
-        { key: 'wairoa', label: 'Wairoa District' },
-        { key: 'horowhenua', label: 'Horowhenua District' },
-        { key: 'manawatu', label: 'Manawatu District' },
-        { key: 'ruapehu', label: 'Ruapehu District' },
-        { key: 'whanganui', label: 'Whanganui District' },
-        { key: 'farNorth', label: 'Far North District' },
-        { key: 'kaipara', label: 'Kaipara District' },
-        { key: 'whangarei', label: 'Whangarei District' },
-        { key: 'newPlymouth', label: 'New Plymouth District' },
-        { key: 'southTaranaki', label: 'South Taranaki District' },
-        { key: 'hauraki', label: 'Hauraki District' },
-        { key: 'matamataPiako', label: 'Matamata-Piako District' },
-        { key: 'otorohanga', label: 'Otorohanga District' },
-        { key: 'southWaikato', label: 'South Waikato District' },
-        { key: 'thamesCoromandel', label: 'Thames-Coromandel District' },
-        { key: 'waikato', label: 'Waikato District' },
-        { key: 'waipa', label: 'Waipa District' },
-        { key: 'carterton', label: 'Carterton District' },
-        { key: 'kapitiCoast', label: 'Kapiti Coast District' },
-        { key: 'masterton', label: 'Masterton District' },
-        { key: 'southWairarapa', label: 'South Wairarapa District' },
-        {
-          key: 'rangitikei',
-          label: "Rangitikei District (Manawatū-Whanganui: 86.37%; Hawke's Bay: 13.63%)",
-        },
-        {
-          key: 'rotoruaLakes',
-          label: 'Rotorua Lakes (Bay of Plenty: 61.52%; Waikato: 38.48%)',
-        },
-        {
-          key: 'stratford',
-          label: 'Stratford District (Taranaki: 68.13%; Manawatū-Whanganui: 31.87%)',
-        },
-        {
-          key: 'tararua',
-          label: 'Tararua District (Manawatū-Whanganui: 98.42%; Wellington: 1.58%)',
-        },
-        {
-          key: 'taupo',
-          label:
-            "Taupo District (Waikato: 73.74%; Bay of Plenty: 14.31%; Hawke's Bay: 11.26%; Manawatū-Whanganui: 0.69%)",
-        },
-        {
-          key: 'waitomo',
-          label: 'Waitomo District (Waikato: 94.87%; Manawatū-Whanganui: 5.13%)',
-        },
-        { key: 'gisborne', label: 'Gisborne District' },
-        { key: 'ashburton', label: 'Ashburton District' },
-        { key: 'hurunui', label: 'Hurunui District' },
-        { key: 'kaikoura', label: 'Kaikoura District' },
-        { key: 'mackenzie', label: 'Mackenzie District' },
-        { key: 'selwyn', label: 'Selwyn District' },
-        { key: 'timaru', label: 'Timaru District' },
-        { key: 'waimakariri', label: 'Waimakariri District' },
-        { key: 'waimate', label: 'Waimate District' },
-        { key: 'centralOtago', label: 'Central Otago District' },
-        { key: 'clutha', label: 'Clutha District' },
-        { key: 'queenstownLakes', label: 'Queenstown-Lakes District' },
-        { key: 'gore', label: 'Gore District' },
-        { key: 'southland', label: 'Southland District' },
-        { key: 'buller', label: 'Buller District' },
-        { key: 'grey', label: 'Grey District' },
-        { key: 'westland', label: 'Westland District' },
-        {
-          key: 'waitaki',
-          label: 'Waitaki District (Canterbury: 59.61%; Otago: 40.39%)',
-        },
-        { key: 'marlborough', label: 'Marlborough District' },
-        { key: 'tasman', label: 'Tasman District' },
-      ],
+      options: nestedRegions.flatMap(island => {
+        return island.subdivs.flatMap(region => {
+          return region.subdivs.flatMap(district => {
+            return { key: district.key, label: district.label, parent: region.key };
+          });
+        });
+      }),
     },
   },
   {

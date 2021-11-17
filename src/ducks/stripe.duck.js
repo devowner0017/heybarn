@@ -241,10 +241,10 @@ export const retrievePaymentIntent = params => dispatch => {
 };
 
 export const confirmCardPayment = params => dispatch => {
+console.log("🚀 | file: stripe.duck.js | line 244 | params", params);
   // It's required to use the same instance of Stripe as where the card has been created
   // so that's why Stripe needs to be passed here and we can't create a new instance.
   const { stripe, paymentParams, stripePaymentIntentClientSecret } = params;
-  const transactionId = params.orderId;
 
   dispatch(confirmCardPaymentRequest());
 
@@ -258,11 +258,12 @@ export const confirmCardPayment = params => dispatch => {
   return stripe
     .confirmCardPayment(...args)
     .then(response => {
+    console.log("🚀 | file: stripe.duck.js | line 261 | response", response);
       if (response.error) {
         return Promise.reject(response);
       } else {
         dispatch(confirmCardPaymentSuccess(response));
-        return { ...response, transactionId };
+        return { ...response };
       }
     })
     .catch(err => {

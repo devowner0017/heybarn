@@ -13,17 +13,40 @@ import { ensureTransaction } from './data';
 // created with the initial request-payment transition.
 // At this transition a PaymentIntent is created by Marketplace API.
 // After this transition, the actual payment must be made on client-side directly to Stripe.
-export const TRANSITION_REQUEST_PAYMENT = 'transition/request-payment';
+export const TRANSITION_HOST_FEE_PAID = 'transition/host-fee-paid';
+export const TRANSITION_RENTER_FEE_PAID = 'transition/renter-fee-paid';
+export const TRANSITION_HOST_APPROVED_BY_RENTER = 'transition/host-approved-by-renter';
+export const TRANSITION_HOST_ACCEPTS_COMMUNICATION = 'transition/host-accepts-communication';
+export const TRANSITION_HOST_DECLINES_COMMUNICATION = 'transition/host-declines-communication';
+export const TRANSITION_RENTER_ACCEPTS_COMMUNICATION = 'transition/renter-accepts-communication';
+export const TRANSITION_RENTER_DECLINES_COMMUNICATION = 'transition/renter-declines-communication';
+export const TRANSITION_HOST_SENDS_AGREEMENT = 'transition/host-sends-agreement';
+export const TRANSITION_HOST_CANCELS_DURING_RAD = 'transition/host-cancels-during-rad';
+export const TRANSITION_RENTER_CANCELS_DURING_RAD = 'transition/renter-cancels-during-rad';
+export const TRANSITION_OPERATOR_CANCELS_DURING_RAD = 'transition/operator-cancels-during-rad';
 
-// A customer can also initiate a transaction with an enquiry, and
-// then transition that with a request.
-export const TRANSITION_ENQUIRE = 'transition/enquire';
-export const TRANSITION_REQUEST_PAYMENT_AFTER_ENQUIRY = 'transition/request-payment-after-enquiry';
+export const TRANSITION_RENTER_SIGNS_RENTAL_AGREEMENT = 'transition/renter-signs-rental-agreement';
+export const TRANSITION_HOST_CANCELS_AFTER_AGREEMENT_SENT =
+  'transition/host-cancels-after-agreement-sent';
+export const TRANSITION_RENTER_CANCELS_AFTER_AGREEMENT_SENT =
+  'transition/renter-cancels-after-agreement-sent';
+export const TRANSITION_OPERATOR_CANCELS_AFTER_AGREEMENT_SENT =
+  'transition/operator-cancels-after-agreement-sent';
+
+export const TRANSITION_REQUEST_PAYMENT = 'transition/request-payment';
 
 // Stripe SDK might need to ask 3D security from customer, in a separate front-end step.
 // Therefore we need to make another transition to Marketplace API,
 // to tell that the payment is confirmed.
 export const TRANSITION_CONFIRM_PAYMENT = 'transition/confirm-payment';
+
+// The backend will mark the transaction completed.
+export const TRANSITION_COMPLETE = 'transition/complete';
+
+// A customer can also initiate a transaction with an enquiry, and
+// then transition that with a request.
+export const TRANSITION_ENQUIRE = 'transition/enquire';
+export const TRANSITION_REQUEST_PAYMENT_AFTER_ENQUIRY = 'transition/request-payment-after-enquiry';
 
 // If the payment is not confirmed in the time limit set in transaction process (by default 15min)
 // the transaction will expire automatically.
@@ -39,9 +62,6 @@ export const TRANSITION_EXPIRE = 'transition/expire';
 
 // Admin can also cancel the transition.
 export const TRANSITION_CANCEL = 'transition/cancel';
-
-// The backend will mark the transaction completed.
-export const TRANSITION_COMPLETE = 'transition/complete';
 
 // Reviews are given through transaction transitions. Review 1 can be
 // by provider or customer, and review 2 will be the other party of
@@ -83,14 +103,26 @@ export const TX_TRANSITION_ACTORS = [
  *       in Marketplace API. Only last transitions are passed along transaction object.
  */
 const STATE_INITIAL = 'initial';
-const STATE_ENQUIRY = 'enquiry';
+
+const STATE_HOST_ENQUIRED = 'host-enquired';
+const STATE_RENTER_ENQUIRED = 'renter-enquired';
+const STATE_HOST_DECLINED_COMMUNICATION = 'host-declined-communication';
+const STATE_RENTER_DECLINED_COMMUNICATION = 'renter-declined-communication';
+const STATE_REVERSED_TRANSACTION_FLOW = 'reversed-transaction-flow';
+const STATE_RENTAL_AGREEMENT_DISCUSSION = 'rental-agreement-discussion';
+const STATE_CANCELLED_DURING_RAD = 'cancelled-during-rad';
+const STATE_RENTAL_AGREEMENT_SENT = 'rental-agreement-sent';
+const STATE_CANCELLED_AFTER_AGREEMENT_SENT = 'cancelled-after-agreement-sent';
+const STATE_RENTAL_AGREEMENT_FINALIZED = 'rental-agreement-finalized';
 const STATE_PENDING_PAYMENT = 'pending-payment';
-const STATE_PAYMENT_EXPIRED = 'payment-expired';
 const STATE_PREAUTHORIZED = 'preauthorized';
+const STATE_DELIVERED = 'delivered';
+
+const STATE_PAYMENT_EXPIRED = 'payment-expired';
+const STATE_ENQUIRY = 'enquiry';
 const STATE_DECLINED = 'declined';
 const STATE_ACCEPTED = 'accepted';
 const STATE_CANCELED = 'canceled';
-const STATE_DELIVERED = 'delivered';
 const STATE_REVIEWED = 'reviewed';
 const STATE_REVIEWED_BY_CUSTOMER = 'reviewed-by-customer';
 const STATE_REVIEWED_BY_PROVIDER = 'reviewed-by-provider';
@@ -117,13 +149,55 @@ const stateDescription = {
   states: {
     [STATE_INITIAL]: {
       on: {
-        [TRANSITION_ENQUIRE]: STATE_ENQUIRY,
-        [TRANSITION_REQUEST_PAYMENT]: STATE_PENDING_PAYMENT,
+        [TRANSITION_HOST_FEE_PAID]: STATE_HOST_ENQUIRED,
+        [TRANSITION_RENTER_FEE_PAID]: STATE_RENTER_ENQUIRED,
+        [TRANSITION_HOST_APPROVED_BY_RENTER]: STATE_RENTAL_AGREEMENT_DISCUSSION,
       },
     },
-    [STATE_ENQUIRY]: {
+
+    [STATE_RENTER_ENQUIRED]: {
       on: {
-        [TRANSITION_REQUEST_PAYMENT_AFTER_ENQUIRY]: STATE_PENDING_PAYMENT,
+        [TRANSITION_HOST_ACCEPTS_COMMUNICATION]: STATE_RENTAL_AGREEMENT_DISCUSSION,
+        [TRANSITION_HOST_DECLINES_COMMUNICATION]: STATE_HOST_DECLINED_COMMUNICATION,
+      },
+    },
+
+    [STATE_HOST_ENQUIRED]: {
+      on: {
+        [TRANSITION_RENTER_ACCEPTS_COMMUNICATION]: STATE_REVERSED_TRANSACTION_FLOW,
+        [TRANSITION_RENTER_DECLINES_COMMUNICATION]: STATE_RENTER_DECLINED_COMMUNICATION,
+      },
+    },
+
+    [STATE_RENTER_DECLINED_COMMUNICATION]: {},
+    [STATE_HOST_DECLINED_COMMUNICATION]: {},
+    [STATE_REVERSED_TRANSACTION_FLOW]: {},
+
+    [STATE_RENTAL_AGREEMENT_DISCUSSION]: {
+      on: {
+        [TRANSITION_HOST_SENDS_AGREEMENT]: STATE_RENTAL_AGREEMENT_SENT,
+        [TRANSITION_HOST_CANCELS_DURING_RAD]: STATE_CANCELLED_DURING_RAD,
+        [TRANSITION_RENTER_CANCELS_DURING_RAD]: STATE_CANCELLED_DURING_RAD,
+        [TRANSITION_OPERATOR_CANCELS_DURING_RAD]: STATE_CANCELLED_DURING_RAD,
+      },
+    },
+
+    [STATE_CANCELLED_DURING_RAD]: {},
+
+    [STATE_RENTAL_AGREEMENT_SENT]: {
+      on: {
+        [TRANSITION_RENTER_SIGNS_RENTAL_AGREEMENT]: STATE_RENTAL_AGREEMENT_FINALIZED,
+        [TRANSITION_HOST_CANCELS_AFTER_AGREEMENT_SENT]: STATE_CANCELLED_AFTER_AGREEMENT_SENT,
+        [TRANSITION_RENTER_CANCELS_AFTER_AGREEMENT_SENT]: STATE_CANCELLED_AFTER_AGREEMENT_SENT,
+        [TRANSITION_OPERATOR_CANCELS_AFTER_AGREEMENT_SENT]: STATE_CANCELLED_AFTER_AGREEMENT_SENT,
+      },
+    },
+
+    [STATE_CANCELLED_AFTER_AGREEMENT_SENT]: {},
+
+    [STATE_RENTAL_AGREEMENT_FINALIZED]: {
+      on: {
+        [TRANSITION_REQUEST_PAYMENT]: STATE_PENDING_PAYMENT,
       },
     },
 
@@ -135,23 +209,13 @@ const stateDescription = {
     },
 
     [STATE_PAYMENT_EXPIRED]: {},
+
     [STATE_PREAUTHORIZED]: {
       on: {
-        [TRANSITION_DECLINE]: STATE_DECLINED,
-        [TRANSITION_EXPIRE]: STATE_DECLINED,
-        [TRANSITION_ACCEPT]: STATE_ACCEPTED,
-      },
-    },
-
-    [STATE_DECLINED]: {},
-    [STATE_ACCEPTED]: {
-      on: {
-        [TRANSITION_CANCEL]: STATE_CANCELED,
         [TRANSITION_COMPLETE]: STATE_DELIVERED,
       },
     },
 
-    [STATE_CANCELED]: {},
     [STATE_DELIVERED]: {
       on: {
         [TRANSITION_EXPIRE_REVIEW_PERIOD]: STATE_REVIEWED,
@@ -181,6 +245,7 @@ const statesFromStateDescription = description => description.states || {};
 
 // Get all the transitions from states object in an array
 const getTransitions = states => {
+console.log("🚀 | file: transaction.js | line 248 | states", states);
   const stateNames = Object.keys(states);
 
   const transitionsReducer = (transitionArray, name) => {
@@ -220,28 +285,43 @@ export const transitionsToRequested = getTransitionsToState(STATE_PREAUTHORIZED)
 
 const txLastTransition = tx => ensureTransaction(tx).attributes.lastTransition;
 
-export const txIsEnquired = tx =>
-  getTransitionsToState(STATE_ENQUIRY).includes(txLastTransition(tx));
+export const txIsHostEnquired = tx =>
+  getTransitionsToState(STATE_HOST_ENQUIRED).includes(txLastTransition(tx));
+
+export const txIsRenterEnquired = tx =>
+  getTransitionsToState(STATE_RENTER_ENQUIRED).includes(txLastTransition(tx));
+
+export const txHasHostDeclined = tx =>
+  getTransitionsToState(STATE_HOST_DECLINED_COMMUNICATION).includes(txLastTransition(tx));
+
+export const txHasRenterDeclined = tx =>
+  getTransitionsToState(STATE_RENTER_DECLINED_COMMUNICATION).includes(txLastTransition(tx));
+
+export const txIsRentalAgreementDiscussion = tx =>
+  getTransitionsToState(STATE_RENTAL_AGREEMENT_DISCUSSION).includes(txLastTransition(tx));
+
+export const txIsReversedTransactionFlow = tx =>
+  getTransitionsToState(STATE_REVERSED_TRANSACTION_FLOW).includes(txLastTransition(tx));
+
+export const txIsCancelledDuringRad = tx =>
+  getTransitionsToState(STATE_CANCELLED_DURING_RAD).includes(txLastTransition(tx));
+
+export const txIsRentalAgreementSent = tx =>
+  getTransitionsToState(STATE_RENTAL_AGREEMENT_SENT).includes(txLastTransition(tx));
+
+export const txIsCancelledAfterAgreementSent = tx =>
+  getTransitionsToState(STATE_CANCELLED_AFTER_AGREEMENT_SENT).includes(txLastTransition(tx));
+
+export const txIsRentalAgreementFinalized = tx =>
+  getTransitionsToState(STATE_RENTAL_AGREEMENT_FINALIZED).includes(txLastTransition(tx));
 
 export const txIsPaymentPending = tx =>
   getTransitionsToState(STATE_PENDING_PAYMENT).includes(txLastTransition(tx));
-
-export const txIsPaymentExpired = tx =>
-  getTransitionsToState(STATE_PAYMENT_EXPIRED).includes(txLastTransition(tx));
 
 // Note: state name used in Marketplace API docs (and here) is actually preauthorized
 // However, word "requested" is used in many places so that we decided to keep it.
 export const txIsRequested = tx =>
   getTransitionsToState(STATE_PREAUTHORIZED).includes(txLastTransition(tx));
-
-export const txIsAccepted = tx =>
-  getTransitionsToState(STATE_ACCEPTED).includes(txLastTransition(tx));
-
-export const txIsDeclined = tx =>
-  getTransitionsToState(STATE_DECLINED).includes(txLastTransition(tx));
-
-export const txIsCanceled = tx =>
-  getTransitionsToState(STATE_CANCELED).includes(txLastTransition(tx));
 
 export const txIsDelivered = tx =>
   getTransitionsToState(STATE_DELIVERED).includes(txLastTransition(tx));
@@ -259,6 +339,23 @@ export const txIsInFirstReviewBy = (tx, isCustomer) =>
 
 export const txIsReviewed = tx =>
   getTransitionsToState(STATE_REVIEWED).includes(txLastTransition(tx));
+
+  // OLD
+
+export const txIsEnquired = tx =>
+  getTransitionsToState(STATE_ENQUIRY).includes(txLastTransition(tx));
+
+export const txIsPaymentExpired = tx =>
+  getTransitionsToState(STATE_PAYMENT_EXPIRED).includes(txLastTransition(tx));
+
+export const txIsAccepted = tx =>
+  getTransitionsToState(STATE_ACCEPTED).includes(txLastTransition(tx));
+
+export const txIsDeclined = tx =>
+  getTransitionsToState(STATE_DECLINED).includes(txLastTransition(tx));
+
+export const txIsCanceled = tx =>
+  getTransitionsToState(STATE_CANCELED).includes(txLastTransition(tx));
 
 /**
  * Helper functions to figure out if transaction has passed a given state.

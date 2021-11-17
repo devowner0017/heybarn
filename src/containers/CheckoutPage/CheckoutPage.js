@@ -315,6 +315,7 @@ export class CheckoutPageComponent extends Component {
     // Step 3: complete order by confirming payment to Marketplace API
     // Parameter should contain { paymentIntent, transactionId } returned in step 2
     const fnConfirmPayment = fnParams => {
+    console.log("🚀 | file: CheckoutPage.js | line 318 | CheckoutPageComponent | handlePaymentIntent | fnParams", fnParams);
       createdPaymentIntent = fnParams.paymentIntent;
       return onConfirmPayment(fnParams);
     };

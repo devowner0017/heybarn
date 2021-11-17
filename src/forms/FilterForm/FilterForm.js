@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createRef, useEffect } from 'react';
 import { bool, func, node, object } from 'prop-types';
 import classNames from 'classnames';
 import { Form as FinalForm, FormSpy } from 'react-final-form';
@@ -9,7 +9,17 @@ import { Form } from '../../components';
 import css from './FilterForm.module.css';
 
 const FilterFormComponent = props => {
-  const { liveEdit, onChange, onSubmit, onCancel, onClear, ...rest } = props;
+  const {
+    liveEdit,
+    onChange,
+    onSubmit,
+    onCancel,
+    onClear,
+    prevValues,
+    setFormValues,
+    onFieldChanges,
+    ...rest
+  } = props;
 
   if (liveEdit && !onChange) {
     throw new Error('FilterForm: if liveEdit is true you need to provide onChange function');
@@ -43,15 +53,19 @@ const FilterFormComponent = props => {
           style,
           paddingClasses,
           intl,
+          values,
           children,
         } = formRenderProps;
-
+        if (!!setFormValues) {
+          if (!_.isEqual(values, prevValues)) {
+            setFormValues(values);
+          }
+        }
         const handleCancel = () => {
           // reset the final form to initialValues
           form.reset();
           onCancel();
         };
-
         const clear = intl.formatMessage({ id: 'FilterForm.clear' });
         const cancel = intl.formatMessage({ id: 'FilterForm.cancel' });
         const submit = intl.formatMessage({ id: 'FilterForm.submit' });
@@ -67,9 +81,22 @@ const FilterFormComponent = props => {
             style={{ ...style }}
           >
             <div className={classNames(paddingClasses || css.contentWrapper)}>{children}</div>
-
+            {!liveEdit && (
+              <FormSpy
+                onChange={vals => {
+                  !!onFieldChanges && onFieldChanges(vals, form);
+                }}
+                subscription={{ values: true, dirty: true }}
+              />
+            )}
             {liveEdit ? (
-              <FormSpy onChange={handleChange} subscription={{ values: true, dirty: true }} />
+              <FormSpy
+                onChange={vals => {
+                  !!onFieldChanges && onFieldChanges(vals, form);
+                  handleChange(vals);
+                }}
+                subscription={{ values: true, dirty: true }}
+              />
             ) : (
               <div className={css.buttonsWrapper}>
                 <button className={css.clearButton} type="button" onClick={onClear}>

@@ -12,8 +12,24 @@ import {
   txIsInFirstReviewBy,
   TRANSITION_ACCEPT,
   TRANSITION_DECLINE,
+  TRANSITION_HOST_FEE_PAID,
+  TRANSITION_RENTER_FEE_PAID,
+  TRANSITION_HOST_APPROVED_BY_RENTER,
+  TRANSITION_HOST_ACCEPTS_COMMUNICATION,
+  TRANSITION_HOST_DECLINES_COMMUNICATION,
+  TRANSITION_RENTER_ACCEPTS_COMMUNICATION,
+  TRANSITION_RENTER_DECLINES_COMMUNICATION,
+  TRANSITION_HOST_SENDS_AGREEMENT,
+  TRANSITION_HOST_CANCELS_DURING_RAD,
+  TRANSITION_RENTER_CANCELS_DURING_RAD,
+  TRANSITION_OPERATOR_CANCELS_DURING_RAD,
+  TRANSITION_RENTER_SIGNS_RENTAL_AGREEMENT,
 } from '../../util/transaction';
-import { transactionLineItems } from '../../util/api';
+import {
+  transactionLineItems,
+  transitionPrivileged,
+  transitionPrivilegedSimple,
+} from '../../util/api';
 import * as log from '../../util/log';
 import {
   updatedEntities,
@@ -39,6 +55,26 @@ export const FETCH_TRANSACTION_ERROR = 'app/TransactionPage/FETCH_TRANSACTION_ER
 export const FETCH_TRANSITIONS_REQUEST = 'app/TransactionPage/FETCH_TRANSITIONS_REQUEST';
 export const FETCH_TRANSITIONS_SUCCESS = 'app/TransactionPage/FETCH_TRANSITIONS_SUCCESS';
 export const FETCH_TRANSITIONS_ERROR = 'app/TransactionPage/FETCH_TRANSITIONS_ERROR';
+
+export const ACCEPT_COMMUNICATION_REQUEST = 'app/TransactionPage/ACCEPT_COMMUNICATION_REQUEST';
+export const ACCEPT_COMMUNICATION_SUCCESS = 'app/TransactionPage/ACCEPT_COMMUNICATION_SUCCESS';
+export const ACCEPT_COMMUNICATION_ERROR = 'app/TransactionPage/ACCEPT_COMMUNICATION_ERROR';
+
+export const DECLINE_COMMUNICATION_REQUEST = 'app/TransactionPage/DECLINE_COMMUNICATION_REQUEST';
+export const DECLINE_COMMUNICATION_SUCCESS = 'app/TransactionPage/DECLINE_COMMUNICATION_SUCCESS';
+export const DECLINE_COMMUNICATION_ERROR = 'app/TransactionPage/DECLINE_COMMUNICATION_ERROR';
+
+export const SEND_RENTAL_AGREEMENT_REQUEST = 'app/TransactionPage/SEND_RENTAL_AGREEMENT_REQUEST';
+export const SEND_RENTAL_AGREEMENT_SUCCESS = 'app/TransactionPage/SEND_RENTAL_AGREEMENT_SUCCESS';
+export const SEND_RENTAL_AGREEMENT_ERROR = 'app/TransactionPage/SEND_RENTAL_AGREEMENT_ERROR';
+
+export const SIGN_RENTAL_AGREEMENT_REQUEST = 'app/TransactionPage/SIGN_RENTAL_AGREEMENT_REQUEST';
+export const SIGN_RENTAL_AGREEMENT_SUCCESS = 'app/TransactionPage/SIGN_RENTAL_AGREEMENT_SUCCESS';
+export const SIGN_RENTAL_AGREEMENT_ERROR = 'app/TransactionPage/SIGN_RENTAL_AGREEMENT_ERROR';
+
+export const CANCEL_DURING_RAD_REQUEST = 'app/TransactionPage/CANCEL_DURING_RAD_REQUEST';
+export const CANCEL_DURING_RAD_SUCCESS = 'app/TransactionPage/CANCEL_DURING_RAD_SUCCESS';
+export const CANCEL_DURING_RAD_ERROR = 'app/TransactionPage/CANCEL_DURING_RAD_ERROR';
 
 export const ACCEPT_SALE_REQUEST = 'app/TransactionPage/ACCEPT_SALE_REQUEST';
 export const ACCEPT_SALE_SUCCESS = 'app/TransactionPage/ACCEPT_SALE_SUCCESS';
@@ -74,10 +110,26 @@ const initialState = {
   fetchTransactionInProgress: false,
   fetchTransactionError: null,
   transactionRef: null,
+
+  acceptCommunicationInProgress: false,
+  acceptCommunicationSaleError: null,
+  declineCommunicationInProgress: false,
+  declineCommunicationSaleError: null,
+
+  sendRentalAgreementInProgress: false,
+  sendRentalAgreementError: null,
+
+  signRentalAgreementInProgress: false,
+  signRentalAgreementError: null,
+
+  cancelDuringRadInProgress: false,
+  cancelDuringRadError: null,
+
   acceptInProgress: false,
   acceptSaleError: null,
   declineInProgress: false,
   declineSaleError: null,
+
   fetchMessagesInProgress: false,
   fetchMessagesError: null,
   totalMessages: 0,
@@ -133,6 +185,74 @@ export default function checkoutPageReducer(state = initialState, action = {}) {
       console.error(payload); // eslint-disable-line
       return { ...state, fetchTransitionsInProgress: false, fetchTransitionsError: payload };
 
+    case ACCEPT_COMMUNICATION_REQUEST:
+      return {
+        ...state,
+        acceptCommunicationInProgress: true,
+        acceptCommunicationError: null,
+        declineCommunicationError: null,
+      };
+    case ACCEPT_COMMUNICATION_SUCCESS:
+      return { ...state, acceptCommunicationInProgress: false };
+    case ACCEPT_COMMUNICATION_ERROR:
+      return { ...state, acceptCommunicationInProgress: false, acceptCommunicationError: payload };
+
+    case DECLINE_COMMUNICATION_REQUEST:
+      return {
+        ...state,
+        declineCommunicationInProgress: true,
+        declineCommunicationError: null,
+        acceptCommunicationError: null,
+      };
+    case DECLINE_COMMUNICATION_SUCCESS:
+      return { ...state, declineCommunicationInProgress: false };
+    case DECLINE_COMMUNICATION_ERROR:
+      return {
+        ...state,
+        declineCommunicationInProgress: false,
+        declineCommunicationError: payload,
+      };
+
+    case SEND_RENTAL_AGREEMENT_REQUEST:
+      return {
+        ...state,
+        sendRentalAgreementInProgress: true,
+        sendRentalAgreementError: null,
+      };
+    case SEND_RENTAL_AGREEMENT_SUCCESS:
+      return { ...state, sendRentalAgreementInProgress: false };
+    case SEND_RENTAL_AGREEMENT_ERROR:
+      return {
+        ...state,
+        sendRentalAgreementInProgress: false,
+        sendRentalAgreementError: payload,
+      };
+
+    case CANCEL_DURING_RAD_REQUEST:
+      return {
+        ...state,
+        cancelDuringRadInProgress: true,
+        cancelDuringRadError: null,
+      };
+    case CANCEL_DURING_RAD_SUCCESS:
+      return { ...state, cancelDuringRadInProgress: false };
+    case CANCEL_DURING_RAD_ERROR:
+      return { ...state, cancelDuringRadInProgress: false, cancelDuringRadError: payload };
+
+    case SIGN_RENTAL_AGREEMENT_REQUEST:
+      return {
+        ...state,
+        signRentalAgreementInProgress: true,
+        signRentalAgreementError: null,
+      };
+    case SIGN_RENTAL_AGREEMENT_SUCCESS:
+      return { ...state, signRentalAgreementInProgress: false };
+    case SIGN_RENTAL_AGREEMENT_ERROR:
+      return {
+        ...state,
+        signRentalAgreementInProgress: false,
+        signRentalAgreementError: payload,
+      };
     case ACCEPT_SALE_REQUEST:
       return { ...state, acceptInProgress: true, acceptSaleError: null, declineSaleError: null };
     case ACCEPT_SALE_SUCCESS:
@@ -209,6 +329,12 @@ export default function checkoutPageReducer(state = initialState, action = {}) {
 export const acceptOrDeclineInProgress = state => {
   return state.TransactionPage.acceptInProgress || state.TransactionPage.declineInProgress;
 };
+export const acceptOrDeclineCommunicationInProgress = state => {
+  return (
+    state.TransactionPage.acceptCommunicationInProgress ||
+    state.TransactionPage.declineCommunicationInProgress
+  );
+};
 
 // ================ Action creators ================ //
 export const setInitialValues = initialValues => ({
@@ -237,6 +363,46 @@ const acceptSaleError = e => ({ type: ACCEPT_SALE_ERROR, error: true, payload: e
 const declineSaleRequest = () => ({ type: DECLINE_SALE_REQUEST });
 const declineSaleSuccess = () => ({ type: DECLINE_SALE_SUCCESS });
 const declineSaleError = e => ({ type: DECLINE_SALE_ERROR, error: true, payload: e });
+
+const acceptCommunicationRequest = () => ({ type: ACCEPT_COMMUNICATION_REQUEST });
+const acceptCommunicationSuccess = () => ({ type: ACCEPT_COMMUNICATION_SUCCESS });
+const acceptCommunicationError = e => ({
+  type: ACCEPT_COMMUNICATION_ERROR,
+  error: true,
+  payload: e,
+});
+
+const cancelDuringRadRequest = () => ({ type: CANCEL_DURING_RAD_REQUEST });
+const cancelDuringRadSuccess = () => ({ type: CANCEL_DURING_RAD_SUCCESS });
+const cancelDuringRadError = e => ({
+  type: CANCEL_DURING_RAD_ERROR,
+  error: true,
+  payload: e,
+});
+
+const declineCommunicationRequest = () => ({ type: DECLINE_COMMUNICATION_REQUEST });
+const declineCommunicationSuccess = () => ({ type: DECLINE_COMMUNICATION_SUCCESS });
+const declineCommunicationError = e => ({
+  type: DECLINE_COMMUNICATION_ERROR,
+  error: true,
+  payload: e,
+});
+
+const sendRentalAgreementRequest = () => ({ type: SEND_RENTAL_AGREEMENT_REQUEST });
+const sendRentalAgreementSuccess = () => ({ type: SEND_RENTAL_AGREEMENT_SUCCESS });
+const sendRentalAgreementError = e => ({
+  type: SEND_RENTAL_AGREEMENT_ERROR,
+  error: true,
+  payload: e,
+});
+
+const signRentalAgreementRequest = () => ({ type: SIGN_RENTAL_AGREEMENT_REQUEST });
+const signRentalAgreementSuccess = () => ({ type: SIGN_RENTAL_AGREEMENT_SUCCESS });
+const signRentalAgreementError = e => ({
+  type: SIGN_RENTAL_AGREEMENT_ERROR,
+  error: true,
+  payload: e,
+});
 
 const fetchMessagesRequest = () => ({ type: FETCH_MESSAGES_REQUEST });
 const fetchMessagesSuccess = (messages, pagination) => ({
@@ -344,6 +510,189 @@ export const fetchTransaction = (id, txRole) => (dispatch, getState, sdk) => {
     })
     .catch(e => {
       dispatch(fetchTransactionError(storableError(e)));
+      throw e;
+    });
+};
+
+export const acceptCommunication = data => (dispatch, getState, sdk) => {
+  const { txId, isRenterEnquired } = data;
+  if (acceptOrDeclineInProgress(getState())) {
+    return Promise.reject(new Error('Accept or decline already in progress'));
+  }
+
+  dispatch(acceptCommunicationRequest());
+
+  return sdk.transactions
+    .transition(
+      {
+        id: txId,
+        transition: isRenterEnquired
+          ? TRANSITION_HOST_ACCEPTS_COMMUNICATION
+          : TRANSITION_RENTER_ACCEPTS_COMMUNICATION,
+        params: {},
+      },
+      { expand: true }
+    )
+    .then(response => {
+      dispatch(addMarketplaceEntities(response));
+      dispatch(acceptCommunicationSuccess());
+      dispatch(fetchCurrentUserNotifications());
+      return response;
+    })
+    .catch(e => {
+      dispatch(acceptCommunicationError(storableError(e)));
+      log.error(e, 'accept-communication-failed', {
+        txId: id,
+        transition: isRenterEnquired
+          ? TRANSITION_HOST_ACCEPTS_COMMUNICATION
+          : TRANSITION_RENTER_ACCEPTS_COMMUNICATION,
+      });
+      throw e;
+    });
+};
+
+export const declineCommunication = data => (dispatch, getState, sdk) => {
+  if (acceptOrDeclineInProgress(getState())) {
+    return Promise.reject(new Error('Accept or decline already in progress'));
+  }
+  const { txId, isRenterEnquired } = data;
+  dispatch(declineCommunicationRequest());
+
+  return sdk.transactions
+    .transition(
+      {
+        id: txId,
+        transition: isRenterEnquired
+          ? TRANSITION_HOST_DECLINES_COMMUNICATION
+          : TRANSITION_RENTER_DECLINES_COMMUNICATION,
+        params: {},
+      },
+      { expand: true }
+    )
+    .then(response => {
+      dispatch(addMarketplaceEntities(response));
+      dispatch(declineCommunicationSuccess());
+      dispatch(fetchCurrentUserNotifications());
+      return response;
+    })
+    .catch(e => {
+      dispatch(declineCommunicationError(storableError(e)));
+      log.error(e, 'decline-communication-failed', {
+        txId: id,
+        transition: isRenterEnquired
+          ? TRANSITION_HOST_DECLINES_COMMUNICATION
+          : TRANSITION_RENTER_DECLINES_COMMUNICATION,
+      });
+      throw e;
+    });
+};
+
+export const sendRentalAgreement = data => (dispatch, getState, sdk) => {
+  // TODO: Add booking data to params here
+  const { txId, listingId } = data;
+
+  dispatch(sendRentalAgreementRequest());
+  const bookingData = {
+    startDate: moment()
+      .add(1, 'days')
+      .toISOString(),
+    endDate: moment()
+      .add(30, 'days')
+      .toISOString(),
+  };
+  const bodyParams = {
+    id: txId.uuid,
+    transition: TRANSITION_HOST_SENDS_AGREEMENT,
+    params: {
+      listingId: listingId.uuid,
+      bookingStart: bookingData.startDate,
+      bookingEnd: bookingData.endDate,
+    },
+  };
+  const queryParams = { expand: true };
+  return transitionPrivilegedSimple({ bodyParams, bookingData, queryParams })
+    .then(response => {
+      dispatch(addMarketplaceEntities(response));
+      dispatch(sendRentalAgreementSuccess());
+      dispatch(fetchCurrentUserNotifications());
+      return response;
+    })
+    .catch(e => {
+      dispatch(sendRentalAgreementError(storableError(e)));
+      log.error(e, 'host-sends-agreement-failed', {
+        txId,
+        transition: TRANSITION_HOST_SENDS_AGREEMENT,
+      });
+      throw e;
+    });
+};
+
+export const cancelDuringRad = data => (dispatch, getState, sdk) => {
+  const { txId, actor } = data;
+  dispatch(cancelDuringRadRequest());
+
+  return sdk.transactions
+    .transition(
+      {
+        id: txId,
+        transition:
+          actor === 'provider'
+            ? TRANSITION_HOST_CANCELS_DURING_RAD
+            : TRANSITION_RENTER_CANCELS_DURING_RAD,
+        params: {},
+      },
+      { expand: true }
+    )
+    .then(response => {
+      dispatch(addMarketplaceEntities(response));
+      dispatch(cancelDuringRadSuccess());
+      dispatch(fetchCurrentUserNotifications());
+      return response;
+    })
+    .catch(e => {
+      dispatch(cancelDuringRadError(storableError(e)));
+      log.error(e, 'cancel-during-rad-failed', {
+        txId: id,
+        transition:
+          actor === 'provider'
+            ? TRANSITION_HOST_CANCELS_DURING_RAD
+            : TRANSITION_RENTER_CANCELS_DURING_RAD,
+      });
+      throw e;
+    });
+};
+
+export const signRentalAgreement = data => (dispatch, getState, sdk) => {
+  // TODO: Add booking data to params here
+  const { txId, listingId } = data;
+
+  dispatch(signRentalAgreementRequest());
+  const bookingData = {
+    startDate: moment()
+      .add(1, 'days')
+      .toISOString(),
+    endDate: moment()
+      .add(30, 'days')
+      .toISOString(),
+  };
+  const bodyParams = {
+    id: txId.uuid,
+    transition: TRANSITION_RENTER_SIGNS_RENTAL_AGREEMENT,
+  };
+  const queryParams = { expand: true };
+  return transitionPrivilegedSimple({ bodyParams, queryParams })
+    .then(response => {
+      dispatch(addMarketplaceEntities(response));
+      dispatch(signRentalAgreementSuccess());
+      dispatch(fetchCurrentUserNotifications());
+      return response;
+    })
+    .catch(e => {
+      dispatch(signRentalAgreementError(storableError(e)));
+      log.error(e, 'renter-signs-agreement-failed', {
+        txId,
+        transition: TRANSITION_RENTER_SIGNS_RENTAL_AGREEMENT,
+      });
       throw e;
     });
 };

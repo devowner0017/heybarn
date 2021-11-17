@@ -8,25 +8,10 @@ import {
   txIsCanceled,
   txIsDeclined,
   txIsEnquired,
-  txIsRenterEnquired,
-  txIsHostEnquired,
   txIsPaymentExpired,
   txIsPaymentPending,
   txIsRequested,
   txHasBeenDelivered,
-  txHasHostDeclined,
-  txHasRenterDeclined,
-  txIsRentalAgreementDiscussion,
-  txIsReversedTransactionFlow,
-  txIsCancelledDuringRad,
-  txIsRentalAgreementSent,
-  txIsCancelledAfterAgreementSent,
-  txIsRentalAgreementFinalized,
-  TRANSITION_HOST_ACCEPTS_COMMUNICATION,
-  TRANSITION_RENTER_ACCEPTS_COMMUNICATION,
-  TRANSITION_HOST_DECLINES_COMMUNICATION,
-  TRANSITION_HOST_SENDS_AGREEMENT,
-  TRANSITION_RENTER_SIGNS_RENTAL_AGREEMENT,
 } from '../../util/transaction';
 import { LINE_ITEM_NIGHT, LINE_ITEM_DAY, propTypes } from '../../util/types';
 import {
@@ -37,13 +22,7 @@ import {
 } from '../../util/data';
 import { isMobileSafari } from '../../util/userAgent';
 import { formatMoney } from '../../util/currency';
-import {
-  AvatarLarge,
-  BookingPanel,
-  NamedLink,
-  ReviewModal,
-  UserDisplayName,
-} from '../../components';
+import { AvatarLarge, BookingPanel, NamedLink, ReviewModal, UserDisplayName } from '..';
 import { SendMessageForm } from '../../forms';
 import config from '../../config';
 
@@ -53,8 +32,9 @@ import BreakdownMaybe from './BreakdownMaybe';
 import DetailCardHeadingsMaybe from './DetailCardHeadingsMaybe';
 import DetailCardImage from './DetailCardImage';
 import FeedSection from './FeedSection';
-import ActionButtonsMaybe from './ActionButtonsMaybe';
+import SaleActionButtonsMaybe from './SaleActionButtonsMaybe';
 import PanelHeading, {
+  HEADING_READY,
   HEADING_ENQUIRED,
   HEADING_PAYMENT_PENDING,
   HEADING_PAYMENT_EXPIRED,
@@ -63,20 +43,9 @@ import PanelHeading, {
   HEADING_DECLINED,
   HEADING_CANCELED,
   HEADING_DELIVERED,
-  HEADING_RENTER_ENQUIRED,
-  HEADING_HOST_ENQUIRED,
-  HEADING_HOST_DECLINED_COMMUNICATION,
-  HEADING_RENTER_DECLINED_COMMUNICATION,
-  HEADING_RENTAL_AGREEMENT_DISCUSSION,
-  HEADING_REVERSED_TRANSACTION_FLOW,
-  HEADING_CANCELLED_DURING_RAD,
-  HEADING_RENTAL_AGREEMENT_SENT,
-  HEADING_CANCELLED_AFTER_AGREEENT_SENT,
-  HEADING_RENTAL_AGREEMENT_FINALIZED,
 } from './PanelHeading';
 
-import css from './TransactionPanel.module.css';
-import { cancelDuringRad } from '../../containers/TransactionPage/TransactionPage.duck';
+import css from './TransactionInitPanel.module.css';
 
 // Helper function to get display names for different roles
 const displayNames = (currentUser, currentProvider, currentCustomer, intl) => {
@@ -106,7 +75,7 @@ const displayNames = (currentUser, currentProvider, currentCustomer, intl) => {
   };
 };
 
-export class TransactionPanelComponent extends Component {
+export class TransactionInitPanelComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -115,7 +84,7 @@ export class TransactionPanelComponent extends Component {
       reviewSubmitted: false,
     };
     this.isMobSaf = false;
-    this.sendMessageFormName = 'TransactionPanel.SendMessageForm';
+    this.sendMessageFormName = 'TransactionInitPanel.SendMessageForm';
 
     this.onOpenReviewModal = this.onOpenReviewModal.bind(this);
     this.onSubmitReview = this.onSubmitReview.bind(this);
@@ -191,7 +160,7 @@ export class TransactionPanelComponent extends Component {
       rootClassName,
       className,
       currentUser,
-      transaction,
+      currentListing,
       totalMessagePages,
       oldestMessagePageFetched,
       messages,
@@ -214,38 +183,14 @@ export class TransactionPanelComponent extends Component {
       acceptSaleError,
       declineSaleError,
       onSubmitBookingRequest,
-      timeSlots,
-      fetchTimeSlotsError,
       nextTransitions,
-      onFetchTransactionLineItems,
-      lineItems,
-      fetchLineItemsInProgress,
-      fetchLineItemsError,
-
-      onAcceptCommunication,
-      onDeclineCommunication,
-      acceptCommunicationInProgress,
-      declineCommunicationInProgress,
-      acceptCommunicationError,
-      declineCommunicationError,
-      onSendRentalAgreement,
-      onCancelDuringRad,
-      sendRentalAgreementInProgress,
-      sendRentalAgreementError,
-      cancelDuringRadInProgress,
-      cancelDuringRadError,
-      signRentalAgreementInProgress,
-      signRentalAgreementError,
-      onSignRentalAgreement,
+      paymentForm,
     } = this.props;
 
-    const currentTransaction = ensureTransaction(transaction);
-    const currentListing = ensureListing(currentTransaction.listing);
-    const currentProvider = ensureUser(currentTransaction.provider);
-    const currentCustomer = ensureUser(currentTransaction.customer);
+    const currentProvider = ensureUser(currentListing.author);
+    const currentCustomer = ensureUser(currentUser);
     const isCustomer = transactionRole === 'customer';
     const isProvider = transactionRole === 'provider';
-
     const listingLoaded = !!currentListing.id;
     const listingDeleted = listingLoaded && currentListing.attributes.deleted;
     const iscustomerLoaded = !!currentCustomer.id;
@@ -256,164 +201,31 @@ export class TransactionPanelComponent extends Component {
     const isProviderDeleted = isProviderLoaded && currentProvider.attributes.deleted;
 
     const stateDataFn = tx => {
-      if (txIsRenterEnquired(tx)) {
+      // THIS IS JUST FOR EXAMPLE PURPOSES
+      // TODO: GET RID OF IT
+      if (txIsEnquired(tx)) {
         const transitions = Array.isArray(nextTransitions)
           ? nextTransitions.map(transition => {
               return transition.attributes.name;
             })
           : [];
         const hasCorrectNextTransition =
-          transitions.length > 0 && transitions.includes(TRANSITION_HOST_ACCEPTS_COMMUNICATION);
+          transitions.length > 0 && transitions.includes(TRANSITION_REQUEST_PAYMENT_AFTER_ENQUIRY);
         return {
-          headingState: HEADING_RENTER_ENQUIRED,
-          showDetailCardHeadings: true,
-          showAcceptCommunicationButtons:
-            isProvider && !isProviderBanned && hasCorrectNextTransition,
-        };
-      }
-      // ****
-      else if (txIsHostEnquired(tx)) {
-        const transitions = Array.isArray(nextTransitions)
-          ? nextTransitions.map(transition => {
-              return transition.attributes.name;
-            })
-          : [];
-        const hasCorrectNextTransition =
-          transitions.length > 0 && transitions.includes(TRANSITION_RENTER_ACCEPTS_COMMUNICATION);
-        return {
-          headingState: HEADING_HOST_ENQUIRED,
-          showDetailCardHeadings: true,
+          headingState: HEADING_ENQUIRED,
           showBookingPanel: isCustomer && !isProviderBanned && hasCorrectNextTransition,
-        };
-      }
-      // ****
-      else if (txHasHostDeclined(tx)) {
-        return {
-          headingState: HEADING_HOST_DECLINED_COMMUNICATION,
-          showDetailCardHeadings: true,
-          showBookingPanel: false,
-        };
-      }
-      // ****
-      else if (txHasRenterDeclined(tx)) {
-        return {
-          headingState: HEADING_RENTER_DECLINED_COMMUNICATION,
-          showDetailCardHeadings: true,
-          showBookingPanel: false,
-        };
-      }
-      // ****
-      else if (txIsRentalAgreementDiscussion(tx)) {
-        return {
-          headingState: HEADING_RENTAL_AGREEMENT_DISCUSSION,
-          showDetailCardHeadings: true,
-          showRentalAgreementButtons: true,
-        };
-      }
-      // ****
-      else if (txIsReversedTransactionFlow(tx)) {
-        return {
-          headingState: HEADING_REVERSED_TRANSACTION_FLOW,
-          showBookingPanel: false,
-        };
-      }
-      // ****
-      else if (txIsCancelledDuringRad(tx)) {
-        return {
-          headingState: HEADING_CANCELLED_DURING_RAD,
-          showBookingPanel: false,
-        };
-      }
-      // ****
-      else if (txIsRentalAgreementSent(tx)) {
-        const transitions = Array.isArray(nextTransitions)
-          ? nextTransitions.map(transition => {
-              return transition.attributes.name;
-            })
-          : [];
-        const hasCorrectNextTransition =
-          transitions.length > 0 && transitions.includes(TRANSITION_RENTER_SIGNS_RENTAL_AGREEMENT);
-        return {
-          headingState: HEADING_RENTAL_AGREEMENT_SENT,
-          showRentalSignatureButtons: isCustomer && hasCorrectNextTransition,
-          // TODO: Fix breakdowns
-          showBreakdowns: false,
-        };
-      }
-      // ****
-      else if (txIsCancelledAfterAgreementSent(tx)) {
-        return {
-          headingState: HEADING_CANCELLED_AFTER_AGREEENT_SENT,
-          showBookingPanel: false,
-        };
-      }
-      // ****
-      else if (txIsRentalAgreementFinalized(tx)) {
-        const transitions = Array.isArray(nextTransitions)
-          ? nextTransitions.map(transition => {
-              return transition.attributes.name;
-            })
-          : [];
-        const hasCorrectNextTransition =
-          transitions.length > 0 && transitions.includes(TRANSITION_REQUEST_PAYMENT);
-        return {
-          headingState: HEADING_RENTAL_AGREEMENT_FINALIZED,
-          showBookingPanel: isCustomer && !isProviderBanned && hasCorrectNextTransition,
-        };
-      }
-      // ****
-      else if (txHasBeenDelivered(tx)) {
-        return {
-          headingState: HEADING_DELIVERED,
-          showDetailCardHeadings: isCustomer,
-          showAddress: isCustomer,
-        };
-      } else if (txIsPaymentPending(tx)) {
-        return {
-          headingState: HEADING_PAYMENT_PENDING,
-          showDetailCardHeadings: isCustomer,
-        };
-      } else if (txIsPaymentExpired(tx)) {
-        return {
-          headingState: HEADING_PAYMENT_EXPIRED,
-          showDetailCardHeadings: isCustomer,
-        };
-      } else if (txIsRequested(tx)) {
-        return {
-          headingState: HEADING_REQUESTED,
-          showDetailCardHeadings: isCustomer,
-          showSaleButtons: isProvider && !isCustomerBanned,
-        };
-      } else if (txIsAccepted(tx)) {
-        return {
-          headingState: HEADING_ACCEPTED,
-          showDetailCardHeadings: isCustomer,
-          showAddress: isCustomer,
-        };
-      } else if (txIsDeclined(tx)) {
-        return {
-          headingState: HEADING_DECLINED,
-          showDetailCardHeadings: isCustomer,
-        };
-      } else if (txIsCanceled(tx)) {
-        return {
-          headingState: HEADING_CANCELED,
-          showDetailCardHeadings: isCustomer,
         };
       } else {
         return {
-          headingState: 'unknown',
+          headingState: HEADING_READY,
+          showDetailCardHeadings: true,
         };
       }
     };
-    const stateData = stateDataFn(currentTransaction);
-    console.log(
-      '🚀 | file: TransactionPanel.js | line 394 | TransactionPanelComponent | render | stateData',
-      stateData
-    );
+    const stateData = stateDataFn(currentListing);
 
     const deletedListingTitle = intl.formatMessage({
-      id: 'TransactionPanel.deletedListingTitle',
+      id: 'TransactionInitPanel.deletedListingTitle',
     });
 
     const {
@@ -428,16 +240,15 @@ export class TransactionPanelComponent extends Component {
     const listingTitle = currentListing.attributes.deleted
       ? deletedListingTitle
       : currentListing.attributes.title;
-
     const unitType = config.bookingUnitType;
     const isNightly = unitType === LINE_ITEM_NIGHT;
     const isDaily = unitType === LINE_ITEM_DAY;
 
     const unitTranslationKey = isNightly
-      ? 'TransactionPanel.perNight'
+      ? 'TransactionInitPanel.perNight'
       : isDaily
-      ? 'TransactionPanel.perDay'
-      : 'TransactionPanel.perUnit';
+      ? 'TransactionInitPanel.perDay'
+      : 'TransactionInitPanel.perUnit';
 
     const price = currentListing.attributes.price;
     const bookingSubTitle = price
@@ -448,99 +259,32 @@ export class TransactionPanelComponent extends Component {
       currentListing.images && currentListing.images.length > 0 ? currentListing.images[0] : null;
 
     const saleButtons = (
-      <ActionButtonsMaybe
+      <SaleActionButtonsMaybe
         showButtons={stateData.showSaleButtons}
-        affirmativeInProgress={acceptInProgress}
-        negativeInProgress={declineInProgress}
-        affirmativeError={acceptSaleError}
-        negativeError={declineSaleError}
-        affirmativeAction={() => onAcceptSale(currentTransaction.id)}
-        negativeAction={() => onDeclineSale(currentTransaction.id)}
+        acceptInProgress={acceptInProgress}
+        declineInProgress={declineInProgress}
+        acceptSaleError={acceptSaleError}
+        declineSaleError={declineSaleError}
+        onAcceptSale={() => onAcceptSale(currentTransaction.id)}
+        onDeclineSale={() => onDeclineSale(currentTransaction.id)}
       />
     );
-    console.log(
-      '🚀 | file: TransactionPanel.js | line 439 | TransactionPanelComponent | render | stateData',
-      stateData
-    );
-    const acceptCommunicationButtons = (
-      <ActionButtonsMaybe
-        showButtons={stateData.showAcceptCommunicationButtons}
-        affirmativeInProgress={acceptCommunicationInProgress}
-        negativeInProgress={declineCommunicationInProgress}
-        affirmativeError={acceptCommunicationError}
-        negativeError={declineCommunicationError}
-        affirmativeAction={() =>
-          onAcceptCommunication({
-            txId: currentTransaction.id,
-            isRenterEnquired: stateData.headingState === 'renter_enquired',
-          })
-        }
-        negativeAction={() =>
-          onDeclineCommunication({
-            txId: currentTransaction.id,
-            isRenterEnquired: stateData.headingState === 'renter_enquired',
-          })
-        }
-        affirmativeText={'Accept'}
-        negativeText={'Decline'}
-      />
-    );
-    const rentalAgreementButtons = (
-      <ActionButtonsMaybe
-        showButtons={stateData.showRentalAgreementButtons}
-        affirmativeInProgress={sendRentalAgreementInProgress}
-        negativeInProgress={cancelDuringRadInProgress}
-        affirmativeError={sendRentalAgreementError}
-        negativeError={cancelDuringRadError}
-        affirmativeAction={() =>
-          onSendRentalAgreement({
-            txId: currentTransaction.id,
-            listingId: currentListing.id,
-          })
-        }
-        negativeAction={() =>
-          onCancelDuringRad({
-            txId: currentTransaction.id,
-            actor: isCustomer ? 'customer' : 'provider',
-          })
-        }
-        affirmativeText={'Send Rental Agreement'}
-        negativeText={'Cancel Transaction'}
-        hideAffirmative={isCustomer}
-      />
-    );
-    const rentalSignatureButtons = (
-      <ActionButtonsMaybe
-        showButtons={stateData.showRentalSignatureButtons}
-        affirmativeInProgress={signRentalAgreementInProgress}
-        negativeInProgress={null}
-        affirmativeError={signRentalAgreementError}
-        negativeError={null}
-        affirmativeAction={() =>
-          onSignRentalAgreement({
-            txId: currentTransaction.id,
-          })
-        }
-        negativeAction={() => null}
-        affirmativeText={'Sign Rental Agreement'}
-        hideNegative={true}
-      />
-    );
+
     const showSendMessageForm =
       !isCustomerBanned && !isCustomerDeleted && !isProviderBanned && !isProviderDeleted;
 
     const sendMessagePlaceholder = intl.formatMessage(
-      { id: 'TransactionPanel.sendMessagePlaceholder' },
+      { id: 'TransactionInitPanel.sendMessagePlaceholder' },
       { name: otherUserDisplayNameString }
     );
 
     const sendingMessageNotAllowed = intl.formatMessage({
-      id: 'TransactionPanel.sendingMessageNotAllowed',
+      id: 'TransactionInitPanel.sendingMessageNotAllowed',
     });
 
     const paymentMethodsPageLink = (
       <NamedLink name="PaymentMethodsPage">
-        <FormattedMessage id="TransactionPanel.paymentMethodsPageLink" />
+        <FormattedMessage id="TransactionInitPanel.paymentMethodsPageLink" />
       </NamedLink>
     );
 
@@ -573,29 +317,24 @@ export class TransactionPanelComponent extends Component {
               listingTitle={listingTitle}
               listingDeleted={listingDeleted}
             />
-            <div className={css.bookingDetailsMobile}>
-              <AddressLinkMaybe
+            {/* <div className={css.bookingDetailsMobile}> */}
+            {/* <AddressLinkMaybe
                 rootClassName={css.addressMobile}
                 location={location}
                 geolocation={geolocation}
-                showAddress={stateData.showAddress}
-              />
-              {stateData.showBreakdowns && (
-                <BreakdownMaybe
-                  transaction={currentTransaction}
-                  transactionRole={transactionRole}
-                />
-              )}
-            </div>
+              /> */}
+            {/* <BreakdownMaybe transaction={currentTransaction} transactionRole={transactionRole} /> */}
+            {/* </div> */}
             {savePaymentMethodFailed ? (
               <p className={css.genericError}>
                 <FormattedMessage
-                  id="TransactionPanel.savePaymentMethodFailed"
+                  id="TransactionInitPanel.savePaymentMethodFailed"
                   values={{ paymentMethodsPageLink }}
                 />
               </p>
             ) : null}
-            <FeedSection
+            {/* TODO: WONT NEED FEED SECTION  */}
+            {/* <FeedSection
               rootClassName={css.feedContainer}
               currentTransaction={currentTransaction}
               currentUser={currentUser}
@@ -607,7 +346,7 @@ export class TransactionPanelComponent extends Component {
               onOpenReviewModal={this.onOpenReviewModal}
               onShowMoreMessages={() => onShowMoreMessages(currentTransaction.id)}
               totalMessagePages={totalMessagePages}
-            />
+            /> */}
             {showSendMessageForm ? (
               <SendMessageForm
                 formId={this.sendMessageFormName}
@@ -622,15 +361,7 @@ export class TransactionPanelComponent extends Component {
             ) : (
               <div className={css.sendingMessageNotAllowed}>{sendingMessageNotAllowed}</div>
             )}
-            {stateData.showAcceptCommunicationButtons ? (
-              <div className={css.mobileActionButtons}>{acceptCommunicationButtons}</div>
-            ) : null}
-            {stateData.showRentalAgreementButtons ? (
-              <div className={css.mobileActionButtons}>{rentalAgreementButtons}</div>
-            ) : null}
-            {stateData.showRentalSignatureButtons ? (
-              <div className={css.mobileActionButtons}>{rentalSignatureButtons}</div>
-            ) : null}
+            {paymentForm}
             {stateData.showSaleButtons ? (
               <div className={css.mobileActionButtons}>{saleButtons}</div>
             ) : null}
@@ -645,13 +376,13 @@ export class TransactionPanelComponent extends Component {
                 provider={currentProvider}
                 isCustomer={isCustomer}
               />
+
               <DetailCardHeadingsMaybe
                 showDetailCardHeadings={stateData.showDetailCardHeadings}
                 listingTitle={listingTitle}
                 subTitle={bookingSubTitle}
                 location={location}
                 geolocation={geolocation}
-                showAddress={stateData.showAddress}
               />
               {stateData.showBookingPanel ? (
                 <BookingPanel
@@ -672,22 +403,13 @@ export class TransactionPanelComponent extends Component {
                   fetchLineItemsError={fetchLineItemsError}
                 />
               ) : null}
-              {stateData.showBreakdowns && (
-                <BreakdownMaybe
-                  className={css.breakdownContainer}
-                  transaction={currentTransaction}
-                  transactionRole={transactionRole}
-                />
-              )}
-              {stateData.showAcceptCommunicationButtons ? (
-                <div className={css.desktopActionButtons}>{acceptCommunicationButtons}</div>
-              ) : null}
-              {stateData.showRentalAgreementButtons ? (
-                <div className={css.desktopActionButtons}>{rentalAgreementButtons}</div>
-              ) : null}
-              {stateData.showRentalSignatureButtons ? (
-                <div className={css.desktopActionButtons}>{rentalSignatureButtons}</div>
-              ) : null}
+              {/* TODO: WONT NEED */}
+              {/* <BreakdownMaybe
+                className={css.breakdownContainer}
+                transaction={currentTransaction}
+                transactionRole={transactionRole}
+              /> */}
+
               {stateData.showSaleButtons ? (
                 <div className={css.desktopActionButtons}>{saleButtons}</div>
               ) : null}
@@ -710,7 +432,7 @@ export class TransactionPanelComponent extends Component {
   }
 }
 
-TransactionPanelComponent.defaultProps = {
+TransactionInitPanelComponent.defaultProps = {
   rootClassName: null,
   className: null,
   currentUser: null,
@@ -728,7 +450,7 @@ TransactionPanelComponent.defaultProps = {
   fetchLineItemsError: null,
 };
 
-TransactionPanelComponent.propTypes = {
+TransactionInitPanelComponent.propTypes = {
   rootClassName: string,
   className: string,
 
@@ -772,6 +494,6 @@ TransactionPanelComponent.propTypes = {
   intl: intlShape,
 };
 
-const TransactionPanel = injectIntl(TransactionPanelComponent);
+const TransactionInitPanel = injectIntl(TransactionInitPanelComponent);
 
-export default TransactionPanel;
+export default TransactionInitPanel;

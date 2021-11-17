@@ -34,6 +34,7 @@ class SelectSingleFilterPopup extends Component {
   }
 
   render() {
+    console.log(this.props)
     const {
       rootClassName,
       className,

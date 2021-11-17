@@ -275,25 +275,14 @@ const routeConfiguration = () => {
     },
     // NEW PAGES FOR INITIALIZING THE EXCHANGE OF CONTACT INfo
     {
-      path: '/order/:id/initial',
-      name: 'OrderInitPage',
+      path: '/transaction/:id/initial',
+      name: 'TransactionInitPage',
       auth: true,
       authPage: 'LoginPage',
       component: TransactionInitPage,
       extraProps: { transactionRole: 'customer' },
       loadData: params =>
         pageDataLoadingAPI.TransactionInitPage.loadData({ ...params, transactionRole: 'customer' }),
-      setInitialValues: pageDataLoadingAPI.TransactionInitPage.setInitialValues,
-    },
-    {
-      path: '/sale/:id/initial',
-      name: 'SaleInitPage',
-      auth: true,
-      authPage: 'LoginPage',
-      component: TransactionInitPage,
-      extraProps: { transactionRole: 'provider' },
-      loadData: params =>
-        pageDataLoadingAPI.TransactionInitPage.loadData({ ...params, transactionRole: 'provider' }),
       setInitialValues: pageDataLoadingAPI.TransactionInitPage.setInitialValues,
     },
     {

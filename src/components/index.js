@@ -142,6 +142,7 @@ export { default as SearchMapGroupLabel } from './SearchMapGroupLabel/SearchMapG
 export { default as SearchMapInfoCard } from './SearchMapInfoCard/SearchMapInfoCard';
 export { default as SearchMapPriceLabel } from './SearchMapPriceLabel/SearchMapPriceLabel';
 export { default as SearchResultsPanel } from './SearchResultsPanel/SearchResultsPanel';
+export { default as SelectRegionFilter } from './SelectRegionFilter/SelectRegionFilter';
 export { default as SelectMultipleFilter } from './SelectMultipleFilter/SelectMultipleFilter';
 export { default as SelectSingleFilter } from './SelectSingleFilter/SelectSingleFilter';
 export { default as SortBy } from './SortBy/SortBy';
@@ -176,4 +177,5 @@ export { default as Topbar } from './Topbar/Topbar';
 export { default as TopbarDesktop } from './TopbarDesktop/TopbarDesktop';
 export { default as TopbarMobileMenu } from './TopbarMobileMenu/TopbarMobileMenu';
 export { default as TransactionPanel } from './TransactionPanel/TransactionPanel';
+export { default as TransactionInitPanel } from './TransactionInitPanel/TransactionInitPanel';
 export { default as SectionRecommendation } from './SectionRecommendation/SectionRecommendation';

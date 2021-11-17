@@ -113,10 +113,12 @@ export const loadData = (params, search) => (dispatch, getState, sdk) => {
     page,
     per_page: INBOX_PAGE_SIZE,
   };
+  console.log("🚀 | file: InboxPage.duck.js | line 116 | loadData | apiQueryParams", apiQueryParams);
 
   return sdk.transactions
     .query(apiQueryParams)
     .then(response => {
+    console.log("🚀 | file: InboxPage.duck.js | line 120 | loadData | response", response);
       dispatch(addMarketplaceEntities(response));
       dispatch(fetchOrdersOrSalesSuccess(response));
       return response;

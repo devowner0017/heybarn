@@ -5,6 +5,7 @@ import {
   KeywordFilter,
   SelectSingleFilter,
   SelectMultipleFilter,
+  SelectRegionFilter,
 } from '../../components';
 
 /**
@@ -20,6 +21,7 @@ const FilterComponent = props => {
     getHandleChangedValueFn,
     ...rest
   } = props;
+  console.log("🚀 | file: FilterComponent.js | line 24 | props", props);
   const { id, type, queryParamNames, label, config } = filterConfig;
   const { liveEdit, showAsPopup } = rest;
 
@@ -37,6 +39,20 @@ const FilterComponent = props => {
           queryParamNames={queryParamNames}
           initialValues={initialValues(queryParamNames)}
           onSelect={getHandleChangedValueFn(useHistoryPush)}
+          {...config}
+          {...rest}
+        />
+      );
+    }
+    case 'SelectRegionFilter': {
+      return (
+        <SelectRegionFilter
+          id={componentId}
+          label={label}
+          name={name}
+          queryParamNames={queryParamNames}
+          initialValues={initialValues(queryParamNames)}
+          onSubmit={getHandleChangedValueFn(useHistoryPush)}
           {...config}
           {...rest}
         />

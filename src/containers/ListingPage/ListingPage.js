@@ -101,22 +101,38 @@ export class ListingPageComponent extends Component {
       params,
       callSetInitialValues,
       onInitializeCardPaymentData,
+      currentUser,
     } = this.props;
+    console.log(
+      '🚀 | file: ListingPage.js | line 107 | ListingPageComponent | submitContactUser | this.props',
+      this.props
+    );
     const listingId = new UUID(params.id);
     const listing = getListing(listingId);
-
-    const { bookingDates, ...bookingData } = values;
+    console.log(
+      '🚀 | file: ListingPage.js | line 110 | ListingPageComponent | submitContactUser | listing',
+      listing
+    );
+    const typeOfLIsting = listing?.attributes?.publicData.listingType;
+    const contactingAs = typeOfLIsting === 'listing' ? 'renter' : 'host';
+    // const { bookingDates, ...bookingData } = values;
 
     const initialValues = {
-      listing,
-      bookingData,
+      
+      contactingAs,
+      host: listing.author,
+      guest: currentUser,
+
       confirmPaymentError: null,
     };
     const saveToSessionStorage = !this.props.currentUser;
     const routes = routeConfiguration();
     // Customize checkout page state with current listing and selected bookingDates
-    const { setInitialValues } = findRouteByRouteName('OrderInitPage', routes);
-
+    const { setInitialValues } = findRouteByRouteName('TransactionInitPage', routes);
+    console.log(
+      '🚀 | file: ListingPage.js | line 120 | ListingPageComponent | submitContactUser | setInitialValues',
+      setInitialValues
+    );
     callSetInitialValues(setInitialValues, initialValues, saveToSessionStorage);
 
     // Clear previous Stripe errors from store if there is any
@@ -125,7 +141,7 @@ export class ListingPageComponent extends Component {
     // Redirect to CheckoutPage
     history.push(
       createResourceLocatorString(
-        'OrderInitPage',
+        'TransactionInitPage',
         routes,
         { id: listing.id.uuid, slug: createSlug(listing.attributes.title) },
         {}
@@ -284,6 +300,10 @@ export class ListingPageComponent extends Component {
       publicData,
     } = currentListing.attributes;
     const typeOfLIsting = publicData.listingType;
+    console.log(
+      '🚀 | file: ListingPage.js | line 287 | ListingPageComponent | render | typeOfLIsting',
+      typeOfLIsting
+    );
     const richTitle = (
       <span>
         {richText(title, {

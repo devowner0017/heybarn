@@ -22,6 +22,7 @@ export { default as ProfileSettingsForm } from './ProfileSettingsForm/ProfileSet
 export { default as ReviewForm } from './ReviewForm/ReviewForm';
 export { default as SendMessageForm } from './SendMessageForm/SendMessageForm';
 export { default as SignupForm } from './SignupForm/SignupForm';
+export { default as StripePaymentFormPlatformFee } from './StripePaymentForm/StripePaymentFormPlatformFee';
 export { default as StripePaymentForm } from './StripePaymentForm/StripePaymentForm';
 export { default as StripeConnectAccountForm } from './StripeConnectAccountForm/StripeConnectAccountForm';
 export { default as TopbarSearchForm } from './TopbarSearchForm/TopbarSearchForm';
