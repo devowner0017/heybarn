@@ -1,3 +1,43 @@
+# heybarn dev environment and workflow
+
+All local dev environment variables are stored in the .env.development file. Just copy them over into a .env file and start the server.
+
+## Git CI/CD Process
+
+heybarn has 2 main trunks and many feature branches.
+
+1. Main/Master Trunk
+   1. No developer ever works directly on the master trunk
+   2. This is production, customer facing code, deployed live!
+   3. Code is only ever merged in via pull requests from hotfix branches or the Release trunk
+2. Release Trunk
+   1. No developer ever works directly on the Release trunk
+   2. The release Trunk is for UA Testing, PRE-Production
+   3. Code is only ever merged in via pull requests from feature branches
+3. Feature Branches
+   1. These are branched from the release branch and worked on by developers
+   2. These should be named something relevant to the code that is being developed
+   3. These should be focused on one feature or aspect being developed
+
+## Commits & Pull Requests
+
+- Commits should be small, concise and descriptive
+- Pull Requests should at the very least describe the changes enacted in the new code, but preferably include:
+  - The feature being worked on
+  - The problems being solved
+  - The solutions enacted
+  - Any knock-on issues or ToDos
+
+## Linting & Testing
+
+Sharetribe is pre rolled with Jest as the testing library, and heybarn continues to use Jest.
+
+Heybarn also uses husky for pre-commit linting to ensure code formatting and precision. Ensure that you have installed Husky and it will run before every commit, ensuring the validity of your code.
+
+
+
+
+
 # Sharetribe Flex Template for Web
 
 [![CircleCI](https://circleci.com/gh/sharetribe/ftw-daily.svg?style=svg)](https://circleci.com/gh/sharetribe/ftw-daily)
