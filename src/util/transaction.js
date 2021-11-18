@@ -245,7 +245,6 @@ const statesFromStateDescription = description => description.states || {};
 
 // Get all the transitions from states object in an array
 const getTransitions = states => {
-console.log("🚀 | file: transaction.js | line 248 | states", states);
   const stateNames = Object.keys(states);
 
   const transitionsReducer = (transitionArray, name) => {
@@ -321,6 +320,10 @@ export const txIsPaymentPending = tx =>
 // Note: state name used in Marketplace API docs (and here) is actually preauthorized
 // However, word "requested" is used in many places so that we decided to keep it.
 export const txIsRequested = tx =>
+  getTransitionsToState(STATE_PREAUTHORIZED).includes(txLastTransition(tx));
+// Note: state name used in Marketplace API docs (and here) is actually preauthorized
+// However, word "requested" is used in many places so that we decided to keep it.
+export const txIsPaid = tx =>
   getTransitionsToState(STATE_PREAUTHORIZED).includes(txLastTransition(tx));
 
 export const txIsDelivered = tx =>

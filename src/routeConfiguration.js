@@ -89,7 +89,7 @@ const routeConfiguration = () => {
       loadData: pageDataLoadingAPI.ListingPage.loadData,
     },
     {
-      path: '/l/:slug/:id/checkout',
+      path: '/t/:id/checkout',
       name: 'CheckoutPage',
       auth: true,
       component: CheckoutPage,

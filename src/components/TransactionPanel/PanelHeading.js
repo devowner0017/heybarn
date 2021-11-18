@@ -28,6 +28,7 @@ export const HEADING_ACCEPTED = 'accepted';
 export const HEADING_DECLINED = 'declined';
 export const HEADING_CANCELED = 'canceled';
 export const HEADING_DELIVERED = 'delivered';
+export const HEADING_RENT_PAID = 'rentPaid';
 
 const createListingLink = (listingId, label, listingDeleted, searchParams = {}, className = '') => {
   if (!listingDeleted) {
@@ -303,6 +304,22 @@ const PanelHeading = props => {
             <p className={css.transactionInfoMessage}>
               <FormattedMessage
                 id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedSubTitle`}
+              />
+            </p>
+          ) : null}
+        </HeadingWithSubtitle>
+      );
+    case HEADING_RENT_PAID:
+      return (
+        <HeadingWithSubtitle
+          className={titleClasses}
+          id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalPaidTitle`}
+          values={{ providerName, listingLink, customerName, listingLink }}
+        >
+          {!listingDeleted ? (
+            <p className={css.transactionInfoMessage}>
+              <FormattedMessage
+                id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalPaidSubTitle`}
               />
             </p>
           ) : null}

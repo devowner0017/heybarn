@@ -242,6 +242,7 @@ export const TransactionPageComponent = props => {
   // that currently handles showing everything inside layout's main view area.
   const panel = isDataAvailable ? (
     <TransactionPanel
+      history={history}
       className={detailsClassName}
       currentUser={currentUser}
       transaction={currentTransaction}
@@ -291,6 +292,8 @@ export const TransactionPageComponent = props => {
       signRentalAgreementError={signRentalAgreementError}
       onSignRentalAgreement={onSignRentalAgreement}
       ensuredRelated={ensuredRelated}
+      onInitializeCardPaymentData={onInitializeCardPaymentData}
+      callSetInitialValues={callSetInitialValues}
     />
   ) : (
     loadingOrFailedFetching
@@ -476,6 +479,7 @@ const mapDispatchToProps = dispatch => {
     onSendRentalAgreement: transactionId => dispatch(sendRentalAgreement(transactionId)),
     onCancelDuringRad: transactionId => dispatch(cancelDuringRad(transactionId)),
     onSignRentalAgreement: transactionId => dispatch(signRentalAgreement(transactionId)),
+
 
     onAcceptSale: transactionId => dispatch(acceptSale(transactionId)),
     onDeclineSale: transactionId => dispatch(declineSale(transactionId)),

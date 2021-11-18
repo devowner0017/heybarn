@@ -1151,6 +1151,16 @@
   "TransactionPanel.p_cancelledDuringRadTitle": "This agreement has been cancelled",
   "TransactionPanel.p_cancelledDuringRadSubTitle": "More renters are searching...",
 
+  "TransactionPanel.c_rentalAgreementFinalizedTitle": "Congratulations! Your rental agreement is all signed",
+  "TransactionPanel.c_rentalAgreementFinalizedSubTitle": "Keep a copy of this safe and check back in on your heybarn accounts page if you need to change the agreement in the future. Happy renting!",
+  "TransactionPanel.p_rentalAgreementFinalizedTitle": "Congratulations, your rental agreement is all signed and you're good to go!",
+  "TransactionPanel.p_rentalAgreementFinalizedSubTitle": "Keep a copy of this safe and check back in on your heybarn accounts page if you need to change the agreement  in the future. Happy hosting!",
+
+  "TransactionPanel.c_rentalPaidTitle": "Congratulations! Your rental agreement is all signed",
+  "TransactionPanel.c_rentalPaidSubTitle": "Keep a copy of this safe and check back in on your heybarn accounts page if you need to change the agreement in the future. Happy renting!",
+  "TransactionPanel.p_rentalPaidTitle": "Congratulations, your rental agreement is all signed and you're good to go!",
+  "TransactionPanel.p_rentalPaidSubTitle": "Keep a copy of this safe and check back in on your heybarn accounts page if you need to change the agreement  in the future. Happy hosting!",
+
   "TransactionPanel.acceptButton": "Accept",
   "TransactionPanel.acceptButton": "Accept",
   "TransactionPanel.acceptButton": "Accept",

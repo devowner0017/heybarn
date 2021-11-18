@@ -94,7 +94,6 @@
    :actions [
     {:name :action/update-protected-data}
     {:name :action/privileged-update-metadata}
-    {:name :action/privileged-set-line-items}
    ],
    :from :state/rental-agreement-sent,
    :to :state/rental-agreement-finalized
@@ -123,7 +122,6 @@
    :actions [
         {:name :action/privileged-update-metadata}
     {:name :action/update-protected-data}
-    {:name :action/privileged-set-line-items}
     {:name :action/stripe-create-payment-intent}
 
    ],

@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { array, arrayOf, bool, func, number, string } from 'prop-types';
 import { FormattedMessage, injectIntl, intlShape } from '../../util/reactIntl';
+import routeConfiguration from '../../routeConfiguration';
+import { createResourceLocatorString, findRouteByRouteName } from '../../util/routes';
+
 import classNames from 'classnames';
 import {
   TRANSITION_REQUEST_PAYMENT_AFTER_ENQUIRY,
@@ -8,6 +11,7 @@ import {
   txIsCanceled,
   txIsDeclined,
   txIsEnquired,
+  txIsPaid,
   txIsRenterEnquired,
   txIsHostEnquired,
   txIsPaymentExpired,
@@ -22,12 +26,14 @@ import {
   txIsRentalAgreementSent,
   txIsCancelledAfterAgreementSent,
   txIsRentalAgreementFinalized,
+  TRANSITION_REQUEST_PAYMENT,
   TRANSITION_HOST_ACCEPTS_COMMUNICATION,
   TRANSITION_RENTER_ACCEPTS_COMMUNICATION,
   TRANSITION_HOST_DECLINES_COMMUNICATION,
   TRANSITION_HOST_SENDS_AGREEMENT,
   TRANSITION_RENTER_SIGNS_RENTAL_AGREEMENT,
 } from '../../util/transaction';
+import { createSlug } from '../../util/urlHelpers';
 import { LINE_ITEM_NIGHT, LINE_ITEM_DAY, propTypes } from '../../util/types';
 import {
   ensureListing,
@@ -62,6 +68,7 @@ import PanelHeading, {
   HEADING_ACCEPTED,
   HEADING_DECLINED,
   HEADING_CANCELED,
+  HEADING_RENT_PAID,
   HEADING_DELIVERED,
   HEADING_RENTER_ENQUIRED,
   HEADING_HOST_ENQUIRED,
@@ -262,6 +269,10 @@ export class TransactionPanelComponent extends Component {
     const isProviderDeleted = isProviderLoaded && currentProvider.attributes.deleted;
 
     const stateDataFn = tx => {
+      console.log(
+        '🚀 | file: TransactionPanel.js | line 270 | TransactionPanelComponent | render | tx',
+        tx
+      );
       if (txIsRenterEnquired(tx)) {
         const transitions = Array.isArray(nextTransitions)
           ? nextTransitions.map(transition => {
@@ -368,6 +379,15 @@ export class TransactionPanelComponent extends Component {
           headingState: HEADING_RENTAL_AGREEMENT_FINALIZED,
           showBookingPanel: isCustomer && !isProviderBanned && hasCorrectNextTransition,
           showBreakdowns: true,
+          showPaymentFormButtons: isCustomer && !isProviderBanned && hasCorrectNextTransition,
+          allowMessages: true,
+        };
+      } else if (txIsPaid(tx)) {
+        return {
+          headingState: HEADING_RENT_PAID,
+          showDetailCardHeadings: isCustomer,
+          showAddress: isCustomer,
+          showBreakdowns: true,
           allowMessages: true,
         };
       }
@@ -398,6 +418,61 @@ export class TransactionPanelComponent extends Component {
       '🚀 | file: TransactionPanel.js | line 394 | TransactionPanelComponent | render | stateData',
       stateData
     );
+
+    const handlePaymentRedirect = values => {
+      const {
+        history,
+        params,
+        listing,
+        callSetInitialValues,
+        onInitializeCardPaymentData,
+        currentUser,
+        transaction,
+      } = this.props;
+      console.log(
+        '🚀 | file: ListingPage.js | line 107 | ListingPageComponent | submitContactUser | this.props',
+        this.props
+      );
+      const typeOfLIsting = listing?.attributes?.publicData.listingType;
+      const contactingAs = typeOfLIsting === 'listing' ? 'renter' : 'host';
+      const { booking } = transaction;
+      console.log(
+        '🚀 | file: TransactionPanel.js | line 425 | TransactionPanelComponent | render | booking',
+        booking
+      );
+      const initialValues = {
+        contactingAs,
+        host: ensuredRelated.author,
+        guest: currentUser,
+        listing: currentListing,
+        relatedListing: ensuredRelated,
+        transaction,
+        confirmPaymentError: null,
+        bookingDates: {
+          bookingStart: booking.attributes.start,
+          bookingEnd: booking.attributes.end,
+        },
+      };
+
+      const saveToSessionStorage = true;
+      const routes = routeConfiguration();
+      // Customize checkout page state with current listing and selected bookingDates
+      const { setInitialValues } = findRouteByRouteName(`CheckoutPage`, routes);
+      console.log(
+        '🚀 | file: ListingPage.js | line 120 | ListingPageComponent | submitContactUser | setInitialValues',
+        setInitialValues
+      );
+
+      callSetInitialValues(setInitialValues, initialValues, saveToSessionStorage);
+
+      // Clear previous Stripe errors from store if there is any
+      onInitializeCardPaymentData();
+
+      // Redirect to CheckoutPage
+      history.push(
+        createResourceLocatorString(`CheckoutPage`, routes, { id: transaction.id.uuid }, {})
+      );
+    };
 
     const deletedListingTitle = intl.formatMessage({
       id: 'TransactionPanel.deletedListingTitle',
@@ -516,6 +591,19 @@ export class TransactionPanelComponent extends Component {
         hideNegative={true}
       />
     );
+    const paymentFormButtons = (
+      <ActionButtonsMaybe
+        showButtons={stateData.showPaymentFormButtons}
+        // affirmativeInProgress={signRentalAgreementInProgress}
+        // negativeInProgress={null}
+        // affirmativeError={signRentalAgreementError}
+        // negativeError={null}
+        affirmativeAction={handlePaymentRedirect}
+        negativeAction={() => null}
+        affirmativeText={'Pay Rent!'}
+        hideNegative={true}
+      />
+    );
     const showSendMessageForm =
       !isCustomerBanned &&
       !isCustomerDeleted &&
@@ -623,6 +711,9 @@ export class TransactionPanelComponent extends Component {
             {stateData.showSaleButtons ? (
               <div className={css.mobileActionButtons}>{saleButtons}</div>
             ) : null}
+            {stateData.showPaymentFormButtons ? (
+              <div className={css.mobileActionButtons}>{paymentFormButtons}</div>
+            ) : null}
           </div>
 
           <div className={css.asideDesktop}>
@@ -660,6 +751,9 @@ export class TransactionPanelComponent extends Component {
               ) : null}
               {stateData.showSaleButtons ? (
                 <div className={css.desktopActionButtons}>{saleButtons}</div>
+              ) : null}
+              {stateData.showPaymentFormButtons ? (
+                <div className={css.desktopActionButtons}>{paymentFormButtons}</div>
               ) : null}
             </div>
             {ensuredRelated && (

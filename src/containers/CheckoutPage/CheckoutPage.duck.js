@@ -107,10 +107,14 @@ export default function checkoutPageReducer(state = initialState, action = {}) {
 
 // ================ Action creators ================ //
 
-export const setInitialValues = initialValues => ({
-  type: SET_INITIAL_VALUES,
-  payload: pick(initialValues, Object.keys(initialState)),
-});
+export const setInitialValues = initialValues => {
+  console.log('🚀 | file: CheckoutPage.duck.js | line 111 |  initialValues', initialValues);
+
+  return {
+    type: SET_INITIAL_VALUES,
+    payload: pick(initialValues, Object.keys(initialState)),
+  };
+};
 
 const initiateOrderRequest = () => ({ type: INITIATE_ORDER_REQUEST });
 
@@ -162,14 +166,20 @@ export const stripeCustomerError = e => ({
 /* ================ Thunks ================ */
 
 export const initiateOrder = (orderParams, transactionId) => (dispatch, getState, sdk) => {
+  console.log(
+    '🚀 | file: CheckoutPage.duck.js | line 169 | initiateOrder | transactionId',
+    transactionId
+  );
+  console.log(
+    '🚀 | file: CheckoutPage.duck.js | line 169 | initiateOrder | orderParams',
+    orderParams
+  );
   dispatch(initiateOrderRequest());
 
   // If we already have a transaction ID, we should transition, not
   // initiate.
   const isTransition = !!transactionId;
-  const transition = isTransition
-    ? TRANSITION_REQUEST_PAYMENT_AFTER_ENQUIRY
-    : TRANSITION_REQUEST_PAYMENT;
+  const transition = TRANSITION_REQUEST_PAYMENT;
   const isPrivilegedTransition = isPrivileged(transition);
 
   const bookingData = {
@@ -239,6 +249,7 @@ export const initiateOrder = (orderParams, transactionId) => (dispatch, getState
 };
 
 export const confirmPayment = orderParams => (dispatch, getState, sdk) => {
+  console.log('🚀 | file: CheckoutPage.duck.js | line 246 | orderParams', orderParams);
   dispatch(confirmPaymentRequest());
 
   const bodyParams = {
