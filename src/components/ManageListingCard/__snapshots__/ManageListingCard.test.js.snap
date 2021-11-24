@@ -39,7 +39,7 @@ exports[`ManageListingCard matches snapshot 1`] = `
         className="menuOverlayContent"
       >
         <MemoizedFormattedMessage
-          id="ManageListingCard.viewListing"
+          id="ManageListingCard.viewundefined"
         />
       </div>
     </div>
@@ -96,7 +96,7 @@ exports[`ManageListingCard matches snapshot 1`] = `
                 rootClassName="menuItem"
               >
                 <MemoizedFormattedMessage
-                  id="ManageListingCard.closeListing"
+                  id="ManageListingCard.closeundefined"
                 />
               </InlineTextButton>
             </MenuItem>
@@ -108,23 +108,6 @@ exports[`ManageListingCard matches snapshot 1`] = `
   <div
     className="info"
   >
-    <div
-      className="price"
-    >
-      <div
-        className="priceValue"
-        title={55}
-      >
-        55
-      </div>
-      <div
-        className="perUnit"
-      >
-        <MemoizedFormattedMessage
-          id="ManageListingCard.perNight"
-        />
-      </div>
-    </div>
     <div
       className="mainInfo"
     >
@@ -166,30 +149,26 @@ exports[`ManageListingCard matches snapshot 1`] = `
         }
       >
         <MemoizedFormattedMessage
-          id="ManageListingCard.editListing"
+          id="ManageListingCard.editundefined"
         />
       </NamedLink>
-      <span
-        className="manageLinksSeparator"
+      <div
+        className="price"
       >
-         • 
-      </span>
-      <NamedLink
-        className="manageLink"
-        name="EditListingPage"
-        params={
-          Object {
-            "id": "listing1",
-            "slug": "listing1-title",
-            "tab": "availability",
-            "type": "edit",
-          }
-        }
-      >
-        <MemoizedFormattedMessage
-          id="ManageListingCard.manageAvailability"
-        />
-      </NamedLink>
+        <div
+          className="priceValue"
+          title={55}
+        >
+          55
+        </div>
+        <div
+          className="perUnit"
+        >
+          <MemoizedFormattedMessage
+            id="ManageListingCard.perWeek"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </div>

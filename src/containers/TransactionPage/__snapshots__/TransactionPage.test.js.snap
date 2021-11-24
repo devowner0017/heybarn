@@ -23,8 +23,7 @@ exports[`TransactionPage - Order matches snapshot 1`] = `
         className="root"
       >
         <injectIntl(TransactionPanelComponent)
-          acceptInProgress={false}
-          acceptSaleError={null}
+          callSetInitialValues={[Function]}
           className="tabContent tabContentVisible"
           currentUser={
             Object {
@@ -47,27 +46,33 @@ exports[`TransactionPage - Order matches snapshot 1`] = `
               "type": "currentUser",
             }
           }
-          declineInProgress={false}
-          declineSaleError={null}
-          fetchLineItemsError={null}
-          fetchLineItemsInProgress={false}
+          ensuredRelated={
+            Object {
+              "attributes": Object {
+                "publicData": Object {},
+              },
+              "id": null,
+              "images": Array [],
+              "type": "listing",
+            }
+          }
           fetchMessagesError={null}
           fetchMessagesInProgress={false}
-          fetchTimeSlotsError={null}
+          history={
+            Object {
+              "push": [Function],
+            }
+          }
           initialMessageFailed={false}
-          lineItems={null}
           messages={Array []}
           oldestMessagePageFetched={0}
-          onAcceptSale={[Function]}
-          onDeclineSale={[Function]}
-          onFetchTransactionLineItems={[Function]}
+          onInitializeCardPaymentData={[Function]}
           onSendMessage={[Function]}
           onShowMoreMessages={[Function]}
           onSubmitBookingRequest={[Function]}
           savePaymentMethodFailed={false}
           sendMessageError={null}
           sendMessageInProgress={false}
-          timeSlots={null}
           totalMessagePages={0}
           transaction={
             Object {
@@ -253,8 +258,7 @@ exports[`TransactionPage - Sale matches snapshot 1`] = `
         className="root"
       >
         <injectIntl(TransactionPanelComponent)
-          acceptInProgress={false}
-          acceptSaleError={null}
+          callSetInitialValues={[Function]}
           className="tabContent tabContentVisible"
           currentUser={
             Object {
@@ -277,26 +281,32 @@ exports[`TransactionPage - Sale matches snapshot 1`] = `
               "type": "currentUser",
             }
           }
-          declineInProgress={false}
-          declineSaleError={null}
-          fetchLineItemsError={null}
-          fetchLineItemsInProgress={false}
+          ensuredRelated={
+            Object {
+              "attributes": Object {
+                "publicData": Object {},
+              },
+              "id": null,
+              "images": Array [],
+              "type": "listing",
+            }
+          }
           fetchMessagesError={null}
-          fetchTimeSlotsError={null}
+          history={
+            Object {
+              "push": [Function],
+            }
+          }
           initialMessageFailed={false}
-          lineItems={null}
           messages={Array []}
           oldestMessagePageFetched={0}
-          onAcceptSale={[Function]}
-          onDeclineSale={[Function]}
-          onFetchTransactionLineItems={[Function]}
+          onInitializeCardPaymentData={[Function]}
           onSendMessage={[Function]}
           onShowMoreMessages={[Function]}
           onSubmitBookingRequest={[Function]}
           savePaymentMethodFailed={false}
           sendMessageError={null}
           sendMessageInProgress={false}
-          timeSlots={null}
           totalMessagePages={0}
           transaction={
             Object {

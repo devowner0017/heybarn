@@ -129,7 +129,7 @@ exports[`ListingPage matches snapshot 1`] = `
               hostLink={
                 <NamedLink
                   className="authorNameLink"
-                  name="ListingPage"
+                  name="Page"
                   params={
                     Object {
                       "id": "listing1",
@@ -282,7 +282,7 @@ exports[`ListingPage matches snapshot 1`] = `
               title="listing1 title"
             />
           </div>
-          <withRouter(injectIntl(BookingPanel))
+          <withRouter(injectIntl(ContactPanel))
             authorDisplayName="user-1 display name"
             className="bookingPanel"
             fetchLineItemsError={null}

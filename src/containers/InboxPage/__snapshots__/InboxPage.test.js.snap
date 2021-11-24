@@ -20,11 +20,18 @@ exports[`InboxPage matches snapshot 1`] = `
         desktopClassName="desktopTopbar"
         mobileRootClassName="mobileTopbar"
       />
+      <UserNav
+        className={null}
+        rootClassName={null}
+        selectedPageName="InboxPage"
+      />
     </LayoutWrapperTopbar>
-    <LayoutWrapperSideNav
-      className="navigation"
+    <withViewport(LayoutWrapperManageListingsSideNavComponent)
+      currentTab="InboxTab"
+    />
+    <LayoutWrapperMain
+      className="inboxPageWrapper"
       rootClassName={null}
-      tabs={null}
     >
       <h1
         className="title"
@@ -33,49 +40,6 @@ exports[`InboxPage matches snapshot 1`] = `
           id="InboxPage.title"
         />
       </h1>
-      <TabNav
-        className={null}
-        rootClassName="tabs"
-        tabClassName={null}
-        tabRootClassName="tab"
-        tabs={
-          Array [
-            Object {
-              "linkProps": Object {
-                "name": "InboxPage",
-                "params": Object {
-                  "tab": "orders",
-                },
-              },
-              "selected": true,
-              "text": <span>
-                <Memo(MemoizedFormattedMessage)
-                  id="InboxPage.ordersTabTitle"
-                />
-              </span>,
-            },
-            Object {
-              "linkProps": Object {
-                "name": "InboxPage",
-                "params": Object {
-                  "tab": "sales",
-                },
-              },
-              "selected": false,
-              "text": <span>
-                <Memo(MemoizedFormattedMessage)
-                  id="InboxPage.salesTabTitle"
-                />
-              </span>,
-            },
-          ]
-        }
-      />
-    </LayoutWrapperSideNav>
-    <LayoutWrapperMain
-      className={null}
-      rootClassName={null}
-    >
       <ul
         className="itemList"
       >
@@ -97,11 +61,11 @@ exports[`InboxPage matches snapshot 1`] = `
             }
             stateData={
               Object {
-                "bookingClassName": "bookingNoActionNeeded",
+                "bookingClassName": "bookingActionNeeded",
                 "lastTransitionedAtClassName": "lastTransitionedAtEmphasized",
                 "nameClassName": "nameNotEmphasized",
-                "state": "InboxPage.stateRequested",
-                "stateClassName": "stateActionNeeded",
+                "state": "InboxPage.stateRentPaid",
+                "stateClassName": "stateNoActionNeeded",
               }
             }
             tx={
@@ -250,11 +214,11 @@ exports[`InboxPage matches snapshot 1`] = `
             }
             stateData={
               Object {
-                "bookingClassName": "bookingNoActionNeeded",
+                "bookingClassName": "bookingActionNeeded",
                 "lastTransitionedAtClassName": "lastTransitionedAtEmphasized",
                 "nameClassName": "nameNotEmphasized",
-                "state": "InboxPage.stateRequested",
-                "stateClassName": "stateActionNeeded",
+                "state": "InboxPage.stateRentPaid",
+                "stateClassName": "stateNoActionNeeded",
               }
             }
             tx={
@@ -405,7 +369,7 @@ exports[`InboxPage matches snapshot 2`] = `
     className="itemAvatar"
   >
     <a
-      className="root"
+      className="mediumAvatar"
       href="/u/provider-user-id"
       onClick={[Function]}
       onMouseOver={[Function]}
@@ -445,31 +409,16 @@ exports[`InboxPage matches snapshot 2`] = `
         </span>
       </div>
       <div
-        className="bookingInfoWrapper bookingNoActionNeeded"
-      >
-        <div
-          className="bookingInfo bookingNoActionNeeded"
-        >
-          <span
-            className="dateSection"
-          >
-            Feb 15 -
-          </span>
-          <span
-            className="dateSection"
-          >
-            Feb 16
-          </span>
-        </div>
-      </div>
+        className="listingName"
+      />
     </div>
     <div
       className="itemState"
     >
       <div
-        className="stateName stateActionNeeded"
+        className="stateName stateNoActionNeeded"
       >
-        InboxPage.stateRequested
+        InboxPage.stateRentPaid
       </div>
       <div
         className="lastTransitionedAt lastTransitionedAtEmphasized"
@@ -502,11 +451,18 @@ exports[`InboxPage matches snapshot 3`] = `
         desktopClassName="desktopTopbar"
         mobileRootClassName="mobileTopbar"
       />
+      <UserNav
+        className={null}
+        rootClassName={null}
+        selectedPageName="InboxPage"
+      />
     </LayoutWrapperTopbar>
-    <LayoutWrapperSideNav
-      className="navigation"
+    <withViewport(LayoutWrapperManageListingsSideNavComponent)
+      currentTab="InboxTab"
+    />
+    <LayoutWrapperMain
+      className="inboxPageWrapper"
       rootClassName={null}
-      tabs={null}
     >
       <h1
         className="title"
@@ -515,49 +471,6 @@ exports[`InboxPage matches snapshot 3`] = `
           id="InboxPage.title"
         />
       </h1>
-      <TabNav
-        className={null}
-        rootClassName="tabs"
-        tabClassName={null}
-        tabRootClassName="tab"
-        tabs={
-          Array [
-            Object {
-              "linkProps": Object {
-                "name": "InboxPage",
-                "params": Object {
-                  "tab": "orders",
-                },
-              },
-              "selected": false,
-              "text": <span>
-                <Memo(MemoizedFormattedMessage)
-                  id="InboxPage.ordersTabTitle"
-                />
-              </span>,
-            },
-            Object {
-              "linkProps": Object {
-                "name": "InboxPage",
-                "params": Object {
-                  "tab": "sales",
-                },
-              },
-              "selected": true,
-              "text": <span>
-                <Memo(MemoizedFormattedMessage)
-                  id="InboxPage.salesTabTitle"
-                />
-              </span>,
-            },
-          ]
-        }
-      />
-    </LayoutWrapperSideNav>
-    <LayoutWrapperMain
-      className={null}
-      rootClassName={null}
-    >
       <ul
         className="itemList"
       >
@@ -582,8 +495,8 @@ exports[`InboxPage matches snapshot 3`] = `
                 "bookingClassName": "bookingActionNeeded",
                 "lastTransitionedAtClassName": "lastTransitionedAtEmphasized",
                 "nameClassName": "nameEmphasized",
-                "state": "InboxPage.statePending",
-                "stateClassName": "stateActionNeeded",
+                "state": "InboxPage.stateRentPaid",
+                "stateClassName": "stateNoActionNeeded",
               }
             }
             tx={
@@ -735,8 +648,8 @@ exports[`InboxPage matches snapshot 3`] = `
                 "bookingClassName": "bookingActionNeeded",
                 "lastTransitionedAtClassName": "lastTransitionedAtEmphasized",
                 "nameClassName": "nameEmphasized",
-                "state": "InboxPage.statePending",
-                "stateClassName": "stateActionNeeded",
+                "state": "InboxPage.stateRentPaid",
+                "stateClassName": "stateNoActionNeeded",
               }
             }
             tx={
@@ -887,7 +800,7 @@ exports[`InboxPage matches snapshot 4`] = `
     className="itemAvatar"
   >
     <a
-      className="root"
+      className="mediumAvatar"
       href="/u/customer-user-id"
       onClick={[Function]}
       onMouseOver={[Function]}
@@ -931,31 +844,16 @@ exports[`InboxPage matches snapshot 4`] = `
         </span>
       </div>
       <div
-        className="bookingInfoWrapper bookingActionNeeded"
-      >
-        <div
-          className="bookingInfo bookingActionNeeded"
-        >
-          <span
-            className="dateSection"
-          >
-            Feb 15 -
-          </span>
-          <span
-            className="dateSection"
-          >
-            Feb 16
-          </span>
-        </div>
-      </div>
+        className="listingName"
+      />
     </div>
     <div
       className="itemState"
     >
       <div
-        className="stateName stateActionNeeded"
+        className="stateName stateNoActionNeeded"
       >
-        InboxPage.statePending
+        InboxPage.stateRentPaid
       </div>
       <div
         className="lastTransitionedAt lastTransitionedAtEmphasized"
