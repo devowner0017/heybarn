@@ -36,14 +36,14 @@
 
 .listingPanel {
   width: 100%;
-  margin: 24px auto 0 auto;
+  margin: 0  auto 0 auto;
 
   @media (--viewportMedium) {
-    margin: 30px auto 0 auto;
+    margin: 0 auto 0 auto;
   }
 
   @media (--viewportLarge) {
-    margin: 40px auto 0 auto;
+    margin: 0 auto 0 auto;
     max-width: 100%;
   }
 }
@@ -64,7 +64,7 @@
   padding: 0 24px 96px 24px;
 
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(160px, 25%));
   grid-gap: 1rem;
   grid-auto-flow: dense;
 

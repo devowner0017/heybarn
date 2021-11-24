@@ -4,6 +4,8 @@
   "private": true,
   "license": "Apache-2.0",
   "dependencies": {
+    "@babel/plugin-syntax-jsx": "^7.16.0",
+    "@babel/preset-react": "^7.16.0",
     "@babel/runtime": "^7.11.2",
     "@emotion/react": "latest",
     "@emotion/styled": "latest",
@@ -78,6 +80,7 @@
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
     "enzyme-to-json": "^3.5.0",
+    "husky": "^7.0.0",
     "inquirer": "^7.3.3",
     "nodemon": "^2.0.12",
     "prettier": "^1.18.2"
@@ -105,14 +108,18 @@
     "format": "prettier --write '**/*.{js,css}'",
     "format-ci": "prettier --list-different '**/*.{js,css}'",
     "format-docs": "prettier --write '**/*.md'",
-    "test": "NODE_ICU_DATA=node_modules/full-icu sharetribe-scripts test",
+    "test": "NODE_ICU_DATA=node_modules/full-icu sharetribe-scripts test --watchAll=false",
     "test-ci": "yarn run test-server --runInBand && sharetribe-scripts test --runInBand",
     "eject": "sharetribe-scripts eject",
     "start": "node --icu-data-dir=node_modules/full-icu server/index.js",
     "dev-server": "export NODE_ENV=development PORT=4000 REACT_APP_CANONICAL_ROOT_URL=http://localhost:4000&&yarn run build&&nodemon --watch server server/index.js",
     "test-server": "jest ./server/**/*.test.js",
     "heroku-postbuild": "yarn run build",
-    "translate": "node scripts/translations.js"
+    "translate": "node scripts/translations.js",
+    "prepare": "husky install",
+    "lint": "eslint src",
+    "prettier:fix": "prettier --write",
+    "prettier:check": "prettier --check"
   },
   "browserslist": {
     "production": [
@@ -133,5 +140,20 @@
     "singleQuote": true,
     "trailingComma": "es5",
     "proseWrap": "always"
+  },
+  "lint-staged": {
+    "src/*.{.js}": [
+      "yarn prettier:fix",
+      "yarn lint"
+    ]
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-react",
+      "@babel/preset-env"
+    ],
+    "plugins": [
+      "@babel/plugin-transform-react-jsx"
+    ]
   }
 }

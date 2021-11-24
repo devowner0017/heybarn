@@ -32,6 +32,7 @@ import {
   TRANSITION_HOST_DECLINES_COMMUNICATION,
   TRANSITION_HOST_SENDS_AGREEMENT,
   TRANSITION_RENTER_SIGNS_RENTAL_AGREEMENT,
+  txWasApprovedByRenter,
 } from '../../util/transaction';
 import { createSlug } from '../../util/urlHelpers';
 import { LINE_ITEM_NIGHT, LINE_ITEM_DAY, propTypes } from '../../util/types';
@@ -69,6 +70,7 @@ import PanelHeading, {
   HEADING_DECLINED,
   HEADING_CANCELED,
   HEADING_RENT_PAID,
+  HEADING_WAS_APPROVED_BY_RENTER,
   HEADING_DELIVERED,
   HEADING_RENTER_ENQUIRED,
   HEADING_HOST_ENQUIRED,
@@ -84,6 +86,9 @@ import PanelHeading, {
 
 import css from './TransactionPanel.module.css';
 import { cancelDuringRad } from '../../containers/TransactionPage/TransactionPage.duck';
+import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
+import NamedRedirect from '../NamedRedirect/NamedRedirect';
+import { getPropByName } from '../../util/userHelpers';
 
 // Helper function to get display names for different roles
 const displayNames = (currentUser, currentProvider, currentCustomer, intl) => {
@@ -120,6 +125,7 @@ export class TransactionPanelComponent extends Component {
       sendMessageFormFocused: false,
       isReviewModalOpen: false,
       reviewSubmitted: false,
+      showConfirmationModal: false,
     };
     this.isMobSaf = false;
     this.sendMessageFormName = 'TransactionPanel.SendMessageForm';
@@ -130,16 +136,19 @@ export class TransactionPanelComponent extends Component {
     this.onSendMessageFormBlur = this.onSendMessageFormBlur.bind(this);
     this.onMessageSubmit = this.onMessageSubmit.bind(this);
     this.scrollToMessage = this.scrollToMessage.bind(this);
+    this.setShowConfirmationModal = this.setShowConfirmationModal.bind(this);
   }
 
   componentDidMount() {
     this.isMobSaf = isMobileSafari();
   }
-
+  setShowConfirmationModal(val) {
+    this.setState({ showConfirmationModal: val });
+  }
   onOpenReviewModal() {
     this.setState({ isReviewModalOpen: true });
   }
-
+  setShowConfirmationModal;
   onSubmitReview(values) {
     const { onSendReview, transaction, transactionRole } = this.props;
     const currentTransaction = ensureTransaction(transaction);
@@ -195,6 +204,7 @@ export class TransactionPanelComponent extends Component {
 
   render() {
     const {
+      history,
       rootClassName,
       className,
       currentUser,
@@ -214,22 +224,9 @@ export class TransactionPanelComponent extends Component {
       onShowMoreMessages,
       transactionRole,
       intl,
-      onAcceptSale,
-      onDeclineSale,
-      acceptInProgress,
-      declineInProgress,
-      acceptSaleError,
-      declineSaleError,
-      onSubmitBookingRequest,
-      timeSlots,
-      fetchTimeSlotsError,
       nextTransitions,
-      onFetchTransactionLineItems,
-      lineItems,
-      fetchLineItemsInProgress,
-      fetchLineItemsError,
-
-      onAcceptCommunication,
+      onHostAcceptCommunication,
+      onRenterAcceptsCommunication,
       onDeclineCommunication,
       acceptCommunicationInProgress,
       declineCommunicationInProgress,
@@ -246,6 +243,7 @@ export class TransactionPanelComponent extends Component {
       onSignRentalAgreement,
 
       ensuredRelated,
+      onCompleteSale,
     } = this.props;
 
     const currentTransaction = ensureTransaction(transaction);
@@ -269,10 +267,6 @@ export class TransactionPanelComponent extends Component {
     const isProviderDeleted = isProviderLoaded && currentProvider.attributes.deleted;
 
     const stateDataFn = tx => {
-      console.log(
-        '🚀 | file: TransactionPanel.js | line 270 | TransactionPanelComponent | render | tx',
-        tx
-      );
       if (txIsRenterEnquired(tx)) {
         const transitions = Array.isArray(nextTransitions)
           ? nextTransitions.map(transition => {
@@ -285,7 +279,22 @@ export class TransactionPanelComponent extends Component {
           headingState: HEADING_RENTER_ENQUIRED,
           showDetailCardHeadings: true,
           showAcceptCommunicationButtons:
-            isProvider && !isProviderBanned && hasCorrectNextTransition,
+            isProvider && !isCustomerBanned && hasCorrectNextTransition,
+          confirmationModalProps: {
+            negativeAction: _ =>
+              onDeclineCommunication({
+                txId: tx.id,
+                isRenterEnquired: true,
+              }),
+            affirmativeButtonText: 'Nevermind!',
+            negativeButtonText: 'Decline This Transaction',
+            affirmativeInProgress: acceptCommunicationInProgress,
+            negativeInProgress: declineCommunicationInProgress,
+            affirmativeError: acceptCommunicationError,
+            negativeError: declineCommunicationError,
+            titleText: <FormattedMessage id="TransactionPanel.declineConfirmationTitle" />,
+            contentText: <FormattedMessage id="TransactionPanel.declineConfirmationSubTitle" />,
+          },
         };
       }
       // ****
@@ -300,7 +309,23 @@ export class TransactionPanelComponent extends Component {
         return {
           headingState: HEADING_HOST_ENQUIRED,
           showDetailCardHeadings: true,
-          showBookingPanel: isCustomer && !isProviderBanned && hasCorrectNextTransition,
+          showAcceptCommunicationButtons:
+            isProvider && !isCustomerBanned && hasCorrectNextTransition,
+          confirmationModalProps: {
+            negativeAction: _ =>
+              onDeclineCommunication({
+                txId: tx.id,
+                isRenterEnquired: false,
+              }),
+            affirmativeButtonText: 'Nevermind!',
+            negativeButtonText: 'Decline This Transaction',
+            affirmativeInProgress: acceptCommunicationInProgress,
+            negativeInProgress: declineCommunicationInProgress,
+            affirmativeError: acceptCommunicationError,
+            negativeError: declineCommunicationError,
+            titleText: <FormattedMessage id="TransactionPanel.declineConfirmationTitle" />,
+            contentText: <FormattedMessage id="TransactionPanel.declineConfirmationSubTitle" />,
+          },
         };
       }
       // ****
@@ -308,7 +333,6 @@ export class TransactionPanelComponent extends Component {
         return {
           headingState: HEADING_HOST_DECLINED_COMMUNICATION,
           showDetailCardHeadings: true,
-          showBookingPanel: false,
         };
       }
       // ****
@@ -316,30 +340,71 @@ export class TransactionPanelComponent extends Component {
         return {
           headingState: HEADING_RENTER_DECLINED_COMMUNICATION,
           showDetailCardHeadings: true,
-          showBookingPanel: false,
         };
       }
       // ****
-      else if (txIsRentalAgreementDiscussion(tx)) {
+      else if (txWasApprovedByRenter(tx)) {
+        return {
+          headingState: HEADING_WAS_APPROVED_BY_RENTER,
+          showDetailCardHeadings: true,
+          showRentalAgreementButtons: true,
+          allowMessages: true,
+          confirmationModalProps: {
+            negativeAction: _ =>
+              onCancelDuringRad({
+                txId: tx.id,
+                actor: isCustomer ? 'customer' : 'provider',
+              }),
+            affirmativeButtonText: 'Nevermind!',
+            negativeButtonText: 'Cancel This Transaction',
+            affirmativeInProgress: sendRentalAgreementInProgress,
+            negativeInProgress: cancelDuringRadInProgress,
+            affirmativeError: sendRentalAgreementError,
+            negativeError: cancelDuringRadError,
+            titleText: <FormattedMessage id="TransactionPanel.cancelConfirmationTitle" />,
+            contentText: <FormattedMessage id="TransactionPanel.cancelConfirmationSubTitle" />,
+          },
+        };
+      } else if (txIsRentalAgreementDiscussion(tx)) {
         return {
           headingState: HEADING_RENTAL_AGREEMENT_DISCUSSION,
           showDetailCardHeadings: true,
           showRentalAgreementButtons: true,
           allowMessages: true,
+          confirmationModalProps: {
+            negativeAction: _ =>
+              onCancelDuringRad({
+                txId: tx.id,
+                actor: isCustomer ? 'customer' : 'provider',
+              }),
+            affirmativeButtonText: 'Nevermind!',
+            negativeButtonText: 'Cancel This Transaction',
+            affirmativeInProgress: sendRentalAgreementInProgress,
+            negativeInProgress: cancelDuringRadInProgress,
+            affirmativeError: sendRentalAgreementError,
+            negativeError: cancelDuringRadError,
+            titleText: <FormattedMessage id="TransactionPanel.cancelConfirmationTitle" />,
+            contentText: <FormattedMessage id="TransactionPanel.cancelConfirmationSubTitle" />,
+          },
         };
       }
       // ****
       else if (txIsReversedTransactionFlow(tx)) {
-        return {
-          headingState: HEADING_REVERSED_TRANSACTION_FLOW,
-          showBookingPanel: false,
-        };
+        const relatedTxId = getPropByName(tx, 'relatedTxId');
+        const routes = routeConfiguration();
+        history.replace(
+          createResourceLocatorString(
+            `${isCustomer ? 'Sale' : 'Order'}DetailsPage`,
+            routes,
+            { id: relatedTxId },
+            {}
+          )
+        );
       }
       // ****
       else if (txIsCancelledDuringRad(tx)) {
         return {
           headingState: HEADING_CANCELLED_DURING_RAD,
-          showBookingPanel: false,
         };
       }
       // ****
@@ -353,9 +418,10 @@ export class TransactionPanelComponent extends Component {
           transitions.length > 0 && transitions.includes(TRANSITION_RENTER_SIGNS_RENTAL_AGREEMENT);
         return {
           headingState: HEADING_RENTAL_AGREEMENT_SENT,
+          showDetailCardHeadings: true,
           showRentalSignatureButtons: isCustomer && hasCorrectNextTransition,
           // TODO: Fix breakdowns
-          showBreakdowns: true,
+          showBreakdowns: isCustomer,
           allowMessages: true,
         };
       }
@@ -363,7 +429,6 @@ export class TransactionPanelComponent extends Component {
       else if (txIsCancelledAfterAgreementSent(tx)) {
         return {
           headingState: HEADING_CANCELLED_AFTER_AGREEENT_SENT,
-          showBookingPanel: false,
         };
       }
       // ****
@@ -373,13 +438,10 @@ export class TransactionPanelComponent extends Component {
               return transition.attributes.name;
             })
           : [];
-        const hasCorrectNextTransition =
-          transitions.length > 0 && transitions.includes(TRANSITION_REQUEST_PAYMENT);
         return {
           headingState: HEADING_RENTAL_AGREEMENT_FINALIZED,
-          showBookingPanel: isCustomer && !isProviderBanned && hasCorrectNextTransition,
           showBreakdowns: true,
-          showPaymentFormButtons: isCustomer && !isProviderBanned && hasCorrectNextTransition,
+          showPaymentFormButtons: isCustomer && !isProviderBanned,
           allowMessages: true,
         };
       } else if (txIsPaid(tx)) {
@@ -389,6 +451,7 @@ export class TransactionPanelComponent extends Component {
           showAddress: isCustomer,
           showBreakdowns: true,
           allowMessages: true,
+          showCompleteButtons: !isCustomer,
         };
       }
       // ****
@@ -413,11 +476,7 @@ export class TransactionPanelComponent extends Component {
         };
       }
     };
-    const stateData = stateDataFn(currentTransaction);
-    console.log(
-      '🚀 | file: TransactionPanel.js | line 394 | TransactionPanelComponent | render | stateData',
-      stateData
-    );
+    const stateData = stateDataFn(currentTransaction) || {};
 
     const handlePaymentRedirect = values => {
       const {
@@ -429,17 +488,9 @@ export class TransactionPanelComponent extends Component {
         currentUser,
         transaction,
       } = this.props;
-      console.log(
-        '🚀 | file: ListingPage.js | line 107 | ListingPageComponent | submitContactUser | this.props',
-        this.props
-      );
       const typeOfLIsting = listing?.attributes?.publicData.listingType;
       const contactingAs = typeOfLIsting === 'listing' ? 'renter' : 'host';
       const { booking } = transaction;
-      console.log(
-        '🚀 | file: TransactionPanel.js | line 425 | TransactionPanelComponent | render | booking',
-        booking
-      );
       const initialValues = {
         contactingAs,
         host: ensuredRelated.author,
@@ -458,10 +509,6 @@ export class TransactionPanelComponent extends Component {
       const routes = routeConfiguration();
       // Customize checkout page state with current listing and selected bookingDates
       const { setInitialValues } = findRouteByRouteName(`CheckoutPage`, routes);
-      console.log(
-        '🚀 | file: ListingPage.js | line 120 | ListingPageComponent | submitContactUser | setInitialValues',
-        setInitialValues
-      );
 
       callSetInitialValues(setInitialValues, initialValues, saveToSessionStorage);
 
@@ -512,21 +559,6 @@ export class TransactionPanelComponent extends Component {
     const firstImage =
       currentListing.images && currentListing.images.length > 0 ? currentListing.images[0] : null;
 
-    const saleButtons = (
-      <ActionButtonsMaybe
-        showButtons={stateData.showSaleButtons}
-        affirmativeInProgress={acceptInProgress}
-        negativeInProgress={declineInProgress}
-        affirmativeError={acceptSaleError}
-        negativeError={declineSaleError}
-        affirmativeAction={() => onAcceptSale(currentTransaction.id)}
-        negativeAction={() => onDeclineSale(currentTransaction.id)}
-      />
-    );
-    console.log(
-      '🚀 | file: TransactionPanel.js | line 439 | TransactionPanelComponent | render | stateData',
-      stateData
-    );
     const acceptCommunicationButtons = (
       <ActionButtonsMaybe
         showButtons={stateData.showAcceptCommunicationButtons}
@@ -534,18 +566,26 @@ export class TransactionPanelComponent extends Component {
         negativeInProgress={declineCommunicationInProgress}
         affirmativeError={acceptCommunicationError}
         negativeError={declineCommunicationError}
-        affirmativeAction={() =>
-          onAcceptCommunication({
-            txId: currentTransaction.id,
-            isRenterEnquired: stateData.headingState === 'renter_enquired',
-          })
-        }
-        negativeAction={() =>
-          onDeclineCommunication({
-            txId: currentTransaction.id,
-            isRenterEnquired: stateData.headingState === 'renter_enquired',
-          })
-        }
+        affirmativeAction={() => {
+          const isRenterEnquired = stateData.headingState === 'renter_enquired';
+          if (isRenterEnquired) {
+            onHostAcceptCommunication({
+              txId: currentTransaction.id,
+            });
+          } else {
+            onRenterAcceptsCommunication({
+              // This is the *HOSTS LISTING ID* to create a new transaction
+              listingId: ensuredRelated.id,
+              // This transaction id, to attach to the new transaction
+              relatedTxId: currentTransaction.id,
+              // The ADVERT ID to attach to the new transaction
+              relatedListingId: currentListing.id,
+            });
+          }
+        }}
+        negativeAction={() => {
+          this.setShowConfirmationModal(true);
+        }}
         affirmativeText={'Accept'}
         negativeText={'Decline'}
       />
@@ -563,12 +603,7 @@ export class TransactionPanelComponent extends Component {
             listingId: currentListing.id,
           })
         }
-        negativeAction={() =>
-          onCancelDuringRad({
-            txId: currentTransaction.id,
-            actor: isCustomer ? 'customer' : 'provider',
-          })
-        }
+        negativeAction={() => this.setShowConfirmationModal(true)}
         affirmativeText={'Send Rental Agreement'}
         negativeText={'Cancel Transaction'}
         hideAffirmative={isCustomer}
@@ -588,6 +623,23 @@ export class TransactionPanelComponent extends Component {
         }
         negativeAction={() => null}
         affirmativeText={'Sign Rental Agreement'}
+        hideNegative={true}
+      />
+    );
+    const completeButtons = (
+      <ActionButtonsMaybe
+        showButtons={stateData.showCompleteButtons}
+        affirmativeInProgress={signRentalAgreementInProgress}
+        negativeInProgress={null}
+        affirmativeError={signRentalAgreementError}
+        negativeError={null}
+        affirmativeAction={() =>
+          onCompleteSale({
+            txId: currentTransaction.id,
+          })
+        }
+        negativeAction={() => null}
+        affirmativeText={'Complete Sale'}
         hideNegative={true}
       />
     );
@@ -708,11 +760,11 @@ export class TransactionPanelComponent extends Component {
             {stateData.showRentalSignatureButtons ? (
               <div className={css.mobileActionButtons}>{rentalSignatureButtons}</div>
             ) : null}
-            {stateData.showSaleButtons ? (
-              <div className={css.mobileActionButtons}>{saleButtons}</div>
-            ) : null}
             {stateData.showPaymentFormButtons ? (
               <div className={css.mobileActionButtons}>{paymentFormButtons}</div>
+            ) : null}
+            {stateData.showCompleteButtons ? (
+              <div className={css.mobileActionButtons}>{completeButtons}</div>
             ) : null}
           </div>
 
@@ -749,11 +801,11 @@ export class TransactionPanelComponent extends Component {
               {stateData.showRentalSignatureButtons ? (
                 <div className={css.desktopActionButtons}>{rentalSignatureButtons}</div>
               ) : null}
-              {stateData.showSaleButtons ? (
-                <div className={css.desktopActionButtons}>{saleButtons}</div>
-              ) : null}
               {stateData.showPaymentFormButtons ? (
                 <div className={css.desktopActionButtons}>{paymentFormButtons}</div>
+              ) : null}
+              {stateData.showCompleteButtons ? (
+                <div className={css.desktopActionButtons}>{completeButtons}</div>
               ) : null}
             </div>
             {ensuredRelated && (
@@ -783,6 +835,13 @@ export class TransactionPanelComponent extends Component {
           reviewSent={this.state.reviewSubmitted}
           sendReviewInProgress={sendReviewInProgress}
           sendReviewError={sendReviewError}
+        />
+        <ConfirmationModal
+          id="ConfirmationModal"
+          isOpen={this.state.showConfirmationModal}
+          onCloseModal={() => this.setShowConfirmationModal(false)}
+          onManageDisableScrolling={onManageDisableScrolling}
+          {...stateData.confirmationModalProps}
         />
       </div>
     );
@@ -832,14 +891,6 @@ TransactionPanelComponent.propTypes = {
   timeSlots: arrayOf(propTypes.timeSlot),
   fetchTimeSlotsError: propTypes.error,
   nextTransitions: array,
-
-  // Sale related props
-  onAcceptSale: func.isRequired,
-  onDeclineSale: func.isRequired,
-  acceptInProgress: bool.isRequired,
-  declineInProgress: bool.isRequired,
-  acceptSaleError: propTypes.error,
-  declineSaleError: propTypes.error,
 
   // line items
   onFetchTransactionLineItems: func.isRequired,

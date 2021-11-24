@@ -9,10 +9,8 @@ import { isMobileSafari } from '../../util/userAgent';
 import { formatMoney } from '../../util/currency';
 import {
   AvatarLarge,
-  BookingPanel,
   CreateListingModal,
   NamedLink,
-  ReviewModal,
   UserDisplayName,
 } from '..';
 import config from '../../config';
@@ -144,13 +142,13 @@ export class TransactionInitPanelComponent extends Component {
       onManageDisableScrolling,
       transactionRole,
       intl,
-      onSubmitBookingRequest,
       nextTransitions,
       paymentForm,
       showCreateListingPopup,
       setShowCreateListingPopup,
       selectListing,
       selectedListing,
+      couponCodeComp
     } = this.props;
 
     const currentProvider = ensureUser(currentListing.author);
@@ -249,7 +247,6 @@ export class TransactionInitPanelComponent extends Component {
     );
 
     const classes = classNames(rootClassName || css.root, className);
-
     return (
       <div className={classes}>
         <div className={css.container}>
@@ -286,6 +283,7 @@ export class TransactionInitPanelComponent extends Component {
               </p>
             ) : null}
             {paymentForm}
+            {couponCodeComp}
           </div>
 
           <div className={css.asideDesktop}>

@@ -103,25 +103,16 @@ export class ListingPageComponent extends Component {
       onInitializeCardPaymentData,
       currentUser,
     } = this.props;
-    console.log(
-      '🚀 | file: ListingPage.js | line 107 | ListingPageComponent | submitContactUser | this.props',
-      this.props
-    );
     const listingId = new UUID(params.id);
     const listing = getListing(listingId);
-    console.log(
-      '🚀 | file: ListingPage.js | line 110 | ListingPageComponent | submitContactUser | listing',
-      listing
-    );
     const typeOfLIsting = listing?.attributes?.publicData.listingType;
     const contactingAs = typeOfLIsting === 'listing' ? 'renter' : 'host';
     // const { bookingDates, ...bookingData } = values;
 
     const initialValues = {
       contactingAs,
-      host: listing.author,
-      guest: currentUser,
-
+      host: typeOfLIsting === 'listing' ? listing.author : currentUser,
+      guest: typeOfLIsting === 'listing' ? currentUser : listing.author,
       confirmPaymentError: null,
     };
     const saveToSessionStorage = !this.props.currentUser;
@@ -130,10 +121,6 @@ export class ListingPageComponent extends Component {
     const { setInitialValues } = findRouteByRouteName(
       `TransactionInitPage${typeOfLIsting === 'listing' ? 'L' : 'A'}`,
       routes
-    );
-    console.log(
-      '🚀 | file: ListingPage.js | line 120 | ListingPageComponent | submitContactUser | setInitialValues',
-      setInitialValues
     );
     callSetInitialValues(setInitialValues, initialValues, saveToSessionStorage);
 
@@ -302,10 +289,6 @@ export class ListingPageComponent extends Component {
       publicData,
     } = currentListing.attributes;
     const typeOfLIsting = publicData.listingType;
-    console.log(
-      '🚀 | file: ListingPage.js | line 287 | ListingPageComponent | render | typeOfLIsting',
-      typeOfLIsting
-    );
     const richTitle = (
       <span>
         {richText(title, {

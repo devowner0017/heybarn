@@ -287,14 +287,20 @@ const txLastTransition = tx => ensureTransaction(tx).attributes.lastTransition;
 export const txIsHostEnquired = tx =>
   getTransitionsToState(STATE_HOST_ENQUIRED).includes(txLastTransition(tx));
 
-export const txIsRenterEnquired = tx =>
-  getTransitionsToState(STATE_RENTER_ENQUIRED).includes(txLastTransition(tx));
+export const txIsRenterEnquired = tx => {
+
+  return getTransitionsToState(STATE_RENTER_ENQUIRED).includes(txLastTransition(tx));
+};
 
 export const txHasHostDeclined = tx =>
   getTransitionsToState(STATE_HOST_DECLINED_COMMUNICATION).includes(txLastTransition(tx));
 
 export const txHasRenterDeclined = tx =>
   getTransitionsToState(STATE_RENTER_DECLINED_COMMUNICATION).includes(txLastTransition(tx));
+
+export const txWasApprovedByRenter = tx => {
+  return ['transition/host-approved-by-renter'].includes(txLastTransition(tx));
+};
 
 export const txIsRentalAgreementDiscussion = tx =>
   getTransitionsToState(STATE_RENTAL_AGREEMENT_DISCUSSION).includes(txLastTransition(tx));
@@ -343,7 +349,7 @@ export const txIsInFirstReviewBy = (tx, isCustomer) =>
 export const txIsReviewed = tx =>
   getTransitionsToState(STATE_REVIEWED).includes(txLastTransition(tx));
 
-  // OLD
+// OLD
 
 export const txIsEnquired = tx =>
   getTransitionsToState(STATE_ENQUIRY).includes(txLastTransition(tx));

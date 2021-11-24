@@ -9,6 +9,7 @@ import {
   txIsRequested,
   txHasBeenDelivered,
   txIsPaymentExpired,
+  txIsPaid,
   txIsPaymentPending,
   txIsHostEnquired,
   txIsRenterEnquired,
@@ -26,7 +27,7 @@ import { ensureCurrentUser } from '../../util/data';
 import { getMarketplaceEntities } from '../../ducks/marketplaceData.duck';
 import { isScrollingDisabled } from '../../ducks/UI.duck';
 import {
-  Avatar,
+  AvatarMedium,
   BookingTimeInfo,
   NamedLink,
   NotificationBadge,
@@ -41,6 +42,8 @@ import {
   Footer,
   IconSpinner,
   UserDisplayName,
+  UserNav,
+  LayoutWrapperManageListingsSideNav,
 } from '../../components';
 import { TopbarContainer, NotFoundPage } from '../../containers';
 import config from '../../config';
@@ -60,11 +63,12 @@ const formatDate = (intl, date) => {
 // Translated name of the state of the given transaction
 export const txState = (intl, tx, type) => {
   const isOrder = type === 'order';
+  console.log('🚀 | file: InboxPage.js | line 63 | txState | type', type);
 
   if (txIsHostEnquired(tx)) {
     return {
       nameClassName: isOrder ? css.nameNotEmphasized : css.nameEmphasized,
-      bookingClassName: css.bookingActionNeeded,
+      // bookingClassName: isOrder ? css.bookingNoActionNeeded : css.bookingActionNeeded,
       lastTransitionedAtClassName: css.lastTransitionedAtEmphasized,
       stateClassName: css.stateActionNeeded,
       state: intl.formatMessage({
@@ -74,7 +78,7 @@ export const txState = (intl, tx, type) => {
   } else if (txIsRenterEnquired(tx)) {
     return {
       nameClassName: isOrder ? css.nameNotEmphasized : css.nameEmphasized,
-      bookingClassName: css.bookingActionNeeded,
+      // bookingClassName: isOrder ? css.bookingNoActionNeeded : css.bookingActionNeeded,
       lastTransitionedAtClassName: css.lastTransitionedAtEmphasized,
       stateClassName: css.stateActionNeeded,
       state: intl.formatMessage({
@@ -84,129 +88,107 @@ export const txState = (intl, tx, type) => {
   } else if (txHasHostDeclined(tx)) {
     return {
       nameClassName: isOrder ? css.nameNotEmphasized : css.nameEmphasized,
-      bookingClassName: css.bookingActionNeeded,
+      // bookingClassName: css.bookingActionNeeded,
       lastTransitionedAtClassName: css.lastTransitionedAtEmphasized,
-      stateClassName: css.stateActionNeeded,
+      stateClassName: css.stateNoActionNeeded,
       state: intl.formatMessage({
-        id: 'InboxPage.stateEnquiry',
+        id: 'InboxPage.stateDeclined',
       }),
     };
   } else if (txHasRenterDeclined(tx)) {
     return {
       nameClassName: isOrder ? css.nameNotEmphasized : css.nameEmphasized,
-      bookingClassName: css.bookingActionNeeded,
+      // bookingClassName: css.bookingNoActionNeeded,
       lastTransitionedAtClassName: css.lastTransitionedAtEmphasized,
-      stateClassName: css.stateActionNeeded,
+      stateClassName: css.stateNoActionNeeded,
       state: intl.formatMessage({
-        id: 'InboxPage.stateEnquiry',
+        id: 'InboxPage.stateDeclined',
       }),
     };
   } else if (txIsRentalAgreementDiscussion(tx)) {
     return {
       nameClassName: isOrder ? css.nameNotEmphasized : css.nameEmphasized,
-      bookingClassName: css.bookingActionNeeded,
+      // bookingClassName: css.bookingActionNeeded,
       lastTransitionedAtClassName: css.lastTransitionedAtEmphasized,
       stateClassName: css.stateActionNeeded,
       state: intl.formatMessage({
-        id: 'InboxPage.stateEnquiry',
+        id: 'InboxPage.stateAgreementDiscussion',
       }),
     };
   } else if (txIsReversedTransactionFlow(tx)) {
     return {
       nameClassName: isOrder ? css.nameNotEmphasized : css.nameEmphasized,
-      bookingClassName: css.bookingActionNeeded,
+      // bookingClassName: css.bookingActionNeeded,
       lastTransitionedAtClassName: css.lastTransitionedAtEmphasized,
-      stateClassName: css.stateActionNeeded,
+      stateClassName: css.stateNoActionNeeded,
       state: intl.formatMessage({
-        id: 'InboxPage.stateEnquiry',
+        id: 'InboxPage.stateReversedTransaction',
       }),
     };
   } else if (txIsCancelledDuringRad(tx)) {
     return {
       nameClassName: isOrder ? css.nameNotEmphasized : css.nameEmphasized,
-      bookingClassName: css.bookingActionNeeded,
+      // bookingClassName: css.bookingNoActionNeeded,
       lastTransitionedAtClassName: css.lastTransitionedAtEmphasized,
-      stateClassName: css.stateActionNeeded,
+      stateClassName: css.stateNoActionNeeded,
       state: intl.formatMessage({
-        id: 'InboxPage.stateEnquiry',
+        id: 'InboxPage.stateCancelled',
       }),
     };
   } else if (txIsRentalAgreementSent(tx)) {
     return {
       nameClassName: isOrder ? css.nameNotEmphasized : css.nameEmphasized,
-      bookingClassName: css.bookingActionNeeded,
+      // bookingClassName: css.bookingActionNeeded,
       lastTransitionedAtClassName: css.lastTransitionedAtEmphasized,
-      stateClassName: css.stateActionNeeded,
+      stateClassName: isOrder ? css.stateActionNeeded : css.stateNoActionNeeded,
       state: intl.formatMessage({
-        id: 'InboxPage.stateEnquiry',
+        id: 'InboxPage.stateRentalAgreementSent',
       }),
     };
   } else if (txIsCancelledAfterAgreementSent(tx)) {
     return {
       nameClassName: isOrder ? css.nameNotEmphasized : css.nameEmphasized,
-      bookingClassName: css.bookingActionNeeded,
+      // bookingClassName: css.bookingNoActionNeeded,
       lastTransitionedAtClassName: css.lastTransitionedAtEmphasized,
       stateClassName: css.stateActionNeeded,
       state: intl.formatMessage({
-        id: 'InboxPage.stateEnquiry',
+        id: 'InboxPage.stateCancelled',
       }),
     };
   } else if (txIsRentalAgreementFinalized(tx)) {
     return {
       nameClassName: isOrder ? css.nameNotEmphasized : css.nameEmphasized,
-      bookingClassName: css.bookingActionNeeded,
+      // bookingClassName: css.bookingActionNeeded,
       lastTransitionedAtClassName: css.lastTransitionedAtEmphasized,
-      stateClassName: css.stateActionNeeded,
-      state: intl.formatMessage({
-        id: 'InboxPage.stateEnquiry',
-      }),
-    };
-  } else if (txIsPaymentPending(tx)) {
-    return {
-      nameClassName: isOrder ? css.nameNotEmphasized : css.nameEmphasized,
-      bookingClassName: css.bookingActionNeeded,
-      lastTransitionedAtClassName: css.lastTransitionedAtEmphasized,
-      stateClassName: css.stateActionNeeded,
-      state: intl.formatMessage({
-        id: 'InboxPage.stateEnquiry',
-      }),
-    };
-  } else if (txIsRequested(tx)) {
-    const requested = isOrder
-      ? {
-          nameClassName: css.nameNotEmphasized,
-          bookingClassName: css.bookingNoActionNeeded,
-          lastTransitionedAtClassName: css.lastTransitionedAtEmphasized,
-          stateClassName: css.stateActionNeeded,
-          state: intl.formatMessage({
-            id: 'InboxPage.stateRequested',
-          }),
-        }
-      : {
-          nameClassName: css.nameEmphasized,
-          bookingClassName: css.bookingActionNeeded,
-          lastTransitionedAtClassName: css.lastTransitionedAtEmphasized,
-          stateClassName: css.stateActionNeeded,
-          state: intl.formatMessage({
-            id: 'InboxPage.statePending',
-          }),
-        };
-
-    return requested;
-  } else if (txIsPaymentPending(tx)) {
-    return {
-      nameClassName: isOrder ? css.nameNotEmphasized : css.nameEmphasized,
-      bookingClassName: css.bookingNoActionNeeded,
-      lastTransitionedAtClassName: css.lastTransitionedAtNotEmphasized,
       stateClassName: isOrder ? css.stateActionNeeded : css.stateNoActionNeeded,
       state: intl.formatMessage({
-        id: 'InboxPage.statePendingPayment',
+        id: 'InboxPage.stateRentalAgreementFinalized',
+      }),
+    };
+  } else if (txIsPaymentPending(tx)) {
+    return {
+      nameClassName: isOrder ? css.nameNotEmphasized : css.nameEmphasized,
+      // bookingClassName: css.bookingActionNeeded,
+      lastTransitionedAtClassName: css.lastTransitionedAtEmphasized,
+      stateClassName: css.stateActionNeeded,
+      state: intl.formatMessage({
+        id: 'InboxPage.statePaymentPending',
+      }),
+    };
+  } else if (txIsPaid(tx)) {
+    return {
+      nameClassName: isOrder ? css.nameNotEmphasized : css.nameEmphasized,
+      bookingClassName: css.bookingActionNeeded,
+      lastTransitionedAtClassName: css.lastTransitionedAtEmphasized,
+      stateClassName: css.stateNoActionNeeded,
+      state: intl.formatMessage({
+        id: 'InboxPage.stateRentPaid',
       }),
     };
   } else if (txIsPaymentExpired(tx)) {
     return {
       nameClassName: css.nameNotEmphasized,
-      bookingClassName: css.bookingNoActionNeeded,
+      // bookingClassName: css.bookingNoActionNeeded,
       lastTransitionedAtClassName: css.lastTransitionedAtNotEmphasized,
       stateClassName: css.stateNoActionNeeded,
       state: intl.formatMessage({
@@ -216,7 +198,7 @@ export const txState = (intl, tx, type) => {
   } else if (txHasBeenDelivered(tx)) {
     return {
       nameClassName: css.nameNotEmphasized,
-      bookingClassName: css.bookingNoActionNeeded,
+      // bookingClassName: css.bookingNoActionNeeded,
       lastTransitionedAtClassName: css.lastTransitionedAtNotEmphasized,
       stateClassName: css.stateNoActionNeeded,
       state: intl.formatMessage({
@@ -289,7 +271,7 @@ export const InboxItem = props => {
   return (
     <div className={css.item}>
       <div className={css.itemAvatar}>
-        <Avatar user={otherUser} />
+        <AvatarMedium user={otherUser} />
       </div>
       <NamedLink
         className={linkClasses}
@@ -365,6 +347,7 @@ export const InboxPageComponent = props => {
   const toTxItem = tx => {
     const type = isOrders ? 'order' : 'sale';
     const stateData = txState(intl, tx, type);
+    console.log('🚀 | file: InboxPage.js | line 369 | stateData', stateData);
     // Render InboxItem only if the latest transition of the transaction is handled in the `txState` function.
     return stateData ? (
       <li key={tx.id.uuid} className={css.listItem}>
@@ -433,6 +416,7 @@ export const InboxPageComponent = props => {
     },
   ];
   const nav = <TabNav rootClassName={css.tabs} tabRootClassName={css.tab} tabs={tabs} />;
+  console.log('🚀 | file: InboxPage.js | line 437 | transactions', transactions);
 
   return (
     <Page title={title} scrollingDisabled={scrollingDisabled}>
@@ -444,8 +428,9 @@ export const InboxPageComponent = props => {
             desktopClassName={css.desktopTopbar}
             currentPage="InboxPage"
           />
+          <UserNav selectedPageName={`InboxPage`} />
         </LayoutWrapperTopbar>
-        <LayoutWrapperSideNav className={css.navigation}>{nav}</LayoutWrapperSideNav>
+        <LayoutWrapperManageListingsSideNav currentTab={`InboxTab`} />
         <LayoutWrapperMain className={css.inboxPageWrapper}>
           {error}
           <h1 className={css.title}>

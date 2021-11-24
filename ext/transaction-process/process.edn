@@ -140,8 +140,9 @@
    :to :state/preauthorized}
 
   {:name :transition/complete,
-   :actor :actor.role/operator,
+   :actor :actor.role/provider,
    :actions [
+    {:name :action/stripe-capture-payment-intent}
      {:name :action/stripe-create-payout}
    ],
    :from :state/preauthorized,

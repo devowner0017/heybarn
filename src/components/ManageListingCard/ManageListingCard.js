@@ -11,7 +11,10 @@ import {
   LISTING_STATE_PENDING_APPROVAL,
   LISTING_STATE_CLOSED,
   LISTING_STATE_DRAFT,
+  LISTING_UNDER_ENQUIRY,
   propTypes,
+  LISTING_UNDER_OFFER,
+  LISTING_RENTAL_AGREEMENT_REQUESTED,
 } from '../../util/types';
 import { formatMoney } from '../../util/currency';
 import { ensureOwnListing } from '../../util/data';
@@ -129,11 +132,17 @@ export const ManageListingCardComponent = props => {
 
   const currentListing = ensureOwnListing(listing);
   const id = currentListing.id.uuid;
-  const { title = '', price, state } = currentListing.attributes;
+  const { title = '', price, state, publicData } = currentListing.attributes;
+  const { listingState, listingType } = publicData;
   const slug = createSlug(title);
   const isPendingApproval = state === LISTING_STATE_PENDING_APPROVAL;
   const isClosed = state === LISTING_STATE_CLOSED;
   const isDraft = state === LISTING_STATE_DRAFT;
+  const isUnderEnquiry = listingState === LISTING_UNDER_ENQUIRY;
+  console.log('🚀 | file: ManageListingCard.js | line 142 | isUnderEnquiry', isUnderEnquiry);
+  console.log('🚀 | file: ManageListingCard.js | line 142 | listingState', listingState);
+  const isUnderOffer = listingState === LISTING_UNDER_OFFER;
+  const hasRequestedRentalAgreement = listingState === LISTING_RENTAL_AGREEMENT_REQUESTED;
   const firstImage =
     currentListing.images && currentListing.images.length > 0 ? currentListing.images[0] : null;
 
@@ -141,13 +150,20 @@ export const ManageListingCardComponent = props => {
     [css.menuItemDisabled]: !!actionsInProgressListingId,
   });
 
-  const listingType = getPropByName(currentListing, 'listingType');
   const { formattedPrice, priceTitle } = priceData(price, intl);
   const hasError = hasOpeningError || hasClosingError;
   const thisListingInProgress =
     actionsInProgressListingId && actionsInProgressListingId.uuid === id;
 
-  const hasOverlay = isDraft || isClosed || isPendingApproval || thisListingInProgress || hasError;
+  const hasOverlay =
+    isDraft ||
+    isUnderEnquiry ||
+    isUnderOffer ||
+    hasRequestedRentalAgreement ||
+    isClosed ||
+    isPendingApproval ||
+    thisListingInProgress ||
+    hasError;
   const classes = classNames(rootClassName || css.root, className, { [css.darkArrow]: hasOverlay });
 
   const onOverListingLink = () => {
@@ -183,7 +199,30 @@ export const ManageListingCardComponent = props => {
 
   return (
     <div className={classes}>
-      {isDraft ? (
+      {isUnderEnquiry ? (
+        <Overlay
+          message={intl.formatMessage({ id: `ManageListingCard.${listingType}UnderEnquiry` })}
+        >
+          <NamedLink
+            className={css.finishListingDraftLink}
+            name="InboxPage"
+            params={{ tab: listingType === 'listing' ? 'orders' : 'sales' }}
+            // params={{ id, slug, type: LISTING_PAGE_PARAM_TYPE_DRAFT, tab: 'photos' }}
+          >
+            <FormattedMessage id={`ManageListingCard.respondToEnquiry`} />
+          </NamedLink>
+        </Overlay>
+      ) : isUnderOffer ? (
+        <Overlay message={intl.formatMessage({ id: `ManageListingCard.${listingType}UnderOffer` })}>
+          <NamedLink
+            className={css.finishListingDraftLink}
+            name="InboxPage"
+            params={{ tab: listingType === 'listing' ? 'order' : 'sale' }}
+          >
+            <FormattedMessage id={`ManageListingCard.respondToEnquiry`} />
+          </NamedLink>
+        </Overlay>
+      ) : isDraft ? (
         <React.Fragment>
           <div className={classNames({ [css.draftNoImage]: !firstImage })} />
           <Overlay
@@ -197,12 +236,11 @@ export const ManageListingCardComponent = props => {
               name="EditListingPage"
               params={{ id, slug, type: LISTING_PAGE_PARAM_TYPE_DRAFT, tab: 'photos' }}
             >
-              <FormattedMessage id="ManageListingCard.finishListingDraft" />
+              <FormattedMessage id={`ManageListingCard.finish${listingType}Draft`} />
             </NamedLink>
           </Overlay>
         </React.Fragment>
-      ) : null}
-      {isClosed ? (
+      ) : isClosed ? (
         <Overlay
           message={intl.formatMessage(
             { id: `ManageListingCard.closed${listingType}` },

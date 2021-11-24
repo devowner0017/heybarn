@@ -132,6 +132,11 @@ export const createUserWithIdp = body => {
 export const closeAcceptedListing = body => {
   return post('/api/close-accepted-listing', body);
 };
+// After transitioning a transaction, change the listingState
+//
+export const updateListingState = body => {
+  return post('/api/update-listing-state', body);
+};
 
 // Create payment intent for takinga  reservation fee
 //
@@ -141,4 +146,8 @@ export const createReservationCharge = body => {
 
 export const receiveReservationPayment = body => {
   return post('/api/receive-reservation-payment', body);
+};
+
+export const createRentalPayments = body => {
+  return post('/api/create-recurring-payments', body);
 };

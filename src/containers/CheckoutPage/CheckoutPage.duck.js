@@ -3,6 +3,7 @@ import config from '../../config';
 import { initiatePrivileged, transitionPrivileged } from '../../util/api';
 import { denormalisedResponseEntities } from '../../util/data';
 import { storableError } from '../../util/errors';
+import { createRentalPayments } from '../../util/api';
 import {
   TRANSITION_REQUEST_PAYMENT,
   TRANSITION_REQUEST_PAYMENT_AFTER_ENQUIRY,
@@ -23,6 +24,10 @@ export const INITIATE_ORDER_ERROR = 'app/CheckoutPage/INITIATE_ORDER_ERROR';
 export const CONFIRM_PAYMENT_REQUEST = 'app/CheckoutPage/CONFIRM_PAYMENT_REQUEST';
 export const CONFIRM_PAYMENT_SUCCESS = 'app/CheckoutPage/CONFIRM_PAYMENT_SUCCESS';
 export const CONFIRM_PAYMENT_ERROR = 'app/CheckoutPage/CONFIRM_PAYMENT_ERROR';
+
+export const CREATE_RECURRING_REQUEST = 'app/CheckoutPage/CREATE_RECURRING_REQUEST';
+export const CREATE_RECURRING_SUCCESS = 'app/CheckoutPage/CREATE_RECURRING_SUCCESS';
+export const CREATE_RECURRING_ERROR = 'app/CheckoutPage/CREATE_RECURRING_ERROR';
 
 export const SPECULATE_TRANSACTION_REQUEST = 'app/ListingPage/SPECULATE_TRANSACTION_REQUEST';
 export const SPECULATE_TRANSACTION_SUCCESS = 'app/ListingPage/SPECULATE_TRANSACTION_SUCCESS';
@@ -90,6 +95,14 @@ export default function checkoutPageReducer(state = initialState, action = {}) {
       console.error(payload); // eslint-disable-line no-console
       return { ...state, confirmPaymentError: payload };
 
+    case CREATE_RECURRING_REQUEST:
+      return { ...state, createRecurringError: null };
+    case CREATE_RECURRING_SUCCESS:
+      return state;
+    case CREATE_RECURRING_ERROR:
+      console.error(payload); // eslint-disable-line no-console
+      return { ...state, createRecurringError: payload };
+
     case STRIPE_CUSTOMER_REQUEST:
       return { ...state, stripeCustomerFetched: false };
     case STRIPE_CUSTOMER_SUCCESS:
@@ -138,6 +151,18 @@ const confirmPaymentSuccess = orderId => ({
 
 const confirmPaymentError = e => ({
   type: CONFIRM_PAYMENT_ERROR,
+  error: true,
+  payload: e,
+});
+const createRecurringRequest = () => ({ type: CREATE_RECURRING_REQUEST });
+
+const createRecurringSuccess = orderId => ({
+  type: CREATE_RECURRING_SUCCESS,
+  payload: orderId,
+});
+
+const createRecurringError = e => ({
+  type: CREATE_RECURRING_ERROR,
   error: true,
   payload: e,
 });
@@ -277,6 +302,41 @@ export const confirmPayment = orderParams => (dispatch, getState, sdk) => {
     });
 };
 
+export const createRecurring = orderParams => (dispatch, getState, sdk) => {
+  console.log('🚀 | file: CheckoutPage.duck.js | line 246 | orderParams', orderParams);
+  dispatch(createRecurringRequest());
+
+  const bodyParams = {
+    id: orderParams.transactionId,
+    transition: TRANSITION_CONFIRM_PAYMENT,
+    params: {},
+  };
+  return createRentalPayments(orderParams)
+    .then(recurringResponse => {
+      console.log(
+        '🚀 | file: CheckoutPage.duck.js | line 290 | returncreateRentalPayment | recurringResponse',
+        recurringResponse
+      );
+
+      // return sdk.transactions
+      //   .transition(bodyParams)
+      //   .then(response => {
+      //     const order = response.data.data;
+      //     dispatch(createRecurringSuccess(order.id));
+      //     return order;
+      //   })
+    })
+    .catch(e => {
+      dispatch(createRecurringError(storableError(e)));
+      const transactionIdMaybe = orderParams.transactionId
+        ? { transactionId: orderParams.transactionId.uuid }
+        : {};
+      log.error(e, 'initiate-order-failed', {
+        ...transactionIdMaybe,
+      });
+      throw e;
+    });
+};
 export const sendMessage = params => (dispatch, getState, sdk) => {
   const message = params.message;
   const orderId = params.id;

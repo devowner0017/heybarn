@@ -45,26 +45,34 @@
   /* Layout */
   display: flex;
   flex-direction: row;
-  padding: 16px 0 2px 0;
+  justify-content: space-between;
+  padding: 18px 0 2px 0;
+  position: relative;
 }
 
+.avatar {
+  position: absolute;
+  bottom: -20px;
+  right: 20px;
+  z-index: 2
+}
 .price {
   /* Layout */
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  flex-direction: row;
+  align-items: flex-end;
   flex-shrink: 0;
   margin-right: 18px;
 }
 
 .priceValue {
   /* Font */
-  @apply --marketplaceH3FontStyles;
-
+  @apply --marketplaceH2FontStyles;
+  font-size: 36px;
   /* Remove default margins from font */
   margin-top: 0;
   margin-bottom: 0;
-
+  padding-right: 0.5rem;
   @media (--viewportMedium) {
     margin-top: 0;
     margin-bottom: 0;

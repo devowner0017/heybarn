@@ -235,14 +235,14 @@ export const convertMoneyToNumber = value => {
 };
 
 /**
- * Format the given money to a string
+ * Format the given money to a string no cents
  *
  * @param {Object} intl
  * @param {Money} value
  *
  * @return {String} formatted money value
  */
-export const formatMoney = (intl, value) => {
+export const formatMoney = (intl, value, digits = 2, hideCurrency) => {
   if (!(value instanceof Money)) {
     throw new Error('Value must be a Money type');
   }
@@ -251,11 +251,12 @@ export const formatMoney = (intl, value) => {
   // See: https://github.com/yahoo/react-intl/wiki/API#formatnumber
   const numberFormatOptions = {
     style: 'currency',
-    currency: value.currency,
+    // Using USD will just show the $ symbol rather than the NZ$
+    currency: hideCurrency ? 'USD' : value.currency,
     currencyDisplay: 'symbol',
     useGrouping: true,
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
   };
 
   return intl.formatNumber(valueAsNumber, numberFormatOptions);

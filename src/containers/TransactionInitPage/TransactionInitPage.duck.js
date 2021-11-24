@@ -11,7 +11,8 @@ import {
 } from '../../util/data';
 import { addMarketplaceEntities } from '../../ducks/marketplaceData.duck';
 import { fetchCurrentUser, fetchCurrentUserHasOrdersSuccess } from '../../ducks/user.duck';
-
+import { updateListingState } from '../../util/api';
+import { LISTING_UNDER_ENQUIRY } from '../../util/types'
 const { UUID } = sdkTypes;
 
 // ================ Action types ================ //
@@ -247,11 +248,18 @@ export const showListing = (listingId, isOwn = false) => (dispatch, getState, sd
 };
 
 export const createTransaction = orderParams => (dispatch, getState, sdk) => {
+  console.log('🚀 | file: TransactionInitPage.duck.js | line 250 | orderParams', orderParams);
   dispatch(initiateOrderRequest());
 
   // TODO UPDATE THIS WHEN WE BUILD THE OTHER SIDE OF THE MARKETPLACE
-  const isRequestFromHost = false;
+  const isRequestFromHost = orderParams.protectedData.contactingAs === 'host';
+  console.log(
+    '🚀 | file: TransactionInitPage.duck.js | line 255 | isRequestFromHost',
+    isRequestFromHost
+  );
+
   const transition = isRequestFromHost ? TRANSITION_HOST_FEE_PAID : TRANSITION_RENTER_FEE_PAID;
+  console.log('🚀 | file: TransactionInitPage.duck.js | line 258 | transition', transition);
 
   const bodyParams = {
     processAlias: config.bookingProcessAlias,
@@ -268,11 +276,23 @@ export const createTransaction = orderParams => (dispatch, getState, sdk) => {
     const order = entities[0];
     dispatch(initiateOrderSuccess(order));
     dispatch(fetchCurrentUserHasOrdersSuccess(true));
+
+    updateListingState({ id: orderParams.listingId, listingState: LISTING_UNDER_ENQUIRY })
+      .then(r => {
+        console.log(
+          '🚀 | file: TransactionInitPage.duck.js | line 284 | updateListingState | r',
+          r
+        );
+      })
+      .catch(e => {
+        console.log('🚀 | file: TransactionInitPage.duck.js | line 289 | e', e);
+      });
     return order;
   };
 
   const handleError = e => {
     dispatch(initiateOrderError(storableError(e)));
+    console.log('🚀 | file: TransactionInitPage.duck.js | line 294 | e', e);
     log.error(e, 'initiate-order-failed', {
       listingId: orderParams.listingId.uuid,
     });
@@ -286,13 +306,15 @@ export const createTransaction = orderParams => (dispatch, getState, sdk) => {
 };
 
 export const sendMessage = params => (dispatch, getState, sdk) => {
+  console.log('🚀 | file: TransactionInitPage.duck.js | line 289 | params', params);
   const message = params.message;
-  const orderId = params.id;
+  const orderId = params.tx.id;
+  const paymentIntent = params.paymentIntent;
   if (message) {
     return sdk.messages
       .send({ transactionId: orderId, content: message })
       .then(() => {
-        return { orderId, messageSuccess: true };
+        return { orderId, messageSuccess: true, paymentIntent };
       })
       .catch(e => {
         log.error(e, 'initial-message-send-failed', { txId: orderId });

@@ -13,6 +13,10 @@ export const FETCH_LISTINGS_REQUEST = 'app/ManageListingsPage/FETCH_LISTINGS_REQ
 export const FETCH_LISTINGS_SUCCESS = 'app/ManageListingsPage/FETCH_LISTINGS_SUCCESS';
 export const FETCH_LISTINGS_ERROR = 'app/ManageListingsPage/FETCH_LISTINGS_ERROR';
 
+export const FETCH_TRANSACTIONS_REQUEST = 'app/ManageListingsPage/FETCH_TRANSACTIONS_REQUEST';
+export const FETCH_TRANSACTIONS_SUCCESS = 'app/ManageListingsPage/FETCH_TRANSACTIONS_SUCCESS';
+export const FETCH_TRANSACTIONS_ERROR = 'app/ManageListingsPage/FETCH_TRANSACTIONS_ERROR';
+
 export const OPEN_LISTING_REQUEST = 'app/ManageListingsPage/OPEN_LISTING_REQUEST';
 export const OPEN_LISTING_SUCCESS = 'app/ManageListingsPage/OPEN_LISTING_SUCCESS';
 export const OPEN_LISTING_ERROR = 'app/ManageListingsPage/OPEN_LISTING_ERROR';
@@ -36,6 +40,10 @@ const initialState = {
   openingListingError: null,
   closingListing: null,
   closingListingError: null,
+
+  queryTransactionsInProgress: null,
+  queryTransactionsError: null,
+  transactions: null,
 };
 
 const resultIds = data => data.data.map(l => l.id);
@@ -83,6 +91,22 @@ const manageListingsPageReducer = (state = initialState, action = {}) => {
       // eslint-disable-next-line no-console
       console.error(payload);
       return { ...state, queryInProgress: false, queryListingsError: payload };
+    case FETCH_TRANSACTIONS_REQUEST:
+      return {
+        ...state,
+        queryTransactionsInProgress: true,
+        queryTransactionsError: null,
+      };
+    case FETCH_TRANSACTIONS_SUCCESS:
+      return {
+        ...state,
+        transactions: payload,
+        queryTransactionsProgress: false,
+      };
+    case FETCH_TRANSACTIONS_ERROR:
+      // eslint-disable-next-line no-console
+      console.error(payload);
+      return { ...state, queryTransactionsProgress: false, queryTransactionsError: payload };
 
     case OPEN_LISTING_REQUEST:
       return {
@@ -217,9 +241,25 @@ export const queryListingsError = e => ({
   error: true,
   payload: e,
 });
+export const queryTransactionsRequest = queryParams => ({
+  type: FETCH_TRANSACTIONS_REQUEST,
+  payload: { queryParams },
+});
+
+export const queryTransactionsSuccess = response => ({
+  type: FETCH_TRANSACTIONS_SUCCESS,
+  payload: { data: response.data },
+});
+
+export const queryTransactionsError = e => ({
+  type: FETCH_TRANSACTIONS_ERROR,
+  error: true,
+  payload: e,
+});
 
 // Throwing error for new (loadData may need that info)
 export const queryOwnListings = queryParams => (dispatch, getState, sdk) => {
+console.log("🚀 | file: ManageListingsPage.duck.js | line 262 | queryParams", queryParams);
   dispatch(queryListingsRequest(queryParams));
   const { perPage, ...rest } = queryParams;
   const params = { ...rest, per_page: perPage };
@@ -235,11 +275,40 @@ export const queryOwnListings = queryParams => (dispatch, getState, sdk) => {
       alteredResponse.data.data = filteredResults;
       alteredResponse.data.meta.totalItems = filteredResults.length;
       dispatch(addOwnEntities(alteredResponse));
-      dispatch(queryListingsSuccess(alteredResponse));
-      return response;
+      return dispatch(queryListingsSuccess(alteredResponse));
     })
     .catch(e => {
       dispatch(queryListingsError(storableError(e)));
+      throw e;
+    });
+};
+// Throwing error for new (loadData may need that info)
+export const queryOwnTransactions = queryParams => (dispatch, getState, sdk) => {
+  console.log('🚀 | file: ManageListingsPage.duck.js | line 286 | queryParams', queryParams);
+
+  dispatch(queryTransactionsRequest(queryParams));
+  return sdk.transactions
+    .query({
+      lastTransitions: [
+        TRANSITION_HOST_FEE_PAID,
+        TRANSITION_RENTER_FEE_PAID,
+        TRANSITION_HOST_APPROVED_BY_RENTER,
+        TRANSITION_HOST_ACCEPTS_COMMUNICATION,
+        TRANSITION_HOST_DECLINES_COMMUNICATION,
+        TRANSITION_RENTER_ACCEPTS_COMMUNICATION,
+        TRANSITION_HOST_SENDS_AGREEMENT,
+        TRANSITION_RENTER_SIGNS_RENTAL_AGREEMENT,
+      ],
+      ...queryParams,
+    })
+    .then(response => {
+      console.log('🚀 | file: ManageListingsPage.duck.js | line 263 | response', response);
+      dispatch(queryTransactionsSuccess(response));
+      return response;
+    })
+    .catch(e => {
+      console.log('🚀 | file: ManageListingsPage.duck.js | line 307 | e', e);
+      dispatch(queryTransactionsError(storableError(e)));
       throw e;
     });
 };
@@ -272,10 +341,14 @@ export const openListing = listingId => (dispatch, getState, sdk) => {
     });
 };
 
-export const loadListingData = (params, search) => {
+export const loadListingData = props => {
+  const { params, search } = props;
+  console.log("🚀 | file: ManageListingsPage.duck.js | line 345 | props", props);
   const queryParams = parse(search);
   const page = queryParams.page || 1;
-  return queryOwnListings({
+  queryOwnTransactions({
+    include: ['listing'],
+  });  return queryOwnListings({
     ...queryParams,
     page,
     pub_listingType: 'listing',
@@ -286,9 +359,13 @@ export const loadListingData = (params, search) => {
   });
 };
 
-export const loadAdvertData = (params, search) => {
+export const loadAdvertData = props => {
+  const { params, search } = props;
   const queryParams = parse(search);
   const page = queryParams.page || 1;
+  queryOwnTransactions({
+    include: ['listing'],
+  });
   return queryOwnListings({
     ...queryParams,
     page,
@@ -299,3 +376,4 @@ export const loadAdvertData = (params, search) => {
     'limit.images': 1,
   });
 };
+

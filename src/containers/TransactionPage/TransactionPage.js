@@ -28,8 +28,7 @@ import {
 import { TopbarContainer } from '../../containers';
 
 import {
-  acceptSale,
-  declineSale,
+  completeSale,
   sendMessage,
   sendReview,
   fetchMoreMessages,
@@ -39,6 +38,7 @@ import {
   sendRentalAgreement,
   cancelDuringRad,
   signRentalAgreement,
+  reverseTransactionFlowAndAcceptCommunication,
 } from './TransactionPage.duck';
 import css from './TransactionPage.module.css';
 
@@ -86,8 +86,8 @@ export const TransactionPageComponent = props => {
     lineItems,
     fetchLineItemsInProgress,
     fetchLineItemsError,
-
-    onAcceptCommunication,
+    onRenterAcceptsCommunication,
+    onHostAcceptCommunication,
     onDeclineCommunication,
     acceptCommunicationInProgress,
     declineCommunicationInProgress,
@@ -105,6 +105,7 @@ export const TransactionPageComponent = props => {
     signRentalAgreementError,
     onSignRentalAgreement,
     relatedListing,
+    onCompleteSale,
   } = props;
 
   const currentTransaction = ensureTransaction(transaction);
@@ -194,6 +195,7 @@ export const TransactionPageComponent = props => {
     currentTransaction.provider &&
     !fetchTransactionError;
 
+  console.log('🚀 | file: TransactionPage.js | line 190 | isDataAvailable', isDataAvailable);
   const isOwnSale =
     isDataAvailable &&
     isProviderRole &&
@@ -262,21 +264,10 @@ export const TransactionPageComponent = props => {
       onSendMessage={onSendMessage}
       onSendReview={onSendReview}
       transactionRole={transactionRole}
-      onAcceptSale={onAcceptSale}
-      onDeclineSale={onDeclineSale}
-      acceptInProgress={acceptInProgress}
-      declineInProgress={declineInProgress}
-      acceptSaleError={acceptSaleError}
-      declineSaleError={declineSaleError}
       nextTransitions={processTransitions}
       onSubmitBookingRequest={handleSubmitBookingRequest}
-      timeSlots={timeSlots}
-      fetchTimeSlotsError={fetchTimeSlotsError}
-      onFetchTransactionLineItems={onFetchTransactionLineItems}
-      lineItems={lineItems}
-      fetchLineItemsInProgress={fetchLineItemsInProgress}
-      fetchLineItemsError={fetchLineItemsError}
-      onAcceptCommunication={onAcceptCommunication}
+      onRenterAcceptsCommunication={onRenterAcceptsCommunication}
+      onHostAcceptCommunication={onHostAcceptCommunication}
       onDeclineCommunication={onDeclineCommunication}
       acceptCommunicationInProgress={acceptCommunicationInProgress}
       declineCommunicationInProgress={declineCommunicationInProgress}
@@ -294,6 +285,7 @@ export const TransactionPageComponent = props => {
       ensuredRelated={ensuredRelated}
       onInitializeCardPaymentData={onInitializeCardPaymentData}
       callSetInitialValues={callSetInitialValues}
+      onCompleteSale={onCompleteSale}
     />
   ) : (
     loadingOrFailedFetching
@@ -422,6 +414,7 @@ const mapStateToProps = state => {
     signRentalAgreementError,
     relatedListingRef,
   } = state.TransactionPage;
+  console.log("🚀 | file: TransactionPage.js | line 417 | state.TransactionPage", state.TransactionPage);
   const { currentUser } = state.user;
   const relatedListing = getMarketplaceEntities(
     state,
@@ -474,13 +467,15 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onAcceptCommunication: transactionId => dispatch(acceptCommunication(transactionId)),
+    onRenterAcceptsCommunication: transactionId =>
+      dispatch(reverseTransactionFlowAndAcceptCommunication(transactionId)),
+    onHostAcceptCommunication: transactionId => dispatch(acceptCommunication(transactionId)),
     onDeclineCommunication: transactionId => dispatch(declineCommunication(transactionId)),
     onSendRentalAgreement: transactionId => dispatch(sendRentalAgreement(transactionId)),
     onCancelDuringRad: transactionId => dispatch(cancelDuringRad(transactionId)),
     onSignRentalAgreement: transactionId => dispatch(signRentalAgreement(transactionId)),
 
-
+    onCompleteSale: transactionId => dispatch(completeSale(transactionId)),
     onAcceptSale: transactionId => dispatch(acceptSale(transactionId)),
     onDeclineSale: transactionId => dispatch(declineSale(transactionId)),
     onShowMoreMessages: txId => dispatch(fetchMoreMessages(txId)),

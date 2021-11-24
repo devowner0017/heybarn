@@ -157,6 +157,11 @@ export const LISTING_STATE_PENDING_APPROVAL = 'pendingApproval';
 export const LISTING_STATE_PUBLISHED = 'published';
 export const LISTING_STATE_CLOSED = 'closed';
 
+export const LISTING_LIVE = 'live';
+export const LISTING_UNDER_ENQUIRY = 'listingEnquired';
+export const LISTING_RENTAL_AGREEMENT_REQUESTED = 'listingRentalAgreementRequested';
+export const LISTING_UNDER_OFFER = 'listingUnderOffer';
+
 const LISTING_STATES = [
   LISTING_STATE_DRAFT,
   LISTING_STATE_PENDING_APPROVAL,

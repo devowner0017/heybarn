@@ -139,7 +139,8 @@
 .itemList {
   margin: 0;
   padding: 0;
-  max-width: 1200px;
+  max-width: 1040px;
+padding-left: 60px;;
 }
 
 @keyframes loadingSpinnerFadeIn {
@@ -395,7 +396,6 @@
 .inboxPageWrapper {
   @media (--viewportLarge) {
     max-width: 1045px;
-    margin-right: 20%;
-    padding: 40px 150px 82px 150px;
+    margin-right: auto;
   }
 }

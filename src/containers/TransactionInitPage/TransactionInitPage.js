@@ -15,6 +15,7 @@ import { StripePaymentFormPlatformFee } from '../../forms';
 import { confirmCardPayment, retrievePaymentIntent } from '../../ducks/stripe.duck';
 import routeConfiguration from '../../routeConfiguration';
 import { pathByRouteName, findRouteByRouteName } from '../../util/routes';
+import { savePaymentMethod } from '../../ducks/paymentMethods.duck';
 
 import { initiateOrder, confirmPayment } from './PlatformFee.duck';
 import {
@@ -45,6 +46,7 @@ import {
 } from './TransactionInitPage.duck';
 import { types as sdkTypes } from '../../util/sdkLoader';
 import css from './TransactionInitPage.module.css';
+import { getPropByName } from '../../util/userHelpers';
 
 const { UUID } = sdkTypes;
 const PROVIDER = 'provider';
@@ -57,11 +59,23 @@ const PAY_AND_SAVE_FOR_LATER_USE = 'PAY_AND_SAVE_FOR_LATER_USE';
 const USE_SAVED_CARD = 'USE_SAVED_CARD';
 
 const initializeOrderPage = (initialValues, routes, dispatch) => {
+  console.log(
+    '🚀 | file: TransactionInitPage.js | line 62 | initializeOrderPage | initialValues',
+    initialValues
+  );
   const OrderPage = findRouteByRouteName('OrderDetailsPage', routes);
 
   // Transaction is already created, but if the initial message
   // sending failed, we tell it to the OrderDetailsPage.
   dispatch(OrderPage.setInitialValues(initialValues));
+};
+
+const checkCouponCode = (coupon, currentUser) => {
+  console.log('🚀 | file: TransactionInitPage.js | line 74 | checkCouponCode | coupon', coupon);
+  console.log(
+    '🚀 | file: TransactionInitPage.js | line 74 | checkCouponCode | currentUser',
+    currentUser
+  );
 };
 // TransactionInitPage handles data loading for Sale and Order views to transaction pages in Inbox.
 export const TransactionInitPageComponent = props => {
@@ -85,14 +99,21 @@ export const TransactionInitPageComponent = props => {
     transactionRole,
     processTransitions,
     stripeCustomerFetched,
+    contactingAs,
     guest,
     host,
     listings,
     queryInProgress,
   } = props;
+  console.log('🚀 | file: TransactionInitPage.js | line 96 | contactingAs', contactingAs);
+  console.log('🚀 | file: TransactionInitPage.js | line 94 | params', params);
   console.log('🚀 | file: TransactionInitPage.js | line 91 | props', props);
   console.log('🚀 | file: TransactionInitPage.js | line 92 | listings', listings);
   const [showCreateListingPopup, setShowCreateListingPopup] = useState(null);
+  const [couponCode, setCouponCode] = useState('');
+  const [validCouponCode, setValidCouponCode] = useState(null);
+  console.log('🚀 | file: TransactionInitPage.js | line 115 | validCouponCode', validCouponCode);
+
   const [selectedListingId, setSelectedListingId] = useState(null);
   const [selectedListing, setSelectedListing] = useState(null);
   console.log('🚀 | file: TransactionInitPage.js | line 98 | selectedListing', selectedListing);
@@ -109,6 +130,14 @@ export const TransactionInitPageComponent = props => {
     }
   }, []);
 
+  useEffect(
+    _ => {
+      if (couponCode === 'TEST') {
+        setValidCouponCode(true);
+      }
+    },
+    [couponCode]
+  );
   /**
    * Load initial data for the page
    *
@@ -124,13 +153,12 @@ export const TransactionInitPageComponent = props => {
   const onStripeInitialized = stripe => {
     setStripeFunction(stripe);
   };
-
   const listingId = new UUID(rawParams.id);
   const currentListing = ensureListing(getListing(listingId));
   const currentAuthor = ensureUser(currentListing.author);
+  const listingType = getPropByName(currentListing, 'listingType');
 
   const currentTransaction = ensureTransaction(transaction);
-  const isProviderRole = transactionRole === PROVIDER;
   const isCustomerRole = transactionRole === CUSTOMER;
 
   const deletedListingTitle = intl.formatMessage({
@@ -194,6 +222,7 @@ export const TransactionInitPageComponent = props => {
   );
 
   const handlePaymentIntent = handlePaymentParams => {
+  console.log("🚀 | file: TransactionInitPage.js | line 225 | handlePaymentParams", handlePaymentParams);
     const {
       currentUser,
       stripeCustomerFetched,
@@ -210,6 +239,7 @@ export const TransactionInitPageComponent = props => {
       paymentIntent,
       selectedPaymentMethod,
       saveAfterOnetimePayment,
+      validCouponCode,
       card,
       formValues,
       stripe,
@@ -217,22 +247,41 @@ export const TransactionInitPageComponent = props => {
 
     const ensuredCurrentUser = ensureCurrentUser(currentUser);
     const ensuredStripeCustomer = ensureStripeCustomer(ensuredCurrentUser.stripeCustomer);
+    const stripeCustomerId = ensuredStripeCustomer.attributes.stripeCustomerId;
+    console.log(
+      '🚀 | file: TransactionInitPage.js | line 221 | ensuredStripeCustomer',
+      ensuredStripeCustomer
+    );
 
     const ensuredDefaultPaymentMethod = ensurePaymentMethodCard(
       ensuredStripeCustomer.defaultPaymentMethod
     );
-
-    let createdPaymentIntent = null;
 
     const hasDefaultPaymentMethod = !!(
       stripeCustomerFetched &&
       ensuredStripeCustomer.attributes.stripeCustomerId &&
       ensuredDefaultPaymentMethod.id
     );
+    console.log(
+      '🚀 | file: TransactionInitPage.js | line 233 | hasDefaultPaymentMethod',
+      hasDefaultPaymentMethod
+    );
     const stripePaymentMethodId = hasDefaultPaymentMethod
       ? ensuredDefaultPaymentMethod.attributes.stripePaymentMethodId
       : null;
+    console.log(
+      '🚀 | file: TransactionInitPage.js | line 235 | stripePaymentMethodId',
+      stripePaymentMethodId
+    );
     const paymentFlow = (selectedPaymentMethod, saveAfterOnetimePayment) => {
+      console.log(
+        '🚀 | file: TransactionInitPage.js | line 245 | paymentFlow | saveAfterOnetimePayment',
+        saveAfterOnetimePayment
+      );
+      console.log(
+        '🚀 | file: TransactionInitPage.js | line 245 | paymentFlow | selectedPaymentMethod',
+        selectedPaymentMethod
+      );
       // Payment mode could be 'replaceCard', but without explicit saveAfterOnetimePayment flag,
       // we'll handle it as one-time payment
       return selectedPaymentMethod === 'defaultCard'
@@ -241,32 +290,53 @@ export const TransactionInitPageComponent = props => {
         ? PAY_AND_SAVE_FOR_LATER_USE
         : ONETIME_PAYMENT;
     };
+    console.log(
+      '🚀 | file: TransactionInitPage.js | line 254 | selectedPaymentMethod',
+      selectedPaymentMethod
+    );
     const selectedPaymentFlow = paymentFlow(selectedPaymentMethod, saveAfterOnetimePayment);
+    console.log(
+      '🚀 | file: TransactionInitPage.js | line 266 | selectedPaymentFlow',
+      selectedPaymentFlow
+    );
 
     // Step 1: initiate order by requesting payment from Marketplace API
     const fnRequestPayment = fnParams => {
+      console.log('🚀 | file: TransactionInitPage.js | line 274 | fnParams', fnParams);
+      console.log('🚀 | file: TransactionInitPage.js | line 257 | fnParams', fnParams);
       // fnParams should be { listingId, bookingStart, bookingEnd }
       const hasPaymentIntents = savedPaymentIntents;
+      console.log(
+        '🚀 | file: TransactionInitPage.js | line 260 | savedPaymentIntents',
+        savedPaymentIntents
+      );
 
       // If paymentIntent exists, order has been initiated previously.
-      return hasPaymentIntents
-        ? Promise.resolve(storedTx)
+      console.log(
+        '🚀 | file: TransactionInitPage.js | line 293 | stripeCustomerId',
+        stripeCustomerId
+      );
+      return fnParams.validCouponCode || hasPaymentIntents
+        ? Promise.resolve(fnParams)
         : onInitiateOrder({
             ...fnParams,
+            stripeCustomerId,
             listingId: listingId.uuid,
           });
     };
 
     // Step 2: pay using Stripe SDK
     const fnConfirmCardPayment = fnParams => {
+      console.log('🚀 | file: TransactionInitPage.js | line 262 | fnParams', fnParams);
       // fnParams should be returned transaction entity
 
-      if (fnParams.id) {
-        setSavedPaymentIntents(fnParams);
-      }
-
-      const { stripe, card, billingDetails, paymentIntent } = handlePaymentParams;
+      const paymentIntent = fnParams;
+      const { stripe, card, billingDetails } = handlePaymentParams;
       const stripeElementMaybe = selectedPaymentFlow !== USE_SAVED_CARD ? { card } : {};
+      console.log(
+        '🚀 | file: TransactionInitPage.js | line 284 | selectedPaymentFlow',
+        selectedPaymentFlow
+      );
 
       // Note: payment_method could be set here for USE_SAVED_CARD flow.
       // { payment_method: stripePaymentMethodId }
@@ -278,8 +348,11 @@ export const TransactionInitPageComponent = props => {
                 billing_details: billingDetails,
                 card: card,
               },
+              setup_future_usage: 'off_session',
             }
-          : {};
+          : {
+              payment_method: stripePaymentMethodId,
+            };
 
       const params = {
         stripePaymentIntentClientSecret:
@@ -293,9 +366,12 @@ export const TransactionInitPageComponent = props => {
       // confirmCardPayment has been called previously.
       const hasPaymentIntentUserActionsDone =
         paymentIntent && STRIPE_PI_USER_ACTIONS_DONE_STATUSES.includes(paymentIntent.status);
-      return hasPaymentIntentUserActionsDone
+      console.log(
+        '🚀 | file: TransactionInitPage.js | line 296 | hasPaymentIntentUserActionsDone',
+        hasPaymentIntentUserActionsDone
+      );
+      return fnParams.validCouponCode || hasPaymentIntentUserActionsDone
         ? Promise.resolve({
-            transactionId: order.id,
             paymentIntent,
           })
         : onConfirmCardPayment(params);
@@ -304,17 +380,26 @@ export const TransactionInitPageComponent = props => {
     // // Step 3: CREATE A TRANSACTION
     // // Parameter should contain { paymentIntent, transactionId } returned in step 2
     const fnCreateTransactionObject = fnParams => {
-      const tx = onCreateTransaction({
+      console.log('🚀 | file: TransactionInitPage.js | line 314 | fnParams', fnParams);
+      const paymentIntent = fnParams.paymentIntent;
+      setSavedPaymentIntents(paymentIntent);
+
+      return onCreateTransaction({
         listingId: listingId.uuid,
         protectedData: {
           selectedListingId: selectedListing.id.uuid,
+          contactingAs,
         },
+      }).then(tx => {
+        return { tx, paymentIntent };
       });
-      return tx;
     };
 
     // Step 4: send initial message
     const fnSendMessage = fnParams => {
+      console.log('🚀 | file: TransactionInitPage.js | line 327 | paymentIntent', paymentIntent);
+      console.log('🚀 | file: TransactionInitPage.js | line 326 | fnParams', fnParams);
+      console.log('🚀 | file: TransactionInitPage.js | line 378 | message', message);
       if (message) {
         return onSendMessage({
           ...fnParams,
@@ -323,13 +408,15 @@ export const TransactionInitPageComponent = props => {
       } else {
         return Promise.resolve({
           ...fnParams,
+          orderId: fnParams.tx.id,
         });
       }
     };
 
     // Step 5: optionally save card as defaultPaymentMethod
     const fnSavePaymentMethod = fnParams => {
-      const pi = createdPaymentIntent || savedPaymentIntents;
+      console.log('🚀 | file: TransactionInitPage.js | line 332 | fnParams', fnParams);
+      const pi = fnParams.paymentIntent;
 
       if (selectedPaymentFlow === PAY_AND_SAVE_FOR_LATER_USE) {
         return onSavePaymentMethod(ensuredStripeCustomer, pi.payment_method)
@@ -378,6 +465,10 @@ export const TransactionInitPageComponent = props => {
     // Note: optionalPaymentParams contains Stripe paymentMethod,
     // but that can also be passed on Step 2
     // stripe.confirmCardPayment(stripe, { payment_method: stripePaymentMethodId })
+    console.log(
+      '🚀 | file: TransactionInitPage.js | line 421 | selectedPaymentFlow',
+      selectedPaymentFlow
+    );
     const optionalPaymentParams =
       selectedPaymentFlow === USE_SAVED_CARD && hasDefaultPaymentMethod
         ? {
@@ -387,14 +478,22 @@ export const TransactionInitPageComponent = props => {
         ? { setupPaymentMethodForSaving: true }
         : {};
 
+    console.log(
+      '🚀 | file: TransactionInitPage.js | line 420 | optionalPaymentParams',
+      optionalPaymentParams
+    );
     const orderParams = {
       ...optionalPaymentParams,
+      validCouponCode,
     };
+      console.log("🚀 | file: TransactionInitPage.js | line 488 | validCouponCode", validCouponCode);
+    console.log('🚀 | file: TransactionInitPage.js | line 430 | orderParams ', orderParams);
 
     return handlePaymentIntentCreation(orderParams);
   };
 
-  const handleSubmitPlatformFee = values => {
+  const handleSubmitPlatformFee = (values = {}) => {
+    console.log('🚀 | file: TransactionInitPage.js | line 495 | values', values);
     if (submittingPlatformFee) {
       return;
     }
@@ -410,7 +509,7 @@ export const TransactionInitPageComponent = props => {
       state,
       country,
       saveAfterOnetimePayment,
-    } = formValues;
+    } = formValues || {};
 
     // Billing address is recommended.
     // However, let's not assume that <StripePaymentAddress> data is among formValues.
@@ -443,14 +542,25 @@ export const TransactionInitPageComponent = props => {
       selectedPaymentMethod: paymentMethod,
       saveAfterOnetimePayment: !!saveAfterOnetimePayment,
       message,
+      validCouponCode,
     };
+    console.log(
+      '🚀 | file: TransactionInitPage.js | line 496 | requestPaymentParams',
+      requestPaymentParams
+    );
     handlePaymentIntent(requestPaymentParams)
       .then(res => {
+        console.log('🚀 | file: TransactionInitPage.js | line 522 | res', res);
         const { orderId, messageSuccess, paymentMethodSaved } = res;
         setSubmittingPlatformFee(false);
 
         const routes = routeConfiguration();
-        const initialMessageFailedToTransaction = messageSuccess ? null : orderId;
+        const initialMessageFailedToTransaction = !message ? null : messageSuccess ? null : orderId;
+        console.log('🚀 | file: TransactionInitPage.js | line 534 | message', message);
+        console.log(
+          '🚀 | file: TransactionInitPage.js | line 534 | initialMessageFailedToTransaction',
+          initialMessageFailedToTransaction
+        );
         const orderDetailsPath = pathByRouteName('OrderDetailsPage', routes, { id: orderId.uuid });
         const initialValues = {
           initialMessageFailedToTransaction,
@@ -502,8 +612,16 @@ export const TransactionInitPageComponent = props => {
       ))}
     </select>
   );
-  // const paymentForm = showPaymentForm ? (
-  const paymentForm = true ? (
+  const paymentForm = validCouponCode ? (
+    <button
+      onClick={e => {
+        e.preventDefault();
+        handleSubmitPlatformFee();
+      }}
+    >
+      Submit
+    </button>
+  ) : (
     <StripePaymentFormPlatformFee
       className={css.paymentForm}
       onSubmit={handleSubmitPlatformFee}
@@ -536,7 +654,19 @@ export const TransactionInitPageComponent = props => {
       onStripeInitialized={onStripeInitialized}
       showInitialMessageInput={true}
     />
-  ) : null;
+  );
+
+  const couponCodeComp = (
+    <input
+      onChange={e => {
+        const val = e.target.value;
+        console.log('🚀 | file: TransactionInitPage.js | line 640 | val', val);
+        setCouponCode(val);
+      }}
+      type="text"
+    />
+  );
+
   // TransactionPanel is presentational component
   // that currently handles showing everything inside layout's main view area.
   const panel = isDataAvailable ? (
@@ -559,6 +689,8 @@ export const TransactionInitPageComponent = props => {
       setShowCreateListingPopup={setShowCreateListingPopup}
       selectListing={selectListing}
       selectedListing={selectedListing}
+      couponCodeComp={couponCodeComp}
+      validCouponCode={validCouponCode}
     />
   ) : (
     loadingOrFailedFetching
@@ -675,11 +807,18 @@ const mapStateToProps = state => {
     fetchLineItemsError,
 
     stripeCustomerFetched,
+    contactingAs,
     guest,
     host,
     currentPageResultIds,
     queryInProgress,
   } = state.TransactionInitPage;
+  console.log(
+    '🚀 | file: TransactionInitPage.js | line 7514 | state.TransactionInitPage',
+    state.TransactionInitPage
+  );
+  console.log('🚀 | file: TransactionInitPage.js | line 754 | host', host);
+  console.log('🚀 | file: TransactionInitPage.js | line 754 | guest', guest);
   const { currentUser } = state.user;
 
   const listings = currentPageResultIds && getOwnListingsById(state, currentPageResultIds);
@@ -721,6 +860,7 @@ const mapStateToProps = state => {
     fetchLineItemsInProgress,
     fetchLineItemsError,
 
+    contactingAs,
     stripeCustomerFetched,
     guest,
     host,

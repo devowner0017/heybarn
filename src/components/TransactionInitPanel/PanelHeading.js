@@ -40,40 +40,6 @@ const ListingDeletedInfoMaybe = props => {
   ) : null;
 };
 
-const HeadingCustomer = props => {
-  const { className, id, subId, values, subValues, listingDeleted } = props;
-  return (
-    <React.Fragment>
-      <h1 className={className}>
-        <span className={css.mainTitle}>
-          <FormattedMessage id={id} values={values} />
-        </span>
-      </h1>
-      {subId && (
-        <div className={css.subTitle}>
-          <FormattedMessage id={subId} values={subValues} />
-        </div>
-      )}
-      <ListingDeletedInfoMaybe listingDeleted={listingDeleted} />
-    </React.Fragment>
-  );
-};
-
-const HeadingCustomerWithSubtitle = props => {
-  const { className, id, values, subtitleId, subtitleValues, children, listingDeleted } = props;
-  return (
-    <React.Fragment>
-      <h1 className={className}>
-        <span className={css.mainTitle}>
-          <FormattedMessage id={id} values={values} />
-        </span>
-        <FormattedMessage id={subtitleId} values={subtitleValues} />
-      </h1>
-      {children}
-      <ListingDeletedInfoMaybe listingDeleted={listingDeleted} />
-    </React.Fragment>
-  );
-};
 
 const CustomerBannedInfoMaybe = props => {
   return props.isCustomerBanned ? (
@@ -83,17 +49,33 @@ const CustomerBannedInfoMaybe = props => {
   ) : null;
 };
 
-const HeadingProvider = props => {
-  const { className, id, values, isCustomerBanned, children } = props;
+
+const HeadingWithSubtitle = props => {
+  const {
+    className,
+    id,
+    values,
+    subtitleId,
+    subtitleValues,
+    children,
+    isProvider,
+    listingDeleted,
+    isCustomerBanned,
+  } = props;
   return (
     <React.Fragment>
       <h1 className={className}>
         <span className={css.mainTitle}>
           <FormattedMessage id={id} values={values} />
         </span>
+        {subtitleId && <FormattedMessage id={subtitleId} values={subtitleValues} />}
       </h1>
       {children}
-      <CustomerBannedInfoMaybe isCustomerBanned={isCustomerBanned} />
+      {isProvider ? (
+        <CustomerBannedInfoMaybe isCustomerBanned={isCustomerBanned} />
+      ) : (
+        <ListingDeletedInfoMaybe listingDeleted={listingDeleted} />
+      )}
     </React.Fragment>
   );
 };
@@ -119,174 +101,100 @@ const PanelHeading = props => {
   const titleClasses = classNames(rootClassName || defaultRootClassName, className);
   const listingLink = createListingLink(listingId, listingTitle, listingDeleted);
 
+  console.log('🚀 | file: PanelHeading.js | line 123 | panelHeadingState', panelHeadingState);
   switch (panelHeadingState) {
     case HEADING_READY:
-      return isCustomer ? (
-        <HeadingCustomer
+      return (
+        <HeadingWithSubtitle
           className={titleClasses}
-          id="TransactionInitPanel.orderReadyTitle"
-          subId={'TransactionInitPanel.orderReadySubTitle'}
-          values={{ listingType: 'listing', otherName: providerName }}
-          listingDeleted={listingDeleted}
-        />
-      ) : (
-        <HeadingProvider
-          className={titleClasses}
-          id="TransactionInitPanel.saleReadyTitle"
-          values={{ customerName, listingLink }}
-          isCustomerBanned={isCustomerBanned}
-        />
-      );
-    case HEADING_ENQUIRED:
-      return isCustomer ? (
-        <HeadingCustomer
-          className={titleClasses}
-          id="TransactionInitPanel.orderEnquiredTitle"
-          values={{ listingLink }}
-          listingDeleted={listingDeleted}
-        />
-      ) : (
-        <HeadingProvider
-          className={titleClasses}
-          id="TransactionInitPanel.saleEnquiredTitle"
-          values={{ customerName, listingLink }}
-          isCustomerBanned={isCustomerBanned}
-        />
-      );
-    case HEADING_PAYMENT_PENDING:
-      return isCustomer ? (
-        <HeadingCustomer
-          className={titleClasses}
-          id="TransactionInitPanel.orderPaymentPendingTitle"
-          values={{ listingLink }}
-          listingDeleted={listingDeleted}
-        />
-      ) : (
-        <HeadingProvider
-          className={titleClasses}
-          id="TransactionInitPanel.salePaymentPendingTitle"
-          values={{ customerName, listingLink }}
-          isCustomerBanned={isCustomerBanned}
-        >
-          <p className={css.transactionInfoMessage}>
-            <FormattedMessage
-              id="TransactionInitPanel.salePaymentPendingInfo"
-              values={{ customerName }}
-            />
-          </p>
-        </HeadingProvider>
-      );
-    case HEADING_PAYMENT_EXPIRED:
-      return isCustomer ? (
-        <HeadingCustomer
-          className={titleClasses}
-          id="TransactionInitPanel.orderPaymentExpiredTitle"
-          values={{ listingLink }}
-          listingDeleted={listingDeleted}
-        />
-      ) : (
-        <HeadingProvider
-          className={titleClasses}
-          id="TransactionInitPanel.salePaymentExpiredTitle"
-          values={{ customerName, listingLink }}
-          isCustomerBanned={isCustomerBanned}
-        />
-      );
-    case HEADING_REQUESTED:
-      return isCustomer ? (
-        <HeadingCustomerWithSubtitle
-          className={titleClasses}
-          id="TransactionInitPanel.orderPreauthorizedTitle"
-          values={{ customerName }}
-          subtitleId="TransactionInitPanel.orderPreauthorizedSubtitle"
-          subtitleValues={{ listingLink }}
+          id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedTitle`}
+          // subId={`TransactionPanel.${isCustomer ? 'c' : 'p'}_renterEnquiredSubTitle`}
+          values={{ providerName, listingLink, customerName, listingLink }}
         >
           {!listingDeleted ? (
             <p className={css.transactionInfoMessage}>
               <FormattedMessage
-                id="TransactionInitPanel.orderPreauthorizedInfo"
-                values={{ providerName }}
+                id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedSubTitle`}
               />
             </p>
           ) : null}
-        </HeadingCustomerWithSubtitle>
-      ) : (
-        <HeadingProvider
+        </HeadingWithSubtitle>
+      );
+    case HEADING_ENQUIRED:
+      <HeadingWithSubtitle
+        className={titleClasses}
+        id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedTitle`}
+        // subId={`TransactionPanel.${isCustomer ? 'c' : 'p'}_renterEnquiredSubTitle`}
+        values={{ providerName, listingLink, customerName, listingLink }}
+      >
+        {!listingDeleted ? (
+          <p className={css.transactionInfoMessage}>
+            <FormattedMessage
+              id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedSubTitle`}
+            />
+          </p>
+        ) : null}
+      </HeadingWithSubtitle>;
+    case HEADING_PAYMENT_PENDING:
+     <HeadingWithSubtitle
+       className={titleClasses}
+       id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedTitle`}
+       // subId={`TransactionPanel.${isCustomer ? 'c' : 'p'}_renterEnquiredSubTitle`}
+       values={{ providerName, listingLink, customerName, listingLink }}
+     >
+       {!listingDeleted ? (
+         <p className={css.transactionInfoMessage}>
+           <FormattedMessage
+             id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedSubTitle`}
+           />
+         </p>
+       ) : null}
+     </HeadingWithSubtitle>;
+    case HEADING_PAYMENT_EXPIRED:
+       <HeadingWithSubtitle
+         className={titleClasses}
+         id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedTitle`}
+         // subId={`TransactionPanel.${isCustomer ? 'c' : 'p'}_renterEnquiredSubTitle`}
+         values={{ providerName, listingLink, customerName, listingLink }}
+       >
+         {!listingDeleted ? (
+           <p className={css.transactionInfoMessage}>
+             <FormattedMessage
+               id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedSubTitle`}
+             />
+           </p>
+         ) : null}
+       </HeadingWithSubtitle>;
+    case HEADING_REQUESTED:
+        <HeadingWithSubtitle
           className={titleClasses}
-          id="TransactionInitPanel.saleRequestedTitle"
-          values={{ customerName, listingLink }}
+          id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedTitle`}
+          // subId={`TransactionPanel.${isCustomer ? 'c' : 'p'}_renterEnquiredSubTitle`}
+          values={{ providerName, listingLink, customerName, listingLink }}
         >
-          {!isCustomerBanned ? (
-            <p className={titleClasses}>
+          {!listingDeleted ? (
+            <p className={css.transactionInfoMessage}>
               <FormattedMessage
-                id="TransactionInitPanel.saleRequestedInfo"
-                values={{ customerName }}
+                id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedSubTitle`}
               />
             </p>
           ) : null}
-        </HeadingProvider>
-      );
+        </HeadingWithSubtitle>;
     case HEADING_ACCEPTED:
-      return isCustomer ? (
-        <HeadingCustomerWithSubtitle
-          className={titleClasses}
-          id="TransactionInitPanel.orderPreauthorizedTitle"
-          values={{ customerName }}
-          subtitleId="TransactionInitPanel.orderAcceptedSubtitle"
-          subtitleValues={{ listingLink }}
-        />
-      ) : (
-        <HeadingProvider
-          className={titleClasses}
-          id="TransactionInitPanel.saleAcceptedTitle"
-          values={{ customerName, listingLink }}
-        />
-      );
-    case HEADING_DECLINED:
-      return isCustomer ? (
-        <HeadingCustomer
-          className={titleClasses}
-          id="TransactionInitPanel.orderDeclinedTitle"
-          values={{ customerName, listingLink }}
-        />
-      ) : (
-        <HeadingProvider
-          className={titleClasses}
-          id="TransactionInitPanel.saleDeclinedTitle"
-          values={{ customerName, listingLink }}
-          isCustomerBanned={isCustomerBanned}
-        />
-      );
-    case HEADING_CANCELED:
-      return isCustomer ? (
-        <HeadingCustomer
-          className={titleClasses}
-          id="TransactionInitPanel.orderCancelledTitle"
-          values={{ customerName, listingLink }}
-        />
-      ) : (
-        <HeadingProvider
-          className={titleClasses}
-          id="TransactionInitPanel.saleCancelledTitle"
-          values={{ customerName, listingLink }}
-        />
-      );
-    case HEADING_DELIVERED:
-      return isCustomer ? (
-        <HeadingCustomer
-          className={titleClasses}
-          id="TransactionInitPanel.orderDeliveredTitle"
-          values={{ customerName, listingLink }}
-          isCustomerBanned={isCustomerBanned}
-        />
-      ) : (
-        <HeadingProvider
-          className={titleClasses}
-          id="TransactionInitPanel.saleDeliveredTitle"
-          values={{ customerName, listingLink }}
-          isCustomerBanned={isCustomerBanned}
-        />
-      );
+       <HeadingWithSubtitle
+         className={titleClasses}
+         id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedTitle`}
+         // subId={`TransactionPanel.${isCustomer ? 'c' : 'p'}_renterEnquiredSubTitle`}
+         values={{ providerName, listingLink, customerName, listingLink }}
+       >
+         {!listingDeleted ? (
+           <p className={css.transactionInfoMessage}>
+             <FormattedMessage
+               id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedSubTitle`}
+             />
+           </p>
+         ) : null}
+       </HeadingWithSubtitle>;
     default:
       console.warn('Unknown state given to panel heading.');
       return null;

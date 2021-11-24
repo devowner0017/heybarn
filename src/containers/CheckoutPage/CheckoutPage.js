@@ -38,6 +38,7 @@ import {
   NamedLink,
   NamedRedirect,
   Page,
+  PrimaryButton,
   ResponsiveImage,
 } from '../../components';
 import { StripePaymentForm } from '../../forms';
@@ -52,9 +53,11 @@ import {
   stripeCustomer,
   confirmPayment,
   sendMessage,
+  createRecurring,
 } from './CheckoutPage.duck';
 import { storeData, storedData, clearData } from './CheckoutPageSessionHelpers';
 import css from './CheckoutPage.module.css';
+import { getPropByName } from '../../util/userHelpers';
 
 const STORAGE_KEY = 'CheckoutPage';
 
@@ -230,7 +233,12 @@ export class CheckoutPageComponent extends Component {
       paymentIntent,
       selectedPaymentMethod,
       saveAfterOnetimePayment,
+      recurringCallback,
     } = handlePaymentParams;
+    console.log(
+      '🚀 | file: CheckoutPage.js | line 237 | CheckoutPageComponent | handlePaymentIntent | handlePaymentParams',
+      handlePaymentParams
+    );
     const storedTx = ensureTransaction(transaction);
 
     const ensuredCurrentUser = ensureCurrentUser(currentUser);
@@ -249,7 +257,6 @@ export class CheckoutPageComponent extends Component {
     const stripePaymentMethodId = hasDefaultPaymentMethod
       ? ensuredDefaultPaymentMethod.attributes.stripePaymentMethodId
       : null;
-
     const selectedPaymentFlow = paymentFlow(selectedPaymentMethod, saveAfterOnetimePayment);
 
     // Step 1: initiate order by requesting payment from Marketplace API
@@ -298,6 +305,10 @@ export class CheckoutPageComponent extends Component {
 
       const { stripe, card, billingDetails, paymentIntent } = handlePaymentParams;
       const stripeElementMaybe = selectedPaymentFlow !== USE_SAVED_CARD ? { card } : {};
+      console.log(
+        '🚀 | file: CheckoutPage.js | line 301 | CheckoutPageComponent | handlePaymentIntent | stripeElementMaybe',
+        stripeElementMaybe
+      );
 
       // Note: payment_method could be set here for USE_SAVED_CARD flow.
       // { payment_method: stripePaymentMethodId }
@@ -337,7 +348,17 @@ export class CheckoutPageComponent extends Component {
         fnParams
       );
       createdPaymentIntent = fnParams.paymentIntent;
-      return onConfirmPayment({ ...fnParams, transactionId: transaction.id });
+      return onConfirmPayment({ ...fnParams, transactionId: transaction.id })
+        .then(confirmResponse => {
+          handlePaymentParams.recurringCallback();
+          return confirmResponse;
+        })
+        .catch(e => {
+          console.log(
+            '🚀 | file: CheckoutPage.js | line 356 | CheckoutPageComponent | handlePaymentIntent | e',
+            e
+          );
+        });
     };
 
     // Step 4: send initial message
@@ -420,8 +441,21 @@ export class CheckoutPageComponent extends Component {
     }
     this.setState({ submitting: true });
 
-    const { history, speculatedTransaction, currentUser, paymentIntent, dispatch } = this.props;
+    const {
+      history,
+      speculatedTransaction,
+      currentUser: user,
+      paymentIntent,
+      dispatch,
+      listing,
+      transaction,
+      onCreateRecurring,
+    } = this.props;
     const { card, message, paymentMethod, formValues } = values;
+    console.log(
+      '🚀 | file: CheckoutPage.js | line 454 | CheckoutPageComponent | handleSubmit | values',
+      values
+    );
     const {
       name,
       addressLine1,
@@ -432,7 +466,12 @@ export class CheckoutPageComponent extends Component {
       country,
       saveAfterOnetimePayment,
     } = formValues;
-
+    const currentUser = ensureCurrentUser(user);
+    console.log(
+      '🚀 | file: CheckoutPage.js | line 469 | CheckoutPageComponent | handleSubmit | currentUser',
+      currentUser
+    );
+    const tx = ensureTransaction(transaction);
     // Billing address is recommended.
     // However, let's not assume that <StripePaymentAddress> data is among formValues.
     // Read more about this from Stripe's docs
@@ -455,6 +494,29 @@ export class CheckoutPageComponent extends Component {
       email: ensureCurrentUser(currentUser).attributes.email,
       ...addressMaybe,
     };
+    const currentListing = ensureListing(listing);
+    const currentAuthor = ensureUser(currentListing.author);
+    const price = currentListing.attributes.price;
+    const recurringPaymentMethod =
+      paymentMethod === 'defaultCard'
+        ? getPropByName(currentUser, 'stripePaymentMethodId')
+        : card;
+    console.log(
+      '🚀 | file: CheckoutPage.js | line 500 | CheckoutPageComponent | handleSubmit | recurringPaymentMethod',
+      recurringPaymentMethod
+    );
+    const createRecurringParams = {
+      weeklyAmount: price?.amount,
+      listingId: currentListing?.id?.uuid,
+      stripeCustomerId: currentUser?.stripeCustomer?.attributes?.stripeCustomerId,
+      providerUserId: currentAuthor.id,
+      paymentMethod: recurringPaymentMethod,
+      transactionId: tx?.id?.uuid,
+    };
+    console.log(
+      '🚀 | file: CheckoutPage.js | line 500 | CheckoutPageComponent | handleSubmit | createRecurringParams',
+      createRecurringParams
+    );
 
     const requestPaymentParams = {
       pageData: this.state.pageData,
@@ -466,10 +528,18 @@ export class CheckoutPageComponent extends Component {
       paymentIntent,
       selectedPaymentMethod: paymentMethod,
       saveAfterOnetimePayment: !!saveAfterOnetimePayment,
+      recurringCallback: _ => onCreateRecurring(createRecurringParams),
     };
-
+    console.log(
+      '🚀 | file: CheckoutPage.js | line 514 | CheckoutPageComponent | handleSubmit | requestPaymentParams',
+      requestPaymentParams
+    );
     this.handlePaymentIntent(requestPaymentParams)
       .then(res => {
+        console.log(
+          '🚀 | file: CheckoutPage.js | line 514 | CheckoutPageComponent | handleSubmit | res',
+          res
+        );
         const { orderId, messageSuccess, paymentMethodSaved } = res;
         this.setState({ submitting: false });
 
@@ -537,6 +607,7 @@ export class CheckoutPageComponent extends Component {
       listing,
       bookingDates,
       transaction,
+      onCreateRecurring,
     } = this.props;
     console.log(
       '🚀 | file: CheckoutPage.js | line 517 | CheckoutPageComponent | render | this.props',
@@ -633,6 +704,14 @@ export class CheckoutPageComponent extends Component {
     // Show breakdown only when speculated transaction and booking are loaded
     // (i.e. have an id)
     const tx = existingTransaction.booking ? existingTransaction : speculatedTransaction;
+    console.log(
+      '🚀 | file: CheckoutPage.js | line 666 | CheckoutPageComponent | render | speculatedTransaction',
+      speculatedTransaction
+    );
+    console.log(
+      '🚀 | file: CheckoutPage.js | line 666 | CheckoutPageComponent | render | existingTransaction',
+      existingTransaction
+    );
     const txBooking = ensureBooking(tx.booking);
     const breakdown =
       tx.id && txBooking.id ? (
@@ -798,7 +877,19 @@ export class CheckoutPageComponent extends Component {
     // e.g. {country: 'FI'}
 
     const initalValuesForStripePayment = { name: userName };
-
+    console.log(
+      '🚀 | file: CheckoutPage.js | line 812 | CheckoutPageComponent | render | currentUser',
+      currentUser
+    );
+    // const createRecurringParams = {
+    //   weeklyAmount: price?.amount,
+    //   listingId: currentListing?.id?.uuid,
+    //   stripeCustomerId: currentUser?.stripeCustomer?.attributes?.stripeCustomerId,
+    //   providerUserId: currentAuthor.id,
+    //   paymentMethod:
+    //     currentUser.stripeCustomer.defaultPaymentMethod.attributes.stripePaymentMethodId,
+    //   transactionId: tx?.id?.uuid,
+    // };
     return (
       <Page {...pageProps}>
         {topbar}
@@ -842,6 +933,13 @@ export class CheckoutPageComponent extends Component {
                   />
                 </p>
               ) : null}
+              {/* <PrimaryButton
+                inProgress={false}
+                disabled={false}
+                onClick={e => onCreateRecurring(createRecurringParams)}
+              >
+                TEST RECURRING
+              </PrimaryButton> */}
               {showPaymentForm ? (
                 <StripePaymentForm
                   className={css.paymentForm}
@@ -1001,6 +1099,7 @@ const mapDispatchToProps = dispatch => ({
   onConfirmCardPayment: params => dispatch(confirmCardPayment(params)),
   onConfirmPayment: params => dispatch(confirmPayment(params)),
   onSendMessage: params => dispatch(sendMessage(params)),
+  onCreateRecurring: params => dispatch(createRecurring(params)),
   onSavePaymentMethod: (stripeCustomer, stripePaymentMethodId) =>
     dispatch(savePaymentMethod(stripeCustomer, stripePaymentMethodId)),
 });

@@ -3,22 +3,24 @@ import { string, func } from 'prop-types';
 import { FormattedMessage, intlShape, injectIntl } from '../../util/reactIntl';
 import classNames from 'classnames';
 import { lazyLoadWithDimensions } from '../../util/contextHelpers';
-import { LINE_ITEM_DAY, LINE_ITEM_NIGHT, propTypes } from '../../util/types';
-import { formatMoney } from '../../util/currency';
+import { LINE_ITEM_DAY, LINE_ITEM_NIGHT, LISTING_UNDER_ENQUIRY, propTypes } from '../../util/types';
+import { formatMoney, formatMoneyShort } from '../../util/currency';
 import { ensureListing, ensureUser } from '../../util/data';
 import { richText } from '../../util/richText';
 import { createSlug } from '../../util/urlHelpers';
 import config from '../../config';
-import { NamedLink, ResponsiveImage } from '../../components';
+import { NamedLink, ResponsiveImage, Avatar } from '../../components';
+import Overlay from './Overlay';
 
 import css from './ListingCard.module.css';
 import { capitalize } from 'lodash';
+import { getPropByName } from '../../util/userHelpers';
 
 const MIN_LENGTH_FOR_LONG_WORDS = 10;
 
 const priceData = (price, intl) => {
   if (price && price.currency === config.currency) {
-    const formattedPrice = formatMoney(intl, price);
+    const formattedPrice = formatMoney(intl, price, 0, true);
     return { formattedPrice, priceTitle: formattedPrice };
   } else if (price) {
     return {
@@ -43,12 +45,13 @@ class ListingImage extends Component {
 const LazyImage = lazyLoadWithDimensions(ListingImage, { loadAfterInitialRendering: 3000 });
 
 export const ListingCardComponent = props => {
-  const { className, rootClassName, intl, listing, renderSizes, setActiveListing , minInfo} = props;
+  const { className, rootClassName, intl, listing, renderSizes, setActiveListing, minInfo } = props;
   const classes = classNames(rootClassName || css.root, className);
   const currentListing = ensureListing(listing);
+  console.log('🚀 | file: ListingCard.js | line 49 | currentListing', currentListing);
   const id = currentListing.id.uuid;
   const { title = '', price, publicData } = currentListing.attributes;
-  const { listingType } = publicData || {};
+  const { listingType, locRegion: region, preferredUse: need, listingState } = publicData || {};
   const slug = createSlug(title);
   const author = ensureUser(listing.author);
   const authorName = author.attributes.profile.displayName;
@@ -68,15 +71,20 @@ export const ListingCardComponent = props => {
     : isDaily
     ? 'ListingCard.perDay'
     : 'ListingCard.perUnit';
-
+  const listingUnderEnquiry = listingState === LISTING_UNDER_ENQUIRY;
   return (
-    <NamedLink className={classes} name={`${capitalize(listingType)}Page`} params={{ id, slug }} >
+    <NamedLink className={classes} name={`${capitalize(listingType)}Page`} params={{ id, slug }}>
       <div
         className={css.threeToTwoWrapper}
         onMouseEnter={() => setActiveListing(currentListing.id)}
         onMouseLeave={() => setActiveListing(null)}
         id="listingCard"
       >
+        {listingUnderEnquiry && (
+          <Overlay
+            message={intl.formatMessage({ id: `ManageListingCard.${listingType}UnderEnquiry` })}
+          ></Overlay>
+        )}
         <div className={css.aspectWrapper}>
           <LazyImage
             rootClassName={css.rootForImage}
@@ -86,19 +94,13 @@ export const ListingCardComponent = props => {
             sizes={renderSizes}
           />
         </div>
+        <Avatar className={css.avatar} user={listing.author} />
       </div>
       {minInfo ? (
+        // TODO FIX THIS
         'TEST'
       ) : (
         <div className={css.info}>
-          <div className={css.price}>
-            <div className={css.priceValue} title={priceTitle}>
-              {formattedPrice}
-            </div>
-            <div className={css.perUnit}>
-              <FormattedMessage id={unitTranslationKey} />
-            </div>
-          </div>
           <div className={css.mainInfo}>
             <div className={css.title}>
               {richText(title, {
@@ -107,9 +109,24 @@ export const ListingCardComponent = props => {
               })}
             </div>
             <div className={css.authorInfo}>
-              <FormattedMessage id="ListingCard.hostedBy" values={{ authorName }} />
+              <FormattedMessage
+                id={`ListingCard.${listingType}By`}
+                values={{ need: capitalize(need), region: capitalize(region), authorName }}
+              />
             </div>
           </div>
+          {listingType === 'listing' && (
+            <>
+              <div className={css.price}>
+                <div className={css.priceValue} title={priceTitle}>
+                  {formattedPrice}
+                </div>
+                <div className={css.perUnit}>
+                  <FormattedMessage id={unitTranslationKey} />
+                </div>
+              </div>
+            </>
+          )}
         </div>
       )}
     </NamedLink>

@@ -24,6 +24,7 @@ import {
   TRANSITION_RENTER_CANCELS_DURING_RAD,
   TRANSITION_OPERATOR_CANCELS_DURING_RAD,
   TRANSITION_RENTER_SIGNS_RENTAL_AGREEMENT,
+  TRANSITION_COMPLETE,
 } from '../../util/transaction';
 import {
   transactionLineItems,
@@ -504,15 +505,20 @@ export const fetchTransaction = (id, txRole) => (dispatch, getState, sdk) => {
         '🚀 | file: TransactionPage.duck.js | line 485 | fetchTransaction | transaction',
         transaction
       );
-      const relatedListingId = getPropByName(transaction, 'selectedListingId');
+      const selectedListingId = getPropByName(transaction, 'selectedListingId');
+      console.log(
+        '🚀 | file: TransactionPage.duck.js | line 508 | fetchTransaction | selectedListingId',
+        selectedListingId
+      );
+      const relatedListingId = getPropByName(transaction, 'relatedListingId');
       console.log(
         '🚀 | file: TransactionPage.duck.js | line 496 | fetchTransaction | relatedListingId',
         relatedListingId
       );
-      if (!!relatedListingId) {
+      if (!!(relatedListingId || selectedListingId)) {
         sdk.listings
           .show({
-            id: relatedListingId,
+            id: selectedListingId || relatedListingId,
             include: ['author', 'author.profileImage', 'images'],
             ...IMAGE_VARIANTS,
           })
@@ -523,6 +529,9 @@ export const fetchTransaction = (id, txRole) => (dispatch, getState, sdk) => {
             );
             dispatch(addMarketplaceEntities(relatedListingResponse));
             dispatch(fetchRelatedListingSuccess(relatedListingResponse));
+          })
+          .catch(e => {
+            console.log(e);
           });
       }
       // Fetch time slots for transactions that are in enquired state
@@ -559,6 +568,140 @@ export const fetchTransaction = (id, txRole) => (dispatch, getState, sdk) => {
     });
 };
 
+export const completeSale = data => (dispatch, getState, sdk) => {
+  const { txId } = data;
+  console.log('🚀 | file: TransactionPage.duck.js | line 572 | id', txId);
+  if (acceptOrDeclineInProgress(getState())) {
+    return Promise.reject(new Error('Accept or decline already in progress'));
+  }
+  dispatch(acceptSaleRequest());
+
+  return sdk.transactions
+    .transition({ id: txId, transition: TRANSITION_COMPLETE, params: {} }, { expand: true })
+    .then(response => {
+      dispatch(addMarketplaceEntities(response));
+      dispatch(acceptSaleSuccess());
+      dispatch(fetchCurrentUserNotifications());
+      return response;
+    })
+    .catch(e => {
+      dispatch(acceptSaleError(storableError(e)));
+      log.error(e, 'accept-sale-failed', {
+        txId,
+        transition: TRANSITION_COMPLETE,
+      });
+      throw e;
+    });
+};
+export const createTransaction = orderParams => (dispatch, getState, sdk) => {
+  console.log('🚀 | file: TransactionInitPage.duck.js | line 250 | orderParams', orderParams);
+  dispatch(initiateOrderRequest());
+
+  // TODO UPDATE THIS WHEN WE BUILD THE OTHER SIDE OF THE MARKETPLACE
+  const isRequestFromHost = orderParams.protectedData.contactingAs === 'host';
+  console.log(
+    '🚀 | file: TransactionInitPage.duck.js | line 255 | isRequestFromHost',
+    isRequestFromHost
+  );
+
+  const transition = TRANSITION_HOST_APPROVED_BY_RENTER;
+  console.log('🚀 | file: TransactionInitPage.duck.js | line 258 | transition', transition);
+
+  const bodyParams = {
+    processAlias: config.bookingProcessAlias,
+    transition,
+    params: orderParams,
+  };
+  const queryParams = {
+    include: ['booking', 'provider'],
+    expand: true,
+  };
+
+  const handleSucces = response => {
+    const entities = denormalisedResponseEntities(response);
+    const order = entities[0];
+    dispatch(initiateOrderSuccess(order));
+    dispatch(fetchCurrentUserHasOrdersSuccess(true));
+    return order;
+  };
+
+  const handleError = e => {
+    dispatch(initiateOrderError(storableError(e)));
+    log.error(e, 'initiate-order-failed', {
+      listingId: orderParams.listingId.uuid,
+    });
+    throw e;
+  };
+
+  return sdk.transactions
+    .initiate(bodyParams, queryParams)
+    .then(handleSucces)
+    .catch(handleError);
+};
+
+export const reverseTransactionFlowAndAcceptCommunication = data => (dispatch, getState, sdk) => {
+  console.log('🚀 | file: TransactionPage.duck.js | line 609 | data', data);
+  // listingId is the HOSTS LISTING
+  // relatedTxId is the CURRENT HOST->RENTER TRANSACTION that is invalid
+  // relatedListingId is the RENTERS ADVERT
+  const { listingId, relatedTxId, relatedListingId } = data;
+  if (acceptOrDeclineInProgress(getState())) {
+    return Promise.reject(new Error('Accept or decline already in progress'));
+  }
+
+  dispatch(acceptCommunicationRequest());
+
+  const bodyParams = {
+    processAlias: config.bookingProcessAlias,
+    transition: TRANSITION_HOST_APPROVED_BY_RENTER,
+    params: {
+      listingId: listingId.uuid,
+      protectedData: { relatedTxId: relatedTxId.uuid, relatedListingId: relatedListingId.uuid },
+    },
+  };
+  console.log('🚀 | file: TransactionPage.duck.js | line 622 | bodyParams', bodyParams);
+  const queryParams = {
+    include: ['booking', 'provider'],
+    expand: true,
+  };
+
+  // This creates the NEW transaction (RENTER -> HOST)
+  return sdk.transactions
+    .initiate(bodyParams, queryParams)
+    .then(response => {
+      console.log('🚀 | file: TransactionPage.duck.js | line 631 | response', response);
+      const newTx = response.data.data;
+      console.log('🚀 | file: TransactionPage.duck.js | line 633 | newTx', newTx);
+      // This transitions the OLD transaction (HOST -> RENTER) into a new state that is hidden.
+      return sdk.transactions
+        .transition(
+          {
+            id: relatedTxId,
+            transition: TRANSITION_RENTER_ACCEPTS_COMMUNICATION,
+            params: { protectedData: { relatedTxId: newTx.id.uuid } },
+          },
+          { expand: true }
+        )
+        .then(response => {
+          console.log('🚀 | file: TransactionPage.duck.js | line 644 | response', response);
+          dispatch(addMarketplaceEntities(response));
+          dispatch(acceptCommunicationSuccess());
+          dispatch(fetchCurrentUserNotifications());
+          return response;
+        });
+    })
+    .catch(e => {
+      console.log('🚀 | file: TransactionPage.duck.js | line 652 | e', e);
+      dispatch(acceptCommunicationError(storableError(e)));
+      log.error(e, 'accept-communication-failed', {
+        relatedTxId,
+        listingId,
+        transition: TRANSITION_RENTER_ACCEPTS_COMMUNICATION,
+      });
+      throw e;
+    });
+};
+
 export const acceptCommunication = data => (dispatch, getState, sdk) => {
   const { txId, isRenterEnquired } = data;
   if (acceptOrDeclineInProgress(getState())) {
@@ -571,9 +714,7 @@ export const acceptCommunication = data => (dispatch, getState, sdk) => {
     .transition(
       {
         id: txId,
-        transition: isRenterEnquired
-          ? TRANSITION_HOST_ACCEPTS_COMMUNICATION
-          : TRANSITION_RENTER_ACCEPTS_COMMUNICATION,
+        transition: TRANSITION_HOST_ACCEPTS_COMMUNICATION,
         params: {},
       },
       { expand: true }
@@ -689,7 +830,7 @@ export const sendRentalAgreement = data => (dispatch, getState, sdk) => {
       bookingEnd: bookingData.endDate,
     },
   };
-  console.log("🚀 | file: TransactionPage.duck.js | line 692 | bodyParams", bodyParams);
+  console.log('🚀 | file: TransactionPage.duck.js | line 692 | bodyParams', bodyParams);
   const queryParams = { expand: true };
 
   const handleSucces = response => {
@@ -704,7 +845,7 @@ export const sendRentalAgreement = data => (dispatch, getState, sdk) => {
   };
 
   const handleError = e => {
-  console.log("🚀 | file: TransactionPage.duck.js | line 707 | e", e);
+    console.log('🚀 | file: TransactionPage.duck.js | line 707 | e', e);
     dispatch(sendRentalAgreementError(storableError(e)));
     const transactionIdMaybe = txId ? { transactionId: txId.uuid } : {};
     log.error(e, 'host-sends-agreement-failed', {
@@ -859,6 +1000,8 @@ export const fetchMoreMessages = txId => (dispatch, getState, sdk) => {
 };
 
 export const sendMessage = (txId, message) => (dispatch, getState, sdk) => {
+  console.log('🚀 | file: TransactionPage.duck.js | line 1003 | sendMessage | txId', txId);
+  console.log('🚀 | file: TransactionPage.duck.js | line 1003 | sendMessage | message', message);
   dispatch(sendMessageRequest());
 
   return sdk.messages
@@ -878,10 +1021,11 @@ export const sendMessage = (txId, message) => (dispatch, getState, sdk) => {
         .catch(() => dispatch(sendMessageSuccess()));
     })
     .catch(e => {
-      dispatch(sendMessageError(storableError(e)));
+      console.error(e);
+      // dispatch(sendMessageError(storableError(e)));
       // Rethrow so the page can track whether the sending failed, and
       // keep the message in the form for a retry.
-      throw e;
+      // throw e;
     });
 };
 
