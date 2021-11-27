@@ -148,7 +148,8 @@ export class TransactionInitPanelComponent extends Component {
       setShowCreateListingPopup,
       selectListing,
       selectedListing,
-      couponCodeComp
+      couponCodeComp,
+      listingType,
     } = this.props;
 
     const currentProvider = ensureUser(currentListing.author);
@@ -224,21 +225,9 @@ export class TransactionInitPanelComponent extends Component {
 
     const firstImage =
       currentListing.images && currentListing.images.length > 0 ? currentListing.images[0] : null;
-    console.log(
-      '🚀 | file: TransactionInitPanel.js | line 225 | TransactionInitPanelComponent | render | firstImage',
-      firstImage
-    );
 
-    console.log(
-      '🚀 | file: TransactionInitPanel.js | line 230 | TransactionInitPanelComponent | render | selectedListing',
-      selectedListing
-    );
     const selectedFirstImage =
       selectedListing?.images?.length > 0 ? selectedListing.images[0] : null;
-    console.log(
-      '🚀 | file: TransactionInitPanel.js | line 228 | TransactionInitPanelComponent | render | selectedFirstImage',
-      selectedFirstImage
-    );
 
     const paymentMethodsPageLink = (
       <NamedLink name="PaymentMethodsPage">
@@ -269,10 +258,12 @@ export class TransactionInitPanelComponent extends Component {
               transactionRole={transactionRole}
               providerName={authorDisplayName}
               customerName={customerDisplayName}
+              otherUserDisplayName={otherUserDisplayName}
               isCustomerBanned={isCustomerBanned}
               listingId={currentListing.id && currentListing.id.uuid}
               listingTitle={listingTitle}
               listingDeleted={listingDeleted}
+              listingType={listingType}
             />
             {savePaymentMethodFailed ? (
               <p className={css.genericError}>

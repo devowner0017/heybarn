@@ -40,7 +40,6 @@ const ListingDeletedInfoMaybe = props => {
   ) : null;
 };
 
-
 const CustomerBannedInfoMaybe = props => {
   return props.isCustomerBanned ? (
     <p className={css.transactionInfoMessage}>
@@ -48,7 +47,6 @@ const CustomerBannedInfoMaybe = props => {
     </p>
   ) : null;
 };
-
 
 const HeadingWithSubtitle = props => {
   const {
@@ -89,11 +87,15 @@ const PanelHeading = props => {
     panelHeadingState,
     customerName,
     providerName,
+    otherUserDisplayName,
     listingId,
     listingTitle,
     listingDeleted,
     isCustomerBanned,
+    listingType,
   } = props;
+  console.log('🚀 | file: PanelHeading.js | line 96 | customerName', customerName);
+  console.log('🚀 | file: PanelHeading.js | line 96 | providerName', providerName);
   console.log(props);
   const isCustomer = props.transactionRole === 'customer';
 
@@ -107,14 +109,21 @@ const PanelHeading = props => {
       return (
         <HeadingWithSubtitle
           className={titleClasses}
-          id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedTitle`}
-          // subId={`TransactionPanel.${isCustomer ? 'c' : 'p'}_renterEnquiredSubTitle`}
-          values={{ providerName, listingLink, customerName, listingLink }}
+          id={`TransactionInitPanel.${isCustomer ? 'c' : 'p'}_orderReadyTitle`}
+          // subId={`TransactionInitPanel.${isCustomer ? 'c' : 'p'}_renterEnquiredSubTitle`}
+          values={{
+            otherName: otherUserDisplayName,
+            providerName,
+            listingLink,
+            customerName,
+            listingLink,
+            listingType,
+          }}
         >
           {!listingDeleted ? (
             <p className={css.transactionInfoMessage}>
               <FormattedMessage
-                id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedSubTitle`}
+                id={`TransactionInitPanel.${isCustomer ? 'c' : 'p'}_orderReadySubTitle`}
               />
             </p>
           ) : null}
@@ -123,78 +132,85 @@ const PanelHeading = props => {
     case HEADING_ENQUIRED:
       <HeadingWithSubtitle
         className={titleClasses}
-        id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedTitle`}
-        // subId={`TransactionPanel.${isCustomer ? 'c' : 'p'}_renterEnquiredSubTitle`}
-        values={{ providerName, listingLink, customerName, listingLink }}
+        id={`TransactionInitPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedTitle`}
+        // subId={`TransactionInitPanel.${isCustomer ? 'c' : 'p'}_renterEnquiredSubTitle`}
+        values={{
+          otherName: isCustomer ? providerName : customerName,
+          providerName,
+          listingLink,
+          customerName,
+          listingLink,
+          listingType,
+        }}
       >
         {!listingDeleted ? (
           <p className={css.transactionInfoMessage}>
             <FormattedMessage
-              id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedSubTitle`}
+              id={`TransactionInitPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedSubTitle`}
             />
           </p>
         ) : null}
       </HeadingWithSubtitle>;
     case HEADING_PAYMENT_PENDING:
-     <HeadingWithSubtitle
-       className={titleClasses}
-       id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedTitle`}
-       // subId={`TransactionPanel.${isCustomer ? 'c' : 'p'}_renterEnquiredSubTitle`}
-       values={{ providerName, listingLink, customerName, listingLink }}
-     >
-       {!listingDeleted ? (
-         <p className={css.transactionInfoMessage}>
-           <FormattedMessage
-             id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedSubTitle`}
-           />
-         </p>
-       ) : null}
-     </HeadingWithSubtitle>;
+      <HeadingWithSubtitle
+        className={titleClasses}
+        id={`TransactionInitPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedTitle`}
+        // subId={`TransactionInitPanel.${isCustomer ? 'c' : 'p'}_renterEnquiredSubTitle`}
+        values={{ providerName, listingLink, customerName, listingLink }}
+      >
+        {!listingDeleted ? (
+          <p className={css.transactionInfoMessage}>
+            <FormattedMessage
+              id={`TransactionInitPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedSubTitle`}
+            />
+          </p>
+        ) : null}
+      </HeadingWithSubtitle>;
     case HEADING_PAYMENT_EXPIRED:
-       <HeadingWithSubtitle
-         className={titleClasses}
-         id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedTitle`}
-         // subId={`TransactionPanel.${isCustomer ? 'c' : 'p'}_renterEnquiredSubTitle`}
-         values={{ providerName, listingLink, customerName, listingLink }}
-       >
-         {!listingDeleted ? (
-           <p className={css.transactionInfoMessage}>
-             <FormattedMessage
-               id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedSubTitle`}
-             />
-           </p>
-         ) : null}
-       </HeadingWithSubtitle>;
+      <HeadingWithSubtitle
+        className={titleClasses}
+        id={`TransactionInitPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedTitle`}
+        // subId={`TransactionInitPanel.${isCustomer ? 'c' : 'p'}_renterEnquiredSubTitle`}
+        values={{ providerName, listingLink, customerName, listingLink }}
+      >
+        {!listingDeleted ? (
+          <p className={css.transactionInfoMessage}>
+            <FormattedMessage
+              id={`TransactionInitPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedSubTitle`}
+            />
+          </p>
+        ) : null}
+      </HeadingWithSubtitle>;
     case HEADING_REQUESTED:
-        <HeadingWithSubtitle
-          className={titleClasses}
-          id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedTitle`}
-          // subId={`TransactionPanel.${isCustomer ? 'c' : 'p'}_renterEnquiredSubTitle`}
-          values={{ providerName, listingLink, customerName, listingLink }}
-        >
-          {!listingDeleted ? (
-            <p className={css.transactionInfoMessage}>
-              <FormattedMessage
-                id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedSubTitle`}
-              />
-            </p>
-          ) : null}
-        </HeadingWithSubtitle>;
+      <HeadingWithSubtitle
+        className={titleClasses}
+        id={`TransactionInitPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedTitle`}
+        // subId={`TransactionInitPanel.${isCustomer ? 'c' : 'p'}_renterEnquiredSubTitle`}
+        values={{ providerName, listingLink, customerName, listingLink }}
+      >
+        {!listingDeleted ? (
+          <p className={css.transactionInfoMessage}>
+            <FormattedMessage
+              id={`TransactionInitPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedSubTitle`}
+            />
+          </p>
+        ) : null}
+      </HeadingWithSubtitle>;
     case HEADING_ACCEPTED:
-       <HeadingWithSubtitle
-         className={titleClasses}
-         id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedTitle`}
-         // subId={`TransactionPanel.${isCustomer ? 'c' : 'p'}_renterEnquiredSubTitle`}
-         values={{ providerName, listingLink, customerName, listingLink }}
-       >
-         {!listingDeleted ? (
-           <p className={css.transactionInfoMessage}>
-             <FormattedMessage
-               id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedSubTitle`}
-             />
-           </p>
-         ) : null}
-       </HeadingWithSubtitle>;
+      <HeadingWithSubtitle
+        className={titleClasses}
+        id={`TransactionInitPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedTitle`}
+        // subId={`TransactionInitPanel.${isCustomer ? 'c' : 'p'}_renterEnquiredSubTitle`}
+        values={{ providerName, listingLink, customerName, listingLink }}
+      >
+        {!listingDeleted ? (
+          <p className={css.transactionInfoMessage}>
+            <FormattedMessage
+              id={`TransactionInitPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedSubTitle`}
+            />
+          </p>
+        ) : null}
+      </HeadingWithSubtitle>;
     default:
       console.warn('Unknown state given to panel heading.');
       return null;

@@ -1,33 +1,26 @@
 @import '../../styles/propertySets.css';
 
 .root {
-  @apply --marketplaceModalBaseStyles;
-  padding-top: 70px;
+}
 
-  @media (--viewportMedium) {
-    flex-basis: 567px;
+.select {
+  color: var(--matterColorAnti);
+  border-bottom-color: var(--attentionColor);
+  padding-right: 20px;
+
+  & > option {
+    color: var(--matterColor);
+  }
+  & > option:disabled {
+    color: var(--matterColorAnti);
   }
 }
 
-.modalContent {
-  flex-grow: 1;
+.selectSuccess {
+  color: var(--matterColor);
+  border-bottom-color: var(--successColor);
 }
 
-/* Icon of the modal */
-.modalIcon {
-  @apply --marketplaceModalIconStyles;
-}
-
-/* Title of the modal */
-.modalTitle {
-  @apply --marketplaceModalTitleStyles;
-}
-
-.reviewee {
-  white-space: nowrap;
-}
-
-/* Paragraph for the Modal */
-.modalMessage {
-  @apply --marketplaceModalParagraphStyles;
+.selectError {
+  border-bottom-color: var(--failColor);
 }

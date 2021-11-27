@@ -19,6 +19,8 @@ const isNonEmptyString = val => {
 const VALID = undefined;
 
 export const required = message => value => {
+  console.log('🚀 | file: validators.js | line 22 | value', value);
+  console.log('🚀 | file: validators.js | line 22 | message', message);
   if (typeof value === 'undefined' || value === null) {
     // undefined or null values are invalid
     return message;
@@ -69,6 +71,10 @@ export const maxLength = (message, maximumLength) => value => {
 
 export const nonEmptyArray = message => value => {
   return value && Array.isArray(value) && value.length > 0 ? VALID : message;
+};
+
+export const requiredObject = message => value => {
+  return typeof value === 'object' && !Array.isArray(value) && value !== null ? VALID : message;
 };
 
 export const autocompleteSearchRequired = message => value => {

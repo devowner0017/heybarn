@@ -14,7 +14,7 @@ import EditIcon from './EditIcon';
 import css from './ListingPage.module.css';
 
 export const ActionBarMaybe = props => {
-  const { isOwnListing, listing, editParams } = props;
+  const { isOwnListing, listingUnderEnquiry, listing, editParams } = props;
   const state = listing.attributes.state;
   const isPendingApproval = state === LISTING_STATE_PENDING_APPROVAL;
   const isClosed = state === LISTING_STATE_CLOSED;
@@ -53,6 +53,14 @@ export const ActionBarMaybe = props => {
       <div className={css.actionBar}>
         <p className={css.closedListingText}>
           <FormattedMessage id="ListingPage.closedListing" />
+        </p>
+      </div>
+    );
+  } else if (listingUnderEnquiry) {
+    return (
+      <div className={css.actionBar}>
+        <p className={css.closedListingText}>
+          <FormattedMessage id="ListingPage.listingUnderEnquiry" />
         </p>
       </div>
     );

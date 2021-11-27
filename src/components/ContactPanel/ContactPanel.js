@@ -54,6 +54,7 @@ const ContactPanel = props => {
     titleClassName,
     listing,
     isOwnListing,
+    listingUnderEnquiry,
     unitType,
     onSubmit,
     title,
@@ -70,6 +71,7 @@ const ContactPanel = props => {
     fetchLineItemsInProgress,
     fetchLineItemsError,
   } = props;
+  console.log('🚀 | file: ContactPanel.js | line 74 | listingUnderEnquiry', listingUnderEnquiry);
 
   const price = listing.attributes.price;
   const hasListingState = !!listing.attributes.state;
@@ -125,7 +127,7 @@ const ContactPanel = props => {
           {subTitleText ? <div className={css.bookingHelp}>{subTitleText}</div> : null}
         </div>
 
-        <Button rootClassName={css.bookButton} onClick={onSubmit}>
+        <Button rootClassName={css.bookButton} disabled={listingUnderEnquiry} onClick={onSubmit}>
           <FormattedMessage id="ContactPanel.ctaButtonMessage" />
         </Button>
         {/* {showBookingDatesForm ? (
@@ -160,6 +162,7 @@ const ContactPanel = props => {
         {showBookingDatesForm ? (
           <Button
             rootClassName={css.bookButton}
+            disabled={listingUnderEnquiry}
             onClick={() => openBookModal(isOwnListing, isClosed, history, location)}
           >
             <FormattedMessage id="ContactPanel.ctaButtonMessage" />

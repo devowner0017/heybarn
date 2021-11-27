@@ -691,6 +691,7 @@ export const TransactionInitPageComponent = props => {
       selectedListing={selectedListing}
       couponCodeComp={couponCodeComp}
       validCouponCode={validCouponCode}
+      listingType={listingType}
     />
   ) : (
     loadingOrFailedFetching

@@ -14,7 +14,6 @@ import Overlay from './Overlay';
 
 import css from './ListingCard.module.css';
 import { capitalize } from 'lodash';
-import { getPropByName } from '../../util/userHelpers';
 
 const MIN_LENGTH_FOR_LONG_WORDS = 10;
 
@@ -45,7 +44,16 @@ class ListingImage extends Component {
 const LazyImage = lazyLoadWithDimensions(ListingImage, { loadAfterInitialRendering: 3000 });
 
 export const ListingCardComponent = props => {
-  const { className, rootClassName, intl, listing, renderSizes, setActiveListing, minInfo } = props;
+  const {
+    className,
+    rootClassName,
+    intl,
+    listing,
+    renderSizes,
+    setActiveListing,
+    minInfo,
+    showAvatar,
+  } = props;
   const classes = classNames(rootClassName || css.root, className);
   const currentListing = ensureListing(listing);
   console.log('🚀 | file: ListingCard.js | line 49 | currentListing', currentListing);
@@ -72,8 +80,30 @@ export const ListingCardComponent = props => {
     ? 'ListingCard.perDay'
     : 'ListingCard.perUnit';
   const listingUnderEnquiry = listingState === LISTING_UNDER_ENQUIRY;
+  const ConditionalWrapper = ({ condition, wrapper, defaultWrapper, children }) => {
+    console.log('🚀 | file: ListingCard.js | line 84 | ConditionalWrapper | wrapper', wrapper);
+    console.log(
+      '🚀 | file: ListingCard.js | line 84 | ConditionalWrapper | defaultWrapper',
+      defaultWrapper
+    );
+    console.log('🚀 | file: ListingCard.js | line 84 | ConditionalWrapper |  condition', condition);
+
+    return condition ? wrapper(children) : !!defaultWrapper ? defaultWrapper(children) : children;
+  };
   return (
-    <NamedLink className={classes} name={`${capitalize(listingType)}Page`} params={{ id, slug }}>
+    <ConditionalWrapper
+      condition={ listingUnderEnquiry}
+      wrapper={children => (
+        <NamedLink
+          className={classes}
+          name={`${capitalize(listingType)}Page`}
+          params={{ id, slug }}
+        >
+          {children}
+        </NamedLink>
+      )}
+      defaultWrapper={children => <div className={classes}>{children}</div>}
+    >
       <div
         className={css.threeToTwoWrapper}
         onMouseEnter={() => setActiveListing(currentListing.id)}
@@ -94,7 +124,7 @@ export const ListingCardComponent = props => {
             sizes={renderSizes}
           />
         </div>
-        <Avatar className={css.avatar} user={listing.author} />
+        {showAvatar && <Avatar className={css.avatar} user={listing.author} />}
       </div>
       {minInfo ? (
         // TODO FIX THIS
@@ -129,7 +159,7 @@ export const ListingCardComponent = props => {
           )}
         </div>
       )}
-    </NamedLink>
+    </ConditionalWrapper>
   );
 };
 

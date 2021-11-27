@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, intlShape, injectIntl } from '../../util/reactIntl';
 import classNames from 'classnames';
+import { Field } from 'react-final-form';
 import { propTypes } from '../../util/types';
-import { IconReviewUser, Modal } from '..';
-import { ReviewForm } from '../../forms';
+import { ValidationError } from '../../components';
 
 import css from './CustomSelect.module.css';
 const { default: Select } = require('react-select'); // eslint-disable-line global-require
@@ -13,61 +12,52 @@ const CustomSelect = props => {
   const {
     className,
     rootClassName,
+    labelClassName,
+    customErrorText,
     id,
-    intl,
-    isOpen,
-    onCloseModal,
-    onManageDisableScrolling,
-    onSubmitReview,
-    revieweeName,
-    reviewSent,
-    sendReviewInProgress,
-    sendReviewError,
+    name,
+    label,
+    placeholder,
+    multi,
+    meta,
+    input,
+    ...rest
   } = props;
+  console.log('🚀 | file: CustomSelect.js | line 28 | props', props);
+
+  const { valid, invalid, touched, error } = meta || {};
+  const hasError = !!customErrorText || !!(touched && invalid && error);
 
   const classes = classNames(rootClassName || css.root, className);
-  const closeButtonMessage = intl.formatMessage({ id: 'CustomSelect.later' });
-  const reviewee = <span className={css.reviewee}>{revieweeName}</span>;
 
+  const selectClasses = classNames(css.select, {
+    [css.selectSuccess]: valid,
+    [css.selectError]: hasError,
+  });
+
+  const errorText = customErrorText || error;
+
+  // Error message and input error styles are only shown if the
+  // field has been touched and the validation has failed.
+
+  const fieldMeta = { touched: hasError, error: errorText };
+  const selectProps = { className: selectClasses, id, ...input, ...rest };
+  console.log('🚀 | file: CustomSelect.js | line 46 | selectProps', selectProps);
   return (
-    <>
-      {/* <Select
-        closeMenuOnSelect={!isMulti}
-        hideSelectedOptions={false}
-        isMulti={isMulti}
-        components={animatedComponents}
-        options={options}
-        styles={customStyles}
-        selected={selectedOptions}
-        placeholder={''}
+    <div className={classes}>
+      {label ? (
+        <label htmlFor={id} className={labelClassName}>
+          {label}
+        </label>
+      ) : null}
+      <Select
+        {...selectProps}
         getOptionValue={value => {
           return value.key;
         }}
-        {...rest}
-        onChange={item => {
-          customOnChange && customOnChange(item);
-          setSelectedOptions(item);
-          input.onChange(item);
-        }}
-        theme={theme => ({
-          ...theme,
-          borderRadius: 0,
-          colors: {
-            ...theme.colors,
-            primary25: '#f4f4f4',
-            primary: 'black',
-          },
-        })}
-        onFocus={item => {
-          setIsFocused(true);
-          input.onFocus && input.onFocus(item);
-        }}
-        onBlur={item => {
-          setIsFocused(false);
-          input.onBlur && input.onBlur(item);
-        }}
-      /> */}
-    </>
+      />
+      <ValidationError fieldMeta={fieldMeta} />
+    </div>
   );
 };
 
@@ -76,18 +66,27 @@ const { bool, string } = PropTypes;
 CustomSelect.defaultProps = {
   className: null,
   rootClassName: null,
-  reviewSent: false,
-  sendReviewInProgress: false,
-  sendReviewError: null,
 };
 
 CustomSelect.propTypes = {
   className: string,
   rootClassName: string,
-  intl: intlShape.isRequired,
-  reviewSent: bool,
-  sendReviewInProgress: bool,
-  sendReviewError: propTypes.error,
 };
 
-export default injectIntl(CustomSelect);
+class FieldCustomSelectInput extends Component {
+  componentWillUnmount() {
+    // Unmounting happens too late if it is done inside Field component
+    // (Then Form has already registered its (new) fields and
+      console.log(2222222222)
+    // changing the value without corresponding field is prohibited in Final Form
+    if (this.props.onUnmount) {
+      console.log(111111111)
+      this.props.onUnmount();
+    }
+  }
+
+  render() {
+    return <Field component={CustomSelect} {...this.props} />;
+  }
+}
+export default FieldCustomSelectInput;

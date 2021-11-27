@@ -1,7 +1,8 @@
 import React from 'react';
 import { bool, func, shape, string } from 'prop-types';
+import config from '../../config';
 import { compose } from 'redux';
-import { Form as FinalForm } from 'react-final-form';
+import { Form as FinalForm, FormSpy } from 'react-final-form';
 import { intlShape, injectIntl, FormattedMessage } from '../../util/reactIntl';
 import classNames from 'classnames';
 import { propTypes } from '../../util/types';
@@ -10,10 +11,9 @@ import {
   autocompletePlaceSelected,
   composeValidators,
 } from '../../util/validators';
-import { Form, LocationAutocompleteInputField, Button, FieldTextInput } from '../../components';
+import { Form, LocationAutocompleteInputField, Button, FieldSelect } from '../../components';
 
 import css from './EditListingLocationForm.module.css';
-import CustomCategorySelectFieldMaybe from '../EditListingDescriptionForm/CustomCategorySelectFieldMaybe';
 
 const identity = v => v;
 
@@ -25,8 +25,10 @@ export const EditListingLocationFormComponent = props => (
         className,
         disabled,
         ready,
+        form,
         handleSubmit,
         intl,
+        initialValues,
         invalid,
         pristine,
         saveActionMsg,
@@ -34,8 +36,8 @@ export const EditListingLocationFormComponent = props => (
         updateInProgress,
         fetchErrors,
         values,
-        locRegionOptions,
       } = formRenderProps;
+      console.log('🚀 | file: EditListingLocationForm.js | line 41 | initialValues', initialValues);
       const titleRequiredMessage = intl.formatMessage({ id: 'EditListingLocationForm.address' });
       const addressPlaceholderMessage = intl.formatMessage({
         id: 'EditListingLocationForm.addressPlaceholder',
@@ -45,18 +47,6 @@ export const EditListingLocationFormComponent = props => (
       });
       const addressNotRecognizedMessage = intl.formatMessage({
         id: 'EditListingLocationForm.addressNotRecognized',
-      });
-
-      const optionalText = intl.formatMessage({
-        id: 'EditListingLocationForm.optionalText',
-      });
-
-      const locRegionLabel = intl.formatMessage(
-        { id: 'EditListingLocationForm.locRegionLabel' },
-        { optionalText: optionalText }
-      );
-      const locRegionPlaceholder = intl.formatMessage({
-        id: 'EditListingLocationForm.locRegionPlaceholder',
       });
 
       const { updateListingError, showListingsError } = fetchErrors || {};
@@ -76,11 +66,85 @@ export const EditListingLocationFormComponent = props => (
       const submitReady = (updated && pristine) || ready;
       const submitInProgress = updateInProgress;
       const submitDisabled = invalid || disabled || submitInProgress;
+      const filterConfig = config.custom.filters;
+      const islandConfig = filterConfig.find(f => f.id === 'locIsland');
+      const islands = islandConfig?.config.options;
+      const regionConfig = filterConfig.find(f => f.id === 'locRegion');
+      const regions = regionConfig?.config.options;
+      const districtConfig = filterConfig.find(f => f.id === 'locDistrict');
+      const districts = districtConfig.config.options;
+      const filteredRegions = regions?.filter(r => r.parent === values?.locIsland);
+      const filteredDistricts = districts?.filter(r => r.parent === values?.locRegion);
 
       return (
         <Form className={classes} onSubmit={handleSubmit}>
           {errorMessage}
           {errorMessageShowListing}
+          <FormSpy
+            subscription={{ values: true }}
+            onChange={val => {
+              console.log('🚀 | file: EditListingLocationForm.js | line 105 | form', values);
+              console.log('🚀 | file: EditListingLocationForm.js | line 105 | val', val);
+              if (val?.values?.locIsland !== values?.locIsland) {
+                form.change('locRegion', null);
+                form.change('locDistrict', null);
+              }
+              if (val?.values?.locRegion !== values?.locRegion) {
+                form.change('locDistrict', null);
+              }
+            }}
+          />
+
+          <div className={css.regionWrapper}>
+            <h2 className={css.title}>Where is this listing located?</h2>
+
+            <FieldSelect
+              className={css.category}
+              name={'locIsland'}
+              id={'locIsland'}
+              label={'Island'}
+            >
+              <option disabled value="">
+                {'Select Island'}
+              </option>
+              {islands.map(c => (
+                <option key={c.key} value={c.key}>
+                  {c.label}
+                </option>
+              ))}
+            </FieldSelect>
+            <FieldSelect
+              className={css.category}
+              name={'locRegion'}
+              id={'locRegion'}
+              label={'Region'}
+            >
+              <option disabled value="">
+                {'Select Region'}
+              </option>
+              {filteredRegions.map(c => (
+                <option key={c.key} value={c.key}>
+                  {c.label}
+                </option>
+              ))}
+            </FieldSelect>
+            <FieldSelect
+              className={css.category}
+              name={'locDistrict'}
+              id={'locDistrict'}
+              label={'District'}
+            >
+              <option disabled value="">
+                {'Select District'}
+              </option>
+              {filteredDistricts.map(c => (
+                <option key={c.key} value={c.key}>
+                  {c.label}
+                </option>
+              ))}
+            </FieldSelect>
+          </div>
+
           <LocationAutocompleteInputField
             className={css.locationAddress}
             inputClassName={css.locationAutocompleteInput}
@@ -98,15 +162,6 @@ export const EditListingLocationFormComponent = props => (
               autocompleteSearchRequired(addressRequiredMessage),
               autocompletePlaceSelected(addressNotRecognizedMessage)
             )}
-          />
-          <CustomCategorySelectFieldMaybe
-            id="locRegion"
-            name="locRegion"
-            options={locRegionOptions}
-            label={locRegionLabel}
-            placeholder={locRegionPlaceholder}
-            intl={intl}
-            showRequired
           />
 
           <Button

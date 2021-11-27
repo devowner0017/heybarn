@@ -12,6 +12,7 @@ const SectionImages = props => {
     title,
     listing,
     isOwnListing,
+    listingUnderEnquiry,
     editParams,
     handleViewPhotosClick,
     imageCarouselOpen,
@@ -30,7 +31,15 @@ const SectionImages = props => {
       <ActionBarMaybe isOwnListing={isOwnListing} listing={listing} editParams={editParams} />
     </div>
   ) : null;
-
+const listingStateBar = listing.id ? (
+  <div onClick={e => e.stopPropagation()}>
+    <ActionBarMaybe
+      listingUnderEnquiry={listingUnderEnquiry} isOwnListing={isOwnListing}
+      listing={listing}
+      editParams={editParams}
+    />
+  </div>
+) : null;
   const viewPhotosButton = hasImages ? (
     <button className={css.viewPhotos} onClick={handleViewPhotosClick}>
       <FormattedMessage
@@ -55,6 +64,7 @@ const SectionImages = props => {
       <div className={css.threeToTwoWrapper}>
         <div className={css.aspectWrapper} onClick={handleViewPhotosClick}>
           {actionBar}
+          {listingStateBar}
           <ResponsiveImage
             rootClassName={css.rootForImage}
             alt={title}

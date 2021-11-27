@@ -5,7 +5,7 @@ import { FormattedMessage } from '../../util/reactIntl';
 import { ensureOwnListing } from '../../util/data';
 import { findOptionsForSelectFilter } from '../../util/search';
 import { LISTING_STATE_DRAFT } from '../../util/types';
-import { getPropByName, capitalizeFirstLetter } from '../../util/userHelpers';
+import { getPropByName, ensureArray } from '../../util/userHelpers';
 import { ListingLink } from '../../components';
 import { EditListingDescriptionForm } from '../../forms';
 import { propTypes } from '../../util/types';
@@ -56,14 +56,25 @@ const EditListingDescriptionPanel = props => {
       <h1 className={css.title}>{panelTitle}</h1>
       <EditListingDescriptionForm
         className={css.form}
-        initialValues={{ title, description, preferredUse: publicData.preferredUse }}
+        initialValues={{
+          title,
+          description,
+          preferredUse: ensureArray(preferredUse).map(p =>
+            preferredUseOptions.find(o => o.key === p)
+          ),
+        }}
         saveActionMsg={submitButtonText}
         onSubmit={values => {
+          console.log('🚀 | file: EditListingDescriptionPanel.js | line 70 | values', values);
           const { title, description, category, preferredUse } = values;
           const updateValues = {
             title: title.trim(),
             description,
-            publicData: { listingType, category, preferredUse },
+            publicData: {
+              listingType,
+              category,
+              preferredUse: ensureArray(preferredUse).map(p => p?.key),
+            },
           };
           onSubmit(updateValues);
         }}
@@ -75,6 +86,7 @@ const EditListingDescriptionPanel = props => {
         fetchErrors={errors}
         categories={categoryOptions}
         preferredUse={preferredUseOptions}
+        listingType={listingType}
       />
     </div>
   );

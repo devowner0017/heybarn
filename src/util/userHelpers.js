@@ -37,3 +37,12 @@ export const getPropByName = (theObject, search) => {
     return result;
   }
 };
+
+/**
+ * Ensure array
+ *
+ * @param {Any or Array} value - the thing we want to check
+ *
+ * @return {Array} The thing we checked, either as originally sent, or as an array
+ */
+export const ensureArray = value => (value instanceof Array ? value : [value]);

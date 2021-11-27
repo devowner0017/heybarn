@@ -25,7 +25,7 @@ class EditListingLocationPanel extends Component {
     const { listing } = this.props;
     const currentListing = ensureOwnListing(listing);
     const { geolocation, publicData } = currentListing.attributes;
-    const { locRegion } = publicData;
+    const { locRegion, locIsland, locDistrict } = publicData;
     // Only render current search if full place object is available in the URL params
     // TODO bounds are missing - those need to be queried directly from Google Places
     const locationFieldsPresent = publicData?.location?.address && geolocation;
@@ -33,6 +33,8 @@ class EditListingLocationPanel extends Component {
     const { address } = location;
 
     return {
+      locIsland,
+      locDistrict,
       locRegion,
       location: locationFieldsPresent
         ? {
@@ -80,7 +82,11 @@ class EditListingLocationPanel extends Component {
           className={css.form}
           initialValues={this.state.initialValues}
           onSubmit={values => {
-            const { location, locRegion } = values;
+          console.log(
+            '🚀 | file: EditListingLocationPanel.js | line 105 | EditListingLocationPanel | render | values',
+            values
+          );
+          const { location, locRegion, locIsland, locDistrict } = values;
             const {
               selectedPlace: { address, origin },
             } = location;
@@ -88,12 +94,17 @@ class EditListingLocationPanel extends Component {
               geolocation: origin,
               publicData: {
                 location: { address },
-                locRegion: locRegion,
+                locRegion,
+                locIsland,
+                locDistrict,
               },
             };
             this.setState({
               initialValues: {
                 location: { search: address, selectedPlace: { address, origin } },
+                locRegion,
+                locIsland,
+                locDistrict,
               },
             });
             onSubmit(updateValues);

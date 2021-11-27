@@ -7,7 +7,12 @@ import { withRouter } from 'react-router-dom';
 import config from '../../config';
 import routeConfiguration from '../../routeConfiguration';
 import { findOptionsForSelectFilter } from '../../util/search';
-import { LISTING_STATE_PENDING_APPROVAL, LISTING_STATE_CLOSED, propTypes } from '../../util/types';
+import {
+  LISTING_STATE_PENDING_APPROVAL,
+  LISTING_STATE_CLOSED,
+  LISTING_UNDER_ENQUIRY,
+  propTypes,
+} from '../../util/types';
 import { types as sdkTypes } from '../../util/sdkLoader';
 import {
   LISTING_PAGE_DRAFT_VARIANT,
@@ -105,21 +110,21 @@ export class ListingPageComponent extends Component {
     } = this.props;
     const listingId = new UUID(params.id);
     const listing = getListing(listingId);
-    const typeOfLIsting = listing?.attributes?.publicData.listingType;
-    const contactingAs = typeOfLIsting === 'listing' ? 'renter' : 'host';
+    const typeOfListing = listing?.attributes?.publicData.listingType;
+    const contactingAs = typeOfListing === 'listing' ? 'renter' : 'host';
     // const { bookingDates, ...bookingData } = values;
 
     const initialValues = {
       contactingAs,
-      host: typeOfLIsting === 'listing' ? listing.author : currentUser,
-      guest: typeOfLIsting === 'listing' ? currentUser : listing.author,
+      host: typeOfListing === 'listing' ? listing.author : currentUser,
+      guest: typeOfListing === 'listing' ? currentUser : listing.author,
       confirmPaymentError: null,
     };
     const saveToSessionStorage = !this.props.currentUser;
     const routes = routeConfiguration();
     // Customize checkout page state with current listing and selected bookingDates
     const { setInitialValues } = findRouteByRouteName(
-      `TransactionInitPage${typeOfLIsting === 'listing' ? 'L' : 'A'}`,
+      `TransactionInitPage${typeOfListing === 'listing' ? 'L' : 'A'}`,
       routes
     );
     callSetInitialValues(setInitialValues, initialValues, saveToSessionStorage);
@@ -130,7 +135,7 @@ export class ListingPageComponent extends Component {
     // Redirect to CheckoutPage
     history.push(
       createResourceLocatorString(
-        `TransactionInitPage${typeOfLIsting === 'listing' ? 'L' : 'A'}`,
+        `TransactionInitPage${typeOfListing === 'listing' ? 'L' : 'A'}`,
         routes,
         { id: listing.id.uuid, slug: createSlug(listing.attributes.title) },
         {}
@@ -288,7 +293,13 @@ export class ListingPageComponent extends Component {
       title = '',
       publicData,
     } = currentListing.attributes;
-    const typeOfLIsting = publicData.listingType;
+    const { listingType: typeOfListing, listingState } = publicData;
+    const listingUnderEnquiry = listingState === LISTING_UNDER_ENQUIRY;
+
+    console.log(
+      '🚀 | file: ListingPage.js | line 110 | ListingPageComponent | submitContactUser | typeOfListing',
+      typeOfListing
+    );
     const richTitle = (
       <span>
         {richText(title, {
@@ -425,7 +436,7 @@ export class ListingPageComponent extends Component {
     const hostLink = (
       <NamedLink
         className={css.authorNameLink}
-        name={`${capitalize(typeOfLIsting)}Page`}
+        name={`${capitalize(typeOfListing)}Page`}
         params={params}
         to={{ hash: '#host' }}
       >
@@ -468,6 +479,7 @@ export class ListingPageComponent extends Component {
                 title={title}
                 listing={currentListing}
                 isOwnListing={isOwnListing}
+                listingUnderEnquiry={listingUnderEnquiry}
                 editParams={{
                   id: listingId.uuid,
                   slug: listingSlug,
@@ -518,6 +530,7 @@ export class ListingPageComponent extends Component {
                   className={css.bookingPanel}
                   listing={currentListing}
                   isOwnListing={isOwnListing}
+                  listingUnderEnquiry={listingUnderEnquiry}
                   unitType={unitType}
                   onSubmit={handleContactUser}
                   title={bookingTitle}
