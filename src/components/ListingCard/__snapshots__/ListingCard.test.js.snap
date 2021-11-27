@@ -1,15 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ListingCard matches snapshot 1`] = `
-<NamedLink
-  className="root"
-  name="Page"
-  params={
-    Object {
-      "id": "listing1",
-      "slug": "listing1-title",
-    }
-  }
+<ConditionalWrapper
+  condition={false}
+  defaultWrapper={[Function]}
+  wrapper={[Function]}
 >
   <div
     className="threeToTwoWrapper"
@@ -33,26 +28,6 @@ exports[`ListingCard matches snapshot 1`] = `
         }
       />
     </div>
-    <injectIntl(AvatarComponent)
-      className="avatar"
-      user={
-        Object {
-          "attributes": Object {
-            "banned": false,
-            "deleted": false,
-            "profile": Object {
-              "abbreviatedName": "TT",
-              "displayName": "user1 display name",
-            },
-          },
-          "id": UUID {
-            "_sdkType": "UUID",
-            "uuid": "user1",
-          },
-          "type": "user",
-        }
-      }
-    />
   </div>
   <div
     className="info"
@@ -83,5 +58,5 @@ exports[`ListingCard matches snapshot 1`] = `
       </div>
     </div>
   </div>
-</NamedLink>
+</ConditionalWrapper>
 `;
