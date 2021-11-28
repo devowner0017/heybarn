@@ -22,21 +22,15 @@ const EditListingPoliciesPanel = props => {
     panelUpdated,
     updateInProgress,
     errors,
+    listingType,
   } = props;
 
   const classes = classNames(rootClassName || css.root, className);
   const currentListing = ensureOwnListing(listing);
   const { publicData } = currentListing.attributes;
-
-  const isPublished = currentListing.id && currentListing.attributes.state !== LISTING_STATE_DRAFT;
-  const panelTitle = isPublished ? (
-    <FormattedMessage
-      id="EditListingPoliciesPanel.title"
-      values={{ listingTitle: <ListingLink listing={listing} /> }}
-    />
-  ) : (
-    <FormattedMessage id="EditListingPoliciesPanel.createListingTitle" />
-  );
+  const { rules, groundRules, accessFrequency } = publicData;
+  // const isPublished = currentListing.id && currentListing.attributes.state !== LISTING_STATE_DRAFT;
+  const panelTitle = <FormattedMessage id={`EditListingPoliciesPanel.create${listingType}Title`} />;
 
   return (
     <div className={classes}>
@@ -44,12 +38,18 @@ const EditListingPoliciesPanel = props => {
       <EditListingPoliciesForm
         className={css.form}
         publicData={publicData}
-        initialValues={{ rules: publicData.rules }}
+        initialValues={{ rules, groundRules, accessFrequency }}
         onSubmit={values => {
-          const { rules = '' } = values;
+          const {
+            rules = '',
+            groundRules,
+            accessFrequency,
+          } = values;
           const updateValues = {
             publicData: {
               rules,
+              groundRules,
+              accessFrequency,
             },
           };
           onSubmit(updateValues);
@@ -61,6 +61,7 @@ const EditListingPoliciesPanel = props => {
         updated={panelUpdated}
         updateInProgress={updateInProgress}
         fetchErrors={errors}
+        listingType={listingType}
       />
     </div>
   );

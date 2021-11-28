@@ -58,20 +58,19 @@ class EditListingLocationPanel extends Component {
       panelUpdated,
       updateInProgress,
       errors,
+      listingType,
     } = this.props;
 
     const classes = classNames(rootClassName || css.root, className);
     const currentListing = ensureOwnListing(listing);
 
-    const isPublished =
-      currentListing.id && currentListing.attributes.state !== LISTING_STATE_DRAFT;
-    const panelTitle = isPublished ? (
+    // const isPublished =
+    //   currentListing.id && currentListing.attributes.state !== LISTING_STATE_DRAFT;
+    const panelTitle = (
       <FormattedMessage
-        id="EditListingLocationPanel.title"
+        id={`EditListingLocationPanel.${listingType}Title`}
         values={{ listingTitle: <ListingLink listing={listing} /> }}
       />
-    ) : (
-      <FormattedMessage id="EditListingLocationPanel.createListingTitle" />
     );
     const locRegionOptions = findOptionsForSelectFilter('locRegion', config.custom.filters);
 
@@ -82,11 +81,11 @@ class EditListingLocationPanel extends Component {
           className={css.form}
           initialValues={this.state.initialValues}
           onSubmit={values => {
-          console.log(
-            '🚀 | file: EditListingLocationPanel.js | line 105 | EditListingLocationPanel | render | values',
-            values
-          );
-          const { location, locRegion, locIsland, locDistrict } = values;
+            console.log(
+              '🚀 | file: EditListingLocationPanel.js | line 105 | EditListingLocationPanel | render | values',
+              values
+            );
+            const { location, locRegion, locIsland, locDistrict } = values;
             const {
               selectedPlace: { address, origin },
             } = location;

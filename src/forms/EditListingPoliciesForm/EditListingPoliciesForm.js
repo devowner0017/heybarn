@@ -2,16 +2,20 @@ import React from 'react';
 import { bool, func, shape, string } from 'prop-types';
 import { compose } from 'redux';
 import { Form as FinalForm } from 'react-final-form';
+import arrayMutators from 'final-form-arrays';
+
 import { intlShape, injectIntl, FormattedMessage } from '../../util/reactIntl';
 import classNames from 'classnames';
 import { propTypes } from '../../util/types';
-import { Form, Button, FieldTextInput } from '../../components';
-
+import { Form, Button, FieldTextInput, FieldCheckboxGroup } from '../../components';
+import { findConfigForSelectFilter, findOptionsForSelectFilter } from '../../util/search';
+import config from '../../config';
 import css from './EditListingPoliciesForm.module.css';
 
 export const EditListingPoliciesFormComponent = props => (
   <FinalForm
     {...props}
+    mutators={{ ...arrayMutators }}
     render={formRenderProps => {
       const {
         className,
@@ -25,6 +29,8 @@ export const EditListingPoliciesFormComponent = props => (
         updated,
         updateInProgress,
         fetchErrors,
+        filterConfig,
+        listingType,
       } = formRenderProps;
 
       const rulesLabelMessage = intl.formatMessage({
@@ -51,20 +57,45 @@ export const EditListingPoliciesFormComponent = props => (
       const submitInProgress = updateInProgress;
       const submitDisabled = invalid || disabled || submitInProgress;
 
+      const options = findOptionsForSelectFilter(`${listingType}AccessFrequency`, filterConfig);
+      const groundRulesOptions = findOptionsForSelectFilter(`groundRules`, filterConfig);
+      console.log(
+        '🚀 | file: EditListingPoliciesForm.js | line 62 | groundRulesOptions',
+        groundRulesOptions
+      );
+
       return (
         <Form className={classes} onSubmit={handleSubmit}>
           {errorMessage}
           {errorMessageShowListing}
-
-          <FieldTextInput
-            id="rules"
-            name="rules"
-            className={css.policy}
-            type="textarea"
-            label={rulesLabelMessage}
-            placeholder={rulesPlaceholderMessage}
+          {listingType === 'listing' && (
+            <h2 className={css.title}>How much access would you permit?</h2>
+          )}
+          <FieldCheckboxGroup
+            className={css.features}
+            id={'accessFrequency'}
+            name={'accessFrequency'}
+            options={options}
           />
-
+          {listingType === 'listing' && (
+            <>
+              <h2 className={css.title}>Other common ground rules</h2>
+              <FieldCheckboxGroup
+                className={css.features}
+                id={'groundRules'}
+                name={'groundRules'}
+                options={groundRulesOptions}
+              />
+              <FieldTextInput
+                id="rules"
+                name="rules"
+                className={css.policy}
+                type="textarea"
+                label={rulesLabelMessage}
+                placeholder={rulesPlaceholderMessage}
+              />
+            </>
+          )}
           <Button
             className={css.submitButton}
             type="submit"
@@ -83,6 +114,7 @@ export const EditListingPoliciesFormComponent = props => (
 EditListingPoliciesFormComponent.defaultProps = {
   selectedPlace: null,
   updateError: null,
+  filterConfig: config.custom.filters,
 };
 
 EditListingPoliciesFormComponent.propTypes = {

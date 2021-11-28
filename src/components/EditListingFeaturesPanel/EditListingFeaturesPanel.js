@@ -25,24 +25,18 @@ const EditListingFeaturesPanel = props => {
     panelUpdated,
     updateInProgress,
     errors,
+    listingType,
   } = props;
 
   const classes = classNames(rootClassName || css.root, className);
   const currentListing = ensureListing(listing);
   const { publicData } = currentListing.attributes;
 
-  const isPublished = currentListing.id && currentListing.attributes.state !== LISTING_STATE_DRAFT;
-  const panelTitle = isPublished ? (
-    <FormattedMessage
-      id="EditListingFeaturesPanel.title"
-      values={{ listingTitle: <ListingLink listing={listing} /> }}
-    />
-  ) : (
-    <FormattedMessage id="EditListingFeaturesPanel.createListingTitle" />
-  );
+  // const isPublished = currentListing.id && currentListing.attributes.state !== LISTING_STATE_DRAFT;
+  const panelTitle = <FormattedMessage id={`EditListingFeaturesPanel.${listingType}Title`} />;
 
-  const amenities = publicData && publicData.amenities;
-  const initialValues = { amenities };
+  const { amenities, sizeOfSpace, ageOfSpace } = publicData || {};
+  const initialValues = { amenities, sizeOfSpace, ageOfSpace };
 
   return (
     <div className={classes}>
@@ -52,10 +46,9 @@ const EditListingFeaturesPanel = props => {
         name={FEATURES_NAME}
         initialValues={initialValues}
         onSubmit={values => {
-          const { amenities = [] } = values;
-
+          const { amenities = [], sizeOfSpace, ageOfSpace } = values;
           const updatedValues = {
-            publicData: { amenities },
+            publicData: { amenities, sizeOfSpace, ageOfSpace },
           };
           onSubmit(updatedValues);
         }}
@@ -66,6 +59,7 @@ const EditListingFeaturesPanel = props => {
         updated={panelUpdated}
         updateInProgress={updateInProgress}
         fetchErrors={errors}
+        listingType={listingType}
       />
     </div>
   );

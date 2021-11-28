@@ -11,8 +11,11 @@ import { EditListingDescriptionForm } from '../../forms';
 import { propTypes } from '../../util/types';
 import config from '../../config';
 import _ from 'lodash';
+import { types as sdkTypes } from '../../util/sdkLoader';
 
 import css from './EditListingDescriptionPanel.module.css';
+
+const { Money } = sdkTypes;
 
 const EditListingDescriptionPanel = props => {
   const {
@@ -30,8 +33,13 @@ const EditListingDescriptionPanel = props => {
     updateInProgress,
     errors,
   } = props;
+  console.log('🚀 | file: EditListingDescriptionPanel.js | line 33 | listing', listing);
   const classes = classNames(rootClassName || css.root, className);
   const currentListing = ensureOwnListing(listing);
+  console.log(
+    '🚀 | file: EditListingDescriptionPanel.js | line 36 | currentListing',
+    currentListing
+  );
   const { description, title, publicData } = currentListing.attributes;
   const { preferredUse } = publicData;
   const isPublished = currentListing.id && currentListing.attributes.state !== LISTING_STATE_DRAFT;
@@ -76,7 +84,10 @@ const EditListingDescriptionPanel = props => {
               preferredUse: ensureArray(preferredUse).map(p => p?.key),
             },
           };
-          onSubmit(updateValues);
+          const defaultPrice = new Money(0, config.currency);
+          const updateValuesWithPrice =
+            listingType === 'listing' ? updateValues : { ...updateValues, price: defaultPrice };
+          onSubmit(updateValuesWithPrice);
         }}
         onChange={onChange}
         disabled={disabled}

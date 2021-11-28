@@ -34,6 +34,9 @@ const FieldCheckboxRenderer = props => {
                 name={fields.name}
                 label={option.label}
                 value={option.key}
+                useCustomCheckbox={!!option.checkedIcon && !!option.unCheckedIcon}
+                checkedIcon={option.checkedIcon}
+                unCheckedIcon={option.unCheckedIcon}
               />
             </li>
           );

@@ -13,72 +13,14 @@ import {
   requiredObject,
 } from '../../util/validators';
 import { Form, Button, FieldTextInput, CustomSelect } from '../../components';
-import * as yup from 'yup';
 import css from './EditListingDescriptionForm.module.css';
 
 const TITLE_MAX_LENGTH = 60;
-const validationSchema = yup.object({
-  title: yup.string().required(),
-  description: yup.string().required(),
-  preferredUse: yup.lazy(val => {
-    console.log(val);
-    return Array.isArray(val)
-      ? yup
-          .array()
-          .of(
-            yup.object({
-              key: yup.string(),
-              label: yup.string(),
-            })
-          )
-          .required()
-      : yup
-          .object({
-            key: yup.string(),
-            label: yup.string(),
-          })
-          .required();
-  }),
-
-  // preferredUse: yup.mixed().when('isArray', {
-  //   is: Array.isArray,
-  //   then: yup.array().of(
-  //     yup.object({
-  //       key: yup.string(),
-  //       label: yup.string(),
-  //     })
-  //   ),
-  //   otherwise: yup
-  //     .object({
-  //       key: yup.string(),
-  //       label: yup.string(),
-  //     })
-  //     .required(),
-  // }),
-});
-
-// To be passed to React Final Form
-const validateFormValues = schema => async values => {
-  if (typeof schema === 'function') {
-    schema = schema();
-  }
-  try {
-    await schema.validate(values, { abortEarly: false });
-  } catch (err) {
-    console.log('🚀 | file: EditListingDescriptionForm.js | line 35 | err', err);
-    const errors = err.inner.reduce((formError, innerError) => {
-      return setIn(formError, innerError.path, innerError.message);
-    }, {});
-
-    return errors;
-  }
-};
-const validate = validateFormValues(validationSchema);
 
 const EditListingDescriptionFormComponent = props => (
   <FinalForm
     {...props}
-    validate={validate}
+    // validate={validate}
     render={formRenderProps => {
       const {
         preferredUse,
@@ -99,7 +41,6 @@ const EditListingDescriptionFormComponent = props => (
         '🚀 | file: EditListingDescriptionForm.js | line 36 | formRenderProps',
         formRenderProps
       );
-      console.log('🚀 | file: EditListingDescriptionForm.js | line 36 | listingType', listingType);
 
       const titleMessage = intl.formatMessage({
         id: 'EditListingDescriptionForm.title',

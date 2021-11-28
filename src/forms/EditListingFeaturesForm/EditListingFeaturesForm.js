@@ -4,12 +4,13 @@ import classNames from 'classnames';
 import { Form as FinalForm } from 'react-final-form';
 import arrayMutators from 'final-form-arrays';
 import { FormattedMessage } from '../../util/reactIntl';
-import { findOptionsForSelectFilter } from '../../util/search';
+import { findConfigForSelectFilter, findOptionsForSelectFilter } from '../../util/search';
 import { propTypes } from '../../util/types';
 import config from '../../config';
-import { Button, FieldCheckboxGroup, Form } from '../../components';
+import { Button, FieldCheckboxGroup, FieldNumberInput, Form } from '../../components';
 
 import css from './EditListingFeaturesForm.module.css';
+import { required } from '../../util/validators';
 
 const EditListingFeaturesFormComponent = props => (
   <FinalForm
@@ -29,6 +30,7 @@ const EditListingFeaturesFormComponent = props => (
         updateInProgress,
         fetchErrors,
         filterConfig,
+        listingType,
       } = formRenderProps;
 
       const classes = classNames(rootClassName || css.root, className);
@@ -50,13 +52,33 @@ const EditListingFeaturesFormComponent = props => (
       ) : null;
 
       const options = findOptionsForSelectFilter('amenities', filterConfig);
+      const sizeOptions = findConfigForSelectFilter('sizeOfSpace', filterConfig);
+      const ageOptions = findConfigForSelectFilter('ageOfSpace', filterConfig);
       return (
         <Form className={classes} onSubmit={handleSubmit}>
           {errorMessage}
           {errorMessageShowListing}
-
           <FieldCheckboxGroup className={css.features} id={name} name={name} options={options} />
-
+          {listingType === 'listing' && (
+            <>
+              <FieldNumberInput
+                className={classNames(css.features, css.numberInput)}
+                label={<FormattedMessage id="EditListingFeaturesForm.sizeOfSpaceLabel" />}
+                id={'sizeOfSpace'}
+                name={'sizeOfSpace'}
+                config={sizeOptions}
+                validate={required('Required')}
+              />
+              <FieldNumberInput
+                className={classNames(css.features, css.numberInput)}
+                label={<FormattedMessage id="EditListingFeaturesForm.ageOfSpaceLabel" />}
+                id={'ageOfSpace'}
+                name={'ageOfSpace'}
+                config={ageOptions}
+                validate={required('Required')}
+              />
+            </>
+          )}
           <Button
             className={css.submitButton}
             type="submit"

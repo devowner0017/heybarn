@@ -36,6 +36,7 @@ export const EditListingLocationFormComponent = props => (
         updateInProgress,
         fetchErrors,
         values,
+        listingType,
       } = formRenderProps;
       console.log('🚀 | file: EditListingLocationForm.js | line 41 | initialValues', initialValues);
       const titleRequiredMessage = intl.formatMessage({ id: 'EditListingLocationForm.address' });
@@ -96,7 +97,9 @@ export const EditListingLocationFormComponent = props => (
           />
 
           <div className={css.regionWrapper}>
-            <h2 className={css.title}>Where is this listing located?</h2>
+            {listingType === 'listing' && (
+              <h2 className={css.title}>Where is this listing located?</h2>
+            )}
 
             <FieldSelect
               className={css.category}

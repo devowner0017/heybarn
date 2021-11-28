@@ -2,6 +2,8 @@
 
 .root {
   position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .input {
@@ -80,10 +82,18 @@
 
 .text {
 }
+
 .textRoot {
   @apply --marketplaceListingAttributeFontStyles;
   color: var(--matterColor);
   margin-top: -1px;
   margin-bottom: 1px;
   cursor: pointer;
+}
+.checkedCustomIcon{
+ opacity: 1;
+}
+.unCheckedCustomIcon{
+ opacity: .2;
+
 }

@@ -33,7 +33,13 @@ export const isAnyFilterActive = (filterIds, urlQueryParams, filterConfigs) => {
   });
   return !!activeKey;
 };
-
+/**
+ * Check if the filter is currently active.
+ */
+export const findConfigForSelectFilter = (filterId, filters) => {
+  const filter = filters.find(f => f.id === filterId);
+  return filter && filter.config ? filter.config : [];
+};
 /**
  * Check if the filter is currently active.
  */

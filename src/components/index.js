@@ -90,6 +90,7 @@ export { default as FieldBirthdayInput } from './FieldBirthdayInput/FieldBirthda
 export { default as FieldCheckbox } from './FieldCheckbox/FieldCheckbox';
 export { default as FieldCurrencyInput } from './FieldCurrencyInput/FieldCurrencyInput';
 export { default as FieldDateInput } from './FieldDateInput/FieldDateInput';
+export { default as FieldNumberInput } from './FieldNumberInput/FieldNumberInput';
 export { default as FieldDateRangeController } from './FieldDateRangeController/FieldDateRangeController';
 export { default as FieldDateRangeInput } from './FieldDateRangeInput/FieldDateRangeInput';
 export { default as FieldRadioButton } from './FieldRadioButton/FieldRadioButton';
@@ -143,6 +144,7 @@ export { default as SearchMapInfoCard } from './SearchMapInfoCard/SearchMapInfoC
 export { default as SearchMapPriceLabel } from './SearchMapPriceLabel/SearchMapPriceLabel';
 export { default as SearchResultsPanel } from './SearchResultsPanel/SearchResultsPanel';
 export { default as SelectRegionFilter } from './SelectRegionFilter/SelectRegionFilter';
+export { default as SelectRangeFilter } from './SelectRangeFilter/SelectRangeFilter';
 export { default as SelectMultipleFilter } from './SelectMultipleFilter/SelectMultipleFilter';
 export { default as SelectSingleFilter } from './SelectSingleFilter/SelectSingleFilter';
 export { default as SortBy } from './SortBy/SortBy';

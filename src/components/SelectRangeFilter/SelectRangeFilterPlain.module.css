@@ -1,0 +1,70 @@
+@import '../../styles/propertySets.css';
+
+.root {
+  position: relative;
+  padding-top: 24px;
+  padding-bottom: 17px;
+}
+
+.filterLabel,
+.filterLabelSelected {
+   @apply --marketplaceH3FontStyles;
+display: flex;
+position: relative;
+
+justify-content: flex-end;
+  /* Baseline adjustment for label text */
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-bottom: 12px;
+}
+
+.filterLabel {
+  color: var(--matterColorDark);
+}
+
+.filterLabelSelected {
+  color: var(--marketplaceColor);
+}
+
+
+.labelButton {
+  /* Override button styles */
+  outline: none;
+  text-align: left;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  margin-right: auto;
+    margin-left: auto;
+}
+
+.formWrapper {
+  padding: 0 10px;
+}
+
+.clearButton {
+  @apply --marketplaceH5FontStyles;
+  font-weight: var(--fontWeightMedium);
+  color: var(--matterColorAnti);
+  position: absolute;
+  right: 10px;
+  top: 0px;
+margin: 0;
+  /* Layout */
+  display: inline;
+  padding: 0;
+
+  /* Override button styles */
+  outline: none;
+  text-align: left;
+  border: none;
+
+  &:focus,
+  &:hover {
+    color: var(--matterColor);
+  }
+}
+.clearButton > div {
+  margin-bottom: 6px
+}

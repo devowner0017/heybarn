@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { node, string } from 'prop-types';
 import classNames from 'classnames';
 import { Field } from 'react-final-form';
-
+import Checkbox from '@mui/material/Checkbox';
+import { getIcon } from '../../util/muiIconHelper';
 import css from './FieldCheckbox.module.css';
 
 const IconCheckbox = props => {
   const { className, checkedClassName, boxClassName } = props;
+
   return (
     <svg className={className} width="14" height="14" xmlns="http://www.w3.org/2000/svg">
       <g fill="none" fillRule="evenodd">
@@ -43,11 +45,13 @@ const FieldCheckboxComponent = props => {
     id,
     label,
     useSuccessColor,
+    useCustomCheckbox,
+    unCheckedIcon,
+    checkedIcon,
     ...rest
   } = props;
 
   const classes = classNames(rootClassName || css.root, className);
-
   // This is a workaround for a bug in Firefox & React Final Form.
   // https://github.com/final-form/react-final-form/issues/134
   const handleOnChange = (input, event) => {
@@ -56,6 +60,8 @@ const FieldCheckboxComponent = props => {
     onBlur(event);
   };
 
+  const checkRef = useRef();
+  const isChecked = checkRef?.current?.checked;
   const successColorVariantMaybe = useSuccessColor
     ? {
         checkedClassName: css.checkedSuccess,
@@ -65,11 +71,12 @@ const FieldCheckboxComponent = props => {
 
   return (
     <span className={classes}>
-      <Field type="checkbox" {...rest}>
+      <Field ref={checkRef} type="checkbox" {...rest}>
         {props => {
           const input = props.input;
           return (
             <input
+              ref={checkRef}
               id={id}
               className={css.input}
               {...input}
@@ -80,7 +87,15 @@ const FieldCheckboxComponent = props => {
       </Field>
       <label htmlFor={id} className={css.label}>
         <span className={css.checkboxWrapper}>
-          <IconCheckbox className={svgClassName} {...successColorVariantMaybe} />
+          {useCustomCheckbox ? (
+            isChecked ? (
+              getIcon(checkedIcon, { className: css.checkedCustomIcon, fontSize: 'large' })
+            ) : (
+              getIcon(unCheckedIcon, { className: css.unCheckedCustomIcon, fontSize: 'large' })
+            )
+          ) : (
+            <IconCheckbox className={svgClassName} {...successColorVariantMaybe} />
+          )}
         </span>
         <span className={classNames(css.text, textClassName || css.textRoot)}>{label}</span>
       </label>

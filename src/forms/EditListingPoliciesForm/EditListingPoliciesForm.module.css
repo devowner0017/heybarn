@@ -28,6 +28,7 @@
 }
 
 .policy {
+  margin-top: 2rem;
   composes: formMargins;
   flex-shrink: 0;
 }

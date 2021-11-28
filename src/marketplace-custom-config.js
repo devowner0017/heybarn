@@ -97,7 +97,6 @@ export const filters = [
       ],
     },
   },
-
   {
     id: 'preferredUse',
     label: 'Preferred Use',
@@ -118,7 +117,32 @@ export const filters = [
       ],
     },
   },
-
+  {
+    id: 'sizeOfSpace',
+    label: 'Size',
+    type: 'SelectRangeFilter',
+    group: 'primary',
+    queryParamNames: ['pub_sizeOfSpace'],
+    config: {
+      min: 1,
+      max: 1000,
+      step: 1,
+      customFormat: 'm2',
+    },
+  },
+  {
+    id: 'ageOfSpace',
+    label: 'Age',
+    type: 'SelectRangeFilter',
+    group: 'primary',
+    queryParamNames: ['pub_ageOfSpace'],
+    config: {
+      min: 1,
+      max: 50,
+      step: 1,
+      customFormat: 'years',
+    },
+  },
   {
     id: 'category',
     label: 'Category',
@@ -214,36 +238,166 @@ export const filters = [
       // to make filter customizations a bit easier.
       options: [
         {
-          key: 'towels',
-          label: 'Towels',
+          key: 'weatherproof',
+          label: 'Weatherproof',
+          checkedIcon: 'beachAccess',
+          unCheckedIcon: 'beachAccessOutlined',
         },
         {
-          key: 'bathroom',
-          label: 'Bathroom',
+          key: 'secure',
+          label: 'Secure',
+          checkedIcon: 'lock',
+          unCheckedIcon: 'lockOutlined',
         },
         {
-          key: 'swimming_pool',
-          label: 'Swimming pool',
+          key: 'mainsPower',
+          label: 'Mains power',
+          checkedIcon: 'power',
+          unCheckedIcon: 'powerOutlined',
         },
         {
-          key: 'own_drinks',
-          label: 'Own drinks allowed',
+          key: 'waterSupply',
+          label: 'Water supply',
+          checkedIcon: 'water',
+          unCheckedIcon: 'waterOutlined',
         },
         {
-          key: 'jacuzzi',
-          label: 'Jacuzzi',
+          key: 'internet',
+          label: 'Internet',
+          checkedIcon: 'internet',
+          unCheckedIcon: 'internetOutlined',
         },
         {
-          key: 'audiovisual_entertainment',
-          label: 'Audiovisual entertainment',
+          key: 'wc',
+          label: 'WC',
+          checkedIcon: 'wc',
+          unCheckedIcon: 'wcOutlined',
         },
         {
-          key: 'barbeque',
-          label: 'Barbeque',
+          key: 'parking',
+          label: 'Parking',
+          checkedIcon: 'parking',
+          unCheckedIcon: 'parkingOutlined',
+        },
+      ],
+    },
+  },
+  {
+    id: 'listingAccessFrequency',
+    label: 'How much access would you permit?',
+    type: 'none',
+    group: 'secondary',
+    listingType: ['listing'],
+    queryParamNames: ['pub_accessFrequency'],
+    config: {
+      // Optional modes: 'has_all', 'has_any'
+      // https://www.sharetribe.com/api-reference/marketplace.html#extended-data-filtering
+      searchMode: 'has_any',
+
+      // "key" is the option you see in Flex Console.
+      // "label" is set here for this web app's UI only.
+      // Note: label is not added through the translation files
+      // to make filter customizations a bit easier.
+      options: [
+        {
+          key: 'anytimeUnrestricted',
+          label: 'Anytime, access is not restricted',
         },
         {
-          key: 'own_food_allowed',
-          label: 'Own food allowed',
+          key: 'anytimeArranged',
+          label: 'Anytime, but by arrangement',
+        },
+        {
+          key: 'weekendsOnly',
+          label: 'prefer only weekends',
+        },
+        {
+          key: 'weekdaysOnly',
+          label: 'Prefer only office hours',
+        },
+        {
+          key: 'negotiable',
+          label: 'Negotiable',
+        },
+      ],
+    },
+  },
+  {
+    id: 'advertAccessFrequency',
+    label: 'Access Frequency',
+    type: 'none',
+    group: 'secondary',
+    listingType: ['advert'],
+    queryParamNames: ['pub_accessFrequency'],
+    config: {
+      // Optional modes: 'has_all', 'has_any'
+      // https://www.sharetribe.com/api-reference/marketplace.html#extended-data-filtering
+      searchMode: 'has_any',
+
+      // "key" is the option you see in Flex Console.
+      // "label" is set here for this web app's UI only.
+      // Note: label is not added through the translation files
+      // to make filter customizations a bit easier.
+      options: [
+        {
+          key: 'anytimeUnrestricted',
+          label: "All the time (I'll pretty much live there!)",
+        },
+        {
+          key: 'anytimeArranged',
+          label: "Anytime, but I'll let you know",
+        },
+        {
+          key: 'weekdaysOnly',
+          label: 'Typically only weekdays',
+        },
+        {
+          key: 'weekendsOnly',
+          label: 'Typically only weekends',
+        },
+        {
+          key: 'infrequently',
+          label: 'Pretty infrequently',
+        },
+        {
+          key: 'dropAndCollect',
+          label: 'Once to drop off, once to collect',
+        },
+        {
+          key: 'negotiable',
+          label: 'Negotiable',
+        },
+      ],
+    },
+  },
+  {
+    id: 'groundRules',
+    label: 'Ground rules',
+    type: 'none',
+    group: 'secondary',
+    listingType: ['listing'],
+    queryParamNames: ['pub_accessFrequency'],
+    config: {
+      // Optional modes: 'has_all', 'has_any'
+      // https://www.sharetribe.com/api-reference/marketplace.html#extended-data-filtering
+      searchMode: 'has_any',
+
+      // "key" is the option you see in Flex Console.
+      // "label" is set here for this web app's UI only.
+      // Note: label is not added through the translation files
+      // to make filter customizations a bit easier.
+      options: [
+        {
+          key: 'noSmoking',
+          label: 'No smoking',
+        },
+        {
+          key: 'noPets',
+          label: 'No pets',
+        },
+        {
+          key: 'noGuests',
+          label: 'No guests',
         },
       ],
     },

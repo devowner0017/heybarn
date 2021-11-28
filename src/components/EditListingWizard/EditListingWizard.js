@@ -46,14 +46,31 @@ export const TABS = [
   ...availabilityMaybe,
   PHOTOS,
 ];
-
+export const LISTING_TABS = [
+  DESCRIPTION,
+  LOCATION,
+  FEATURES,
+  POLICY,
+  ...availabilityMaybe,
+  PRICING,
+  PHOTOS,
+];
+export const ADVERT_TABS = [
+  DESCRIPTION,
+  LOCATION,
+  ...availabilityMaybe,
+  POLICY,
+  // FEATURES,
+  // PRICING,
+  PHOTOS,
+];
 // Tabs are horizontal in small screens
 const MAX_HORIZONTAL_NAV_SCREEN_WIDTH = 1023;
 
 const STRIPE_ONBOARDING_RETURN_URL_SUCCESS = 'success';
 const STRIPE_ONBOARDING_RETURN_URL_FAILURE = 'failure';
 
-const tabLabel = (intl, tab) => {
+const tabLabel = (intl, tab, listingType) => {
   let key = null;
   if (tab === DESCRIPTION) {
     key = 'EditListingWizard.tabLabelDescription';
@@ -62,7 +79,7 @@ const tabLabel = (intl, tab) => {
   } else if (tab === FEATURES) {
     key = 'EditListingWizard.tabLabelFeatures';
   } else if (tab === POLICY) {
-    key = 'EditListingWizard.tabLabelPolicy';
+    key = `EditListingWizard.tabLabel${listingType}Policy`;
   } else if (tab === PRICING) {
     key = 'EditListingWizard.tabLabelPricing';
   } else if (tab === AVAILABILITY) {
@@ -83,6 +100,7 @@ const tabLabel = (intl, tab) => {
  * @return true if tab / step is completed.
  */
 const tabCompleted = (tab, listing) => {
+  console.log('🚀 | file: EditListingWizard.js | line 103 | tabCompleted | listing', listing);
   const {
     availabilityPlan,
     description,
@@ -91,23 +109,31 @@ const tabCompleted = (tab, listing) => {
     title,
     publicData,
   } = listing.attributes;
+  const listingType = publicData?.listingType;
+  const isListing = listingType === 'listing';
   const images = listing.images;
 
   switch (tab) {
     case DESCRIPTION:
       return !!(description && title);
     case LOCATION:
-      return !!(geolocation && publicData && publicData.location && publicData.location.address);
+      return !!(
+        !!listingType &&
+        geolocation &&
+        publicData &&
+        publicData.location &&
+        publicData.location.address
+      );
     case FEATURES:
-      return !!(publicData && publicData.amenities);
+      return !!(!!listingType && publicData && publicData.amenities);
     case POLICY:
-      return !!(publicData && typeof publicData.rules !== 'undefined');
+      return !!(!!listingType && publicData && typeof publicData.rules !== 'undefined');
     case PRICING:
-      return !!price;
+      return !!listingType && isListing && !!price;
     case AVAILABILITY:
-      return !!availabilityPlan;
+      return !!listingType && !!availabilityPlan;
     case PHOTOS:
-      return images && images.length > 0;
+      return !!listingType && images && images.length > 0;
     default:
       return false;
   }
@@ -122,11 +148,13 @@ const tabCompleted = (tab, listing) => {
  *
  * @return object containing activity / editability of different tabs of this wizard
  */
-const tabsActive = (isNew, listing) => {
-  return TABS.reduce((acc, tab) => {
-    const previousTabIndex = TABS.findIndex(t => t === tab) - 1;
+const tabsActive = (isNew, listing, tabsForListingType) => {
+  return tabsForListingType.reduce((acc, tab) => {
+    const previousTabIndex = tabsForListingType.findIndex(t => t === tab) - 1;
     const isActive =
-      previousTabIndex >= 0 ? !isNew || tabCompleted(TABS[previousTabIndex], listing) : true;
+      previousTabIndex >= 0
+        ? !isNew || tabCompleted(tabsForListingType[previousTabIndex], listing)
+        : true;
     return { ...acc, [tab]: isActive };
   }, {});
 };
@@ -292,12 +320,14 @@ class EditListingWizard extends Component {
     const isDraft = currentListing.id && currentListing.attributes.state === LISTING_STATE_DRAFT;
 
     const listingType = isDraft ? publicData.listingType : isAdvert ? 'advert' : 'listing';
-    const tabsStatus = tabsActive(isNewListingFlow, currentListing);
+    const tabsForListingType = listingType === 'listing' ? LISTING_TABS : ADVERT_TABS;
+    const tabsStatus = tabsActive(isNewListingFlow, currentListing, tabsForListingType);
 
     // If selectedTab is not active, redirect to the beginning of wizard
     if (!tabsStatus[selectedTab]) {
-      const currentTabIndex = TABS.indexOf(selectedTab);
-      const nearestActiveTab = TABS.slice(0, currentTabIndex)
+      const currentTabIndex = tabsForListingType.indexOf(selectedTab);
+      const nearestActiveTab = tabsForListingType
+        .slice(0, currentTabIndex)
         .reverse()
         .find(t => tabsStatus[t]);
 
@@ -387,13 +417,13 @@ class EditListingWizard extends Component {
           navRootClassName={css.nav}
           tabRootClassName={css.tab}
         >
-          {TABS.map(tab => {
+          {tabsForListingType.map(tab => {
             return (
               <EditListingWizardTab
                 {...rest}
                 key={tab}
                 tabId={`${id}_${tab}`}
-                tabLabel={tabLabel(intl, tab)}
+                tabLabel={tabLabel(intl, tab, listingType)}
                 tabLinkProps={tabLink(tab)}
                 selected={selectedTab === tab}
                 disabled={isNewListingFlow && !tabsStatus[tab]}
@@ -401,7 +431,7 @@ class EditListingWizard extends Component {
                 intl={intl}
                 params={params}
                 listing={listing}
-                marketplaceTabs={TABS}
+                marketplaceTabs={tabsForListingType}
                 errors={errors}
                 handleCreateFlowTabScrolling={this.handleCreateFlowTabScrolling}
                 handlePublishListing={this.handlePublishListing}
