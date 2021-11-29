@@ -92,7 +92,7 @@ export const ListingCardComponent = props => {
   };
   return (
     <ConditionalWrapper
-      condition={ listingUnderEnquiry}
+      condition={!listingUnderEnquiry}
       wrapper={children => (
         <NamedLink
           className={classes}

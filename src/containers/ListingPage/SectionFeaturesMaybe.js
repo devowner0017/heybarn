@@ -5,7 +5,7 @@ import { PropertyGroup } from '../../components';
 import css from './ListingPage.module.css';
 
 const SectionFeaturesMaybe = props => {
-  const { options, publicData } = props;
+  const { options, publicData, listingType } = props;
   if (!publicData) {
     return null;
   }
@@ -14,7 +14,7 @@ const SectionFeaturesMaybe = props => {
   return (
     <div className={css.sectionFeatures}>
       <h2 className={css.featuresTitle}>
-        <FormattedMessage id="ListingPage.featuresTitle" />
+        <FormattedMessage id={`ListingPage.${listingType}FeaturesTitle`} />
       </h2>
       <PropertyGroup
         id="ListingPage.amenities"

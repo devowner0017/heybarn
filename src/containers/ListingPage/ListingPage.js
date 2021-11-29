@@ -293,7 +293,17 @@ export class ListingPageComponent extends Component {
       title = '',
       publicData,
     } = currentListing.attributes;
-    const { listingType: typeOfListing, listingState } = publicData;
+    const {
+      listingType: typeOfListing,
+      listingState,
+      locRegion: region,
+      preferredUse: need,
+    } = publicData;
+    console.log(
+      '🚀 | file: ListingPage.js | line 302 | ListingPageComponent | render | publicData',
+      publicData
+    );
+
     const listingUnderEnquiry = listingState === LISTING_UNDER_ENQUIRY;
 
     console.log(
@@ -378,7 +388,6 @@ export class ListingPageComponent extends Component {
     const userAndListingAuthorAvailable = !!(currentUser && authorAvailable);
     const isOwnListing =
       userAndListingAuthorAvailable && currentListing.author.id.uuid === currentUser.id.uuid;
-    const showContactUser = authorAvailable && (!currentUser || (currentUser && !isOwnListing));
 
     const currentAuthor = authorAvailable ? currentListing.author : null;
     const ensuredAuthor = ensureUser(currentAuthor);
@@ -445,14 +454,6 @@ export class ListingPageComponent extends Component {
     );
 
     const amenityOptions = findOptionsForSelectFilter('amenities', filterConfig);
-    const categoryOptions = findOptionsForSelectFilter('category', filterConfig);
-    const category =
-      publicData && publicData.category ? (
-        <span>
-          {categoryLabel(categoryOptions, publicData.category)}
-          <span className={css.separator}>•</span>
-        </span>
-      ) : null;
 
     return (
       <Page
@@ -498,32 +499,39 @@ export class ListingPageComponent extends Component {
                     priceTitle={priceTitle}
                     formattedPrice={formattedPrice}
                     richTitle={richTitle}
-                    category={category}
                     hostLink={hostLink}
-                    showContactUser={showContactUser}
                     onContactUser={this.onContactUser}
+                    region={region}
+                    preferredUse={need}
+                    listingType={typeOfListing}
                   />
-                  <SectionDescriptionMaybe description={description} />
-                  <SectionFeaturesMaybe options={amenityOptions} publicData={publicData} />
-                  <SectionRulesMaybe publicData={publicData} />
+                  <SectionDescriptionMaybe description={description} listingType={typeOfListing} />
+                  {listingType === 'listing' && (
+                    <SectionFeaturesMaybe
+                      options={amenityOptions}
+                      publicData={publicData}
+                      listingType={typeOfListing}
+                    />
+                  )}
+                  <SectionRulesMaybe publicData={publicData} listingType={typeOfListing} />
                   <SectionMapMaybe
                     geolocation={geolocation}
                     publicData={publicData}
                     listingId={currentListing.id}
+                    listingType={typeOfListing}
                   />
-                  <SectionReviews reviews={reviews} fetchReviewsError={fetchReviewsError} />
+                  <SectionReviews
+                    reviews={reviews}
+                    fetchReviewsError={fetchReviewsError}
+                    listingType={typeOfListing}
+                  />
                   <SectionHostMaybe
                     title={title}
                     listing={currentListing}
                     authorDisplayName={authorDisplayName}
-                    onContactUser={this.onContactUser}
-                    isEnquiryModalOpen={isAuthenticated && this.state.enquiryModalOpen}
-                    onCloseEnquiryModal={() => this.setState({ enquiryModalOpen: false })}
-                    sendEnquiryError={sendEnquiryError}
-                    sendEnquiryInProgress={sendEnquiryInProgress}
-                    onSubmitEnquiry={this.onSubmitEnquiry}
                     currentUser={currentUser}
                     onManageDisableScrolling={onManageDisableScrolling}
+                    listingType={typeOfListing}
                   />
                 </div>
                 <ContactPanel
@@ -544,23 +552,6 @@ export class ListingPageComponent extends Component {
                   fetchLineItemsInProgress={fetchLineItemsInProgress}
                   fetchLineItemsError={fetchLineItemsError}
                 />
-                {/* <BookingPanel
-                  className={css.bookingPanel}
-                  listing={currentListing}
-                  isOwnListing={isOwnListing}
-                  unitType={unitType}
-                  onSubmit={handleBookingSubmit}
-                  title={bookingTitle}
-                  subTitle={bookingSubTitle}
-                  authorDisplayName={authorDisplayName}
-                  onManageDisableScrolling={onManageDisableScrolling}
-                  timeSlots={timeSlots}
-                  fetchTimeSlotsError={fetchTimeSlotsError}
-                  onFetchTransactionLineItems={onFetchTransactionLineItems}
-                  lineItems={lineItems}
-                  fetchLineItemsInProgress={fetchLineItemsInProgress}
-                  fetchLineItemsError={fetchLineItemsError}
-                /> */}
               </div>
             </div>
           </LayoutWrapperMain>

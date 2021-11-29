@@ -57,10 +57,10 @@ export const LISTING_TABS = [
 ];
 export const ADVERT_TABS = [
   DESCRIPTION,
+  FEATURES,
   LOCATION,
   ...availabilityMaybe,
   POLICY,
-  // FEATURES,
   // PRICING,
   PHOTOS,
 ];

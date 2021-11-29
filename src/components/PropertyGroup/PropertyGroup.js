@@ -12,13 +12,22 @@ import classNames from 'classnames';
 import includes from 'lodash/includes';
 
 import css from './PropertyGroup.module.css';
+import { getIcon } from '../../util/muiIconHelper';
 
 const checkSelected = (options, selectedOptions) => {
-  return options.map(option => ({
-    key: option.key,
-    label: option.label,
-    isSelected: includes(selectedOptions, option.key),
-  }));
+  return options.map(option => {
+    console.log('🚀 | file: PropertyGroup.js | line 22 | checkSelected | option', option);
+    const isSelected = includes(selectedOptions, option.key);
+
+    return {
+      key: option.key,
+      label: option.label,
+      isSelected,
+      icon: isSelected
+        ? getIcon(option.checkedIcon, { className: css.checkedCustomIcon, fontSize: 'large' })
+        : getIcon(option.unCheckedIcon, { className: css.unCheckedCustomIcon, fontSize: 'large' }),
+    };
+  });
 };
 
 const IconCheck = props => {
@@ -37,12 +46,13 @@ const IconCheck = props => {
 };
 
 const Item = props => {
-  const { label, isSelected } = props;
+  const { label, isSelected, icon } = props;
+  console.log('🚀 | file: PropertyGroup.js | line 47 | props', props);
   const labelClass = isSelected ? css.selectedLabel : css.notSelectedLabel;
   return (
     <li className={css.item}>
       <span className={css.iconWrapper}>
-        <IconCheck isVisible={isSelected} />
+        {!!icon ? icon : <IconCheck isVisible={isSelected} />}
       </span>
       <div className={css.labelWrapper}>
         <span className={labelClass}>{label}</span>
@@ -57,11 +67,12 @@ const PropertyGroup = props => {
   const listClasses = twoColumns ? classNames(classes, css.twoColumns) : classes;
 
   const checked = checkSelected(options, selectedOptions);
+  console.log('🚀 | file: PropertyGroup.js | line 60 | checked', checked);
 
   return (
     <ul className={listClasses}>
       {checked.map(option => (
-        <Item key={`${id}.${option.key}`} label={option.label} isSelected={option.isSelected} />
+        <Item key={`${id}.${option.key}`} {...option} />
       ))}
     </ul>
   );

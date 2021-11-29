@@ -21,7 +21,6 @@ import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import WcIcon from '@mui/icons-material/Wc';
 
 export const getIcon = (iconName, iconProps) => {
-  let iconComponent;
   switch (iconName) {
     case 'beachAccess':
       return <BeachAccessIcon {...iconProps} />;

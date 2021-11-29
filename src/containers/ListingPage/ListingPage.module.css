@@ -22,17 +22,16 @@
 }
 
 .sectionImages {
-      margin: 0 auto;
-    max-width: 1600px;
+  margin: 0 auto;
+  max-width: 1600px;
 }
-.backButton{
+.backButton {
   padding: 20px;
 
   @media (--viewportLarge) {
     padding: 36px 36px 0 36px;
   }
 }
-
 
 .threeToTwoWrapper {
   /* Layout */
@@ -375,6 +374,9 @@
     margin-top: 0;
     margin-bottom: 0;
     color: var(--matterColor);
+  }
+  & :last-child {
+    padding: 0.3rem 0;
   }
 }
 

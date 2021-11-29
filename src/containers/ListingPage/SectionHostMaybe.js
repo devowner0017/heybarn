@@ -7,17 +7,9 @@ import css from './ListingPage.module.css';
 
 const SectionHostMaybe = props => {
   const {
-    title,
     listing,
-    authorDisplayName,
-    onContactUser,
-    isEnquiryModalOpen,
-    onCloseEnquiryModal,
-    sendEnquiryError,
-    sendEnquiryInProgress,
-    onSubmitEnquiry,
     currentUser,
-    onManageDisableScrolling,
+    listingType,
   } = props;
 
   if (!listing.author) {
@@ -27,27 +19,9 @@ const SectionHostMaybe = props => {
   return (
     <div id="host" className={css.sectionHost}>
       <h2 className={css.yourHostHeading}>
-        <FormattedMessage id="ListingPage.yourHostHeading" />
+        <FormattedMessage id={`ListingPage.${listingType}yourHostHeading`} />
       </h2>
-      <UserCard user={listing.author} currentUser={currentUser} onContactUser={onContactUser} />
-      <Modal
-        id="ListingPage.enquiry"
-        contentClassName={css.enquiryModalContent}
-        isOpen={isEnquiryModalOpen}
-        onClose={onCloseEnquiryModal}
-        usePortal
-        onManageDisableScrolling={onManageDisableScrolling}
-      >
-        <EnquiryForm
-          className={css.enquiryForm}
-          submitButtonWrapperClassName={css.enquirySubmitButtonWrapper}
-          listingTitle={title}
-          authorDisplayName={authorDisplayName}
-          sendEnquiryError={sendEnquiryError}
-          onSubmit={onSubmitEnquiry}
-          inProgress={sendEnquiryInProgress}
-        />
-      </Modal>
+      <UserCard user={listing.author} currentUser={currentUser}  />
     </div>
   );
 };
