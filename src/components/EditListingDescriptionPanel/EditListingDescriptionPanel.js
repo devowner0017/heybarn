@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { FormattedMessage } from '../../util/reactIntl';
 import { ensureOwnListing } from '../../util/data';
 import { findOptionsForSelectFilter } from '../../util/search';
-import { LISTING_STATE_DRAFT } from '../../util/types';
+import { LISTING_LIVE, LISTING_STATE_DRAFT } from '../../util/types';
 import { getPropByName, ensureArray } from '../../util/userHelpers';
 import { ListingLink } from '../../components';
 import { EditListingDescriptionForm } from '../../forms';
@@ -41,7 +41,7 @@ const EditListingDescriptionPanel = props => {
     currentListing
   );
   const { description, title, publicData } = currentListing.attributes;
-  const { preferredUse } = publicData;
+  const { preferredUse, listingState: currentListingState } = publicData;
   const isPublished = currentListing.id && currentListing.attributes.state !== LISTING_STATE_DRAFT;
   const panelTitle = isPublished ? (
     <FormattedMessage
@@ -56,7 +56,6 @@ const EditListingDescriptionPanel = props => {
       />
     </>
   );
-
   const categoryOptions = findOptionsForSelectFilter('category', config.custom.filters);
   const preferredUseOptions = findOptionsForSelectFilter('preferredUse', config.custom.filters);
   return (
@@ -75,11 +74,16 @@ const EditListingDescriptionPanel = props => {
         onSubmit={values => {
           console.log('🚀 | file: EditListingDescriptionPanel.js | line 70 | values', values);
           const { title, description, category, preferredUse } = values;
+          if (!currentListingState) {
+            listingState;
+          }
+          const listingState = !currentListingState ? LISTING_LIVE : null;
           const updateValues = {
             title: title.trim(),
             description,
             publicData: {
               listingType,
+              listingState,
               category,
               preferredUse: ensureArray(preferredUse).map(p => p?.key),
             },

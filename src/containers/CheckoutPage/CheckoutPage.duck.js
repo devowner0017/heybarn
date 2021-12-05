@@ -199,6 +199,7 @@ export const initiateOrder = (orderParams, transactionId) => (dispatch, getState
     '🚀 | file: CheckoutPage.duck.js | line 169 | initiateOrder | orderParams',
     orderParams
   );
+
   dispatch(initiateOrderRequest());
 
   // If we already have a transaction ID, we should transition, not
@@ -280,7 +281,11 @@ export const confirmPayment = orderParams => (dispatch, getState, sdk) => {
   const bodyParams = {
     id: orderParams.transactionId,
     transition: TRANSITION_CONFIRM_PAYMENT,
-    params: {},
+    params: {
+      protectedData: {
+        recurringResponse: orderParams.recurringResponse,
+      },
+    },
   };
 
   return sdk.transactions
@@ -306,25 +311,14 @@ export const createRecurring = orderParams => (dispatch, getState, sdk) => {
   console.log('🚀 | file: CheckoutPage.duck.js | line 246 | orderParams', orderParams);
   dispatch(createRecurringRequest());
 
-  const bodyParams = {
-    id: orderParams.transactionId,
-    transition: TRANSITION_CONFIRM_PAYMENT,
-    params: {},
-  };
   return createRentalPayments(orderParams)
     .then(recurringResponse => {
       console.log(
         '🚀 | file: CheckoutPage.duck.js | line 290 | returncreateRentalPayment | recurringResponse',
         recurringResponse
       );
-
-      // return sdk.transactions
-      //   .transition(bodyParams)
-      //   .then(response => {
-      //     const order = response.data.data;
-      //     dispatch(createRecurringSuccess(order.id));
-      //     return order;
-      //   })
+      createRecurringSuccess(recurringResponse);
+      return recurringResponse;
     })
     .catch(e => {
       dispatch(createRecurringError(storableError(e)));

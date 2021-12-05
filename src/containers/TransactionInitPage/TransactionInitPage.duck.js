@@ -12,7 +12,8 @@ import {
 import { addMarketplaceEntities } from '../../ducks/marketplaceData.duck';
 import { fetchCurrentUser, fetchCurrentUserHasOrdersSuccess } from '../../ducks/user.duck';
 import { updateListingState } from '../../util/api';
-import { LISTING_UNDER_ENQUIRY } from '../../util/types'
+import { LISTING_LIVE, LISTING_UNDER_ENQUIRY } from '../../util/types';
+import { queryOwnListings } from '../ManageListingsPage/ManageListingsPage.duck';
 const { UUID } = sdkTypes;
 
 // ================ Action types ================ //
@@ -139,7 +140,7 @@ export default function checkoutPageReducer(state = initialState, action = {}) {
  * @param {Array<UUID>} listingIds listing IDs to select from the store
  */
 export const getOwnListingsById = (state, listingIds) => {
-  const { ownEntities } = state.TransactionInitPage;
+  const { ownEntities } = state.ManageListingsPage;
   const resources = listingIds.map(id => ({
     id,
     type: 'ownListing',
@@ -248,18 +249,12 @@ export const showListing = (listingId, isOwn = false) => (dispatch, getState, sd
 };
 
 export const createTransaction = orderParams => (dispatch, getState, sdk) => {
-  console.log('🚀 | file: TransactionInitPage.duck.js | line 250 | orderParams', orderParams);
   dispatch(initiateOrderRequest());
 
   // TODO UPDATE THIS WHEN WE BUILD THE OTHER SIDE OF THE MARKETPLACE
   const isRequestFromHost = orderParams.protectedData.contactingAs === 'host';
-  console.log(
-    '🚀 | file: TransactionInitPage.duck.js | line 255 | isRequestFromHost',
-    isRequestFromHost
-  );
 
   const transition = isRequestFromHost ? TRANSITION_HOST_FEE_PAID : TRANSITION_RENTER_FEE_PAID;
-  console.log('🚀 | file: TransactionInitPage.duck.js | line 258 | transition', transition);
 
   const bodyParams = {
     processAlias: config.bookingProcessAlias,
@@ -278,21 +273,13 @@ export const createTransaction = orderParams => (dispatch, getState, sdk) => {
     dispatch(fetchCurrentUserHasOrdersSuccess(true));
 
     updateListingState({ id: orderParams.listingId, listingState: LISTING_UNDER_ENQUIRY })
-      .then(r => {
-        console.log(
-          '🚀 | file: TransactionInitPage.duck.js | line 284 | updateListingState | r',
-          r
-        );
-      })
-      .catch(e => {
-        console.log('🚀 | file: TransactionInitPage.duck.js | line 289 | e', e);
-      });
+      .then(r => {})
+      .catch(e => {});
     return order;
   };
 
   const handleError = e => {
     dispatch(initiateOrderError(storableError(e)));
-    console.log('🚀 | file: TransactionInitPage.duck.js | line 294 | e', e);
     log.error(e, 'initiate-order-failed', {
       listingId: orderParams.listingId.uuid,
     });
@@ -306,7 +293,6 @@ export const createTransaction = orderParams => (dispatch, getState, sdk) => {
 };
 
 export const sendMessage = params => (dispatch, getState, sdk) => {
-  console.log('🚀 | file: TransactionInitPage.duck.js | line 289 | params', params);
   const message = params.message;
   const orderId = params.tx.id;
   const paymentIntent = params.paymentIntent;
@@ -350,28 +336,34 @@ export const fetchOwnListings = listingType => (dispatch, getState, sdk) => {
   dispatch(queryListingsRequest());
   const { currentUser } = getState().user;
   if (!currentUser) return null;
-  const params = {
-    authorId: currentUser.id,
-    per_page: 100,
-    include: ['images'],
-    'fields.image': ['variants.landscape-crop', 'variants.landscape-crop2x'],
-    'limit.images': 1,
-  };
-  return sdk.ownListings
-    .query(params)
-    .then(response => {
-      console.log('🚀 | file: TransactionInitPage.duck.js | line 334 | params', params);
-      console.log('🚀 | file: TransactionInitPage.duck.js | line 336 | response', response);
-      const filteredResults = response.data.data.filter(r => {
-        const responseListingType = r.attributes.publicData.listingType;
-        return responseListingType === listingType;
+  return dispatch(
+    queryOwnListings({
+      page: 1,
+      pub_listingType: listingType,
+      perPage: 100,
+      include: ['images'],
+      'fields.image': ['variants.landscape-crop', 'variants.landscape-crop2x'],
+      'limit.images': 1,
+    })
+  )
+    .then(ownListingsResponse => {
+      const filteredResults = ownListingsResponse.data.data.filter(r => {
+        const {
+          publicData: { listingType: responseListingType, listingState },
+          state,
+        } = r.attributes;
+        return (
+          responseListingType === listingType &&
+          listingState === LISTING_LIVE &&
+          state === 'published'
+        );
       });
-      let alteredResponse = response;
+      let alteredResponse = ownListingsResponse;
       alteredResponse.data.data = filteredResults;
       alteredResponse.data.meta.totalItems = filteredResults.length;
       dispatch(addOwnEntities(alteredResponse));
       dispatch(queryListingsSuccess(alteredResponse));
-      return response;
+      return alteredResponse;
     })
     .catch(e => {
       dispatch(queryListingsError(storableError(e)));

@@ -57,6 +57,7 @@ const scrollToTab = (currentTab, scrollLeft, setScrollLeft) => {
 
 const LayoutWrapperManageListingsSideNavComponent = props => {
   const [scrollLeft, setScrollLeft] = useGlobalState('scrollLeft');
+  const { extraTabs } = props;
   useEffect(() => {
     const { currentTab, viewport } = props;
 
@@ -97,17 +98,17 @@ const LayoutWrapperManageListingsSideNavComponent = props => {
         name: 'ManageAdvertsPage',
       },
     },
-    {
-      text: <FormattedMessage id="LayoutWrapperManageListingsSideNav.inboxTab" />,
-      selected: currentTab === 'InboxTab',
-      id: 'InboxTab',
-      linkProps: {
-        name: 'InboxBasePage',
-      },
-    },
+    // {
+    //   text: <FormattedMessage id="LayoutWrapperManageListingsSideNav.inboxTab" />,
+    //   selected: currentTab === 'InboxTab',
+    //   id: 'InboxTab',
+    //   linkProps: {
+    //     name: 'InboxBasePage',
+    //   },
+    // },
   ];
 
-  return <LayoutWrapperSideNav tabs={tabs} />;
+  return <LayoutWrapperSideNav tabs={[...tabs, ...extraTabs]} />;
 };
 
 LayoutWrapperManageListingsSideNavComponent.defaultProps = {

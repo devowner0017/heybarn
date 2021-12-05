@@ -11,6 +11,7 @@ export const HEADING_RENTER_ENQUIRED = 'renter_enquired';
 export const HEADING_HOST_DECLINED_COMMUNICATION = 'host_declined_communication';
 export const HEADING_WAS_APPROVED_BY_RENTER = 'was_approved_by_renter';
 export const HEADING_RENTAL_AGREEMENT_DISCUSSION = 'rental_agreement_discussion';
+export const HEADING_RENTAL_AGREEMENT_REQUESTED = 'rental_agreement_requested';
 export const HEADING_REVERSED_TRANSACTION_FLOW = 'reversed_transaction_flow';
 export const HEADING_RENTER_DECLINED_COMMUNICATION = 'renter_declined_communication';
 export const HEADING_CANCELLED_DURING_RAD = 'cancelled_during_rad';
@@ -279,6 +280,23 @@ const PanelHeading = props => {
             <p className={css.transactionInfoMessage}>
               <FormattedMessage
                 id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_cancelledDuringRadSubTitle`}
+              />
+            </p>
+          ) : null}
+        </HeadingWithSubtitle>
+      );
+    case HEADING_RENTAL_AGREEMENT_REQUESTED:
+      return (
+        <HeadingWithSubtitle
+          className={titleClasses}
+          id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementRequestedTitle`}
+          // subId={`TransactionPanel.${isCustomer ? 'c' : 'p'}_renterEnquiredSubTitle`}
+          values={{ providerName, listingLink, customerName, listingLink }}
+        >
+          {!listingDeleted ? (
+            <p className={css.transactionInfoMessage}>
+              <FormattedMessage
+                id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementRequestedSubTitle`}
               />
             </p>
           ) : null}

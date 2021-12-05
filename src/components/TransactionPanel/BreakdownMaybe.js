@@ -10,6 +10,7 @@ import css from './TransactionPanel.module.css';
 const BreakdownMaybe = props => {
   const { className, rootClassName, breakdownClassName, transaction, transactionRole } = props;
   const loaded = transaction && transaction.id && transaction.booking && transaction.booking.id;
+  console.log("🚀 | file: BreakdownMaybe.js | line 13 | loaded", loaded);
 
   const classes = classNames(rootClassName || css.breakdownMaybe, className);
   const breakdownClasses = classNames(breakdownClassName || css.breakdown);

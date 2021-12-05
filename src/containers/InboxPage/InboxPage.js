@@ -16,6 +16,7 @@ import {
   txHasHostDeclined,
   txHasRenterDeclined,
   txIsRentalAgreementDiscussion,
+  txIsRentalAgreementRequested,
   txIsReversedTransactionFlow,
   txIsCancelledDuringRad,
   txIsRentalAgreementSent,
@@ -113,6 +114,16 @@ export const txState = (intl, tx, type) => {
       stateClassName: css.stateActionNeeded,
       state: intl.formatMessage({
         id: 'InboxPage.stateAgreementDiscussion',
+      }),
+    };
+  } else if (txIsRentalAgreementRequested(tx)) {
+    return {
+      nameClassName: isOrder ? css.nameNotEmphasized : css.nameEmphasized,
+      // bookingClassName: css.bookingActionNeeded,
+      lastTransitionedAtClassName: css.lastTransitionedAtEmphasized,
+      stateClassName: isOrder ? css.stateNoActionNeeded : css.stateActionNeeded,
+      state: intl.formatMessage({
+        id: 'InboxPage.stateAgreementRequested',
       }),
     };
   } else if (txIsReversedTransactionFlow(tx)) {
@@ -430,7 +441,7 @@ export const InboxPageComponent = props => {
           />
           <UserNav selectedPageName={`InboxPage`} />
         </LayoutWrapperTopbar>
-        <LayoutWrapperManageListingsSideNav currentTab={`InboxTab`} />
+        <LayoutWrapperManageListingsSideNav currentTab={`InboxTab`} extraTabs={tabs} />
         <LayoutWrapperMain className={css.inboxPageWrapper}>
           {error}
           <h1 className={css.title}>

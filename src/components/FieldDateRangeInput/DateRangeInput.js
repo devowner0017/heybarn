@@ -152,32 +152,57 @@ class DateRangeInputComponent extends Component {
   }
 
   onDatesChange(dates) {
+    console.log(
+      '🚀 | file: DateRangeInput.js | line 155 | DateRangeInputComponent | onDatesChange | dates',
+      dates
+    );
     const { unitType, timeSlots } = this.props;
-    const { startDate, endDate } = dates;
+    const { startDate, endDate, disabled } = dates;
 
     // both dates are selected, a new start date before the previous start
     // date is selected
-    const startDateUpdated =
-      timeSlots &&
-      startDate &&
-      endDate &&
-      this.state.currentStartDate &&
-      startDate.isBefore(this.state.currentStartDate);
+    const startDateOnly = disabled
+      ? true
+      : startDate.isBefore(this.state.currentStartDate) && timeSlots;
+
+    const startDateUpdated = startDate && endDate && this.state.currentStartDate && startDateOnly;
+    console.log(
+      '🚀 | file: DateRangeInput.js | line 167 | DateRangeInputComponent | onDatesChange | startDateUpdated',
+      startDateUpdated
+    );
 
     // clear the end date in case a blocked date can be found
     // between previous start date and new start date
-    const clearEndDate = startDateUpdated
+    const clearEndDate = disabled
+      ? true
+      : startDateUpdated
       ? isBlockedBetween(timeSlots, startDate, moment(this.state.currentStartDate).add(1, 'days'))
       : false;
 
+    console.log(
+      '🚀 | file: DateRangeInput.js | line 177 | DateRangeInputComponent | onDatesChange | clearEndDate',
+      clearEndDate
+    );
+    console.log(
+      '🚀 | file: DateRangeInput.js | line 187 | DateRangeInputComponent | onDatesChange | startDate',
+      startDate
+    );
     const startDateAsDate = startDate instanceof moment ? startDate.toDate() : null;
+    console.log(
+      '🚀 | file: DateRangeInput.js | line 191 | DateRangeInputComponent | onDatesChange | startDateAsDate',
+      startDateAsDate
+    );
     const endDateAsDate = clearEndDate ? null : pickerEndDateToApiDate(unitType, endDate);
+    console.log(
+      '🚀 | file: DateRangeInput.js | line 193 | DateRangeInputComponent | onDatesChange | endDateAsDate',
+      endDateAsDate
+    );
 
     this.setState(() => ({
       currentStartDate: startDateAsDate,
     }));
 
-    this.props.onChange({ startDate: startDateAsDate, endDate: endDateAsDate });
+    this.props.onChange({ startDate: startDateAsDate, endDate: endDateAsDate, test: 'test' });
   }
 
   onFocusChange(focusedInput) {
@@ -216,8 +241,13 @@ class DateRangeInputComponent extends Component {
       children,
       render,
       timeSlots,
+      disabled,
       ...datePickerProps
     } = this.props;
+    console.log(
+      '🚀 | file: DateRangeInput.js | line 246 | DateRangeInputComponent | render | disabled',
+      disabled
+    );
     /* eslint-enable no-unused-vars */
 
     const isDaily = unitType === LINE_ITEM_DAY;
@@ -236,13 +266,9 @@ class DateRangeInputComponent extends Component {
       unitType
     );
 
-    let isOutsideRange = isOutsideRangeFn(
-      timeSlots,
-      startDate,
-      endDate,
-      this.state.focusedInput,
-      unitType
-    );
+    let isOutsideRange = disabled
+      ? _ => false
+      : isOutsideRangeFn(timeSlots, startDate, endDate, this.state.focusedInput, unitType);
 
     const startDatePlaceholderTxt =
       startDatePlaceholderText ||
@@ -273,7 +299,12 @@ class DateRangeInputComponent extends Component {
           startDate={startDate}
           endDate={endDate}
           minimumNights={isDaily ? 0 : 1}
-          onDatesChange={this.onDatesChange}
+          onDatesChange={vals =>
+            this.onDatesChange({
+              ...vals,
+              disabled: datePickerProps?.disabled?.includes('endDate'),
+            })
+          }
           startDatePlaceholderText={startDatePlaceholderTxt}
           endDatePlaceholderText={endDatePlaceholderTxt}
           screenReaderInputMessage={screenReaderInputText}

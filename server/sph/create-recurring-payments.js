@@ -18,6 +18,8 @@ module.exports = async (req, res) => {
     transactionId,
     hostStripeId,
     providerUserId,
+    startTimestamp,
+    endTimestamp,
   } = req.body;
   console.log('🚀 | file: create-recurring-payments.js | line 10 | req.body;', req.body);
   const { author, hostStripeAccount } = await integrationSdk.users
@@ -62,6 +64,9 @@ module.exports = async (req, res) => {
       destination: hostStripeAccount.attributes?.stripeAccountId,
     },
     payment_behavior: 'allow_incomplete',
+    proration_behavior: 'none',
+    trial_end: startTimestamp,
+    cancel_at: endTimestamp,
     metadata: { listingId, transactionId },
   };
 
@@ -71,6 +76,10 @@ module.exports = async (req, res) => {
     .then(apiResponse => {
       console.log('🚀 | file: create-recurring-payments.js | line 21 | apiResponse', apiResponse);
       const serialRes = serialize(apiResponse);
+      console.log(
+        '🚀 | file: create-recurring-payments.js | line 74 | module.exports= | serialRes',
+        serialRes
+      );
       return res
         .status(200)
         .set('Content-Type', 'application/transit+json')
@@ -78,8 +87,13 @@ module.exports = async (req, res) => {
         .end();
     })
     .catch(e => {
-      console.log(e);
-      return e;
+      console.log('🚀 | file: create-recurring-payments.js | line 91 | module.exports= | e', e);
+      const serialErr = serialize(e);
+      return res
+        .status(500)
+        .set('Content-Type', 'application/transit+json')
+        .send(serialErr)
+        .end();
       // handleError(res, e);
     });
 };

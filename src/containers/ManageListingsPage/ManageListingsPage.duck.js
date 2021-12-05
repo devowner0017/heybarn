@@ -259,7 +259,6 @@ export const queryTransactionsError = e => ({
 
 // Throwing error for new (loadData may need that info)
 export const queryOwnListings = queryParams => (dispatch, getState, sdk) => {
-console.log("🚀 | file: ManageListingsPage.duck.js | line 262 | queryParams", queryParams);
   dispatch(queryListingsRequest(queryParams));
   const { perPage, ...rest } = queryParams;
   const params = { ...rest, per_page: perPage };
@@ -275,7 +274,8 @@ console.log("🚀 | file: ManageListingsPage.duck.js | line 262 | queryParams", 
       alteredResponse.data.data = filteredResults;
       alteredResponse.data.meta.totalItems = filteredResults.length;
       dispatch(addOwnEntities(alteredResponse));
-      return dispatch(queryListingsSuccess(alteredResponse));
+      dispatch(queryListingsSuccess(alteredResponse));
+      return alteredResponse;
     })
     .catch(e => {
       dispatch(queryListingsError(storableError(e)));
@@ -284,7 +284,6 @@ console.log("🚀 | file: ManageListingsPage.duck.js | line 262 | queryParams", 
 };
 // Throwing error for new (loadData may need that info)
 export const queryOwnTransactions = queryParams => (dispatch, getState, sdk) => {
-  console.log('🚀 | file: ManageListingsPage.duck.js | line 286 | queryParams', queryParams);
 
   dispatch(queryTransactionsRequest(queryParams));
   return sdk.transactions
@@ -302,12 +301,10 @@ export const queryOwnTransactions = queryParams => (dispatch, getState, sdk) => 
       ...queryParams,
     })
     .then(response => {
-      console.log('🚀 | file: ManageListingsPage.duck.js | line 263 | response', response);
       dispatch(queryTransactionsSuccess(response));
       return response;
     })
     .catch(e => {
-      console.log('🚀 | file: ManageListingsPage.duck.js | line 307 | e', e);
       dispatch(queryTransactionsError(storableError(e)));
       throw e;
     });
@@ -343,12 +340,12 @@ export const openListing = listingId => (dispatch, getState, sdk) => {
 
 export const loadListingData = props => {
   const { params, search } = props;
-  console.log("🚀 | file: ManageListingsPage.duck.js | line 345 | props", props);
   const queryParams = parse(search);
   const page = queryParams.page || 1;
   queryOwnTransactions({
     include: ['listing'],
-  });  return queryOwnListings({
+  });
+  return queryOwnListings({
     ...queryParams,
     page,
     pub_listingType: 'listing',

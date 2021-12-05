@@ -60,6 +60,7 @@ class FieldDateRangeInputComponent extends Component {
       startDateLabel,
       endDateId,
       endDateLabel,
+      endDateReadOnly,
       input,
       meta,
       useMobileMargins,
@@ -129,7 +130,16 @@ class FieldDateRangeInputComponent extends Component {
       focusedInput: this.state.focusedInput,
       startDateId,
       endDateId,
+      disabled: "endDate"
     };
+    console.log(
+      '🚀 | file: FieldDateRangeInput.js | line 130 | FieldDateRangeInputComponent | render | rest',
+      rest
+    );
+    console.log(
+      '🚀 | file: FieldDateRangeInput.js | line 134 | FieldDateRangeInputComponent | render | restOfInput',
+      restOfInput
+    );
     const classes = classNames(rootClassName || css.fieldRoot, className);
     const errorClasses = classNames({ [css.mobileMargins]: useMobileMargins });
 

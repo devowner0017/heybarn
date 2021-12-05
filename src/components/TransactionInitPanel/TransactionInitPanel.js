@@ -7,12 +7,7 @@ import { LINE_ITEM_NIGHT, LINE_ITEM_DAY, propTypes } from '../../util/types';
 import { ensureTransaction, ensureUser, userDisplayNameAsString } from '../../util/data';
 import { isMobileSafari } from '../../util/userAgent';
 import { formatMoney } from '../../util/currency';
-import {
-  AvatarLarge,
-  CreateListingModal,
-  NamedLink,
-  UserDisplayName,
-} from '..';
+import { AvatarLarge, CreateListingModal, NamedLink, UserDisplayName } from '..';
 import config from '../../config';
 
 // These are internal components that make this file more readable.
@@ -21,6 +16,7 @@ import DetailCardImage from './DetailCardImage';
 import PanelHeading, { HEADING_READY, HEADING_ENQUIRED } from './PanelHeading';
 
 import css from './TransactionInitPanel.module.css';
+import { useHistory } from 'react-router';
 
 // Helper function to get display names for different roles
 const displayNames = (currentUser, currentProvider, currentCustomer, intl) => {
@@ -322,6 +318,8 @@ export class TransactionInitPanelComponent extends Component {
           reviewSent={this.state.reviewSubmitted}
           sendReviewInProgress={sendReviewInProgress}
           sendReviewError={sendReviewError}
+          listingType={listingType}
+          authorName={authorDisplayName}
         />
       </div>
     );

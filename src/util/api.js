@@ -151,3 +151,7 @@ export const receiveReservationPayment = body => {
 export const createRentalPayments = body => {
   return post('/api/create-recurring-payments', body);
 };
+
+export const fetchRentalPayments = body => {
+  return post('/api/fetch-recurring-payments', body);
+};

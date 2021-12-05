@@ -36,6 +36,7 @@ import {
   acceptCommunication,
   declineCommunication,
   sendRentalAgreement,
+  requestRentalAgreement,
   cancelDuringRad,
   signRentalAgreement,
   reverseTransactionFlowAndAcceptCommunication,
@@ -71,21 +72,9 @@ export const TransactionPageComponent = props => {
     sendReviewInProgress,
     transaction,
     transactionRole,
-    acceptInProgress,
-    acceptSaleError,
-    declineInProgress,
-    declineSaleError,
-    onAcceptSale,
-    onDeclineSale,
-    timeSlots,
-    fetchTimeSlotsError,
     processTransitions,
     callSetInitialValues,
     onInitializeCardPaymentData,
-    onFetchTransactionLineItems,
-    lineItems,
-    fetchLineItemsInProgress,
-    fetchLineItemsError,
     onRenterAcceptsCommunication,
     onHostAcceptCommunication,
     onDeclineCommunication,
@@ -95,6 +84,8 @@ export const TransactionPageComponent = props => {
     declineCommunicationError,
 
     onSendRentalAgreement,
+    onRequestRentalAgreement,
+
     onCancelDuringRad,
     sendRentalAgreementInProgress,
     sendRentalAgreementError,
@@ -106,7 +97,10 @@ export const TransactionPageComponent = props => {
     onSignRentalAgreement,
     relatedListing,
     onCompleteSale,
+
+    subscription,
   } = props;
+    console.log("🚀 | file: TransactionPage.js | line 103 | subscription", subscription);
 
   const currentTransaction = ensureTransaction(transaction);
   const currentListing = ensureListing(currentTransaction.listing);
@@ -274,6 +268,7 @@ export const TransactionPageComponent = props => {
       acceptCommunicationError={acceptCommunicationError}
       declineCommunicationError={declineCommunicationError}
       onSendRentalAgreement={onSendRentalAgreement}
+      onRequestRentalAgreement={onRequestRentalAgreement}
       onCancelDuringRad={onCancelDuringRad}
       sendRentalAgreementInProgress={sendRentalAgreementInProgress}
       sendRentalAgreementError={sendRentalAgreementError}
@@ -286,6 +281,7 @@ export const TransactionPageComponent = props => {
       onInitializeCardPaymentData={onInitializeCardPaymentData}
       callSetInitialValues={callSetInitialValues}
       onCompleteSale={onCompleteSale}
+      subscription={subscription}
     />
   ) : (
     loadingOrFailedFetching
@@ -414,7 +410,12 @@ const mapStateToProps = state => {
     signRentalAgreementError,
     relatedListingRef,
   } = state.TransactionPage;
-  console.log("🚀 | file: TransactionPage.js | line 417 | state.TransactionPage", state.TransactionPage);
+  console.log(
+    '🚀 | file: TransactionPage.js | line 417 | state.TransactionPage',
+    state.TransactionPage
+  );
+  const { subscription } = state.stripe;
+  console.log('🚀 | file: TransactionPage.js | line 426 | subscription', subscription);
   const { currentUser } = state.user;
   const relatedListing = getMarketplaceEntities(
     state,
@@ -449,7 +450,7 @@ const mapStateToProps = state => {
     lineItems,
     fetchLineItemsInProgress,
     fetchLineItemsError,
-
+    subscription,
     acceptCommunicationInProgress,
     declineCommunicationInProgress,
     acceptCommunicationError,
@@ -472,6 +473,7 @@ const mapDispatchToProps = dispatch => {
     onHostAcceptCommunication: transactionId => dispatch(acceptCommunication(transactionId)),
     onDeclineCommunication: transactionId => dispatch(declineCommunication(transactionId)),
     onSendRentalAgreement: transactionId => dispatch(sendRentalAgreement(transactionId)),
+    onRequestRentalAgreement: transactionId => dispatch(requestRentalAgreement(transactionId)),
     onCancelDuringRad: transactionId => dispatch(cancelDuringRad(transactionId)),
     onSignRentalAgreement: transactionId => dispatch(signRentalAgreement(transactionId)),
 

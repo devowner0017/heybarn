@@ -25,6 +25,7 @@ const { authenticateGoogle, authenticateGoogleCallback } = require('./api/auth/g
 const receiveReservationPayment = require('./sph/receive-reservation-payment');
 const createReservationCharge = require('./sph/create-reservation-charge');
 const createRentalPayments = require('./sph/create-recurring-payments');
+const fetchRentalPayments = require('./sph/fetch-recurring-payments');
 const updateListingState = require('./api/update-listing-state');
 
 const router = express.Router();
@@ -90,6 +91,7 @@ router.get('/auth/google/callback', authenticateGoogleCallback);
 router.post('/receive-reservation-payment', receiveReservationPayment);
 router.post('/create-reservation-charge', createReservationCharge);
 router.post('/create-recurring-payments', createRentalPayments);
+router.post('/fetch-recurring-payments', fetchRentalPayments);
 router.post('/update-listing-state', updateListingState);
 
 module.exports = router;

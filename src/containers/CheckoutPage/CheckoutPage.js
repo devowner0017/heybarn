@@ -58,6 +58,7 @@ import {
 import { storeData, storedData, clearData } from './CheckoutPageSessionHelpers';
 import css from './CheckoutPage.module.css';
 import { getPropByName } from '../../util/userHelpers';
+import moment from 'moment';
 
 const STORAGE_KEY = 'CheckoutPage';
 
@@ -225,6 +226,7 @@ export class CheckoutPageComponent extends Component {
       transaction,
       bookingData,
       bookingDates,
+      onCreateRecurring,
     } = this.props;
     const {
       pageData,
@@ -233,14 +235,17 @@ export class CheckoutPageComponent extends Component {
       paymentIntent,
       selectedPaymentMethod,
       saveAfterOnetimePayment,
-      recurringCallback,
+      createRecurringParams,
     } = handlePaymentParams;
+    console.log(
+      '🚀 | file: CheckoutPage.js | line 239 | CheckoutPageComponent | handlePaymentIntent | recurringCallbackParams',
+      createRecurringParams
+    );
     console.log(
       '🚀 | file: CheckoutPage.js | line 237 | CheckoutPageComponent | handlePaymentIntent | handlePaymentParams',
       handlePaymentParams
     );
     const storedTx = ensureTransaction(transaction);
-
     const ensuredCurrentUser = ensureCurrentUser(currentUser);
     const ensuredStripeCustomer = ensureStripeCustomer(ensuredCurrentUser.stripeCustomer);
     const ensuredDefaultPaymentMethod = ensurePaymentMethodCard(
@@ -259,6 +264,15 @@ export class CheckoutPageComponent extends Component {
       : null;
     const selectedPaymentFlow = paymentFlow(selectedPaymentMethod, saveAfterOnetimePayment);
 
+    const fnCreateRecurring = fnParams => {
+      return onCreateRecurring(createRecurringParams).then(recurringResponse => {
+        console.log(
+          '🚀 | file: CheckoutPage.js | line 281 | CheckoutPageComponent | onCreateRecurring | recurringResponse',
+          recurringResponse
+        );
+        return { ...fnParams, protectedData: { recurringResponse } };
+      });
+    };
     // Step 1: initiate order by requesting payment from Marketplace API
     const fnRequestPayment = fnParams => {
       console.log(
@@ -280,14 +294,14 @@ export class CheckoutPageComponent extends Component {
         fnParams
       );
       // fnParams should be returned transaction entity
-
-      const order = ensureTransaction(fnParams);
+      const { recurringResponse, ...transaction } = fnParams;
+      const order = ensureTransaction(transaction);
       if (order.id) {
         // Store order.
 
         // const { bookingData, bookingDates, listing } = pageData;
-        storeData(bookingData, bookingDates, listing, order, STORAGE_KEY);
-        this.setState({ pageData: { ...pageData, transaction: order } });
+        storeData(bookingData, bookingDates, listing, order, STORAGE_KEY, recurringResponse);
+        this.setState({ pageData: { ...pageData, transaction: order, recurringResponse } });
       }
 
       const hasPaymentIntents =
@@ -329,6 +343,7 @@ export class CheckoutPageComponent extends Component {
         stripe,
         ...stripeElementMaybe,
         paymentParams,
+        recurringResponse,
       };
 
       // If paymentIntent status is not waiting user action,
@@ -350,7 +365,6 @@ export class CheckoutPageComponent extends Component {
       createdPaymentIntent = fnParams.paymentIntent;
       return onConfirmPayment({ ...fnParams, transactionId: transaction.id })
         .then(confirmResponse => {
-          handlePaymentParams.recurringCallback();
           return confirmResponse;
         })
         .catch(e => {
@@ -403,6 +417,7 @@ export class CheckoutPageComponent extends Component {
     const applyAsync = (acc, val) => acc.then(val);
     const composeAsync = (...funcs) => x => funcs.reduce(applyAsync, Promise.resolve(x));
     const handlePaymentIntentCreation = composeAsync(
+      fnCreateRecurring,
       fnRequestPayment,
       fnConfirmCardPayment,
       fnConfirmPayment,
@@ -450,7 +465,12 @@ export class CheckoutPageComponent extends Component {
       listing,
       transaction,
       onCreateRecurring,
+      bookingDates,
     } = this.props;
+    console.log(
+      '🚀 | file: CheckoutPage.js | line 469 | CheckoutPageComponent | handleSubmit | bookingDates',
+      bookingDates
+    );
     const { card, message, paymentMethod, formValues } = values;
     console.log(
       '🚀 | file: CheckoutPage.js | line 454 | CheckoutPageComponent | handleSubmit | values',
@@ -498,12 +518,10 @@ export class CheckoutPageComponent extends Component {
     const currentAuthor = ensureUser(currentListing.author);
     const price = currentListing.attributes.price;
     const recurringPaymentMethod =
-      paymentMethod === 'defaultCard'
-        ? getPropByName(currentUser, 'stripePaymentMethodId')
-        : card;
+      paymentMethod === 'defaultCard' ? getPropByName(currentUser, 'stripePaymentMethodId') : card;
     console.log(
-      '🚀 | file: CheckoutPage.js | line 500 | CheckoutPageComponent | handleSubmit | recurringPaymentMethod',
-      recurringPaymentMethod
+      '🚀 | file: CheckoutPage.js | line 532 | CheckoutPageComponent | handleSubmit | bookingDates',
+      bookingDates
     );
     const createRecurringParams = {
       weeklyAmount: price?.amount,
@@ -512,9 +530,17 @@ export class CheckoutPageComponent extends Component {
       providerUserId: currentAuthor.id,
       paymentMethod: recurringPaymentMethod,
       transactionId: tx?.id?.uuid,
+      lengthOfContract: getPropByName(transaction, 'lengthOfContract'),
+      startTimestamp: moment(bookingDates.bookingStart)
+        .add({ days: 6, hours: 23, minutes: 59 })
+        .unix(),
+      endTimestamp: moment(bookingDates.bookingEnd)
+        .subtract({ days: 7, minutes: 1 })
+        .unix(),
+      transaction: tx,
     };
     console.log(
-      '🚀 | file: CheckoutPage.js | line 500 | CheckoutPageComponent | handleSubmit | createRecurringParams',
+      '🚀 | file: CheckoutPage.js | line 515 | CheckoutPageComponent | handleSubmit | createRecurringParams',
       createRecurringParams
     );
 
@@ -528,8 +554,12 @@ export class CheckoutPageComponent extends Component {
       paymentIntent,
       selectedPaymentMethod: paymentMethod,
       saveAfterOnetimePayment: !!saveAfterOnetimePayment,
-      recurringCallback: _ => onCreateRecurring(createRecurringParams),
+      createRecurringParams,
     };
+    console.log(
+      '🚀 | file: CheckoutPage.js | line 528 | CheckoutPageComponent | handleSubmit | requestPaymentParams',
+      requestPaymentParams
+    );
     console.log(
       '🚀 | file: CheckoutPage.js | line 514 | CheckoutPageComponent | handleSubmit | requestPaymentParams',
       requestPaymentParams

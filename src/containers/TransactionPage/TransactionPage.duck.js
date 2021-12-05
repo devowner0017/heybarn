@@ -12,19 +12,18 @@ import {
   txIsInFirstReviewBy,
   TRANSITION_ACCEPT,
   TRANSITION_DECLINE,
-  TRANSITION_HOST_FEE_PAID,
-  TRANSITION_RENTER_FEE_PAID,
   TRANSITION_HOST_APPROVED_BY_RENTER,
   TRANSITION_HOST_ACCEPTS_COMMUNICATION,
   TRANSITION_HOST_DECLINES_COMMUNICATION,
   TRANSITION_RENTER_ACCEPTS_COMMUNICATION,
   TRANSITION_RENTER_DECLINES_COMMUNICATION,
   TRANSITION_HOST_SENDS_AGREEMENT,
+  TRANSITION_RENTER_REQUESTS_AGREEMENT,
   TRANSITION_HOST_CANCELS_DURING_RAD,
   TRANSITION_RENTER_CANCELS_DURING_RAD,
-  TRANSITION_OPERATOR_CANCELS_DURING_RAD,
   TRANSITION_RENTER_SIGNS_RENTAL_AGREEMENT,
   TRANSITION_COMPLETE,
+  TRANSITION_HOST_SENDS_AGREEMENT_AFTER_REQUEST,
 } from '../../util/transaction';
 import {
   transactionLineItems,
@@ -40,6 +39,7 @@ import {
 import { addMarketplaceEntities } from '../../ducks/marketplaceData.duck';
 import { fetchCurrentUserNotifications } from '../../ducks/user.duck';
 import { getPropByName } from '../../util/userHelpers';
+import { fetchSubscription } from '../../ducks/stripe.duck';
 
 const { UUID } = sdkTypes;
 
@@ -71,6 +71,12 @@ export const DECLINE_COMMUNICATION_ERROR = 'app/TransactionPage/DECLINE_COMMUNIC
 export const SEND_RENTAL_AGREEMENT_REQUEST = 'app/TransactionPage/SEND_RENTAL_AGREEMENT_REQUEST';
 export const SEND_RENTAL_AGREEMENT_SUCCESS = 'app/TransactionPage/SEND_RENTAL_AGREEMENT_SUCCESS';
 export const SEND_RENTAL_AGREEMENT_ERROR = 'app/TransactionPage/SEND_RENTAL_AGREEMENT_ERROR';
+
+export const REQUEST_RENTAL_AGREEMENT_REQUEST =
+  'app/TransactionPage/REQUEST_RENTAL_AGREEMENT_REQUEST';
+export const REQUEST_RENTAL_AGREEMENT_SUCCESS =
+  'app/TransactionPage/REQUEST_RENTAL_AGREEMENT_SUCCESS';
+export const REQUEST_RENTAL_AGREEMENT_ERROR = 'app/TransactionPage/REQUEST_RENTAL_AGREEMENT_ERROR';
 
 export const SIGN_RENTAL_AGREEMENT_REQUEST = 'app/TransactionPage/SIGN_RENTAL_AGREEMENT_REQUEST';
 export const SIGN_RENTAL_AGREEMENT_SUCCESS = 'app/TransactionPage/SIGN_RENTAL_AGREEMENT_SUCCESS';
@@ -122,6 +128,9 @@ const initialState = {
 
   sendRentalAgreementInProgress: false,
   sendRentalAgreementError: null,
+
+  requestRentalAgreementInProgress: false,
+  requestRentalAgreementError: null,
 
   signRentalAgreementInProgress: false,
   signRentalAgreementError: null,
@@ -235,6 +244,20 @@ export default function checkoutPageReducer(state = initialState, action = {}) {
         ...state,
         sendRentalAgreementInProgress: false,
         sendRentalAgreementError: payload,
+      };
+    case REQUEST_RENTAL_AGREEMENT_REQUEST:
+      return {
+        ...state,
+        requestRentalAgreementInProgress: true,
+        requestRentalAgreementError: null,
+      };
+    case REQUEST_RENTAL_AGREEMENT_SUCCESS:
+      return { ...state, requestRentalAgreementInProgress: false };
+    case REQUEST_RENTAL_AGREEMENT_ERROR:
+      return {
+        ...state,
+        requestRentalAgreementInProgress: false,
+        requestRentalAgreementError: payload,
       };
 
     case CANCEL_DURING_RAD_REQUEST:
@@ -410,6 +433,14 @@ const sendRentalAgreementError = e => ({
   payload: e,
 });
 
+const requestRentalAgreementRequest = () => ({ type: REQUEST_RENTAL_AGREEMENT_REQUEST });
+const requestRentalAgreementSuccess = () => ({ type: REQUEST_RENTAL_AGREEMENT_SUCCESS });
+const requestRentalAgreementError = e => ({
+  type: REQUEST_RENTAL_AGREEMENT_ERROR,
+  error: true,
+  payload: e,
+});
+
 const signRentalAgreementRequest = () => ({ type: SIGN_RENTAL_AGREEMENT_REQUEST });
 const signRentalAgreementSuccess = () => ({ type: SIGN_RENTAL_AGREEMENT_SUCCESS });
 const signRentalAgreementError = e => ({
@@ -486,34 +517,19 @@ export const fetchTransaction = (id, txRole) => (dispatch, getState, sdk) => {
     )
     .then(response => {
       txResponse = response;
-      console.log(
-        '🚀 | file: TransactionPage.duck.js | line 475 | fetchTransaction | txResponse',
-        txResponse
-      );
       const listingId = listingRelationship(response).id;
       const entities = updatedEntities({}, response.data);
       const listingRef = { id: listingId, type: 'listing' };
       const transactionRef = { id, type: 'transaction' };
       const denormalised = denormalisedEntities(entities, [listingRef, transactionRef]);
       const listing = denormalised[0];
-      console.log(
-        '🚀 | file: TransactionPage.duck.js | line 483 | fetchTransaction | listing',
-        listing
-      );
       const transaction = denormalised[1];
-      console.log(
-        '🚀 | file: TransactionPage.duck.js | line 485 | fetchTransaction | transaction',
-        transaction
-      );
       const selectedListingId = getPropByName(transaction, 'selectedListingId');
-      console.log(
-        '🚀 | file: TransactionPage.duck.js | line 508 | fetchTransaction | selectedListingId',
-        selectedListingId
-      );
       const relatedListingId = getPropByName(transaction, 'relatedListingId');
+      const recurringResponse = getPropByName(transaction, 'recurringResponse');
       console.log(
-        '🚀 | file: TransactionPage.duck.js | line 496 | fetchTransaction | relatedListingId',
-        relatedListingId
+        '🚀 | file: TransactionPage.duck.js | line 529 | fetchTransaction | recurringResponse',
+        recurringResponse
       );
       if (!!(relatedListingId || selectedListingId)) {
         sdk.listings
@@ -523,16 +539,10 @@ export const fetchTransaction = (id, txRole) => (dispatch, getState, sdk) => {
             ...IMAGE_VARIANTS,
           })
           .then(relatedListingResponse => {
-            console.log(
-              '🚀 | file: TransactionPage.duck.js | line 504 | fetchTransaction | relatedListingResponse',
-              relatedListingResponse
-            );
             dispatch(addMarketplaceEntities(relatedListingResponse));
             dispatch(fetchRelatedListingSuccess(relatedListingResponse));
           })
-          .catch(e => {
-            console.log(e);
-          });
+          .catch(e => {});
       }
       // Fetch time slots for transactions that are in enquired state
       const canFetchTimeslots =
@@ -544,7 +554,10 @@ export const fetchTransaction = (id, txRole) => (dispatch, getState, sdk) => {
       if (canFetchTimeslots) {
         dispatch(fetchTimeSlots(listingId));
       }
-
+      const canFetchSubscription = !!recurringResponse;
+      if (canFetchSubscription) {
+        dispatch(fetchSubscription({ subId: recurringResponse.id }));
+      }
       const canFetchListing = listing && listing.attributes && !listing.attributes.deleted;
       if (canFetchListing) {
         return sdk.listings.show({
@@ -570,7 +583,6 @@ export const fetchTransaction = (id, txRole) => (dispatch, getState, sdk) => {
 
 export const completeSale = data => (dispatch, getState, sdk) => {
   const { txId } = data;
-  console.log('🚀 | file: TransactionPage.duck.js | line 572 | id', txId);
   if (acceptOrDeclineInProgress(getState())) {
     return Promise.reject(new Error('Accept or decline already in progress'));
   }
@@ -594,18 +606,12 @@ export const completeSale = data => (dispatch, getState, sdk) => {
     });
 };
 export const createTransaction = orderParams => (dispatch, getState, sdk) => {
-  console.log('🚀 | file: TransactionInitPage.duck.js | line 250 | orderParams', orderParams);
   dispatch(initiateOrderRequest());
 
   // TODO UPDATE THIS WHEN WE BUILD THE OTHER SIDE OF THE MARKETPLACE
   const isRequestFromHost = orderParams.protectedData.contactingAs === 'host';
-  console.log(
-    '🚀 | file: TransactionInitPage.duck.js | line 255 | isRequestFromHost',
-    isRequestFromHost
-  );
 
   const transition = TRANSITION_HOST_APPROVED_BY_RENTER;
-  console.log('🚀 | file: TransactionInitPage.duck.js | line 258 | transition', transition);
 
   const bodyParams = {
     processAlias: config.bookingProcessAlias,
@@ -640,7 +646,6 @@ export const createTransaction = orderParams => (dispatch, getState, sdk) => {
 };
 
 export const reverseTransactionFlowAndAcceptCommunication = data => (dispatch, getState, sdk) => {
-  console.log('🚀 | file: TransactionPage.duck.js | line 609 | data', data);
   // listingId is the HOSTS LISTING
   // relatedTxId is the CURRENT HOST->RENTER TRANSACTION that is invalid
   // relatedListingId is the RENTERS ADVERT
@@ -659,7 +664,6 @@ export const reverseTransactionFlowAndAcceptCommunication = data => (dispatch, g
       protectedData: { relatedTxId: relatedTxId.uuid, relatedListingId: relatedListingId.uuid },
     },
   };
-  console.log('🚀 | file: TransactionPage.duck.js | line 622 | bodyParams', bodyParams);
   const queryParams = {
     include: ['booking', 'provider'],
     expand: true,
@@ -669,9 +673,7 @@ export const reverseTransactionFlowAndAcceptCommunication = data => (dispatch, g
   return sdk.transactions
     .initiate(bodyParams, queryParams)
     .then(response => {
-      console.log('🚀 | file: TransactionPage.duck.js | line 631 | response', response);
       const newTx = response.data.data;
-      console.log('🚀 | file: TransactionPage.duck.js | line 633 | newTx', newTx);
       // This transitions the OLD transaction (HOST -> RENTER) into a new state that is hidden.
       return sdk.transactions
         .transition(
@@ -683,7 +685,6 @@ export const reverseTransactionFlowAndAcceptCommunication = data => (dispatch, g
           { expand: true }
         )
         .then(response => {
-          console.log('🚀 | file: TransactionPage.duck.js | line 644 | response', response);
           dispatch(addMarketplaceEntities(response));
           dispatch(acceptCommunicationSuccess());
           dispatch(fetchCurrentUserNotifications());
@@ -691,7 +692,6 @@ export const reverseTransactionFlowAndAcceptCommunication = data => (dispatch, g
         });
     })
     .catch(e => {
-      console.log('🚀 | file: TransactionPage.duck.js | line 652 | e', e);
       dispatch(acceptCommunicationError(storableError(e)));
       log.error(e, 'accept-communication-failed', {
         relatedTxId,
@@ -774,17 +774,20 @@ export const declineCommunication = data => (dispatch, getState, sdk) => {
 };
 
 export const cancelDuringRad = data => (dispatch, getState, sdk) => {
-  const { txId, actor } = data;
+  const { txId, actor, wasRequested } = data;
   dispatch(cancelDuringRadRequest());
-
+  const transition = wasRequested
+    ? actor === 'provider'
+      ? TRANSITION_HOST_CANCELS_AFTER_REQUEST
+      : TRANSITION_RENTER_CANCELS_AFTER_REQUEST
+    : actor === 'provider'
+    ? TRANSITION_HOST_CANCELS_DURING_RAD
+    : TRANSITION_RENTER_CANCELS_DURING_RAD;
   return sdk.transactions
     .transition(
       {
         id: txId,
-        transition:
-          actor === 'provider'
-            ? TRANSITION_HOST_CANCELS_DURING_RAD
-            : TRANSITION_RENTER_CANCELS_DURING_RAD,
+        transition: transition,
         params: {},
       },
       { expand: true }
@@ -799,10 +802,7 @@ export const cancelDuringRad = data => (dispatch, getState, sdk) => {
       dispatch(cancelDuringRadError(storableError(e)));
       log.error(e, 'cancel-during-rad-failed', {
         txId: txId,
-        transition:
-          actor === 'provider'
-            ? TRANSITION_HOST_CANCELS_DURING_RAD
-            : TRANSITION_RENTER_CANCELS_DURING_RAD,
+        transition: transition,
       });
       throw e;
     });
@@ -810,31 +810,29 @@ export const cancelDuringRad = data => (dispatch, getState, sdk) => {
 
 export const sendRentalAgreement = data => (dispatch, getState, sdk) => {
   // TODO: Add booking data to params here
-  const { txId, listingId } = data;
-
+  const { txId, listingId, wasRequested, contractLines, bookingDates } = data;
+  const { startDate, endDate } = bookingDates;
   dispatch(sendRentalAgreementRequest());
   const bookingData = {
-    startDate: moment()
-      .add(1, 'days')
-      .toISOString(),
-    endDate: moment()
-      .add(30, 'days')
-      .toISOString(),
+    startDate: startDate.toISOString(),
+    endDate: endDate.toISOString(),
   };
+  const transition = wasRequested
+    ? TRANSITION_HOST_SENDS_AGREEMENT_AFTER_REQUEST
+    : TRANSITION_HOST_SENDS_AGREEMENT;
   const bodyParams = {
     id: txId.uuid,
-    transition: TRANSITION_HOST_SENDS_AGREEMENT,
+    transition: transition,
     params: {
       listingId: listingId.uuid,
       bookingStart: bookingData.startDate,
       bookingEnd: bookingData.endDate,
+      protectedData: { ...contractLines },
     },
   };
-  console.log('🚀 | file: TransactionPage.duck.js | line 692 | bodyParams', bodyParams);
   const queryParams = { expand: true };
 
   const handleSucces = response => {
-    console.log('🚀 | file: TransactionPage.duck.js | line 697 | response', response);
     const entities = denormalisedResponseEntities(response);
     const order = entities[0];
 
@@ -845,10 +843,61 @@ export const sendRentalAgreement = data => (dispatch, getState, sdk) => {
   };
 
   const handleError = e => {
-    console.log('🚀 | file: TransactionPage.duck.js | line 707 | e', e);
     dispatch(sendRentalAgreementError(storableError(e)));
     const transactionIdMaybe = txId ? { transactionId: txId.uuid } : {};
     log.error(e, 'host-sends-agreement-failed', {
+      ...transactionIdMaybe,
+      listingId: bodyParams?.params?.listingId?.uuid,
+      bookingStart: bodyParams.bookingStart,
+      bookingEnd: bodyParams.bookingEnd,
+    });
+    throw e;
+  };
+
+  // transition privileged
+  return transitionPrivileged({ bookingData, bodyParams, queryParams })
+    .then(handleSucces)
+    .catch(handleError);
+};
+
+export const requestRentalAgreement = data => (dispatch, getState, sdk) => {
+  // TODO: Add booking data to params here
+  const { txId, listingId } = data;
+
+  dispatch(requestRentalAgreementRequest());
+  const bookingData = {
+    startDate: moment()
+      .add(1, 'days')
+      .toISOString(),
+    endDate: moment()
+      .add(30, 'days')
+      .toISOString(),
+  };
+  const bodyParams = {
+    id: txId.uuid,
+    transition: TRANSITION_RENTER_REQUESTS_AGREEMENT,
+    params: {
+      listingId: listingId.uuid,
+      bookingStart: bookingData.startDate,
+      bookingEnd: bookingData.endDate,
+    },
+  };
+  const queryParams = { expand: true };
+
+  const handleSucces = response => {
+    const entities = denormalisedResponseEntities(response);
+    const order = entities[0];
+
+    dispatch(addMarketplaceEntities(response));
+    dispatch(requestRentalAgreementSuccess());
+    dispatch(fetchCurrentUserNotifications());
+    return order;
+  };
+
+  const handleError = e => {
+    dispatch(requestRentalAgreementError(storableError(e)));
+    const transactionIdMaybe = txId ? { transactionId: txId.uuid } : {};
+    log.error(e, 'host-requests-agreement-failed', {
       ...transactionIdMaybe,
       listingId: bodyParams?.params?.listingId?.uuid,
       bookingStart: bodyParams.bookingStart,
@@ -1000,8 +1049,6 @@ export const fetchMoreMessages = txId => (dispatch, getState, sdk) => {
 };
 
 export const sendMessage = (txId, message) => (dispatch, getState, sdk) => {
-  console.log('🚀 | file: TransactionPage.duck.js | line 1003 | sendMessage | txId', txId);
-  console.log('🚀 | file: TransactionPage.duck.js | line 1003 | sendMessage | message', message);
   dispatch(sendMessageRequest());
 
   return sdk.messages

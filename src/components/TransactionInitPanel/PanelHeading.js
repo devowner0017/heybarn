@@ -94,6 +94,7 @@ const PanelHeading = props => {
     isCustomerBanned,
     listingType,
   } = props;
+  console.log('🚀 | file: PanelHeading.js | line 97 | listingType', listingType);
   console.log('🚀 | file: PanelHeading.js | line 96 | customerName', customerName);
   console.log('🚀 | file: PanelHeading.js | line 96 | providerName', providerName);
   console.log(props);
@@ -117,7 +118,7 @@ const PanelHeading = props => {
             listingLink,
             customerName,
             listingLink,
-            listingType,
+            listingType: listingType === 'advert' ? 'listing' : listingType,
           }}
         >
           {!listingDeleted ? (
@@ -140,7 +141,7 @@ const PanelHeading = props => {
           listingLink,
           customerName,
           listingLink,
-          listingType,
+          listingType: listingType === 'listing' ? 'advert' : listingType,
         }}
       >
         {!listingDeleted ? (

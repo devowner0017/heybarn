@@ -88,6 +88,63 @@
    :to :state/rental-agreement-sent
    :privileged? true}
 
+  {:name :transition/renter-requests-agreement,
+   :actor :actor.role/customer,
+    :actions
+   [
+    ],
+   :from :state/rental-agreement-discussion,
+   :to :state/rental-agreement-requested}
+
+  {:name :transition/host-sends-agreement-after-request,
+   :actor :actor.role/provider,
+    :actions
+   [
+     {:name :action/create-booking,
+     :config {:observe-availability? false}}
+    {:name :action/privileged-set-line-items}
+    {:name :action/privileged-update-metadata}
+    {:name :action/update-protected-data}
+
+    ],
+   :from :state/rental-agreement-requested,
+   :to :state/rental-agreement-sent
+   :privileged? true}
+
+  {:name :transition/renter-cancels-after-request,
+   :actor :actor.role/customer,
+    :actions
+   [
+    {:name :action/update-protected-data}
+    ],
+   :from :state/rental-agreement-requested,
+   :to :state/cancelled-during-rad}
+
+
+  {:name :transition/host-cancels-after-request,
+   :actor :actor.role/provider,
+    :actions
+   [
+    {:name :action/update-protected-data}
+
+    ],
+   :from :state/rental-agreement-requested,
+   :to :state/cancelled-during-rad}
+
+  {:name :transition/operator-cancels-after-request,
+   :actor :actor.role/operator,
+    :actions
+   [
+    {:name :action/update-protected-data}
+
+    ],
+   :from :state/rental-agreement-requested,
+   :to :state/cancelled-during-rad}
+
+
+
+
+
 
   {:name :transition/renter-signs-rental-agreement,
    :actor :actor.role/customer,

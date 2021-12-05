@@ -21,6 +21,7 @@ export { default as PaymentMethodsForm } from './PaymentMethodsForm/PaymentMetho
 export { default as PriceFilterForm } from './PriceFilterForm/PriceFilterForm';
 export { default as ProfileSettingsForm } from './ProfileSettingsForm/ProfileSettingsForm';
 export { default as ReviewForm } from './ReviewForm/ReviewForm';
+export { default as RentalAgreementSetupForm } from './RentalAgreementSetupForm/RentalAgreementSetupForm';
 export { default as SendMessageForm } from './SendMessageForm/SendMessageForm';
 export { default as SignupForm } from './SignupForm/SignupForm';
 export { default as StripePaymentFormPlatformFee } from './StripePaymentForm/StripePaymentFormPlatformFee';

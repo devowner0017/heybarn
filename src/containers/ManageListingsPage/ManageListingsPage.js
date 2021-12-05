@@ -110,6 +110,30 @@ export class ManageListingsPageComponent extends Component {
       `${panelWidth / 3}vw`,
     ].join(', ');
 
+    const tabs = [
+      {
+        text: (
+          <span>
+            <FormattedMessage id="InboxPage.ordersTabTitle" />
+          </span>
+        ),
+        linkProps: {
+          name: 'InboxPage',
+          params: { tab: 'orders' },
+        },
+      },
+      {
+        text: (
+          <span>
+            <FormattedMessage id="InboxPage.salesTabTitle" />
+          </span>
+        ),
+        linkProps: {
+          name: 'InboxPage',
+          params: { tab: 'sales' },
+        },
+      },
+    ];
     return (
       <Page title={title} scrollingDisabled={scrollingDisabled}>
         <LayoutSideNavigation>
@@ -117,7 +141,10 @@ export class ManageListingsPageComponent extends Component {
             <TopbarContainer currentPage={`Manage${_.capitalize(listingType)}sPage`} />
             <UserNav selectedPageName={`Manage${_.capitalize(listingType)}sPage`} />
           </LayoutWrapperTopbar>
-          <LayoutWrapperManageListingsSideNav currentTab={`${_.capitalize(listingType)}sTab`} />
+          <LayoutWrapperManageListingsSideNav
+            currentTab={`${_.capitalize(listingType)}sTab`}
+            extraTabs={tabs}
+          />
           <LayoutWrapperMain>
             {queryInProgress ? loadingResults : null}
             {queryListingsError ? queryError : null}
@@ -201,7 +228,10 @@ const mapStateToProps = state => {
     closingListing,
     closingListingError,
   } = state.ManageListingsPage;
-  console.log("🚀 | file: ManageListingsPage.js | line 204 | state.ManageListingsPage", state.ManageListingsPage);
+  console.log(
+    '🚀 | file: ManageListingsPage.js | line 204 | state.ManageListingsPage',
+    state.ManageListingsPage
+  );
   const listings = getOwnListingsById(state, currentPageResultIds);
   return {
     currentPageResultIds,

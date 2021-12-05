@@ -21,9 +21,14 @@ export const TRANSITION_HOST_DECLINES_COMMUNICATION = 'transition/host-declines-
 export const TRANSITION_RENTER_ACCEPTS_COMMUNICATION = 'transition/renter-accepts-communication';
 export const TRANSITION_RENTER_DECLINES_COMMUNICATION = 'transition/renter-declines-communication';
 export const TRANSITION_HOST_SENDS_AGREEMENT = 'transition/host-sends-agreement';
+export const TRANSITION_HOST_SENDS_AGREEMENT_AFTER_REQUEST = 'transition/host-sends-agreement-after-request';
+export const TRANSITION_RENTER_REQUESTS_AGREEMENT = 'transition/renter-requests-agreement';
 export const TRANSITION_HOST_CANCELS_DURING_RAD = 'transition/host-cancels-during-rad';
 export const TRANSITION_RENTER_CANCELS_DURING_RAD = 'transition/renter-cancels-during-rad';
+export const TRANSITION_HOST_CANCELS_AFTER_REQUEST = 'transition/host-cancels-after-request';
+export const TRANSITION_RENTER_CANCELS_AFTER_REQUEST = 'transition/renter-cancels-after-request';
 export const TRANSITION_OPERATOR_CANCELS_DURING_RAD = 'transition/operator-cancels-during-rad';
+export const TRANSITION_OPERATOR_CANCELS_AFTER_REQUEST = 'transition/operator-cancels-during-rad';
 
 export const TRANSITION_RENTER_SIGNS_RENTAL_AGREEMENT = 'transition/renter-signs-rental-agreement';
 export const TRANSITION_HOST_CANCELS_AFTER_AGREEMENT_SENT =
@@ -112,6 +117,7 @@ const STATE_REVERSED_TRANSACTION_FLOW = 'reversed-transaction-flow';
 const STATE_RENTAL_AGREEMENT_DISCUSSION = 'rental-agreement-discussion';
 const STATE_CANCELLED_DURING_RAD = 'cancelled-during-rad';
 const STATE_RENTAL_AGREEMENT_SENT = 'rental-agreement-sent';
+const STATE_RENTAL_AGREEMENT_REQUESTED = 'rental-agreement-requested';
 const STATE_CANCELLED_AFTER_AGREEMENT_SENT = 'cancelled-after-agreement-sent';
 const STATE_RENTAL_AGREEMENT_FINALIZED = 'rental-agreement-finalized';
 const STATE_PENDING_PAYMENT = 'pending-payment';
@@ -176,9 +182,18 @@ const stateDescription = {
     [STATE_RENTAL_AGREEMENT_DISCUSSION]: {
       on: {
         [TRANSITION_HOST_SENDS_AGREEMENT]: STATE_RENTAL_AGREEMENT_SENT,
+        [TRANSITION_RENTER_REQUESTS_AGREEMENT]: STATE_RENTAL_AGREEMENT_REQUESTED,
         [TRANSITION_HOST_CANCELS_DURING_RAD]: STATE_CANCELLED_DURING_RAD,
         [TRANSITION_RENTER_CANCELS_DURING_RAD]: STATE_CANCELLED_DURING_RAD,
         [TRANSITION_OPERATOR_CANCELS_DURING_RAD]: STATE_CANCELLED_DURING_RAD,
+      },
+    },
+    [STATE_RENTAL_AGREEMENT_REQUESTED]: {
+      on: {
+        [TRANSITION_HOST_SENDS_AGREEMENT_AFTER_REQUEST]: STATE_RENTAL_AGREEMENT_SENT,
+        [TRANSITION_HOST_CANCELS_AFTER_REQUEST]: STATE_CANCELLED_DURING_RAD,
+        [TRANSITION_RENTER_CANCELS_AFTER_REQUEST]: STATE_CANCELLED_DURING_RAD,
+        [TRANSITION_OPERATOR_CANCELS_AFTER_REQUEST]: STATE_CANCELLED_DURING_RAD,
       },
     },
 
@@ -288,7 +303,6 @@ export const txIsHostEnquired = tx =>
   getTransitionsToState(STATE_HOST_ENQUIRED).includes(txLastTransition(tx));
 
 export const txIsRenterEnquired = tx => {
-
   return getTransitionsToState(STATE_RENTER_ENQUIRED).includes(txLastTransition(tx));
 };
 
@@ -298,12 +312,12 @@ export const txHasHostDeclined = tx =>
 export const txHasRenterDeclined = tx =>
   getTransitionsToState(STATE_RENTER_DECLINED_COMMUNICATION).includes(txLastTransition(tx));
 
-export const txWasApprovedByRenter = tx => {
-  return ['transition/host-approved-by-renter'].includes(txLastTransition(tx));
-};
-
 export const txIsRentalAgreementDiscussion = tx =>
-  getTransitionsToState(STATE_RENTAL_AGREEMENT_DISCUSSION).includes(txLastTransition(tx));
+         getTransitionsToState(STATE_RENTAL_AGREEMENT_DISCUSSION).includes(txLastTransition(tx)) ||
+         ['transition/host-approved-by-renter'].includes(txLastTransition(tx));
+
+export const txIsRentalAgreementRequested = tx =>
+  getTransitionsToState(STATE_RENTAL_AGREEMENT_REQUESTED).includes(txLastTransition(tx));
 
 export const txIsReversedTransactionFlow = tx =>
   getTransitionsToState(STATE_REVERSED_TRANSACTION_FLOW).includes(txLastTransition(tx));

@@ -25,6 +25,8 @@ import LineItemTotalPrice from './LineItemTotalPrice';
 import LineItemUnknownItemsMaybe from './LineItemUnknownItemsMaybe';
 
 import css from './BookingBreakdown.module.css';
+import { getPropByName } from '../../util/userHelpers';
+import LineItemLengthOfContract from './LineItemLengthOfContract';
 
 export const BookingBreakdownComponent = props => {
   const {
@@ -40,7 +42,6 @@ export const BookingBreakdownComponent = props => {
 
   const isCustomer = userRole === 'customer';
   const isProvider = userRole === 'provider';
-
   const hasCommissionLineItem = transaction.attributes.lineItems.find(item => {
     const hasCustomerCommission = isCustomer && item.code === LINE_ITEM_CUSTOMER_COMMISSION;
     const hasProviderCommission = isProvider && item.code === LINE_ITEM_PROVIDER_COMMISSION;
@@ -125,6 +126,7 @@ export const BookingBreakdownComponent = props => {
       />
 
       <LineItemTotalPrice transaction={transaction} isProvider={isProvider} intl={intl} />
+      <LineItemLengthOfContract transaction={transaction} isProvider={isProvider} intl={intl} />
 
       {hasCommissionLineItem ? (
         <span className={css.feeInfo}>

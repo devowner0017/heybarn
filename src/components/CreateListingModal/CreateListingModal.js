@@ -3,10 +3,14 @@ import PropTypes from 'prop-types';
 import { FormattedMessage, intlShape, injectIntl } from '../../util/reactIntl';
 import classNames from 'classnames';
 import { propTypes } from '../../util/types';
-import { IconReviewUser, Modal } from '..';
+import { IconReviewUser, Modal, ActionButtons, NamedRedirect } from '..';
 import { ReviewForm } from '../../forms';
 
 import css from './CreateListingModal.module.css';
+import { useHistory } from 'react-router';
+import { capitalize } from 'lodash';
+import routeConfiguration from '../../routeConfiguration';
+import { createResourceLocatorString, findRouteByRouteName } from '../../util/routes';
 
 const CreateListingModal = props => {
   const {
@@ -15,19 +19,32 @@ const CreateListingModal = props => {
     id,
     intl,
     isOpen,
-    onCloseModal,
     onManageDisableScrolling,
-    onSubmitReview,
-    revieweeName,
-    reviewSent,
-    sendReviewInProgress,
-    sendReviewError,
+    listingType,
+    authorName,
   } = props;
+  const history = useHistory();
 
   const classes = classNames(rootClassName || css.root, className);
   const closeButtonMessage = intl.formatMessage({ id: 'CreateListingModal.later' });
-  const reviewee = <span className={css.reviewee}>{revieweeName}</span>;
+  const handleRedirect = () => {
+    const routes = routeConfiguration();
+    history.push(createResourceLocatorString(`New${capitalize(listingType)}Page`, routes, {}, {}));
+  };
+  const handleBack = () => {
+    const routes = routeConfiguration();
+    history.goBack();
+  };
 
+  const completeButtons = (
+    <ActionButtons
+      showButtons={true}
+      affirmativeAction={() => handleRedirect()}
+      negativeAction={() => handleBack()}
+      affirmativeText={'Lets do it!'}
+      negativeText={'Keep browsing'}
+    />
+  );
   return (
     <Modal
       id={id}
@@ -40,19 +57,22 @@ const CreateListingModal = props => {
       closeButtonMessage={closeButtonMessage}
       hideCloseButton
     >
-      <IconReviewUser className={css.modalIcon} />
       <p className={css.modalTitle}>
-        <FormattedMessage id="CreateListingModal.title" values={{ revieweeName: reviewee }} />
+        <FormattedMessage
+          id="CreateListingModal.title"
+          values={{ listingType: listingType === 'listing' ? 'advert' : 'listing' }}
+        />
       </p>
       <p className={css.modalMessage}>
-        <FormattedMessage id="CreateListingModal.description" />
+        <FormattedMessage
+          id="CreateListingModal.description"
+          values={{
+            listingType: listingType === 'listing' ? 'an advert' : 'a listing',
+            name: authorName,
+          }}
+        />
       </p>
-      <ReviewForm
-        onSubmit={onSubmitReview}
-        reviewSent={reviewSent}
-        sendReviewInProgress={sendReviewInProgress}
-        sendReviewError={sendReviewError}
-      />
+      {completeButtons}
     </Modal>
   );
 };

@@ -1,38 +1,39 @@
-import { fetchRentalPayments } from '../util/api';
 import { storableError } from '../util/errors';
 import * as log from '../util/log';
 
 // ================ Action types ================ //
 
-export const STRIPE_ACCOUNT_CLEAR_ERROR = 'app/stripe/STRIPE_ACCOUNT_CLEAR_ERROR';
+export const STRIPE_ACCOUNT_CLEAR_ERROR = 'app/stripesubscription/STRIPE_ACCOUNT_CLEAR_ERROR';
 
-export const ACCOUNT_OPENER_CREATE_REQUEST = 'app/stripe/ACCOUNT_OPENER_CREATE_REQUEST';
-export const ACCOUNT_OPENER_CREATE_SUCCESS = 'app/stripe/ACCOUNT_OPENER_CREATE_SUCCESS';
-export const ACCOUNT_OPENER_CREATE_ERROR = 'app/stripe/ACCOUNT_OPENER_CREATE_ERROR';
+export const RETRIEVE_STRIPE_SUBSCRIPTION_REQUEST =
+  'app/stripesubscription/RETRIEVE_STRIPE_SUBSCRIPTION_REQUEST';
+export const RETRIEVE_STRIPE_SUBSCRIPTION_SUCCESS =
+  'app/stripesubscription/RETRIEVE_STRIPE_SUBSCRIPTION_SUCCESS';
+export const RETRIEVE_STRIPE_SUBSCRIPTION_ERROR = 'app/stripesubscription/RETRIEVE_STRIPE_SUBSCRIPTION_ERROR';
 
-export const PERSON_CREATE_REQUEST = 'app/stripe/PERSON_CREATE_REQUEST';
-export const PERSON_CREATE_SUCCESS = 'app/stripe/PERSON_CREATE_SUCCESS';
-export const PERSON_CREATE_ERROR = 'app/stripe/PERSON_CREATE_ERROR';
+export const ACCOUNT_OPENER_CREATE_REQUEST = 'app/stripesubscription/ACCOUNT_OPENER_CREATE_REQUEST';
+export const ACCOUNT_OPENER_CREATE_SUCCESS = 'app/stripesubscription/ACCOUNT_OPENER_CREATE_SUCCESS';
+export const ACCOUNT_OPENER_CREATE_ERROR = 'app/stripesubscription/ACCOUNT_OPENER_CREATE_ERROR';
 
-export const CLEAR_PAYMENT_TOKEN = 'app/stripe/CLEAR_PAYMENT_TOKEN';
+export const PERSON_CREATE_REQUEST = 'app/stripesubscription/PERSON_CREATE_REQUEST';
+export const PERSON_CREATE_SUCCESS = 'app/stripesubscription/PERSON_CREATE_SUCCESS';
+export const PERSON_CREATE_ERROR = 'app/stripesubscription/PERSON_CREATE_ERROR';
 
-export const HANDLE_CARD_PAYMENT_REQUEST = 'app/stripe/HANDLE_CARD_PAYMENT_REQUEST';
-export const HANDLE_CARD_PAYMENT_SUCCESS = 'app/stripe/HANDLE_CARD_PAYMENT_SUCCESS';
-export const HANDLE_CARD_PAYMENT_ERROR = 'app/stripe/HANDLE_CARD_PAYMENT_ERROR';
+export const CLEAR_PAYMENT_TOKEN = 'app/stripesubscription/CLEAR_PAYMENT_TOKEN';
 
-export const HANDLE_CARD_SETUP_REQUEST = 'app/stripe/HANDLE_CARD_SETUP_REQUEST';
-export const HANDLE_CARD_SETUP_SUCCESS = 'app/stripe/HANDLE_CARD_SETUP_SUCCESS';
-export const HANDLE_CARD_SETUP_ERROR = 'app/stripe/HANDLE_CARD_SETUP_ERROR';
+export const HANDLE_CARD_PAYMENT_REQUEST = 'app/stripesubscription/HANDLE_CARD_PAYMENT_REQUEST';
+export const HANDLE_CARD_PAYMENT_SUCCESS = 'app/stripesubscription/HANDLE_CARD_PAYMENT_SUCCESS';
+export const HANDLE_CARD_PAYMENT_ERROR = 'app/stripesubscription/HANDLE_CARD_PAYMENT_ERROR';
 
-export const CLEAR_HANDLE_CARD_PAYMENT = 'app/stripe/CLEAR_HANDLE_CARD_PAYMENT';
+export const HANDLE_CARD_SETUP_REQUEST = 'app/stripesubscription/HANDLE_CARD_SETUP_REQUEST';
+export const HANDLE_CARD_SETUP_SUCCESS = 'app/stripesubscription/HANDLE_CARD_SETUP_SUCCESS';
+export const HANDLE_CARD_SETUP_ERROR = 'app/stripesubscription/HANDLE_CARD_SETUP_ERROR';
 
-export const RETRIEVE_PAYMENT_INTENT_REQUEST = 'app/stripe/RETRIEVE_PAYMENT_INTENT_REQUEST';
-export const RETRIEVE_PAYMENT_INTENT_SUCCESS = 'app/stripe/RETRIEVE_PAYMENT_INTENT_SUCCESS';
-export const RETRIEVE_PAYMENT_INTENT_ERROR = 'app/stripe/RETRIEVE_PAYMENT_INTENT_ERROR';
+export const CLEAR_HANDLE_CARD_PAYMENT = 'app/stripesubscription/CLEAR_HANDLE_CARD_PAYMENT';
 
-export const FETCH_SUBSCRIPTION_REQUEST = 'app/stripe/FETCH_SUBSCRIPTION_REQUEST';
-export const FETCH_SUBSCRIPTION_SUCCESS = 'app/stripe/FETCH_SUBSCRIPTION_SUCCESS';
-export const FETCH_SUBSCRIPTION_ERROR = 'app/stripe/FETCH_SUBSCRIPTION_ERROR';
+export const RETRIEVE_PAYMENT_INTENT_REQUEST = 'app/stripesubscription/RETRIEVE_PAYMENT_INTENT_REQUEST';
+export const RETRIEVE_PAYMENT_INTENT_SUCCESS = 'app/stripesubscription/RETRIEVE_PAYMENT_INTENT_SUCCESS';
+export const RETRIEVE_PAYMENT_INTENT_ERROR = 'app/stripesubscription/RETRIEVE_PAYMENT_INTENT_ERROR';
 
 // ================ Reducer ================ //
 
@@ -45,10 +46,6 @@ const initialState = {
   setupIntent: null,
   retrievePaymentIntentInProgress: false,
   retrievePaymentIntentError: null,
-
-  subscription: null,
-  fetchSubscriptionInProgress: false,
-  fetchSubscriptionError: null,
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -149,22 +146,6 @@ export default function reducer(state = initialState, action = {}) {
         retrievePaymentIntentInProgress: false,
       };
 
-    case FETCH_SUBSCRIPTION_REQUEST:
-      return {
-        ...state,
-        fetchSubscriptionError: null,
-        fetchSubscriptionInProgress: true,
-      };
-    case FETCH_SUBSCRIPTION_SUCCESS:
-      return { ...state, subscription: payload, fetchSubscriptionInProgress: false };
-    case FETCH_SUBSCRIPTION_ERROR:
-      console.error(payload);
-      return {
-        ...state,
-        fetchSubscriptionError: payload,
-        fetchSubscriptionInProgress: false,
-      };
-
     default:
       return state;
   }
@@ -224,22 +205,46 @@ export const retrievePaymentIntentError = payload => ({
   payload,
   error: true,
 });
-export const fetchSubscriptionRequest = () => ({
-  type: FETCH_SUBSCRIPTION_REQUEST,
-});
-
-export const fetchSubscriptionSuccess = payload => ({
-  type: FETCH_SUBSCRIPTION_SUCCESS,
-  payload,
-});
-
-export const fetchSubscriptionError = payload => ({
-  type: FETCH_SUBSCRIPTION_ERROR,
-  payload,
-  error: true,
-});
 
 // ================ Thunks ================ //
+
+export const retrieveStripeSubscription = params => dispatch => {
+  const { stripe, stripeStripeSubscriptionClientSecret } = params;
+  dispatch(retrieveStripeSubscriptionRequest());
+
+  return stripe
+    .retrieveStripeSubscription(stripeStripeSubscriptionClientSecret)
+    .then(response => {
+      if (response.error) {
+        return Promise.reject(response);
+      } else {
+        dispatch(retrieveStripeSubscriptionSuccess(response.stripeSubscription));
+        return response;
+      }
+    })
+    .catch(err => {
+      // Unwrap Stripe error.
+      const e = err.error || storableError(err);
+      dispatch(retrieveStripeSubscriptionError(e));
+
+      // Log error
+      const { code, doc_url, message, payment_intent } = err.error || {};
+      const loggableError = err.error
+        ? {
+            code,
+            message,
+            doc_url,
+            stripeSubscriptionStatus: payment_intent
+              ? payment_intent.status
+              : 'no payment_intent included',
+          }
+        : e;
+      log.error(loggableError, 'stripe-retrieve-payment-intent-failed', {
+        stripeMessage: loggableError.message,
+      });
+      throw err;
+    });
+};
 
 export const retrievePaymentIntent = params => dispatch => {
   const { stripe, stripePaymentIntentClientSecret } = params;
@@ -276,28 +281,6 @@ export const retrievePaymentIntent = params => dispatch => {
         stripeMessage: loggableError.message,
       });
       throw err;
-    });
-};
-
-export const fetchSubscription = params => dispatch => {
-  dispatch(fetchSubscriptionRequest());
-
-  return fetchRentalPayments(params)
-    .then(response => {
-      console.log('🚀 | file: stripe.duck.js | line 287 | response', response);
-      if (response.error) {
-        return Promise.reject(response);
-      } else {
-        dispatch(fetchSubscriptionSuccess(response));
-        return response;
-      }
-    })
-    .catch(err => {
-      // Unwrap Stripe error.
-      const e = err.error || storableError(err);
-      dispatch(fetchSubscriptionError(e));
-
-      log.error(e, 'stripe-fetch-subscription-failed');
     });
 };
 
