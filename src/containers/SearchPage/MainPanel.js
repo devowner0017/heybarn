@@ -89,10 +89,6 @@ class MainPanel extends Component {
   }
 
   initialValues(queryParamNames) {
-    console.log(
-      '🚀 | file: MainPanel.js | line 92 | MainPanel | initialValues | queryParamNames',
-      queryParamNames
-    );
     // Query parameters that are visible in the URL
     const urlQueryParams = this.props.urlQueryParams;
     // Query parameters that are in state (user might have not yet clicked "Apply")
@@ -100,15 +96,7 @@ class MainPanel extends Component {
 
     // Get initial value for a given parameter from state if its there.
     const getInitialValue = paramName => {
-      console.log(
-        '🚀 | file: MainPanel.js | line 100 | MainPanel | initialValues | paramName',
-        paramName
-      );
       const currentQueryParam = currentQueryParams[paramName];
-      console.log(
-        '🚀 | file: MainPanel.js | line 102 | MainPanel | initialValues | currentQueryParam',
-        currentQueryParam
-      );
       const hasQueryParamInState = typeof currentQueryParam !== 'undefined';
       return hasQueryParamInState ? currentQueryParam : urlQueryParams[paramName];
     };
@@ -128,20 +116,8 @@ class MainPanel extends Component {
     const { urlQueryParams, history, sortConfig, filterConfig } = this.props;
 
     return updatedURLParams => {
-      console.log(
-        '🚀 | file: MainPanel.js | line 122 | MainPanel | getHandleChangedValueFn | updatedURLParams',
-        updatedURLParams
-      );
       const updater = prevState => {
-        console.log(
-          '🚀 | file: MainPanel.js | line 124 | MainPanel | getHandleChangedValueFn | prevState',
-          prevState
-        );
         const { address, bounds } = urlQueryParams;
-        console.log(
-          '🚀 | file: MainPanel.js | line 126 | MainPanel | getHandleChangedValueFn | urlQueryParams',
-          urlQueryParams
-        );
         const mergedQueryParams = { ...urlQueryParams, ...prevState.currentQueryParams };
 
         // Address and bounds are handled outside of MainPanel.

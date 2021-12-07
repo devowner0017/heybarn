@@ -130,7 +130,7 @@ const maps = {
 
     // Distance in meters for calculating the bounding box around the
     // current location.
-    currentLocationBoundsDistance: 1000,
+    currentLocationBoundsDistance: 2000,
 
     // Example location can be edited in the
     // `default-location-searches.js` file.
@@ -140,7 +140,7 @@ const maps = {
     // Limit location autocomplete to a one or more countries
     // using ISO 3166 alpha 2 country codes separated by commas.
     // If you want to limit the autocomplete, uncomment this value:
-    countryLimit: ['AU', 'NZ'],
+    countryLimit: ['NZ'],
   },
 
   // When fuzzy locations are enabled, coordinates on maps are

@@ -17,19 +17,24 @@
 :root {
   /* ================ Colors ================ */
 
-  --marketplaceColor: #c0392b;
-  --marketplaceColorLight: #ff4c38;
-  --marketplaceColorDark: #8c291e;
+  --marketplaceColor: #c35827;
+  --marketplaceColorLight: #c35827;
+  --marketplaceColorDark: #c35827;
+  --marketplaceColorTan: #f3ddbc;
+  --marketplaceColorGreen: #6d692b;
+  --marketplaceColorOrange: #da8627;
+  --marketplaceColorBrown: #754d1e;
+  --marketplaceColorRed: #c35827;
 
   /* Used with inline CSS SVGs */
   --marketplaceColorEncoded: %23c0392b;
 
-  --successColor: #2ecc71;
-  --successColorDark: #239954;
+  --successColor: #6D692B;
+  --successColorDark: #585522;
   --successColorLight: #f0fff6;
   --failColor: #ff0000;
   --failColorLight: #fff0f0;
-  --attentionColor: #ffaa00;
+  --attentionColor: #da8627;
   --attentionColorLight: #fff7f0;
   --bannedColorLight: var(--marketplaceColorLight);
   --bannedColorDark: var(--marketplaceColor);
@@ -44,7 +49,8 @@
   --matterColorLightTransparent: rgba(255, 255, 255, 0.65);
 
   /* ================ Font ================ */
-  --fontFamily: 'poppins', Helvetica, Arial, sans-serif;
+  --fontFamily: 'Zilla Slab', serif;
+  --fontFamilySecondary: 'Montserrat', Helvetica, Arial, sans-serif;
 
   --fontWeightRegular: 400;
   --fontWeightMedium: 500;
@@ -292,9 +298,9 @@ textarea {
 
 .fontsLoaded {
   & body {
-    font-family: 'poppins', Helvetica, Arial, sans-serif;
+    font-family: 'Zilla Slab', Helvetica, Arial, sans-serif;
   }
   & button {
-    font-family: 'poppins', Helvetica, Arial, sans-serif;
+    font-family: 'Zilla Slab', Helvetica, Arial, sans-serif;
   }
 }

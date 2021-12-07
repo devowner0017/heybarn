@@ -4,7 +4,8 @@ import classNames from 'classnames';
 
 import config from '../../config';
 import IconLogo from './IconLogo';
-import LogoImage from './saunatime-logo.png';
+import BigLogo from './BigLogo';
+import LogoImage from './heybarn-logo.svg';
 import css from './Logo.module.css';
 
 const Logo = props => {
@@ -12,7 +13,7 @@ const Logo = props => {
   const mobileClasses = classNames(css.logoMobile, className);
 
   if (format === 'desktop') {
-    return <img className={className} src={LogoImage} alt={config.siteTitle} {...rest} />;
+    return <BigLogo className={className} src={LogoImage} alt={config.siteTitle} {...rest} />;
   }
 
   return <IconLogo className={mobileClasses} {...rest} />;

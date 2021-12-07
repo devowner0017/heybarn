@@ -140,7 +140,9 @@
   margin: 0;
   padding: 0;
   max-width: 1040px;
-padding-left: 60px;;
+  @media (--viewportLarge) {
+    padding-left: 60px;
+  }
 }
 
 @keyframes loadingSpinnerFadeIn {

@@ -392,6 +392,7 @@ export class TransactionPanelComponent extends Component {
                 txId: currentTransaction.id,
                 listingId: currentListing.id,
               });
+              this.handleOpenRentalAgreementModal(false);
             },
             negativeAction: _ =>
               onCancelDuringRad({
@@ -944,7 +945,7 @@ export class TransactionPanelComponent extends Component {
                   avatarWrapperClassName={css.avatarWrapperDesktop}
                   listingTitle={relatedTitle}
                   image={relatedFirstImage}
-                  provider={currentProvider}
+                  provider={currentCustomer}
                   isCustomer={isCustomer}
                 />
                 <DetailCardHeadingsMaybe

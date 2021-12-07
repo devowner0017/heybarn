@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useCallback } from 'react';
 import { string, func } from 'prop-types';
 import { FormattedMessage, intlShape, injectIntl } from '../../util/reactIntl';
 import classNames from 'classnames';
@@ -56,7 +56,6 @@ export const ListingCardComponent = props => {
   } = props;
   const classes = classNames(rootClassName || css.root, className);
   const currentListing = ensureListing(listing);
-  console.log('🚀 | file: ListingCard.js | line 49 | currentListing', currentListing);
   const id = currentListing.id.uuid;
   const { title = '', price, publicData } = currentListing.attributes;
   const { listingType, locRegion: region, preferredUse: need, listingState } = publicData || {};
@@ -80,28 +79,26 @@ export const ListingCardComponent = props => {
     ? 'ListingCard.perDay'
     : 'ListingCard.perUnit';
   const listingUnderEnquiry = listingState === LISTING_UNDER_ENQUIRY;
-  const ConditionalWrapper = ({ condition, wrapper, defaultWrapper, children }) => {
-    console.log('🚀 | file: ListingCard.js | line 84 | ConditionalWrapper | wrapper', wrapper);
-    console.log(
-      '🚀 | file: ListingCard.js | line 84 | ConditionalWrapper | defaultWrapper',
-      defaultWrapper
-    );
-    console.log('🚀 | file: ListingCard.js | line 84 | ConditionalWrapper |  condition', condition);
-
-    return condition ? wrapper(children) : !!defaultWrapper ? defaultWrapper(children) : children;
-  };
+  const ConditionalWrapper = useCallback(
+    ({ condition, wrapper, defaultWrapper, children }) => {
+      return condition ? wrapper(children) : !!defaultWrapper ? defaultWrapper(children) : children;
+    },
+    [listingUnderEnquiry]
+  );
   return (
     <ConditionalWrapper
       condition={!listingUnderEnquiry}
-      wrapper={children => (
-        <NamedLink
-          className={classes}
-          name={`${capitalize(listingType)}Page`}
-          params={{ id, slug }}
-        >
-          {children}
-        </NamedLink>
-      )}
+      wrapper={children => {
+        return (
+          <NamedLink
+            className={classes}
+            name={`${capitalize(listingType)}Page`}
+            params={{ id, slug }}
+          >
+            {children}
+          </NamedLink>
+        );
+      }}
       defaultWrapper={children => <div className={classes}>{children}</div>}
     >
       <div

@@ -373,7 +373,7 @@
   "FilterForm.clear": "Clear",
   "FilterForm.submit": "Apply",
   "FilterPlain.clear": "Clear",
-  "Footer.copyright": "© Sharetribe {year}",
+  "Footer.copyright": "© Heybarn {year}",
   "Footer.goToFacebook": "Go to Facebook page",
   "Footer.goToInstagram": "Go to Instagram page",
   "Footer.goToTwitter": "Go to Twitter page",
@@ -1192,7 +1192,7 @@
   "TransactionPanel.c_hostEnquiredTitle": "Done. We've sent {providerName} your advert.",
   "TransactionPanel.c_hostEnquiredSubTitle": "Sit back, relax and we'll let you know if they're interested.",
   "TransactionPanel.p_hostEnquiredTitle": "Good news!  {customerName} is keen to connect.",
-  "TransactionPanel.p_hostEnquiredSubTitle": "Does this look like the right renter for you?",
+  "TransactionPanel.p_hostEnquiredSubTitle": "Does this look like the right space for you?",
 
   "TransactionPanel.c_rentalAgreementDiscussionTitle": "Good news! {providerName} is keen to talk more.",
   "TransactionPanel.c_rentalAgreementDiscussionSubTitle": "Lets start a conversation with them...",

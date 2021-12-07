@@ -61,7 +61,7 @@ const LineItemNextPayment = props => {
   const localEndDateRaw = dateFromAPIToLocalNoon(moment(lastPaymentDate));
 
   const isNightly = unitType === LINE_ITEM_NIGHT;
-  const endDay = isNightly ? localEndDateRaw : moment(localEndDateRaw).subtract(1, 'days');
+  const endDay = isNightly ? localEndDateRaw : moment(localEndDateRaw);
 
   return (
     <>

@@ -7,7 +7,7 @@
 }
 
 .darkSkin {
-  background-color: var(--matterColor);
+  background-color: var(--marketplaceColorGreen);
 }
 
 .tab {
@@ -32,7 +32,7 @@
   /* Font */
   @apply --marketplaceTabNavHorizontalFontStyles;
 
-  color: var(--matterColor);
+  color: var(--marketplaceColor);
   padding-bottom: 10px;
 
   border-bottom-width: 2px;
@@ -74,7 +74,7 @@
 
 /* Dark skin */
 .tabContentDarkSkin {
-  color: var(--matterColorAnti);
+  color: var(--matterColorLight);
 
   &:hover {
     color: var(--matterColorLight);
@@ -87,6 +87,6 @@
 }
 
 .disabledDarkSkin {
-  color: var(--matterColorDark);
+  color: var(--matterColorAnti);
   opacity: 0.3;
 }

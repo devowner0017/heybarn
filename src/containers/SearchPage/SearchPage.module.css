@@ -13,7 +13,7 @@
     top: 0;
     left: 0;
     /* We need to raise Topbar above .container */
-    z-index: 1;
+    z-index: var(--zIndexTopbar);
   }
 }
 
@@ -198,7 +198,6 @@
 .mapOpened {
   left: revert;
   -webkit-transform: translate(0, 0);
-
 }
 .mapClosing {
 }

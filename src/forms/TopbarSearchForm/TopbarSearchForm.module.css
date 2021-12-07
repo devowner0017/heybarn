@@ -56,7 +56,7 @@
   display: flex;
   width: 24px;
   align-self: stretch;
-  background-color: var(--matterColorLight);
+  background-color: var(--marketplaceColorTan);
 }
 
 .desktopInput {
@@ -82,7 +82,7 @@
 
   &:hover::placeholder,
   &:focus::placeholder {
-    color: var(--matterColor);
+    color: var(--matterColorDark);
   }
 
   /* Placeholder text might be too wide */
@@ -91,6 +91,8 @@
     overflow-x: hidden;
     font-weight: var(--fontWeightMedium);
     transition: var(--transitionStyleButton);
+    color: var(--marketplaceColorRed);
+
   }
 
   margin-top: 0;
@@ -139,7 +141,7 @@
   border-bottom-left-radius: var(--borderRadius);
   border-bottom-right-radius: var(--borderRadius);
   box-shadow: var(--boxShadowPopup);
-  z-index: calc(var(--zIndexPopup) + 1);
+  z-index: calc(var(--zIndexPopup) + 100);
 
   margin-top: calc(
     var(--topbarHeightDesktop) - var(--TopbarSearchForm_inputHeight) +

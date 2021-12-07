@@ -535,7 +535,7 @@ export class CheckoutPageComponent extends Component {
         .add({ days: 6, hours: 23, minutes: 59 })
         .unix(),
       endTimestamp: moment(bookingDates.bookingEnd)
-        .subtract({ days: 7, minutes: 1 })
+        .subtract({ days: 6, hours: 23, minutes: 59 })
         .unix(),
       transaction: tx,
     };
