@@ -196,14 +196,18 @@
   /* width: 0.1vw; */
 }
 .mapOpened {
-  left: revert;
-  -webkit-transform: translate(0, 0);
+  @media (--viewportMedium) {
+    left: revert;
+    -webkit-transform: translate(0, 0);
+  }
 }
 .mapClosing {
 }
 .mapClosed {
-  right: -120%;
-  -webkit-transform: translate(-100%, 0);
+  @media (--viewportMedium) {
+    right: -120%;
+    -webkit-transform: translate(-100%, 0);
 
-  /* width: 0.1vw; */
+    /* width: 0.1vw; */
+  }
 }

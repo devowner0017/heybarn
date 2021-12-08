@@ -36,7 +36,7 @@
 
 .listingPanel {
   width: 100%;
-  margin: 0  auto 0 auto;
+  margin: 0 auto 0 auto;
 
   @media (--viewportMedium) {
     margin: 0 auto 0 auto;
@@ -61,14 +61,17 @@
 }
 
 .listingCards {
-  padding: 0 24px 96px 24px;
+  padding: 0 0 96px 0;
+  grid-template-columns: repeat(auto-fit, minmax(100%));
 
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 25%));
   grid-gap: 1rem;
   grid-auto-flow: dense;
 
   @media (--viewportMedium) {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 25%));
+    padding: 0 24px 96px 24px;
+
     /* display: flex; */
     /* flex-direction: row;
     flex-wrap: wrap; */

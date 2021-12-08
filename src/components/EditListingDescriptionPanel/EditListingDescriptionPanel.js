@@ -42,6 +42,7 @@ const EditListingDescriptionPanel = props => {
   );
   const { description, title, publicData } = currentListing.attributes;
   const { preferredUse, listingState: currentListingState } = publicData;
+  console.log('🚀 | file: EditListingDescriptionPanel.js | line 45 | publicData', publicData);
   const isPublished = currentListing.id && currentListing.attributes.state !== LISTING_STATE_DRAFT;
   const panelTitle = isPublished ? (
     <FormattedMessage
@@ -74,10 +75,15 @@ const EditListingDescriptionPanel = props => {
         onSubmit={values => {
           console.log('🚀 | file: EditListingDescriptionPanel.js | line 70 | values', values);
           const { title, description, category, preferredUse } = values;
-          if (!currentListingState) {
-            listingState;
-          }
-          const listingState = !currentListingState ? LISTING_LIVE : null;
+          console.log(
+            '🚀 | file: EditListingDescriptionPanel.js | line 78 | currentListingState',
+            currentListingState
+          );
+          const listingState = !currentListingState || !isPublished ? LISTING_LIVE : null;
+          console.log(
+            '🚀 | file: EditListingDescriptionPanel.js | line 79 | listingState',
+            listingState
+          );
           const updateValues = {
             title: title.trim(),
             description,

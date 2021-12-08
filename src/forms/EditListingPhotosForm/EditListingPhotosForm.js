@@ -60,6 +60,7 @@ export class EditListingPhotosFormComponent extends Component {
             saveActionMsg,
             updated,
             updateInProgress,
+            listingType,
           } = formRenderProps;
 
           const chooseImageText = (
@@ -201,7 +202,7 @@ export class EditListingPhotosFormComponent extends Component {
               {uploadImageFailed}
 
               <p className={css.tip}>
-                <FormattedMessage id="EditListingPhotosForm.addImagesTip" />
+                <FormattedMessage id={`EditListingPhotosForm.${listingType}addImagesTip`} />
               </p>
               {publishListingFailed}
               {showListingFailed}

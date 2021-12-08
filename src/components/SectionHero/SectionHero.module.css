@@ -96,8 +96,10 @@
   width: 100%;
   justify-content: space-around;
 }
+
 .heroButton {
   @apply --marketplaceButtonStyles;
+    margin: 0.2rem;
   composes: animation;
 
   animation-delay: 0.8s;

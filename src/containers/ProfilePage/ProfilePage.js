@@ -76,6 +76,7 @@ export class ProfilePageComponent extends Component {
     const bio = profileUser.attributes.profile.bio;
     const hasBio = !!bio;
     const hasListings = listings.length > 0;
+    const hasAdverts = listings.length > 0;
     const isMobileLayout = viewport.width < MAX_MOBILE_SCREEN_WIDTH;
 
     const editLinkMobile = isCurrentUser ? (
@@ -189,6 +190,23 @@ export class ProfilePageComponent extends Component {
             <h2 className={css.listingsTitle}>
               <FormattedMessage
                 id="ProfilePage.listingsTitle"
+                values={{ count: listings.length }}
+              />
+            </h2>
+            <ul className={css.listings}>
+              {listings.map(l => (
+                <li className={css.listing} key={l.id.uuid}>
+                  <ListingCard listing={l} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}{' '}
+        {hasAdverts ? (
+          <div className={listingsContainerClasses}>
+            <h2 className={css.listingsTitle}>
+              <FormattedMessage
+                id="ProfilePage.advertsTitle"
                 values={{ count: listings.length }}
               />
             </h2>

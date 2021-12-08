@@ -2,8 +2,9 @@ import { storableError } from '../../util/errors';
 import { retrieveRecommendedUsersFromApi } from '../../util/api';
 import { addMarketplaceEntities } from '../../ducks/marketplaceData.duck';
 import { denormalisedResponseEntities } from '../../util/data';
-import config from '../../config'
+import config from '../../config';
 import { types as sdkTypes } from '../../util/sdkLoader';
+import { LISTING_LIVE } from '../../util/types';
 const { UUID } = sdkTypes;
 
 // ================ Action types ================ //
@@ -57,7 +58,7 @@ const listingPageReducer = (state = initialState, action = {}) => {
       // eslint-disable-next-line no-console
       console.error(payload);
       return { ...state, searchInProgress: false, retrieveRecommendedListingsError: payload };
-      
+
     case RETRIEVE_RECOMMENDED_ADVERTS_REQUEST:
       return {
         ...state,
@@ -74,22 +75,6 @@ const listingPageReducer = (state = initialState, action = {}) => {
       // eslint-disable-next-line no-console
       console.error(payload);
       return { ...state, searchAdvertsInProgress: false, retrieveRecommendedAdvertsError: payload };
-
-    // case RETRIEVE_RECOMMENDED_USERS_REQUEST:
-    //   return {
-    //     ...state,
-    //     searchUsersInProgress: true,
-    //     retrieveRecommendedUsersError: null,
-    //   };
-    // case RETRIEVE_RECOMMENDED_USERS_SUCCESS:
-    //   return {
-    //     ...state,
-    //     currentPageUsers: [...state.currentPageUsers, ...payload],
-    //   };
-    // case RETRIEVE_RECOMMENDED_USERS_ERROR:
-    //   // eslint-disable-next-line no-console
-    //   console.error(payload);
-    //   return { ...state, retrieveRecommendedUsersError: payload };
 
     default:
       return state;
@@ -132,26 +117,11 @@ export const retrieveRecommendedAdvertsError = e => ({
   payload: e,
 });
 
-// export const retrieveRecommendedUsersRequest = searchParams => ({
-//   type: RETRIEVE_RECOMMENDED_USERS_REQUEST,
-//   payload: { searchParams },
-// });
-
-// export const retrieveRecommendedUsersSuccess = response => ({
-//   type: RETRIEVE_RECOMMENDED_USERS_SUCCESS,
-//   payload: response,
-// });
-
-// export const retrieveRecommendedUsersError = e => ({
-//   type: RETRIEVE_RECOMMENDED_USERS_ERROR,
-//   error: true,
-//   payload: e,
-// });
-
 export const retrieveRecommendedListings = _ => (dispatch, getState, sdk) => {
   dispatch(retrieveRecommendedListingsRequest());
   const params = {
     pub_listingType: 'listing',
+    pub_listingState: LISTING_LIVE,
     include: ['author', 'images'],
     'fields.listing': ['title', 'geolocation', 'price', 'publicData'],
     'fields.user': ['profile.displayName', 'profile.abbreviatedName'],
@@ -181,6 +151,7 @@ export const retrieveRecommendedAdverts = _ => (dispatch, getState, sdk) => {
   dispatch(retrieveRecommendedAdvertsRequest());
   const params = {
     pub_listingType: 'advert',
+    pub_listingState: LISTING_LIVE,
     include: ['author', 'images'],
     'fields.listing': ['title', 'geolocation', 'price', 'publicData'],
     'fields.user': ['profile.displayName', 'profile.abbreviatedName'],
@@ -207,39 +178,8 @@ export const retrieveRecommendedAdverts = _ => (dispatch, getState, sdk) => {
     });
 };
 
-// export const retrieveRecommendedUsers = params => (dispatch, getState, sdk) => {
-//   if (getState().LandingPage.searchUsersInProgress){
-//     return null
-//   } 
-//   dispatch(retrieveRecommendedUsersRequest());
-//   const userIds = config.recommendedUsers?.split(',');
-//   return Promise.all(
-//     userIds?.map(u => {
-//       return sdk.users
-//         .show({
-//           id: new UUID(u),
-//           expand: true,
-//           include: ['profileImage'],
-//           'fields.user': ['profile.displayName', 'profile.abbreviatedName', ],
-//         })
-//         .then(r => {
-//           const user = denormalisedResponseEntities(r);
-          
-//           dispatch(retrieveRecommendedUsersSuccess(user))
-//           return user
-//         })
-//         .catch(e => {
-//           console.log(e)
-//           dispatch(retrieveRecommendedUsersError(storableError(e)));
-//           throw e;
-//         });
-//     })
-//   )
-// };
-
 export const loadData = params => (dispatch, getState, sdk) => {
   return Promise.all([
-    // dispatch(retrieveRecommendedUsers()),
     dispatch(retrieveRecommendedListings()),
     dispatch(retrieveRecommendedAdverts()),
   ]);

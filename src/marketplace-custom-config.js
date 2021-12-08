@@ -144,26 +144,6 @@ export const filters = [
     },
   },
   {
-    id: 'category',
-    label: 'Category',
-    type: 'SelectSingleFilter',
-    group: 'primary',
-    queryParamNames: ['pub_category'],
-    listingType: ['listing', 'advert'],
-    config: {
-      // "key" is the option you see in Flex Console.
-      // "label" is set here for the UI only.
-      // Note: label is not added through the translation files
-      // to make filter customizations a bit easier.
-      options: [
-        { key: 'smoke', label: 'Smoke' },
-        { key: 'electric', label: 'Electric' },
-        { key: 'wood', label: 'Wood' },
-        { key: 'other', label: 'Other' },
-      ],
-    },
-  },
-  {
     id: 'locIsland',
     label: 'Island',
     type: 'SelectRegionFilter',

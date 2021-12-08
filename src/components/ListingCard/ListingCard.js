@@ -79,6 +79,10 @@ export const ListingCardComponent = props => {
     ? 'ListingCard.perDay'
     : 'ListingCard.perUnit';
   const listingUnderEnquiry = listingState === LISTING_UNDER_ENQUIRY;
+  const useLink = minInfo || !listingUnderEnquiry;
+  console.log("🚀 | file: ListingCard.js | line 83 |  !minInfo",  !minInfo);
+  console.log("🚀 | file: ListingCard.js | line 83 |  !listingUnderEnquiry",  !listingUnderEnquiry);
+  console.log("🚀 | file: ListingCard.js | line 83 |  !minInfo || !listingUnderEnquiry",  !minInfo || !listingUnderEnquiry);
   const ConditionalWrapper = useCallback(
     ({ condition, wrapper, defaultWrapper, children }) => {
       return condition ? wrapper(children) : !!defaultWrapper ? defaultWrapper(children) : children;
@@ -87,7 +91,7 @@ export const ListingCardComponent = props => {
   );
   return (
     <ConditionalWrapper
-      condition={!listingUnderEnquiry}
+      condition={useLink}
       wrapper={children => {
         return (
           <NamedLink
@@ -107,7 +111,7 @@ export const ListingCardComponent = props => {
         onMouseLeave={() => setActiveListing(null)}
         id="listingCard"
       >
-        {listingUnderEnquiry && (
+        {listingUnderEnquiry && !minInfo && (
           <Overlay
             message={intl.formatMessage({ id: `ManageListingCard.${listingType}UnderEnquiry` })}
           ></Overlay>

@@ -78,11 +78,6 @@ const priceData = (price, intl) => {
   return {};
 };
 
-const categoryLabel = (categories, key) => {
-  const cat = categories.find(c => c.key === key);
-  return cat ? cat.label : key;
-};
-
 export class ListingPageComponent extends Component {
   constructor(props) {
     super(props);
