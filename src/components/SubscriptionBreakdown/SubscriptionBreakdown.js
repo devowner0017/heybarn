@@ -41,6 +41,7 @@ export const SubscriptionBreakdownComponent = props => {
     dateType,
     subscription,
   } = props;
+  if (!subscription) return null;
   console.log('🚀 | file: SubscriptionBreakdown.js | line 41 | props', props);
   const { booking } = transaction;
   console.log('🚀 | file: SubscriptionBreakdown.js | line 44 | transaction', transaction);

@@ -215,9 +215,7 @@ export class TransactionInitPanelComponent extends Component {
       : 'TransactionInitPanel.perUnit';
 
     const price = currentListing.attributes.price;
-    const bookingSubTitle = price
-      ? `${formatMoney(intl, price)} ${intl.formatMessage({ id: unitTranslationKey })}`
-      : '';
+    const bookingSubTitle = price ? `${formatMoney(intl, price)}` : '';
 
     const firstImage =
       currentListing.images && currentListing.images.length > 0 ? currentListing.images[0] : null;
@@ -269,6 +267,9 @@ export class TransactionInitPanelComponent extends Component {
                 />
               </p>
             ) : null}
+
+            {selectListing}
+
             {paymentForm}
             {couponCodeComp}
           </div>
@@ -285,12 +286,12 @@ export class TransactionInitPanelComponent extends Component {
               <DetailCardHeadingsMaybe
                 showDetailCardHeadings={stateData.showDetailCardHeadings}
                 listingTitle={listingTitle}
+                listing={currentListing}
                 subTitle={bookingSubTitle}
                 location={location}
                 geolocation={geolocation}
               />
             </div>
-            {selectListing}
             {selectedListing && (
               <div className={css.detailCard}>
                 <DetailCardImage

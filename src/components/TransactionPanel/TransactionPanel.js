@@ -382,13 +382,21 @@ export class TransactionPanelComponent extends Component {
           },
           rentalAgreementModalProps: {
             affirmativeAction: values => {
-              const { bookingDates, ...rest } = values;
+              const {
+                startDate: { date: startDate },
+                endDate,
+                ...rest
+              } = values;
+              console.log(
+                '🚀 | file: TransactionPanel.js | line 386 | TransactionPanelComponent | render | values',
+                values
+              );
 
               onSendRentalAgreement({
                 contractLines: {
                   ...rest,
                 },
-                bookingDates,
+                bookingDates: { startDate, endDate },
                 txId: currentTransaction.id,
                 listingId: currentListing.id,
               });
@@ -405,8 +413,10 @@ export class TransactionPanelComponent extends Component {
             negativeInProgress: cancelDuringRadInProgress,
             affirmativeError: sendRentalAgreementError,
             negativeError: cancelDuringRadError,
-            titleText: <FormattedMessage id="TransactionPanel.rentalAgreementModalTitle" />,
-            contentText: <FormattedMessage id="TransactionPanel.rentalAgreementModalSubTitle" />,
+            titleText: <FormattedMessage id="RentalAgreementModal.rentalAgreementModalTitle" />,
+            contentText: (
+              <FormattedMessage id="RentalAgreementModal.rentalAgreementModalSubTitle" />
+            ),
           },
         };
       }
@@ -442,17 +452,22 @@ export class TransactionPanelComponent extends Component {
           },
           rentalAgreementModalProps: {
             affirmativeAction: values => {
-              const { bookingDates, ...rest } = values;
+              const {
+                startDate: { date: startDate },
+                endDate,
+                ...rest
+              } = values;
 
               onSendRentalAgreement({
                 contractLines: {
                   ...rest,
                 },
-                bookingDates,
+                bookingDates: { startDate, endDate },
                 txId: currentTransaction.id,
                 listingId: currentListing.id,
                 wasRequested: true,
               });
+              this.handleOpenRentalAgreementModal(false);
             },
             negativeAction: _ =>
               onCancelDuringRad({
@@ -466,8 +481,10 @@ export class TransactionPanelComponent extends Component {
             negativeInProgress: cancelDuringRadInProgress,
             affirmativeError: sendRentalAgreementError,
             negativeError: cancelDuringRadError,
-            titleText: <FormattedMessage id="TransactionPanel.rentalAgreementModalTitle" />,
-            contentText: <FormattedMessage id="TransactionPanel.rentalAgreementModalSubTitle" />,
+            titleText: <FormattedMessage id="RentalAgreementModal.rentalAgreementModalTitle" />,
+            contentText: (
+              <FormattedMessage id="RentalAgreementModal.rentalAgreementModalSubTitle" />
+            ),
           },
         };
       }

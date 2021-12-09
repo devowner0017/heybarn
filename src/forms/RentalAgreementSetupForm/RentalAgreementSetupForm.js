@@ -38,7 +38,10 @@ const RentalAgreementSetupFormComponent = props => (
         reviewSent,
         sendReviewError,
         sendReviewInProgress,
+        values,
       } = fieldRenderProps;
+      console.log('🚀 | file: RentalAgreementSetupForm.js | line 43 | values', values);
+      const { startDate, endDate } = values;
       const [focusedInput, setFocusedInput] = useState();
       // Function that can be passed to nested components
       // so that they can notify this component when the
@@ -70,42 +73,23 @@ const RentalAgreementSetupFormComponent = props => (
       // In case you add more fields to the form, make sure you add
       // the values here to the bookingData object.
       const handleOnChange = formValues => {
+        const { lengthOfContract, startDate, endDate } = formValues.values;
+        if (!startDate) return null;
+        console.log('🚀 | file: RentalAgreementSetupForm.js | line 77 | endDate', endDate);
+        console.log('🚀 | file: RentalAgreementSetupForm.js | line 77 | startDate', startDate);
+        const endDateMaybe = moment(startDate?.date).add(lengthOfContract, 'weeks');
         console.log(
-          '🚀 | file: RentalAgreementSetupForm.js | line 67 | formValues',
-          formValues.values.bookingDates
-        );
-        console.log(
-          '🚀 | file: RentalAgreementSetupForm.js | line 67 | formValues',
-          formValues.values.bookingDates?.endDate
-        );
-        const { lengthOfContract } = formValues.values;
-        console.log(
-          '🚀 | file: RentalAgreementSetupForm.js | line 68 | lengthOfContract',
-          lengthOfContract
-        );
-        const { startDate, endDate } =
-          formValues.values && formValues.values.bookingDates ? formValues.values.bookingDates : {};
-        console.log('🚀 | file: RentalAgreementSetupForm.js | line 69 | startDate', startDate);
-        console.log('🚀 | file: RentalAgreementSetupForm.js | line 69 | endDate', endDate);
-        const endDateMaybe = dateFromLocalToAPI(moment(startDate).add(lengthOfContract, 'weeks'));
-        console.log(
-          '🚀 | file: RentalAgreementSetupForm.js | line 74 | endDateMaybe',
+          '🚀 | file: RentalAgreementSetupForm.js | line 80 | endDateMaybe',
           endDateMaybe
         );
-
-        console.log(
-          '🚀 | file: RentalAgreementSetupForm.js | line 77 | !moment(endDateMaybe).isSame(moment(endDate))',
-          !moment(endDateMaybe).isSame(moment(endDate))
-        );
         if (startDate && lengthOfContract && !moment(endDateMaybe).isSame(moment(endDate))) {
-          form.change(`bookingDates.endDate`, endDateMaybe);
+          form.change(`endDate`, endDateMaybe);
         }
       };
 
       return (
         <Form className={classes} onSubmit={handleSubmit}>
           <FieldNumberInput
-            className={classNames(css.features, css.numberInput)}
             label={<FormattedMessage id="RentalAgreementModal.lengthOfContractLabel" />}
             id={'lengthOfContract'}
             name={'lengthOfContract'}
@@ -118,13 +102,15 @@ const RentalAgreementSetupFormComponent = props => (
           <FormSpy
             subscription={{ values: true }}
             onChange={values => {
-              console.log("🚀 | file: RentalAgreementSetupForm.js | line 123 | values", values);
+              console.log('🚀 | file: RentalAgreementSetupForm.js | line 123 | values', values);
               handleOnChange(values);
             }}
           />
-          <FieldDateRangeInput
+          <FieldDateInput
             className={css.bookingDates}
-            name="bookingDates"
+            label={'Start'}
+            name="startDate"
+            id={`startDate`}
             unitType={'units'}
             startDateId={`startDate`}
             startDateLabel={'Start'}
@@ -137,7 +123,7 @@ const RentalAgreementSetupFormComponent = props => (
             onFocusedInputChange={onFocusedInputChange}
             format={identity}
             // timeSlots={timeSlots}
-            useMobileMargins
+            disabled={!values.lengthOfContract}
             customIsDayBlocked={date => {
               console.log('🚀 | file: RentalAgreementSetupForm.js | line 143 | date', date);
               return false;
@@ -146,13 +132,7 @@ const RentalAgreementSetupFormComponent = props => (
               console.log('🚀 | file: RentalAgreementSetupForm.js | line 147 | date', date);
               return false;
             }}
-            // validate={composeValidators(
-            //   required(requiredMessage),
-            //   bookingDatesRequired(startDateErrorMessage, endDateErrorMessage)
-            // )}
-            // disabled={fetchLineItemsInProgress}
           />
-
           {/* <FieldTextInput
             className={css.reviewContent}
             type="textarea"
@@ -163,6 +143,18 @@ const RentalAgreementSetupFormComponent = props => (
             validate={required(reviewContentRequiredMessage)}
           /> */}
           {errorArea}
+          {startDate && (
+            <div className={css.detailRow}>
+              <p>Start Date</p>
+              <p>{moment(startDate.date).format('ddd, DD MMM YYYY')}</p>
+            </div>
+          )}
+          {endDate && (
+            <div className={css.detailRow}>
+              <p>End Date</p>
+              <p>{moment(endDate).format('ddd, DD MMM YYYY')}</p>
+            </div>
+          )}
           <PrimaryButton
             className={css.submitButton}
             type="submit"

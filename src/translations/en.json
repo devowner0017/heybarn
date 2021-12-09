@@ -1243,15 +1243,16 @@
   "TransactionPanel.declineConfirmationTitle": "Are you sure you want to stop the conversation?",
   "TransactionPanel.declineConfirmationSubTitle": "This action is permanent, and you won't have a chance to communicate with the other user anymore.",
 
-  "RentalAgreementModal.defaultTitle": "Prepare Your Rental Agreement",
-  "RentalAgreementModal.defaultSubTitle": "Enter the details you would like in your rental agreement",
+  "RentalAgreementModal.later": "Later",
+  "RentalAgreementModal.rentalAgreementModalTitle": "Prepare Your Rental Agreement",
+  "RentalAgreementModal.rentalAgreementModalSubTitle": "Enter the details you would like in your rental agreement",
   "RentalAgreementModal.lengthOfContractLabel": "How many weeks are you renting the space out?",
   "RentalAgreementSetupForm.submit": "Send",
 
   "ConfirmationModal.defaultTitle": "Are you sure?",
   "ConfirmationModal.defaultSubTitle": "This action may be permanent, are you sure about this?",
   "ConfirmationModal.later": "Close",
-
+  "FieldDateInput.placeholder": "Date",
   "TransactionPanel.acceptButton": "Accept",
   "TransactionPanel.acceptSaleFailed": "Oops, accepting failed. Please try again.",
   "TransactionPanel.activityHeading": "Activity",

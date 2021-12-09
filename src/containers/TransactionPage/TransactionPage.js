@@ -415,7 +415,7 @@ const mapStateToProps = state => {
     state.TransactionPage
   );
   const { subscription } = state.stripe;
-  console.log('🚀 | file: TransactionPage.js | line 426 | subscription', subscription);
+  console.log('🚀 | file: TransactionPage.js | line 426 | subscription', state.stripe);
   const { currentUser } = state.user;
   const relatedListing = getMarketplaceEntities(
     state,

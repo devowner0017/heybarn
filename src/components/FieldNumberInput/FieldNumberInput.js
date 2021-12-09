@@ -4,9 +4,9 @@ import React from 'react';
 import { Field } from 'react-final-form';
 import { ValidationError } from '..';
 import NumericInput from 'react-numeric-input';
+import InputNumber from 'rc-input-number';
 
 import css from './FieldNumberInput.module.css';
-NumericInput.style.input.border = 'none';
 
 const FieldNumberInputComponent = props => {
   const {
@@ -38,44 +38,40 @@ const FieldNumberInputComponent = props => {
     [css.selectSuccess]: valid,
     [css.selectError]: hasError,
   });
+
   const handleOnChange = val => {
     customOnChange && customOnChange(val);
     input.onChange(val);
   };
 
   function customFormatFunc(num) {
-    return num + " " + customFormat;
+    return num + ' ' + customFormat;
   }
 
   const selectProps = { className: selectClasses, id, value: 1, ...input, ...rest };
   const classes = classNames(rootClassName || css.root, className);
+  console.log('🚀 | file: FieldNumberInput.js | line 52 | selectProps', selectProps);
   const inputComp = (
-    <NumericInput
+    <InputNumber
       {...selectProps}
       autoFocus={autofocus}
       min={min}
       max={max}
       step={step}
-      snap={!!props.step}
       defaultValue={min}
-      format={customFormat ? customFormatFunc : val => val}
+      controls={true}
+      // format={customFormat ? customFormatFunc : val => val}
       onChange={e => handleOnChange(e)}
     />
   );
   return (
     <div className={classes}>
       {label ? (
-        <label
-          htmlFor={id}
-          className={classNames(css.innerLabel, { [css.innerLabelFocused]: !!input.value })}
-          // className={classNames(css.inputLabel, { [css.tooltipLabel]: !!tooltip })}
-        >
+        <label className={css.inputLabel} htmlFor={id}>
           {label}
         </label>
       ) : null}
-      <div className={css.inputTooltipWrapper}>
-        {inputComp}
-      </div>
+      <div>{inputComp}</div>
       <ValidationError fieldMeta={meta} />
     </div>
   );

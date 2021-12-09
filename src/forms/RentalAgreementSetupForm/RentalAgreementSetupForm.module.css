@@ -49,3 +49,15 @@
     margin-bottom: 0;
   }
 }
+.bookingDates {
+  margin-top: 1rem;
+}
+.detailRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  & > p {
+    margin: 0;
+  }
+}

@@ -66,8 +66,7 @@ const initializeOrderPage = (initialValues, routes, dispatch) => {
   dispatch(OrderPage.setInitialValues(initialValues));
 };
 
-const checkCouponCode = (coupon, currentUser) => {
-};
+const checkCouponCode = (coupon, currentUser) => {};
 // TransactionInitPage handles data loading for Sale and Order views to transaction pages in Inbox.
 export const TransactionInitPageComponent = props => {
   const {
@@ -485,12 +484,7 @@ export const TransactionInitPageComponent = props => {
         setSubmittingPlatformFee(false);
       });
   };
-
-  // If paymentIntent status is not waiting user action,
-  // confirmCardPayment has been called previously.
-  const hasPaymentIntentUserActionsDone = true;
-  // paymentIntent && STRIPE_PI_USER_ACTIONS_DONE_STATUSES.includes(paymentIntent.status);
-
+  const showPaymentForm = !!selectedListing;
   // Get first and last name of the current user and use it in the StripePaymentForm to autofill the name field
   const userName =
     currentUser && currentUser.attributes
@@ -505,68 +499,77 @@ export const TransactionInitPageComponent = props => {
     ensurePaymentMethodCard(currentUser.stripeCustomer.defaultPaymentMethod).id
   );
   const selectListing = (
-    <select
-      onChange={e => {
-        const listingId = e.target.value;
-        setSelectedListingId(listingId);
-        setSelectedListing(listings.find(l => l.id.uuid === listingId));
-      }}
-    >
-      <option disabled value="" selected>
-        Select A Listing
-      </option>
-      {listings?.map(l => (
-        <option key={l.id.uuid} value={l.id.uuid}>
-          {l.attributes.title}
+    <>
+      <h3 className={css.selectListingHeading}>
+        Which {listingType === 'listing' ? 'advert' : 'listing'} would you like to present to the{' '}
+        {listingType === 'listing' ? 'host' : 'renter'}?
+      </h3>
+      <select
+        onChange={e => {
+          const listingId = e.target.value;
+          setSelectedListingId(listingId);
+          setSelectedListing(listings.find(l => l.id.uuid === listingId));
+        }}
+        className={css.selectListing}
+      >
+        <option disabled value="" selected>
+          Select A Listing
         </option>
-      ))}
-    </select>
+        {listings?.map(l => (
+          <option key={l.id.uuid} value={l.id.uuid}>
+            {l.attributes.title}
+          </option>
+        ))}
+      </select>
+    </>
   );
-  const paymentForm = validCouponCode ? (
-    <button
-      onClick={e => {
-        e.preventDefault();
-        handleSubmitPlatformFee();
-      }}
-    >
-      Submit
-    </button>
-  ) : (
-    <StripePaymentFormPlatformFee
-      className={css.paymentForm}
-      onSubmit={handleSubmitPlatformFee}
-      inProgress={submittingPlatformFee}
-      disabled={showCreateListingPopup || !selectedListing}
-      formId="TransactionInitPagePaymentForm"
-      // Message above submit button
-      // paymentInfo={intl.formatMessage({
-      //   id: 'TransactionInitPage.paymentInfo',
-      // })}
-      // authorDisplayName={currentAuthor.attributes.profile.displayName}
-      authorDisplayName={'currentAuthor'}
-      showInitialMessageInput={false}
-      initialValues={initalValuesForStripePayment}
-      // initiateOrderError={initiateOrderError}
-      initiateOrderError={null}
-      // confirmCardPaymentError={confirmCardPaymentError}
-      confirmCardPaymentError={null}
-      // confirmPaymentError={confirmPaymentError}
-      confirmPaymentError={null}
-      // hasHandledCardPayment={hasPaymentIntentUserActionsDone}
-      hasHandledCardPayment={false}
-      // loadingData={!stripeCustomerFetched}
-      loadingData={false}
-      defaultPaymentMethod={
-        hasDefaultPaymentMethod ? currentUser.stripeCustomer.defaultPaymentMethod : null
-      }
-      paymentIntent={null}
-      // paymentIntent={paymentIntent}
-      onStripeInitialized={onStripeInitialized}
-      showInitialMessageInput={true}
-    />
-  );
+  const paymentForm = showPaymentForm ? (
+    validCouponCode ? (
+      <button
+        onClick={e => {
+          e.preventDefault();
+          handleSubmitPlatformFee();
+        }}
+      >
+        Submit
+      </button>
+    ) : (
+      <StripePaymentFormPlatformFee
+        className={css.paymentForm}
+        onSubmit={handleSubmitPlatformFee}
+        inProgress={submittingPlatformFee}
+        disabled={showCreateListingPopup || !selectedListing}
+        formId="TransactionInitPagePaymentForm"
+        // Message above submit button
+        // paymentInfo={intl.formatMessage({
+        //   id: 'TransactionInitPage.paymentInfo',
+        // })}
+        // authorDisplayName={currentAuthor.attributes.profile.displayName}
+        authorDisplayName={'currentAuthor'}
+        showInitialMessageInput={false}
+        initialValues={initalValuesForStripePayment}
+        // initiateOrderError={initiateOrderError}
+        initiateOrderError={null}
+        // confirmCardPaymentError={confirmCardPaymentError}
+        confirmCardPaymentError={null}
+        // confirmPaymentError={confirmPaymentError}
+        confirmPaymentError={null}
+        // hasHandledCardPayment={hasPaymentIntentUserActionsDone}
+        hasHandledCardPayment={false}
+        // loadingData={!stripeCustomerFetched}
+        loadingData={false}
+        defaultPaymentMethod={
+          hasDefaultPaymentMethod ? currentUser.stripeCustomer.defaultPaymentMethod : null
+        }
+        paymentIntent={null}
+        // paymentIntent={paymentIntent}
+        onStripeInitialized={onStripeInitialized}
+        showInitialMessageInput={true}
+      />
+    )
+  ) : null;
 
-  const couponCodeComp = (
+  const couponCodeComp = showPaymentForm && (
     <input
       onChange={e => {
         const val = e.target.value;

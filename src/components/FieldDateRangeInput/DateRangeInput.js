@@ -245,6 +245,10 @@ class DateRangeInputComponent extends Component {
       ...datePickerProps
     } = this.props;
     console.log(
+      '🚀 | file: DateRangeInput.js | line 246 | DateRangeInputComponent | render | datePickerProps',
+      datePickerProps
+    );
+    console.log(
       '🚀 | file: DateRangeInput.js | line 246 | DateRangeInputComponent | render | disabled',
       disabled
     );
