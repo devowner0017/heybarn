@@ -143,7 +143,6 @@ const PanelHeading = props => {
   const titleClasses = classNames(rootClassName || defaultRootClassName, className);
   const listingLink = createListingLink(listingId, listingTitle, listingDeleted);
 
-  console.log('🚀 | file: PanelHeading.js | line 144 | panelHeadingState', panelHeadingState);
   switch (panelHeadingState) {
     case HEADING_HOST_ENQUIRED:
       return (

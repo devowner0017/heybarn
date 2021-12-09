@@ -251,7 +251,6 @@ export const showListing = (listingId, isOwn = false) => (dispatch, getState, sd
 export const createTransaction = orderParams => (dispatch, getState, sdk) => {
   dispatch(initiateOrderRequest());
 
-  // TODO UPDATE THIS WHEN WE BUILD THE OTHER SIDE OF THE MARKETPLACE
   const isRequestFromHost = orderParams.protectedData.contactingAs === 'host';
 
   const transition = isRequestFromHost ? TRANSITION_HOST_FEE_PAID : TRANSITION_RENTER_FEE_PAID;
@@ -267,12 +266,18 @@ export const createTransaction = orderParams => (dispatch, getState, sdk) => {
   };
 
   const handleSucces = response => {
+  console.log("🚀 | file: TransactionInitPage.duck.js | line 270 | response", response);
     const entities = denormalisedResponseEntities(response);
     const order = entities[0];
+    console.log("🚀 | file: TransactionInitPage.duck.js | line 272 | order", order);
     dispatch(initiateOrderSuccess(order));
     dispatch(fetchCurrentUserHasOrdersSuccess(true));
 
-    updateListingState({ id: orderParams.listingId, listingState: LISTING_UNDER_ENQUIRY })
+    updateListingState({
+      id: orderParams.listingId,
+      listingState: LISTING_UNDER_ENQUIRY,
+      transactionId: order.id.uuid,
+    })
       .then(r => {})
       .catch(e => {});
     return order;

@@ -465,7 +465,18 @@
     margin-bottom: 48px;
   }
 }
-
+.mobileSubscriptionBreakdown {
+  display: revert;
+  @media (--viewportLarge) {
+    display: none;
+  }
+}
+.desktopSubscriptionBreakdown {
+  display: none;
+  @media (--viewportLarge) {
+    display: revert;
+  }
+}
 /* BookingPanel subcompnent */
 .bookingPanel {
   margin: 16px 48px 48px 48px;

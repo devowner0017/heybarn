@@ -22,6 +22,7 @@ const ActionButtonsMaybe = props => {
     hideNegative,
     affirmativeText,
     negativeText,
+    title
   } = props;
 
   const buttonsDisabled = affirmativeInProgress || negativeInProgress;
@@ -41,6 +42,7 @@ const ActionButtonsMaybe = props => {
 
   return showButtons ? (
     <div className={classes}>
+      {!!title && <h3>{title}</h3>}
       <div className={css.actionErrors}>
         {acceptErrorMessage}
         {declineErrorMessage}

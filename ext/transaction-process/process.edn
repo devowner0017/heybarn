@@ -192,6 +192,8 @@
    :actor :actor.role/customer,
    :actions [
      {:name :action/stripe-confirm-payment-intent}
+      {:name :action/stripe-capture-payment-intent}
+     {:name :action/stripe-create-payout}
    ],
    :from :state/pending-payment,
    :to :state/preauthorized}
@@ -199,12 +201,17 @@
   {:name :transition/complete,
    :actor :actor.role/provider,
    :actions [
-    {:name :action/stripe-capture-payment-intent}
-     {:name :action/stripe-create-payout}
    ],
    :from :state/preauthorized,
    :to :state/delivered}
 
+
+  {:name :transition/complete-at-booking-end,
+   :at {:fn/timepoint [:time/booking-end]},
+   :actions [
+   ],
+   :from :state/preauthorized,
+   :to :state/delivered}
 
   {:name :transition/review-1-by-provider,
    :actor :actor.role/provider,

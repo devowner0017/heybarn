@@ -1194,8 +1194,8 @@
 
   "TransactionPanel.c_rentalAgreementDiscussionTitle": "Good news! {providerName} is keen to talk more.",
   "TransactionPanel.c_rentalAgreementDiscussionSubTitle": "Lets start a conversation with them...",
-  "TransactionPanel.p_rentalAgreementDiscussionTitle": "Great! We’ve let {customerName} know.",
-  "TransactionPanel.p_rentalAgreementDiscussionSubTitle": "Lets start a conversation with them...",
+  "TransactionPanel.p_rentalAgreementDiscussionTitle": "Great! You've been connected to {customerName}.",
+  "TransactionPanel.p_rentalAgreementDiscussionSubTitle": "Start a conversation with them...",
 
   "TransactionPanel.p_wasApprovedByRenterTitle": "Good news! {customerName} is keen to talk more.",
   "TransactionPanel.p_wasApprovedByRenterSubTitle": "Lets start a conversation with them...",

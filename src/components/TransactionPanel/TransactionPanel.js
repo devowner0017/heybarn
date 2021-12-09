@@ -249,10 +249,6 @@ export class TransactionPanelComponent extends Component {
 
       subscription,
     } = this.props;
-    console.log(
-      '🚀 | file: TransactionPanel.js | line 251 | TransactionPanelComponent | render | subscription',
-      subscription
-    );
 
     const currentTransaction = ensureTransaction(transaction);
     const currentListing = ensureListing(currentTransaction.listing);
@@ -275,10 +271,6 @@ export class TransactionPanelComponent extends Component {
     const isProviderDeleted = isProviderLoaded && currentProvider.attributes.deleted;
 
     const stateDataFn = tx => {
-      console.log(
-        '🚀 | file: TransactionPanel.js | line 271 | TransactionPanelComponent | render | tx',
-        tx
-      );
       if (txIsRenterEnquired(tx)) {
         const transitions = Array.isArray(nextTransitions)
           ? nextTransitions.map(transition => {
@@ -356,10 +348,6 @@ export class TransactionPanelComponent extends Component {
       }
       // ****
       else if (txIsRentalAgreementDiscussion(tx)) {
-        console.log(
-          '🚀 | file: TransactionPanel.js | line 377 | TransactionPanelComponent | render | tx',
-          tx
-        );
         return {
           headingState: HEADING_RENTAL_AGREEMENT_DISCUSSION,
           showDetailCardHeadings: true,
@@ -387,10 +375,6 @@ export class TransactionPanelComponent extends Component {
                 endDate,
                 ...rest
               } = values;
-              console.log(
-                '🚀 | file: TransactionPanel.js | line 386 | TransactionPanelComponent | render | values',
-                values
-              );
 
               onSendRentalAgreement({
                 contractLines: {
@@ -422,11 +406,6 @@ export class TransactionPanelComponent extends Component {
       }
       //*** */
       else if (txIsRentalAgreementRequested(tx)) {
-        console.log(
-          '🚀 | file: TransactionPanel.js | line 426 | TransactionPanelComponent | render | tx',
-          tx
-        );
-        console.log(111111);
         return {
           headingState: HEADING_RENTAL_AGREEMENT_REQUESTED,
           showDetailCardHeadings: true,
@@ -509,10 +488,6 @@ export class TransactionPanelComponent extends Component {
       }
       // ****
       else if (txIsRentalAgreementSent(tx)) {
-        console.log(
-          '🚀 | file: TransactionPanel.js | line 470 | TransactionPanelComponent | render | tx',
-          tx
-        );
         const transitions = Array.isArray(nextTransitions)
           ? nextTransitions.map(transition => {
               return transition.attributes.name;
@@ -565,16 +540,20 @@ export class TransactionPanelComponent extends Component {
           allowMessages: true,
         };
       } else if (txIsPaid(tx)) {
-        console.log(
-          '🚀 | file: TransactionPanel.js | line 543 | TransactionPanelComponent | render | tx',
-          tx
-        );
         return {
           headingState: HEADING_RENT_PAID,
           showDetailCardHeadings: isCustomer,
           showAddress: isCustomer,
           allowMessages: true,
           showCompleteButtons: !isCustomer,
+          completeButtonProps: {
+            affirmativeAction: _ =>
+              onCancelDuringRad({
+                txId: tx.id,
+                actor: isCustomer ? 'customer' : 'provider',
+                wasRequested: true,
+              }),
+          },
           showSubscriptionDetails: isCustomer,
           showSubscriptionStats: true,
           showSubscriptionActions: !isCustomer,
@@ -603,10 +582,6 @@ export class TransactionPanelComponent extends Component {
       }
     };
     const stateData = stateDataFn(currentTransaction) || {};
-    console.log(
-      '🚀 | file: TransactionPanel.js | line 558 | TransactionPanelComponent | render | stateData',
-      stateData
-    );
 
     const handlePaymentRedirect = values => {
       const {
@@ -769,29 +744,44 @@ export class TransactionPanelComponent extends Component {
       />
     );
     const completeButtons = (
-      <ActionButtonsMaybe
-        showButtons={stateData.showCompleteButtons}
-        affirmativeInProgress={signRentalAgreementInProgress}
-        negativeInProgress={null}
-        affirmativeError={signRentalAgreementError}
-        negativeError={null}
-        affirmativeAction={() =>
-          onCompleteSale({
-            txId: currentTransaction.id,
-          })
-        }
-        negativeAction={() => null}
-        affirmativeText={'Complete Sale'}
-        hideNegative={true}
-      />
+      <>
+        <ActionButtonsMaybe
+          showButtons={stateData.showCompleteButtons}
+          title={'Actions'}
+          affirmativeInProgress={signRentalAgreementInProgress}
+          negativeInProgress={null}
+          affirmativeError={signRentalAgreementError}
+          negativeError={null}
+          affirmativeAction={() =>
+            onCompleteSale({
+              txId: currentTransaction.id,
+            })
+          }
+          negativeAction={() => null}
+          affirmativeText={'Complete Sale'}
+          hideNegative={true}
+        />
+        <ActionButtonsMaybe
+          showButtons={stateData.showCompleteButtons}
+          title={'DEV PURPOSES ONLY'}
+          affirmativeInProgress={signRentalAgreementInProgress}
+          negativeInProgress={null}
+          affirmativeError={signRentalAgreementError}
+          negativeError={null}
+          affirmativeAction={() =>
+            onCompleteSale({
+              txId: currentTransaction.id,
+            })
+          }
+          negativeAction={() => null}
+          affirmativeText={'Complete Sale'}
+          hideNegative={true}
+        />
+      </>
     );
     const paymentFormButtons = (
       <ActionButtonsMaybe
         showButtons={stateData.showPaymentFormButtons}
-        // affirmativeInProgress={signRentalAgreementInProgress}
-        // negativeInProgress={null}
-        // affirmativeError={signRentalAgreementError}
-        // negativeError={null}
         affirmativeAction={handlePaymentRedirect}
         negativeAction={() => null}
         affirmativeText={'Pay Rent!'}
@@ -817,10 +807,6 @@ export class TransactionPanelComponent extends Component {
     );
 
     const classes = classNames(rootClassName || css.root, className);
-    console.log(
-      '🚀 | file: TransactionPanel.js | line 788 | TransactionPanelComponent | render | classes',
-      stateData
-    );
     const subscriptionBreakdown = (
       <SubscriptionBreakdown
         transaction={currentTransaction}
@@ -939,7 +925,9 @@ export class TransactionPanelComponent extends Component {
                   transactionRole={transactionRole}
                 />
               )}
-              {stateData.showSubscriptionStats && subscriptionBreakdown}
+              {stateData.showSubscriptionStats && (
+                <div className={css.desktopSubscriptionBreakdown}>{subscriptionBreakdown}</div>
+              )}
               {stateData.showAcceptCommunicationButtons ? (
                 <div className={css.desktopActionButtons}>{acceptCommunicationButtons}</div>
               ) : null}

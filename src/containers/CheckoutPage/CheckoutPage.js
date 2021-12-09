@@ -978,7 +978,7 @@ export class CheckoutPageComponent extends Component {
                   formId="CheckoutPagePaymentForm"
                   paymentInfo={intl.formatMessage({ id: 'CheckoutPage.paymentInfo' })}
                   authorDisplayName={currentAuthor.attributes.profile.displayName}
-                  showInitialMessageInput={showInitialMessageInput}
+                  showInitialMessageInput={false}
                   initialValues={initalValuesForStripePayment}
                   initiateOrderError={initiateOrderError}
                   confirmCardPaymentError={confirmCardPaymentError}

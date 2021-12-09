@@ -95,6 +95,22 @@ const createListingURL = (routes, listing) => {
   return createResourceLocatorString(linkProps.name, routes, linkProps.params, {});
 };
 
+const createTransactionURL = (routes, listing) => {
+  const id = listing.id.uuid;
+  const publicData = getPropByName(listing, 'publicData');
+  const { listingState, transactionId } = publicData;
+  const isPendingApproval = listing.attributes.state === LISTING_STATE_PENDING_APPROVAL;
+
+  const linkProps = transactionId && {
+    name: 'SaleDetailsPage',
+    params: {
+      id: transactionId,
+    },
+  };
+
+  return !!linkProps && createResourceLocatorString(linkProps.name, routes, linkProps.params, {});
+};
+
 // Cards are not fixed sizes - So, long words in title make flexboxed items to grow too big.
 // 1. We split title to an array of words and spaces.
 //    "foo bar".split(/([^\s]+)/gi) => ["", "foo", " ", "bar", ""]
@@ -127,29 +143,26 @@ export const ManageListingCardComponent = props => {
     onOpenListing,
     onToggleMenu,
     renderSizes,
-    availabilityEnabled,
   } = props;
 
   const currentListing = ensureOwnListing(listing);
   const id = currentListing.id.uuid;
   const { title = '', price, state, publicData } = currentListing.attributes;
-  const { listingState, listingType } = publicData;
+  const { listingState, listingType, transactionId } = publicData;
   const slug = createSlug(title);
   const isPendingApproval = state === LISTING_STATE_PENDING_APPROVAL;
   const isClosed = state === LISTING_STATE_CLOSED;
   const isDraft = state === LISTING_STATE_DRAFT;
   const isUnderEnquiry = listingState === LISTING_UNDER_ENQUIRY;
-  console.log('🚀 | file: ManageListingCard.js | line 142 | isUnderEnquiry', isUnderEnquiry);
-  console.log('🚀 | file: ManageListingCard.js | line 142 | listingState', listingState);
   const isUnderOffer = listingState === LISTING_UNDER_OFFER;
   const hasRequestedRentalAgreement = listingState === LISTING_RENTAL_AGREEMENT_REQUESTED;
   const firstImage =
     currentListing.images && currentListing.images.length > 0 ? currentListing.images[0] : null;
-
   const menuItemClasses = classNames(css.menuItem, {
     [css.menuItemDisabled]: !!actionsInProgressListingId,
   });
-
+  const transactionUrl = createTransactionURL(routeConfiguration(), currentListing);
+  console.log('🚀 | file: ManageListingCard.js | line 165 | transactionUrl', transactionUrl);
   const { formattedPrice, priceTitle } = priceData(price, intl);
   const hasError = hasOpeningError || hasClosingError;
   const thisListingInProgress =
@@ -205,9 +218,8 @@ export const ManageListingCardComponent = props => {
         >
           <NamedLink
             className={css.finishListingDraftLink}
-            name="InboxPage"
-            params={{ tab: listingType === 'listing' ? 'orders' : 'sales' }}
-            // params={{ id, slug, type: LISTING_PAGE_PARAM_TYPE_DRAFT, tab: 'photos' }}
+            name="SaleDetailsPage"
+            params={{ id: transactionId }}
           >
             <FormattedMessage id={`ManageListingCard.respondToEnquiry`} />
           </NamedLink>
@@ -216,8 +228,8 @@ export const ManageListingCardComponent = props => {
         <Overlay message={intl.formatMessage({ id: `ManageListingCard.${listingType}UnderOffer` })}>
           <NamedLink
             className={css.finishListingDraftLink}
-            name="InboxPage"
-            params={{ tab: listingType === 'listing' ? 'order' : 'sale' }}
+            name="SaleDetailsPage"
+            params={{ id: transactionId }}
           >
             <FormattedMessage id={`ManageListingCard.respondToEnquiry`} />
           </NamedLink>

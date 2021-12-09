@@ -122,81 +122,79 @@ export const SubscriptionBreakdownComponent = props => {
    */
 
   return (
-    <div>
-      <div className={classes}>
-        <LineItemBookingPeriod
-          booking={booking}
-          unitType={unitType}
-          dateType={dateType}
-          subscription={subscription}
-        />
-        <LineItemLengthOfContract transaction={transaction} isProvider={isProvider} intl={intl} />
+    <div className={classes}>
+      <LineItemBookingPeriod
+        booking={booking}
+        unitType={unitType}
+        dateType={dateType}
+        subscription={subscription}
+      />
+      <LineItemLengthOfContract transaction={transaction} isProvider={isProvider} intl={intl} />
 
-        <LineItemWeeksRemaining
-          transaction={transaction}
-          unitType={unitType}
-          weeksRemaining={Math.abs(weeksRemaining)}
-        />
-        <LineItemNextPayment
-          booking={booking}
-          unitType={unitType}
-          dateType={dateType}
-          subscription={subscription}
-          nextPaymentDate={nextPaymentDate}
-          lastPaymentDate={lastPaymentPayment}
-        />
-        <LineItemUnitsMaybe
-          transaction={transaction}
-          unitType={unitType}
-          subscription={subscription}
-        />
-        <LineItemBasePriceMaybe
-          transaction={transaction}
-          unitType={unitType}
-          intl={intl}
-          subscription={subscription}
-        />
-        <LineItemUnknownItemsMaybe
-          transaction={transaction}
-          isProvider={isProvider}
-          intl={intl}
-          subscription={subscription}
-        />
-        <LineItemSubTotalMaybe
-          transaction={transaction}
-          unitType={unitType}
-          userRole={userRole}
-          intl={intl}
-          subscription={subscription}
-        />
-        <LineItemRefundMaybe transaction={transaction} intl={intl} />
-        <LineItemCustomerCommissionMaybe
-          transaction={transaction}
-          isCustomer={isCustomer}
-          intl={intl}
-        />
-        <LineItemCustomerCommissionRefundMaybe
-          transaction={transaction}
-          isCustomer={isCustomer}
-          intl={intl}
-        />
-        <LineItemProviderCommissionMaybe
-          transaction={transaction}
-          isProvider={isProvider}
-          intl={intl}
-        />
-        <LineItemProviderCommissionRefundMaybe
-          transaction={transaction}
-          isProvider={isProvider}
-          intl={intl}
-        />
-        <LineItemTotalPrice transaction={transaction} isProvider={isProvider} intl={intl} />
-        {hasCommissionLineItem ? (
-          <span className={css.feeInfo}>
-            <FormattedMessage id="SubscriptionBreakdown.commissionFeeNote" />
-          </span>
-        ) : null}
-      </div>
+      <LineItemWeeksRemaining
+        transaction={transaction}
+        unitType={unitType}
+        weeksRemaining={Math.abs(weeksRemaining)}
+      />
+      <LineItemNextPayment
+        booking={booking}
+        unitType={unitType}
+        dateType={dateType}
+        subscription={subscription}
+        nextPaymentDate={nextPaymentDate}
+        lastPaymentDate={lastPaymentPayment}
+      />
+      <LineItemUnitsMaybe
+        transaction={transaction}
+        unitType={unitType}
+        subscription={subscription}
+      />
+      <LineItemBasePriceMaybe
+        transaction={transaction}
+        unitType={unitType}
+        intl={intl}
+        subscription={subscription}
+      />
+      <LineItemUnknownItemsMaybe
+        transaction={transaction}
+        isProvider={isProvider}
+        intl={intl}
+        subscription={subscription}
+      />
+      <LineItemSubTotalMaybe
+        transaction={transaction}
+        unitType={unitType}
+        userRole={userRole}
+        intl={intl}
+        subscription={subscription}
+      />
+      <LineItemRefundMaybe transaction={transaction} intl={intl} />
+      <LineItemCustomerCommissionMaybe
+        transaction={transaction}
+        isCustomer={isCustomer}
+        intl={intl}
+      />
+      <LineItemCustomerCommissionRefundMaybe
+        transaction={transaction}
+        isCustomer={isCustomer}
+        intl={intl}
+      />
+      <LineItemProviderCommissionMaybe
+        transaction={transaction}
+        isProvider={isProvider}
+        intl={intl}
+      />
+      <LineItemProviderCommissionRefundMaybe
+        transaction={transaction}
+        isProvider={isProvider}
+        intl={intl}
+      />
+      <LineItemTotalPrice transaction={transaction} isProvider={isProvider} intl={intl} />
+      {hasCommissionLineItem ? (
+        <span className={css.feeInfo}>
+          <FormattedMessage id="SubscriptionBreakdown.commissionFeeNote" />
+        </span>
+      ) : null}
     </div>
   );
 };
