@@ -19,16 +19,21 @@ const FilterComponent = props => {
     urlQueryParams,
     initialValues,
     getHandleChangedValueFn,
+    searchType,
     ...rest
   } = props;
-  const { id, type, queryParamNames, label, config } = filterConfig;
+    console.log("🚀 | file: FilterComponent.js | line 24 | initialValues", initialValues);
+  console.log('🚀 | file: FilterComponent.js | line 24 | urlQueryParams', urlQueryParams);
+  console.log('🚀 | file: FilterComponent.js | line 26 | searchType', searchType);
+  const { id, type, queryParamNames, label, config, listingType } = filterConfig;
+  console.log('🚀 | file: FilterComponent.js | line 25 | filterConfig', filterConfig);
   const { liveEdit, showAsPopup } = rest;
 
   const useHistoryPush = liveEdit || showAsPopup;
   const prefix = idPrefix || 'SearchPage';
   const componentId = `${prefix}.${id.toLowerCase()}`;
   const name = id.replace(/\s+/g, '-').toLowerCase();
-
+  if (!listingType || !listingType.includes(searchType)) return null;
   switch (type) {
     case 'SelectSingleFilter': {
       return (

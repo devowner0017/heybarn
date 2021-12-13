@@ -202,8 +202,11 @@ export const stringify = params => {
  * @return {Object} key/value pairs parsed from the given String
  */
 export const parse = (search, options = {}) => {
-  const { latlng = [], latlngBounds = [] } = options;
+console.log("🚀 | file: urlHelpers.js | line 205 | parse | search", search);
+console.log('🚀 | file: urlHelpers.js | line 227 | parse | options', options);
+const { latlng = [], latlngBounds = [] } = options;
   const params = queryString.parse(search);
+  console.log("🚀 | file: urlHelpers.js | line 209 | parse | params", params);
   return Object.keys(params).reduce((result, key) => {
     const val = params[key];
     /* eslint-disable no-param-reassign */

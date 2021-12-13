@@ -153,13 +153,14 @@ export class SearchPageComponent extends Component {
     } = this.props;
     const { isMapOpen, mapClosed, mapClosing, mapOpened, mapOpening } = this.state;
     // eslint-disable-next-line no-unused-vars
-    const { mapSearch, page, ...searchInURL } = parse(location.search, {
+    const { mapSearch, page, pub_listingType, ...searchInURL } = parse(location.search, {
       latlng: ['origin'],
       latlngBounds: ['bounds'],
     });
     // urlQueryParams doesn't contain page specific url params
     // like mapSearch, page or origin (origin depends on config.sortSearchByDistance)
     const urlQueryParams = pickSearchParamsOnly(searchInURL, filterConfig, sortConfig);
+    console.log("🚀 | file: SearchPage.js | line 163 | SearchPageComponent | render | searchInURL", searchInURL);
 
     // Page transition might initially use values from previous search
     const urlQueryString = stringify(urlQueryParams);
@@ -241,6 +242,7 @@ export class SearchPageComponent extends Component {
             history={history}
             mapSwitch={mapSwitch}
             isMapOpen={isMapOpen}
+            searchType={pub_listingType || "listing"}
           />
           <ModalInMobile
             className={css.mapPanel}

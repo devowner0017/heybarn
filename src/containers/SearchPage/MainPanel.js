@@ -170,11 +170,16 @@ class MainPanel extends Component {
       sortConfig,
       mapSwitch,
       isMapOpen,
+      searchType,
     } = this.props;
 
     const primaryFilters = filterConfig.filter(f => f.group === 'primary');
     const secondaryFilters = filterConfig.filter(f => f.group !== 'primary');
-    const hasSecondaryFilters = !!(secondaryFilters && secondaryFilters.length > 0);
+    const hasSecondaryFilters = !!(
+      secondaryFilters &&
+      secondaryFilters.length > 0 &&
+      secondaryFilters.some(s => s.listingType.includes(searchType) && s.type !== 'none')
+    );
 
     // Selected aka active filters
     const selectedFilters = validFilterParams(urlQueryParams, filterConfig);
@@ -251,6 +256,7 @@ class MainPanel extends Component {
                 getHandleChangedValueFn={this.getHandleChangedValueFn}
                 showAsPopup
                 contentPlacementOffset={FILTER_DROPDOWN_OFFSET}
+                searchType={searchType}
               />
             );
           })}
@@ -282,11 +288,12 @@ class MainPanel extends Component {
                 getHandleChangedValueFn={this.getHandleChangedValueFn}
                 liveEdit
                 showAsPopup={false}
+                searchType={searchType}
               />
             );
           })}
         </SearchFiltersMobile>
-        {isSecondaryFiltersOpen ? (
+        {isSecondaryFiltersOpen && !!secondaryFilters?.length ? (
           <div className={classNames(css.searchFiltersPanel)}>
             <SearchFiltersSecondary
               urlQueryParams={urlQueryParams}
@@ -306,6 +313,7 @@ class MainPanel extends Component {
                     initialValues={this.initialValues}
                     getHandleChangedValueFn={this.getHandleChangedValueFn}
                     showAsPopup={false}
+                    searchType={searchType}
                   />
                 );
               })}

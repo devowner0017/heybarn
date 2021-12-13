@@ -54,7 +54,7 @@ export const filters = [
     group: 'primary',
     // Note: PriceFilter is fixed filter,
     // you can't change "queryParamNames: ['price'],"
-    listingType: ['listing', 'advert'],
+    listingType: ['listing'],
     queryParamNames: ['price'],
     // Price filter configuration
     // Note: unlike most prices this is not handled in subunits
@@ -122,6 +122,7 @@ export const filters = [
     label: 'Size',
     type: 'SelectRangeFilter',
     group: 'primary',
+    listingType: ['listing'],
     queryParamNames: ['pub_sizeOfSpace'],
     config: {
       min: 1,
@@ -135,6 +136,7 @@ export const filters = [
     label: 'Age',
     type: 'SelectRangeFilter',
     group: 'primary',
+    listingType: ['listing'],
     queryParamNames: ['pub_ageOfSpace'],
     config: {
       min: 1,
@@ -145,7 +147,7 @@ export const filters = [
   },
   {
     id: 'locIsland',
-    label: 'Island',
+    label: 'Location',
     type: 'SelectRegionFilter',
     group: 'primary',
     queryParamNames: ['pub_locIsland', 'pub_locRegion', 'pub_locDistrict'],
@@ -202,10 +204,10 @@ export const filters = [
   },
   {
     id: 'amenities',
-    label: 'Amenities',
+    label: 'Features',
     type: 'SelectMultipleFilter',
     group: 'secondary',
-    listingType: ['listing', 'advert'],
+    listingType: ['listing'],
     queryParamNames: ['pub_amenities'],
     config: {
       // Optional modes: 'has_all', 'has_any'
@@ -249,7 +251,7 @@ export const filters = [
         },
         {
           key: 'wc',
-          label: 'WC',
+          label: 'Toilet',
           checkedIcon: 'wc',
           unCheckedIcon: 'wcOutlined',
         },
