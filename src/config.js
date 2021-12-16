@@ -33,7 +33,7 @@ const listingTypes = { advert: ['advert', '"need'], listing: ['listing', 'space'
 //
 // In a way, 'processAlias' defines which transaction process (or processes)
 // this particular web application is able to handle.
-const bookingProcessAlias = 'double-sided/test';
+const bookingProcessAlias = 'init/test';
 
 // The transaction line item code for the main unit type in bookings.
 //
