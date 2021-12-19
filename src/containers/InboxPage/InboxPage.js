@@ -403,11 +403,7 @@ export const InboxPageComponent = props => {
     ) : null;
 
   const providerNotificationBadge =
-    providerNotificationCount > 0 ? (
-      <NotificationBadge count={providerNotificationCount} />
-    ) : (
-      'fdassfs'
-    );
+    providerNotificationCount > 0 ? <NotificationBadge count={providerNotificationCount} /> : null;
   console.log(
     '🚀 | file: InboxPage.js | line 397 | providerNotificationCount',
     providerNotificationCount

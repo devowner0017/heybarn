@@ -83,10 +83,11 @@ const paymentFlow = (selectedPaymentMethod, saveAfterOnetimePayment) => {
 
 const initializeOrderPage = (initialValues, routes, dispatch) => {
   const OrderPage = findRouteByRouteName('OrderDetailsPage', routes);
-
+console.log(1111)
   // Transaction is already created, but if the initial message
   // sending failed, we tell it to the OrderDetailsPage.
   dispatch(OrderPage.setInitialValues(initialValues));
+console.log(2222)
 };
 
 const checkIsPaymentExpired = existingTransaction => {
@@ -265,6 +266,7 @@ export class CheckoutPageComponent extends Component {
     const selectedPaymentFlow = paymentFlow(selectedPaymentMethod, saveAfterOnetimePayment);
 
     const fnCreateRecurring = fnParams => {
+    console.log("🚀 | file: CheckoutPage.js | line 269 | CheckoutPageComponent | handlePaymentIntent | fnParams", fnParams);
       return onCreateRecurring(createRecurringParams)
         .then(recurringResponse => {
           console.log(
@@ -547,7 +549,7 @@ export class CheckoutPageComponent extends Component {
       endTimestamp: moment(bookingDates.bookingEnd)
         .subtract({ days: 6, hours: 23, minutes: 59 })
         .unix(),
-      transaction: tx,
+      // transaction: tx,
       ongoingContract,
     };
     console.log(
