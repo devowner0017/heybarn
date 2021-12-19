@@ -1,4 +1,18 @@
 import { ensureTransaction } from './data';
+// RENTER RED DOTS
+const ORDER_NOTIFICATION_TRANSITIONS = [
+  'transition/host-fee-paid',
+  'transition/host-approved-by-renter',
+  'transition/host-sends-agreement',
+  'transition/host-sends-agreement-after-request',
+  'transition/renter-signs-rental-agreement',
+];
+// HOST RED DOTS
+const SALE_NOTIFICATION_TRANSITIONS = [
+  'transition/renter-fee-paid',
+  'transition/host-accepts-communication',
+  'transition/renter-requests-agreement',
+];
 
 /**
  * Transitions
@@ -21,7 +35,8 @@ export const TRANSITION_HOST_DECLINES_COMMUNICATION = 'transition/host-declines-
 export const TRANSITION_RENTER_ACCEPTS_COMMUNICATION = 'transition/renter-accepts-communication';
 export const TRANSITION_RENTER_DECLINES_COMMUNICATION = 'transition/renter-declines-communication';
 export const TRANSITION_HOST_SENDS_AGREEMENT = 'transition/host-sends-agreement';
-export const TRANSITION_HOST_SENDS_AGREEMENT_AFTER_REQUEST = 'transition/host-sends-agreement-after-request';
+export const TRANSITION_HOST_SENDS_AGREEMENT_AFTER_REQUEST =
+  'transition/host-sends-agreement-after-request';
 export const TRANSITION_RENTER_REQUESTS_AGREEMENT = 'transition/renter-requests-agreement';
 export const TRANSITION_HOST_CANCELS_DURING_RAD = 'transition/host-cancels-during-rad';
 export const TRANSITION_RENTER_CANCELS_DURING_RAD = 'transition/renter-cancels-during-rad';
@@ -313,8 +328,8 @@ export const txHasRenterDeclined = tx =>
   getTransitionsToState(STATE_RENTER_DECLINED_COMMUNICATION).includes(txLastTransition(tx));
 
 export const txIsRentalAgreementDiscussion = tx =>
-         getTransitionsToState(STATE_RENTAL_AGREEMENT_DISCUSSION).includes(txLastTransition(tx)) ||
-         ['transition/host-approved-by-renter'].includes(txLastTransition(tx));
+  getTransitionsToState(STATE_RENTAL_AGREEMENT_DISCUSSION).includes(txLastTransition(tx)) ||
+  ['transition/host-approved-by-renter'].includes(txLastTransition(tx));
 
 export const txIsRentalAgreementRequested = tx =>
   getTransitionsToState(STATE_RENTAL_AGREEMENT_REQUESTED).includes(txLastTransition(tx));
@@ -331,12 +346,16 @@ export const txIsRentalAgreementSent = tx =>
 export const txIsCancelledAfterAgreementSent = tx =>
   getTransitionsToState(STATE_CANCELLED_AFTER_AGREEMENT_SENT).includes(txLastTransition(tx));
 
-export const txIsRentalAgreementFinalized = tx =>
+export const txIsRentalAgreementSigned = tx =>
   getTransitionsToState(STATE_RENTAL_AGREEMENT_FINALIZED).includes(txLastTransition(tx));
 
 export const txIsPaymentPending = tx =>
   getTransitionsToState(STATE_PENDING_PAYMENT).includes(txLastTransition(tx));
 
+export const txNeedsNotificationSale = tx =>
+  SALE_NOTIFICATION_TRANSITIONS.includes(txLastTransition(tx));
+export const txNeedsNotificationOrder = tx =>
+  ORDER_NOTIFICATION_TRANSITIONS.includes(txLastTransition(tx));
 // Note: state name used in Marketplace API docs (and here) is actually preauthorized
 // However, word "requested" is used in many places so that we decided to keep it.
 export const txIsRequested = tx =>

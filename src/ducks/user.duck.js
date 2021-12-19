@@ -7,6 +7,17 @@ import { authInfo } from './Auth.duck';
 import { stripeAccountCreateSuccess } from './stripeConnectAccount.duck';
 import { util as sdkUtil } from '../util/sdkLoader';
 
+const NOTIFICATION_TRANSITIONS = [
+  'transition/host-fee-paid',
+  'transition/renter-fee-paid',
+  'transition/host-approved-by-renter',
+  'transition/host-accepts-communication',
+  'transition/renter-requests-agreement',
+  'transition/host-sends-agreement',
+  'transition/host-sends-agreement-after-request',
+  'transition/renter-signs-rental-agreement',
+];
+
 // ================ Action types ================ //
 
 export const CURRENT_USER_SHOW_REQUEST = 'app/user/CURRENT_USER_SHOW_REQUEST';
@@ -293,10 +304,14 @@ export const fetchCurrentUserNotifications = () => (dispatch, getState, sdk) => 
 
   const apiQueryParams = {
     only: 'sale',
-    last_transitions: transitionsToRequested,
+    last_transitions: NOTIFICATION_TRANSITIONS,
     page: 1,
     per_page: NOTIFICATION_PAGE_SIZE,
   };
+  console.log(
+    '🚀 | file: user.duck.js | line 302 | fetchCurrentUserNotifications | apiQueryParams',
+    apiQueryParams
+  );
 
   sdk.transactions
     .query(apiQueryParams)

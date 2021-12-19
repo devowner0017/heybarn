@@ -265,13 +265,17 @@ export class CheckoutPageComponent extends Component {
     const selectedPaymentFlow = paymentFlow(selectedPaymentMethod, saveAfterOnetimePayment);
 
     const fnCreateRecurring = fnParams => {
-      return onCreateRecurring(createRecurringParams).then(recurringResponse => {
-        console.log(
-          '🚀 | file: CheckoutPage.js | line 281 | CheckoutPageComponent | onCreateRecurring | recurringResponse',
-          recurringResponse
-        );
-        return { ...fnParams, protectedData: { recurringResponse } };
-      });
+      return onCreateRecurring(createRecurringParams)
+        .then(recurringResponse => {
+          console.log(
+            '🚀 | file: CheckoutPage.js | line 281 | CheckoutPageComponent | onCreateRecurring | recurringResponse',
+            recurringResponse
+          );
+          return { ...fnParams, protectedData: { recurringResponse } };
+        })
+        .catch(e => {
+          console.log(e);
+        });
     };
     // Step 1: initiate order by requesting payment from Marketplace API
     const fnRequestPayment = fnParams => {
@@ -523,6 +527,12 @@ export class CheckoutPageComponent extends Component {
       '🚀 | file: CheckoutPage.js | line 532 | CheckoutPageComponent | handleSubmit | bookingDates',
       bookingDates
     );
+    const  ongoingContract  = tx.attributes?.protectedData?.ongoingContract;
+    console.log("🚀 | file: CheckoutPage.js | line 531 | CheckoutPageComponent | handleSubmit | tx", tx);
+    console.log(
+      '🚀 | file: CheckoutPage.js | line 531 | CheckoutPageComponent | handleSubmit | ongoingContract',
+      ongoingContract
+    );
     const createRecurringParams = {
       weeklyAmount: price?.amount,
       listingId: currentListing?.id?.uuid,
@@ -538,12 +548,12 @@ export class CheckoutPageComponent extends Component {
         .subtract({ days: 6, hours: 23, minutes: 59 })
         .unix(),
       transaction: tx,
+      ongoingContract,
     };
     console.log(
       '🚀 | file: CheckoutPage.js | line 515 | CheckoutPageComponent | handleSubmit | createRecurringParams',
       createRecurringParams
     );
-
     const requestPaymentParams = {
       pageData: this.state.pageData,
       speculatedTransaction,

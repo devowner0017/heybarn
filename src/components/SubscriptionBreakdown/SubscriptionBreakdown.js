@@ -41,16 +41,14 @@ export const SubscriptionBreakdownComponent = props => {
     dateType,
     subscription,
   } = props;
-  if (!subscription) return null;
-  console.log('🚀 | file: SubscriptionBreakdown.js | line 41 | props', props);
-  const { booking } = transaction;
   console.log('🚀 | file: SubscriptionBreakdown.js | line 44 | transaction', transaction);
+  if (!subscription) return null;
+  const { booking } = transaction;
   const {
     current_period_end: nextPeriodBegins,
     trial_end: trialEnd,
     cancel_at: contractEnd,
   } = subscription;
-  console.log('🚀 | file: SubscriptionBreakdown.js | line 34 | protectedData', subscription);
   const isCustomer = userRole === 'customer';
   const isProvider = userRole === 'provider';
   const hasCommissionLineItem = transaction.attributes.lineItems.find(item => {
@@ -58,27 +56,13 @@ export const SubscriptionBreakdownComponent = props => {
     const hasProviderCommission = isProvider && item.code === LINE_ITEM_PROVIDER_COMMISSION;
     return (hasCustomerCommission || hasProviderCommission) && !item.reversal;
   });
+
+  const { ongoingContract } = transaction?.attributes?.protectedData || {};
+  console.log('🚀 | file: LineItemBookingPeriod.js | line 13 | ongoingContract', ongoingContract);
   const contractHasStarted = trialEnd < moment().unix();
-  console.log('🚀 | file: SubscriptionBreakdown.js | line 54 | contractEnd', contractEnd);
-  console.log('🚀 | file: SubscriptionBreakdown.js | line 54 | trialEnd', trialEnd);
-  console.log('🚀 | file: SubscriptionBreakdown.js | line 54 | nextPeriodBegins', nextPeriodBegins);
-  console.log(
-    '🚀 | file: SubscriptionBreakdown.js | line 53 |  subscription.trial_end',
-    subscription.trial_end
-  );
-  console.log('🚀 | file: SubscriptionBreakdown.js | line 53 |  moment().unix()', moment().unix());
-  console.log(
-    '🚀 | file: SubscriptionBreakdown.js | line 53 | contractHasStarted',
-    contractHasStarted
-  );
   const { start, end } = booking?.attributes;
-  console.log('🚀 | file: SubscriptionBreakdown.js | line 71 | endDate', end);
-  console.log('🚀 | file: SubscriptionBreakdown.js | line 71 | startDate', start);
   const weeksRemaining = moment(start).diff(moment(end), 'weeks');
-  console.log('🚀 | file: SubscriptionBreakdown.js | line 72 | weeksRemaining', weeksRemaining);
-  console.log('🚀 | file: SubscriptionBreakdown.js | line 71 | startDate', start);
   const startDateTS = moment(start).unix();
-  console.log('🚀 | file: SubscriptionBreakdown.js | line 72 | startDateTS', startDateTS);
   const nextPaymentDate = moment.unix(nextPeriodBegins);
   const lastPaymentPayment = moment.unix(contractEnd);
 
@@ -121,15 +105,20 @@ export const SubscriptionBreakdownComponent = props => {
    *
    */
 
+  console.log('🚀 | file: SubscriptionBreakdown.js | line 113 | transaction', transaction);
+  console.log("🚀 | file: SubscriptionBreakdown.js | line 135 | ongoingContract", ongoingContract);
   return (
     <div className={classes}>
       <LineItemBookingPeriod
         booking={booking}
         unitType={unitType}
-        dateType={dateType}
         subscription={subscription}
+        ongoingContract={ongoingContract}
       />
-      <LineItemLengthOfContract transaction={transaction} isProvider={isProvider} intl={intl} />
+      <LineItemLengthOfContract transaction={transaction} isProvider={isProvider} intl={intl}
+        ongoingContract={ongoingContract}
+
+      />
 
       <LineItemWeeksRemaining
         transaction={transaction}
@@ -139,10 +128,11 @@ export const SubscriptionBreakdownComponent = props => {
       <LineItemNextPayment
         booking={booking}
         unitType={unitType}
-        dateType={dateType}
         subscription={subscription}
         nextPaymentDate={nextPaymentDate}
         lastPaymentDate={lastPaymentPayment}
+        ongoingContract={ongoingContract}
+
       />
       <LineItemUnitsMaybe
         transaction={transaction}

@@ -98,14 +98,6 @@ const LayoutWrapperManageListingsSideNavComponent = props => {
         name: 'ManageAdvertsPage',
       },
     },
-    // {
-    //   text: <FormattedMessage id="LayoutWrapperManageListingsSideNav.inboxTab" />,
-    //   selected: currentTab === 'InboxTab',
-    //   id: 'InboxTab',
-    //   linkProps: {
-    //     name: 'InboxBasePage',
-    //   },
-    // },
   ];
 
   return <LayoutWrapperSideNav tabs={[...tabs, ...extraTabs]} />;

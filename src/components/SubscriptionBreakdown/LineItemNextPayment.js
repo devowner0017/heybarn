@@ -7,18 +7,8 @@ import { dateFromAPIToLocalNoon } from '../../util/dates';
 import css from './SubscriptionBreakdown.module.css';
 
 const BookingPeriod = props => {
-  const { startDate, endDate, dateType } = props;
-
-  const timeFormatOptions =
-    dateType === DATE_TYPE_DATE
-      ? {
-          weekday: 'long',
-        }
-      : {
-          weekday: 'short',
-          hour: 'numeric',
-          minute: 'numeric',
-        };
+  const { startDate, endDate, ongoingContract } = props;
+  console.log("🚀 | file: LineItemNextPayment.js | line 11 | ongoingContract", ongoingContract);
 
   const dateFormatOptions = {
     month: 'short',
@@ -37,21 +27,23 @@ const BookingPeriod = props => {
           </div>
         </div>
 
-        <div className={css.bookingPeriodSectionRigth}>
-          <div className={css.dayLabel}>
-            <FormattedMessage id="SubscriptionBreakdown.finalPayment" />
+        {!ongoingContract && (
+          <div className={css.bookingPeriodSectionRigth}>
+            <div className={css.dayLabel}>
+              <FormattedMessage id="SubscriptionBreakdown.finalPayment" />
+            </div>
+            <div className={css.itemLabel}>
+              <FormattedDate value={endDate} {...dateFormatOptions} />
+            </div>
           </div>
-          <div className={css.itemLabel}>
-            <FormattedDate value={endDate} {...dateFormatOptions} />
-          </div>
-        </div>
+        )}
       </div>
     </>
   );
 };
 
 const LineItemNextPayment = props => {
-  const { booking, unitType, dateType, nextPaymentDate, lastPaymentDate } = props;
+  const { booking, unitType, dateType, nextPaymentDate, lastPaymentDate,ongoingContract } = props;
 
   // Attributes: displayStart and displayEnd can be used to differentiate shown time range
   // from actual start and end times used for availability reservation. It can help in situations
@@ -66,7 +58,8 @@ const LineItemNextPayment = props => {
   return (
     <>
       <div className={css.lineItem}>
-        <BookingPeriod startDate={localStartDate} endDate={endDay} dateType={dateType} />
+        <BookingPeriod startDate={localStartDate} endDate={endDay}
+        ongoingContract={ongoingContract} />
       </div>
       <hr className={css.totalDivider} />
     </>

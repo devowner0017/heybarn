@@ -33,8 +33,6 @@ const RentalAgreementModal = props => {
     titleText,
     contentText,
   } = props;
-  console.log("🚀 | file: RentalAgreementModal.js | line 36 | props", props);
-  console.log('🚀 | file: RentalAgreementModal.js | line 36 | props', props);
 
   const classes = classNames(rootClassName || css.root, className);
   const closeButtonMessage = closeText || intl.formatMessage({ id: 'RentalAgreementModal.later' });
@@ -61,11 +59,6 @@ const RentalAgreementModal = props => {
   ) : null;
 
   const handleSubmit = values => {
-    console.log('🚀 | file: RentalAgreementModal.js | line 62 | handleSubmit | values', values);
-    console.log(
-      '🚀 | file: RentalAgreementModal.js | line 65 | affirmativeAction',
-      affirmativeAction
-    );
     affirmativeAction(values);
   };
   return (

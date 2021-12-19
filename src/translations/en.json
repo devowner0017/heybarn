@@ -390,9 +390,9 @@
   "InboxPage.fetchFailed": "Could not load all messages. Please try again.",
   "InboxPage.noOrdersFound": "You haven't made any bookings.",
   "InboxPage.noSalesFound": "Nobody has booked anything from you yet.",
-  "InboxPage.ordersTabTitle": "Renting",
-  "InboxPage.ordersTitle": "Inbox: Renting",
-  "InboxPage.salesTabTitle": "Hosting",
+  "InboxPage.ordersTabTitle": "Inbox",
+  "InboxPage.ordersTitle": "Inbox",
+  "InboxPage.salesTabTitle": "Inbox",
   "InboxPage.salesTitle": "Inbox: Hosting",
   "InboxPage.stateExpired": "Payment expired",
   "InboxPage.statePaymentPending": "Pending payment",
@@ -1226,6 +1226,12 @@
   "TransactionPanel.c_cancelledDuringRadSubTitle": "How about taking a look at some other options?",
   "TransactionPanel.p_cancelledDuringRadTitle": "This agreement has been cancelled",
   "TransactionPanel.p_cancelledDuringRadSubTitle": "More renters are searching...",
+
+
+  "TransactionPanel.c_cancelledAfterAgreementSentTitle": "This agreement has been cancelled",
+  "TransactionPanel.c_cancelledAfterAgreementSentSubTitle": "How about taking a look at some other options?",
+  "TransactionPanel.p_cancelledAfterAgreementSentTitle": "This agreement has been cancelled",
+  "TransactionPanel.p_cancelledAfterAgreementSentSubTitle": "More renters are searching...",
 
   "TransactionPanel.c_rentalAgreementFinalizedTitle": "Congratulations! Your rental agreement is all signed",
   "TransactionPanel.c_rentalAgreementFinalizedSubTitle": "Keep a copy of this safe and check back in on your heybarn accounts page if you need to change the agreement in the future. Happy renting!",

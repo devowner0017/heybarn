@@ -14,6 +14,7 @@ import {
   FieldTextInput,
   FieldNumberInput,
   FieldDateInput,
+  FieldCheckbox,
   FieldDateRangeInput,
 } from '../../components';
 
@@ -40,8 +41,13 @@ const RentalAgreementSetupFormComponent = props => (
         sendReviewInProgress,
         values,
       } = fieldRenderProps;
-      console.log('🚀 | file: RentalAgreementSetupForm.js | line 43 | values', values);
-      const { startDate, endDate } = values;
+
+      const {
+        startDate,
+        endDate,
+        lengthOfContract,
+        ongoingContract: [ongoingContract] = [],
+      } = values;
       const [focusedInput, setFocusedInput] = useState();
       // Function that can be passed to nested components
       // so that they can notify this component when the
@@ -75,37 +81,39 @@ const RentalAgreementSetupFormComponent = props => (
       const handleOnChange = formValues => {
         const { lengthOfContract, startDate, endDate } = formValues.values;
         if (!startDate) return null;
-        console.log('🚀 | file: RentalAgreementSetupForm.js | line 77 | endDate', endDate);
-        console.log('🚀 | file: RentalAgreementSetupForm.js | line 77 | startDate', startDate);
         const endDateMaybe = moment(startDate?.date).add(lengthOfContract, 'weeks');
-        console.log(
-          '🚀 | file: RentalAgreementSetupForm.js | line 80 | endDateMaybe',
-          endDateMaybe
-        );
         if (startDate && lengthOfContract && !moment(endDateMaybe).isSame(moment(endDate))) {
           form.change(`endDate`, endDateMaybe);
         }
       };
-
       return (
         <Form className={classes} onSubmit={handleSubmit}>
-          <FieldNumberInput
-            label={<FormattedMessage id="RentalAgreementModal.lengthOfContractLabel" />}
-            id={'lengthOfContract'}
-            name={'lengthOfContract'}
-            config={{
-              min: 1,
-              max: 102,
-            }}
-            validate={required('Required')}
+          <FieldCheckbox
+            id={'ongoingContract'}
+            name={'ongoingContract'}
+            label={'On Going'}
+            value={true}
           />
+          {!values.ongoingContract && (
+            <FieldNumberInput
+              label={<FormattedMessage id="RentalAgreementModal.lengthOfContractLabel" />}
+              id={'lengthOfContract'}
+              name={'lengthOfContract'}
+              disabled={ongoingContract}
+              config={{
+                min: 1,
+                max: 102,
+              }}
+              validate={!ongoingContract ? required('Required') : _ => null}
+            />
+          )}
           <FormSpy
             subscription={{ values: true }}
             onChange={values => {
-              console.log('🚀 | file: RentalAgreementSetupForm.js | line 123 | values', values);
               handleOnChange(values);
             }}
           />
+
           <FieldDateInput
             className={css.bookingDates}
             label={'Start'}
@@ -123,25 +131,14 @@ const RentalAgreementSetupFormComponent = props => (
             onFocusedInputChange={onFocusedInputChange}
             format={identity}
             // timeSlots={timeSlots}
-            disabled={!values.lengthOfContract}
+            disabled={!lengthOfContract && !ongoingContract}
             customIsDayBlocked={date => {
-              console.log('🚀 | file: RentalAgreementSetupForm.js | line 143 | date', date);
               return false;
             }}
             customIsDayOutsideRange={date => {
-              console.log('🚀 | file: RentalAgreementSetupForm.js | line 147 | date', date);
               return false;
             }}
           />
-          {/* <FieldTextInput
-            className={css.reviewContent}
-            type="textarea"
-            id={formId ? `${formId}.reviewContent` : 'reviewContent'}
-            name="reviewContent"
-            label={reviewContent}
-            placeholder={reviewContentPlaceholderMessage}
-            validate={required(reviewContentRequiredMessage)}
-          /> */}
           {errorArea}
           {startDate && (
             <div className={css.detailRow}>

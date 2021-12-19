@@ -50,7 +50,6 @@ const FieldNumberInputComponent = props => {
 
   const selectProps = { className: selectClasses, id, value: 1, ...input, ...rest };
   const classes = classNames(rootClassName || css.root, className);
-  console.log('🚀 | file: FieldNumberInput.js | line 52 | selectProps', selectProps);
   const inputComp = (
     <InputNumber
       {...selectProps}

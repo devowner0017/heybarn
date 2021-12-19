@@ -20,6 +20,7 @@ module.exports = async (req, res) => {
     providerUserId,
     startTimestamp,
     endTimestamp,
+    ongoingContract,
   } = req.body;
   console.log('🚀 | file: create-recurring-payments.js | line 10 | req.body;', req.body);
   const { author, hostStripeAccount } = await integrationSdk.users
@@ -66,13 +67,13 @@ module.exports = async (req, res) => {
     payment_behavior: 'allow_incomplete',
     proration_behavior: 'none',
     trial_end: startTimestamp,
-    cancel_at: endTimestamp,
+    // cancel_at: ongoingContract ? null : endTimestamp,
     metadata: { listingId, transactionId },
   };
 
   // TODO: UPDATE ERROR HANDLING
   return stripe.subscriptions
-    .create(params)
+    .create(ongoingContract ? params : { ...params, cancel_at: endTimestamp })
     .then(apiResponse => {
       console.log('🚀 | file: create-recurring-payments.js | line 21 | apiResponse', apiResponse);
       const serialRes = serialize(apiResponse);

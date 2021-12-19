@@ -10,11 +10,11 @@ const LineItemLengthOfContract = props => {
   const { transaction } = props;
 
   const protectedData = getPropByName(transaction, 'protectedData');
-  const { lengthOfContract } = protectedData;
+  const { lengthOfContract, ongoingContract } = protectedData;
 
   const totalLabel = <FormattedMessage id="BookingBreakdown.lengthOfContract" />;
 
-  return (
+  return !ongoingContract && (
     <>
       <hr className={css.totalDivider} />
       <div className={css.lineItemTotal}>

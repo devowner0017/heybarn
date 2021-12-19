@@ -16,6 +16,7 @@ import {
   LayoutWrapperFooter,
   Footer,
   LayoutWrapperMain,
+  NotificationBadge,
 } from '../../components';
 import { TopbarContainer } from '../../containers';
 
@@ -48,6 +49,7 @@ export class ManageListingsPageComponent extends Component {
       queryListingsError,
       queryParams,
       scrollingDisabled,
+      providerNotificationCount,
       intl,
     } = this.props;
     const listingType = location.pathname.startsWith('/adverts') ? 'advert' : 'listing';
@@ -110,27 +112,22 @@ export class ManageListingsPageComponent extends Component {
       `${panelWidth / 3}vw`,
     ].join(', ');
 
+    const providerNotificationBadge =
+      providerNotificationCount > 0 ? (
+        <NotificationBadge count={providerNotificationCount} />
+      ) : null;
+
     const tabs = [
       {
         text: (
           <span>
-            <FormattedMessage id="InboxPage.ordersTabTitle" />
-          </span>
-        ),
-        linkProps: {
-          name: 'InboxPage',
-          params: { tab: 'orders' },
-        },
-      },
-      {
-        text: (
-          <span>
             <FormattedMessage id="InboxPage.salesTabTitle" />
+            {providerNotificationBadge}
           </span>
         ),
+        selected: false,
         linkProps: {
           name: 'InboxPage',
-          params: { tab: 'sales' },
         },
       },
     ];
@@ -228,10 +225,8 @@ const mapStateToProps = state => {
     closingListing,
     closingListingError,
   } = state.ManageListingsPage;
-  console.log(
-    '🚀 | file: ManageListingsPage.js | line 204 | state.ManageListingsPage',
-    state.ManageListingsPage
-  );
+  const { currentUserNotificationCount: providerNotificationCount } = state.user;
+
   const listings = getOwnListingsById(state, currentPageResultIds);
   return {
     currentPageResultIds,
@@ -245,6 +240,7 @@ const mapStateToProps = state => {
     openingListingError,
     closingListing,
     closingListingError,
+    providerNotificationCount,
   };
 };
 

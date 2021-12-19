@@ -25,7 +25,7 @@ import {
   txIsCancelledDuringRad,
   txIsRentalAgreementSent,
   txIsCancelledAfterAgreementSent,
-  txIsRentalAgreementFinalized,
+  txIsRentalAgreementSigned,
   TRANSITION_REQUEST_PAYMENT,
   TRANSITION_HOST_ACCEPTS_COMMUNICATION,
   TRANSITION_RENTER_ACCEPTS_COMMUNICATION,
@@ -246,6 +246,9 @@ export class TransactionPanelComponent extends Component {
 
       ensuredRelated,
       onCompleteSale,
+      cancelAfterAgreementSentInProgress,
+      cancelAfterAgreementSentError,
+      onCancelAfterAgreementSent,
 
       subscription,
     } = this.props;
@@ -370,14 +373,17 @@ export class TransactionPanelComponent extends Component {
           },
           rentalAgreementModalProps: {
             affirmativeAction: values => {
+            console.log("🚀 | file: TransactionPanel.js | line 376 | TransactionPanelComponent | render | values", values);
               const {
                 startDate: { date: startDate },
                 endDate,
+                ongoingContract: [ongoingContract],
                 ...rest
               } = values;
 
               onSendRentalAgreement({
                 contractLines: {
+                  ongoingContract,
                   ...rest,
                 },
                 bookingDates: { startDate, endDate },
@@ -501,20 +507,20 @@ export class TransactionPanelComponent extends Component {
           showRentalSignatureButtons: isCustomer && hasCorrectNextTransition,
           // TODO: Fix THIS STEP
           showBreakdowns: isCustomer,
-          allowMessages: true,
+          allowMessages: false,
+
           confirmationModalProps: {
             negativeAction: _ =>
-              onCancelDuringRad({
+              onCancelAfterAgreementSent({
                 txId: tx.id,
                 actor: isCustomer ? 'customer' : 'provider',
-                wasRequested: true,
               }),
             affirmativeButtonText: 'Nevermind!',
             negativeButtonText: 'Cancel This Transaction',
             affirmativeInProgress: sendRentalAgreementInProgress,
-            negativeInProgress: cancelDuringRadInProgress,
+            negativeInProgress: cancelAfterAgreementSentInProgress,
             affirmativeError: sendRentalAgreementError,
-            negativeError: cancelDuringRadError,
+            negativeError: cancelAfterAgreementSentError,
             titleText: <FormattedMessage id="TransactionPanel.cancelConfirmationTitle" />,
             contentText: <FormattedMessage id="TransactionPanel.cancelConfirmationSubTitle" />,
           },
@@ -527,7 +533,7 @@ export class TransactionPanelComponent extends Component {
         };
       }
       // ****
-      else if (txIsRentalAgreementFinalized(tx)) {
+      else if (txIsRentalAgreementSigned(tx)) {
         const transitions = Array.isArray(nextTransitions)
           ? nextTransitions.map(transition => {
               return transition.attributes.name;
@@ -582,6 +588,8 @@ export class TransactionPanelComponent extends Component {
       }
     };
     const stateData = stateDataFn(currentTransaction) || {};
+    console.log("🚀 | file: TransactionPanel.js | line 588 | TransactionPanelComponent | render | stateData", stateData);
+    console.log("🚀 | file: TransactionPanel.js | line 588 | TransactionPanelComponent | render | currentTransaction", currentTransaction);
 
     const handlePaymentRedirect = values => {
       const {
@@ -859,30 +867,32 @@ export class TransactionPanelComponent extends Component {
                 />
               </p>
             ) : null}
-            <FeedSection
-              rootClassName={css.feedContainer}
-              currentTransaction={currentTransaction}
-              currentUser={currentUser}
-              fetchMessagesError={fetchMessagesError}
-              fetchMessagesInProgress={fetchMessagesInProgress}
-              initialMessageFailed={initialMessageFailed}
-              messages={messages}
-              oldestMessagePageFetched={oldestMessagePageFetched}
-              onOpenReviewModal={this.onOpenReviewModal}
-              onShowMoreMessages={() => onShowMoreMessages(currentTransaction.id)}
-              totalMessagePages={totalMessagePages}
-            />
             {showSendMessageForm ? (
-              <SendMessageForm
-                formId={this.sendMessageFormName}
-                rootClassName={css.sendMessageForm}
-                messagePlaceholder={sendMessagePlaceholder}
-                inProgress={sendMessageInProgress}
-                sendMessageError={sendMessageError}
-                onFocus={this.onSendMessageFormFocus}
-                onBlur={this.onSendMessageFormBlur}
-                onSubmit={this.onMessageSubmit}
-              />
+              <>
+                <FeedSection
+                  rootClassName={css.feedContainer}
+                  currentTransaction={currentTransaction}
+                  currentUser={currentUser}
+                  fetchMessagesError={fetchMessagesError}
+                  fetchMessagesInProgress={fetchMessagesInProgress}
+                  initialMessageFailed={initialMessageFailed}
+                  messages={messages}
+                  oldestMessagePageFetched={oldestMessagePageFetched}
+                  onOpenReviewModal={this.onOpenReviewModal}
+                  onShowMoreMessages={() => onShowMoreMessages(currentTransaction.id)}
+                  totalMessagePages={totalMessagePages}
+                />
+                <SendMessageForm
+                  formId={this.sendMessageFormName}
+                  rootClassName={css.sendMessageForm}
+                  messagePlaceholder={sendMessagePlaceholder}
+                  inProgress={sendMessageInProgress}
+                  sendMessageError={sendMessageError}
+                  onFocus={this.onSendMessageFormFocus}
+                  onBlur={this.onSendMessageFormBlur}
+                  onSubmit={this.onMessageSubmit}
+                />
+              </>
             ) : null}
             {stateData.showAcceptCommunicationButtons ? (
               <div className={css.mobileActionButtons}>{acceptCommunicationButtons}</div>

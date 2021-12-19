@@ -21,9 +21,12 @@ import {
   TRANSITION_RENTER_REQUESTS_AGREEMENT,
   TRANSITION_HOST_CANCELS_DURING_RAD,
   TRANSITION_RENTER_CANCELS_DURING_RAD,
+  TRANSITION_RENTER_CANCELS_AFTER_REQUEST,
   TRANSITION_RENTER_SIGNS_RENTAL_AGREEMENT,
   TRANSITION_COMPLETE,
   TRANSITION_HOST_SENDS_AGREEMENT_AFTER_REQUEST,
+  TRANSITION_HOST_CANCELS_AFTER_AGREEMENT_SENT,
+  TRANSITION_RENTER_CANCELS_AFTER_AGREEMENT_SENT,
 } from '../../util/transaction';
 import {
   transactionLineItems,
@@ -86,6 +89,10 @@ export const CANCEL_DURING_RAD_REQUEST = 'app/TransactionPage/CANCEL_DURING_RAD_
 export const CANCEL_DURING_RAD_SUCCESS = 'app/TransactionPage/CANCEL_DURING_RAD_SUCCESS';
 export const CANCEL_DURING_RAD_ERROR = 'app/TransactionPage/CANCEL_DURING_RAD_ERROR';
 
+export const CANCEL_AFTER_AGREEMENT_SENT_REQUEST = 'app/TransactionPage/CANCEL_AFTER_AGREEMENT_SENT_REQUEST';
+export const CANCEL_AFTER_AGREEMENT_SENT_SUCCESS = 'app/TransactionPage/CANCEL_AFTER_AGREEMENT_SENT_SUCCESS';
+export const CANCEL_AFTER_AGREEMENT_SENT_ERROR = 'app/TransactionPage/CANCEL_AFTER_AGREEMENT_SENT_ERROR';
+
 export const ACCEPT_SALE_REQUEST = 'app/TransactionPage/ACCEPT_SALE_REQUEST';
 export const ACCEPT_SALE_SUCCESS = 'app/TransactionPage/ACCEPT_SALE_SUCCESS';
 export const ACCEPT_SALE_ERROR = 'app/TransactionPage/ACCEPT_SALE_ERROR';
@@ -137,6 +144,9 @@ const initialState = {
 
   cancelDuringRadInProgress: false,
   cancelDuringRadError: null,
+
+  cancelAfterAgreementSentInProgress: false,
+  cancelAfterAgreementSentError: null,
 
   acceptInProgress: false,
   acceptSaleError: null,
@@ -270,6 +280,18 @@ export default function checkoutPageReducer(state = initialState, action = {}) {
       return { ...state, cancelDuringRadInProgress: false };
     case CANCEL_DURING_RAD_ERROR:
       return { ...state, cancelDuringRadInProgress: false, cancelDuringRadError: payload };
+
+      case CANCEL_AFTER_AGREEMENT_SENT_REQUEST:
+        return {
+          ...state,
+          cancelAfterAgreementSentInProgress: true,
+          cancelAfterAgreementSentError: null,
+        };
+      case CANCEL_AFTER_AGREEMENT_SENT_SUCCESS:
+        return { ...state, cancelAfterAgreementSentInProgress: false };
+      case CANCEL_AFTER_AGREEMENT_SENT_ERROR:
+        return { ...state, cancelAfterAgreementSentInProgress: false, cancelAfterAgreementSentError: payload };
+
 
     case SIGN_RENTAL_AGREEMENT_REQUEST:
       return {
@@ -416,6 +438,16 @@ const cancelDuringRadError = e => ({
   error: true,
   payload: e,
 });
+
+
+const cancelAfterAgreementSentRequest = () => ({ type: CANCEL_AFTER_AGREEMENT_SENT_REQUEST });
+const cancelAfterAgreementSentSuccess = () => ({ type: CANCEL_AFTER_AGREEMENT_SENT_SUCCESS });
+const cancelAfterAgreementSentError = e => ({
+  type: CANCEL_AFTER_AGREEMENT_SENT_ERROR,
+  error: true,
+  payload: e,
+});
+
 
 const declineCommunicationRequest = () => ({ type: DECLINE_COMMUNICATION_REQUEST });
 const declineCommunicationSuccess = () => ({ type: DECLINE_COMMUNICATION_SUCCESS });
@@ -774,6 +806,7 @@ export const declineCommunication = data => (dispatch, getState, sdk) => {
 };
 
 export const cancelDuringRad = data => (dispatch, getState, sdk) => {
+  console.log('🚀 | file: TransactionPage.duck.js | line 778 | data', data);
   const { txId, actor, wasRequested } = data;
   dispatch(cancelDuringRadRequest());
   const transition = wasRequested
@@ -811,7 +844,12 @@ export const cancelDuringRad = data => (dispatch, getState, sdk) => {
 export const sendRentalAgreement = data => (dispatch, getState, sdk) => {
   // TODO: Add booking data to params here
   const { txId, listingId, wasRequested, contractLines, bookingDates } = data;
-  const { startDate, endDate } = bookingDates;
+
+  console.log("🚀 | file: TransactionPage.duck.js | line 847 | data", data);
+  const { startDate } = bookingDates;
+  const endDate = bookingDates.endDate || new moment().add(1, 'years');
+  console.log('🚀 | file: TransactionPage.duck.js | line 816 | endDate', endDate);
+  console.log('🚀 | file: TransactionPage.duck.js | line 815 | bookingDates', bookingDates);
   dispatch(sendRentalAgreementRequest());
   const bookingData = {
     startDate: startDate.toISOString(),
@@ -910,6 +948,39 @@ export const requestRentalAgreement = data => (dispatch, getState, sdk) => {
   return transitionPrivileged({ bookingData, bodyParams, queryParams })
     .then(handleSucces)
     .catch(handleError);
+};
+
+export const cancelAfterAgreementSent = data => (dispatch, getState, sdk) => {
+  console.log('🚀 | file: TransactionPage.duck.js | line 778 | data', data);
+  const { txId, actor } = data;
+  dispatch(cancelAfterAgreementSentRequest());
+  const transition =
+    actor === 'provider'
+      ? TRANSITION_HOST_CANCELS_AFTER_AGREEMENT_SENT
+      : TRANSITION_RENTER_CANCELS_AFTER_AGREEMENT_SENT;
+  return sdk.transactions
+    .transition(
+      {
+        id: txId,
+        transition: transition,
+        params: {},
+      },
+      { expand: true }
+    )
+    .then(response => {
+      dispatch(addMarketplaceEntities(response));
+      dispatch(cancelAfterAgreementSentSuccess());
+      dispatch(fetchCurrentUserNotifications());
+      return response;
+    })
+    .catch(e => {
+      dispatch(cancelAfterAgreementSentError(storableError(e)));
+      log.error(e, 'cancel-during-rad-failed', {
+        txId: txId,
+        transition: transition,
+      });
+      throw e;
+    });
 };
 
 export const signRentalAgreement = data => (dispatch, getState, sdk) => {

@@ -82,9 +82,9 @@ export const loadData = (params, search) => (dispatch, getState, sdk) => {
   };
 
   const onlyFilter = onlyFilterValues[tab];
-  if (!onlyFilter) {
-    return Promise.reject(new Error(`Invalid tab for InboxPage: ${tab}`));
-  }
+  // if (!onlyFilter) {
+  //   return Promise.reject(new Error(`Invalid tab for InboxPage: ${tab}`));
+  // }
 
   dispatch(fetchOrdersOrSalesRequest());
 

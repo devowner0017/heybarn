@@ -80,7 +80,6 @@ const HeadingWithSubtitle = props => {
     listingDeleted,
     isCustomerBanned,
   } = props;
-  console.log('🚀 | file: PanelHeading.js | line 81 | props', props);
   return (
     <React.Fragment>
       <h1 className={className}>

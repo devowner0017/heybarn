@@ -6,8 +6,9 @@ import css from './SubscriptionBreakdown.module.css';
 
 const LineItemWeeksRemaining = props => {
   const { weeksRemaining } = props;
+  const { ongoingContract } = props.transaction?.attributes?.protectedData || {};
 
-  return (
+  return !ongoingContract && (
     <>
       <div className={css.lineItem}>
         <span className={css.itemLabel}>

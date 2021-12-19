@@ -40,6 +40,7 @@ import {
   cancelDuringRad,
   signRentalAgreement,
   reverseTransactionFlowAndAcceptCommunication,
+  cancelAfterAgreementSent,
 } from './TransactionPage.duck';
 import css from './TransactionPage.module.css';
 
@@ -92,6 +93,9 @@ export const TransactionPageComponent = props => {
     cancelDuringRadInProgress,
     cancelDuringRadError,
 
+    cancelAfterAgreementSentInProgress,
+    cancelAfterAgreementSentError,
+    onCancelAfterAgreementSent,
     signRentalAgreementInProgress,
     signRentalAgreementError,
     onSignRentalAgreement,
@@ -100,7 +104,6 @@ export const TransactionPageComponent = props => {
 
     subscription,
   } = props;
-    console.log("🚀 | file: TransactionPage.js | line 103 | subscription", subscription);
 
   const currentTransaction = ensureTransaction(transaction);
   const currentListing = ensureListing(currentTransaction.listing);
@@ -189,7 +192,6 @@ export const TransactionPageComponent = props => {
     currentTransaction.provider &&
     !fetchTransactionError;
 
-  console.log('🚀 | file: TransactionPage.js | line 190 | isDataAvailable', isDataAvailable);
   const isOwnSale =
     isDataAvailable &&
     isProviderRole &&
@@ -282,6 +284,9 @@ export const TransactionPageComponent = props => {
       callSetInitialValues={callSetInitialValues}
       onCompleteSale={onCompleteSale}
       subscription={subscription}
+      cancelAfterAgreementSentInProgress={cancelAfterAgreementSentInProgress}
+      cancelAfterAgreementSentError={cancelAfterAgreementSentError}
+      onCancelAfterAgreementSent={onCancelAfterAgreementSent}
     />
   ) : (
     loadingOrFailedFetching
@@ -406,16 +411,14 @@ const mapStateToProps = state => {
     cancelDuringRadInProgress,
     cancelDuringRadError,
 
+    cancelAfterAgreementSentInProgress,
+    cancelAfterAgreementSentError,
+
     signRentalAgreementInProgress,
     signRentalAgreementError,
     relatedListingRef,
   } = state.TransactionPage;
-  console.log(
-    '🚀 | file: TransactionPage.js | line 417 | state.TransactionPage',
-    state.TransactionPage
-  );
   const { subscription } = state.stripe;
-  console.log('🚀 | file: TransactionPage.js | line 426 | subscription', state.stripe);
   const { currentUser } = state.user;
   const relatedListing = getMarketplaceEntities(
     state,
@@ -459,7 +462,8 @@ const mapStateToProps = state => {
     sendRentalAgreementError,
     cancelDuringRadInProgress,
     cancelDuringRadError,
-
+    cancelAfterAgreementSentInProgress,
+    cancelAfterAgreementSentError,
     signRentalAgreementInProgress,
     signRentalAgreementError,
     relatedListing: relatedListing?.length ? relatedListing[0] : null,
@@ -475,6 +479,7 @@ const mapDispatchToProps = dispatch => {
     onSendRentalAgreement: transactionId => dispatch(sendRentalAgreement(transactionId)),
     onRequestRentalAgreement: transactionId => dispatch(requestRentalAgreement(transactionId)),
     onCancelDuringRad: transactionId => dispatch(cancelDuringRad(transactionId)),
+    onCancelAfterAgreementSent: transactionId => dispatch(cancelAfterAgreementSent(transactionId)),
     onSignRentalAgreement: transactionId => dispatch(signRentalAgreement(transactionId)),
 
     onCompleteSale: transactionId => dispatch(completeSale(transactionId)),

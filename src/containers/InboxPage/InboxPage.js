@@ -21,7 +21,9 @@ import {
   txIsCancelledDuringRad,
   txIsRentalAgreementSent,
   txIsCancelledAfterAgreementSent,
-  txIsRentalAgreementFinalized,
+  txIsRentalAgreementSigned,
+  txNeedsNotificationOrder,
+  txNeedsNotificationSale,
 } from '../../util/transaction';
 import { propTypes, DATE_TYPE_DATE } from '../../util/types';
 import { ensureCurrentUser } from '../../util/data';
@@ -63,15 +65,15 @@ const formatDate = (intl, date) => {
 
 // Translated name of the state of the given transaction
 export const txState = (intl, tx, type) => {
+  console.log('🚀 | file: InboxPage.js | line 68 | txState | type', type);
+  console.log('🚀 | file: InboxPage.js | line 225 | txState | tx', tx);
   const isOrder = type === 'order';
-  console.log('🚀 | file: InboxPage.js | line 63 | txState | type', type);
-
   if (txIsHostEnquired(tx)) {
     return {
       nameClassName: isOrder ? css.nameNotEmphasized : css.nameEmphasized,
       // bookingClassName: isOrder ? css.bookingNoActionNeeded : css.bookingActionNeeded,
       lastTransitionedAtClassName: css.lastTransitionedAtEmphasized,
-      stateClassName: css.stateActionNeeded,
+      stateClassName: isOrder ? css.stateNoActionNeeded : css.stateActionNeeded,
       state: intl.formatMessage({
         id: 'InboxPage.stateEnquiry',
       }),
@@ -81,7 +83,7 @@ export const txState = (intl, tx, type) => {
       nameClassName: isOrder ? css.nameNotEmphasized : css.nameEmphasized,
       // bookingClassName: isOrder ? css.bookingNoActionNeeded : css.bookingActionNeeded,
       lastTransitionedAtClassName: css.lastTransitionedAtEmphasized,
-      stateClassName: css.stateActionNeeded,
+      stateClassName: !isOrder ? css.stateNoActionNeeded : css.stateActionNeeded,
       state: intl.formatMessage({
         id: 'InboxPage.stateEnquiry',
       }),
@@ -121,21 +123,22 @@ export const txState = (intl, tx, type) => {
       nameClassName: isOrder ? css.nameNotEmphasized : css.nameEmphasized,
       // bookingClassName: css.bookingActionNeeded,
       lastTransitionedAtClassName: css.lastTransitionedAtEmphasized,
-      stateClassName: isOrder ? css.stateNoActionNeeded : css.stateActionNeeded,
+      stateClassName: !isOrder ? css.stateNoActionNeeded : css.stateActionNeeded,
       state: intl.formatMessage({
         id: 'InboxPage.stateAgreementRequested',
       }),
     };
   } else if (txIsReversedTransactionFlow(tx)) {
-    return {
-      nameClassName: isOrder ? css.nameNotEmphasized : css.nameEmphasized,
-      // bookingClassName: css.bookingActionNeeded,
-      lastTransitionedAtClassName: css.lastTransitionedAtEmphasized,
-      stateClassName: css.stateNoActionNeeded,
-      state: intl.formatMessage({
-        id: 'InboxPage.stateReversedTransaction',
-      }),
-    };
+    return null;
+    //  {
+    //   nameClassName: isOrder ? css.nameNotEmphasized : css.nameEmphasized,
+    //   // bookingClassName: css.bookingActionNeeded,
+    //   lastTransitionedAtClassName: css.lastTransitionedAtEmphasized,
+    //   stateClassName: css.stateNoActionNeeded,
+    //   state: intl.formatMessage({
+    //     id: 'InboxPage.stateReversedTransaction',
+    //   }),
+    // };
   } else if (txIsCancelledDuringRad(tx)) {
     return {
       nameClassName: isOrder ? css.nameNotEmphasized : css.nameEmphasized,
@@ -147,11 +150,12 @@ export const txState = (intl, tx, type) => {
       }),
     };
   } else if (txIsRentalAgreementSent(tx)) {
+    console.log(tx);
     return {
       nameClassName: isOrder ? css.nameNotEmphasized : css.nameEmphasized,
       // bookingClassName: css.bookingActionNeeded,
       lastTransitionedAtClassName: css.lastTransitionedAtEmphasized,
-      stateClassName: isOrder ? css.stateActionNeeded : css.stateNoActionNeeded,
+      stateClassName: !isOrder ? css.stateActionNeeded : css.stateNoActionNeeded,
       state: intl.formatMessage({
         id: 'InboxPage.stateRentalAgreementSent',
       }),
@@ -161,17 +165,17 @@ export const txState = (intl, tx, type) => {
       nameClassName: isOrder ? css.nameNotEmphasized : css.nameEmphasized,
       // bookingClassName: css.bookingNoActionNeeded,
       lastTransitionedAtClassName: css.lastTransitionedAtEmphasized,
-      stateClassName: css.stateActionNeeded,
+      stateClassName: css.stateNoActionNeeded,
       state: intl.formatMessage({
         id: 'InboxPage.stateCancelled',
       }),
     };
-  } else if (txIsRentalAgreementFinalized(tx)) {
+  } else if (txIsRentalAgreementSigned(tx)) {
     return {
       nameClassName: isOrder ? css.nameNotEmphasized : css.nameEmphasized,
       // bookingClassName: css.bookingActionNeeded,
       lastTransitionedAtClassName: css.lastTransitionedAtEmphasized,
-      stateClassName: isOrder ? css.stateActionNeeded : css.stateNoActionNeeded,
+      stateClassName: !isOrder ? css.stateActionNeeded : css.stateNoActionNeeded,
       state: intl.formatMessage({
         id: 'InboxPage.stateRentalAgreementFinalized',
       }),
@@ -263,15 +267,19 @@ BookingInfoMaybe.propTypes = {
 };
 
 export const InboxItem = props => {
-  const { unitType, type, tx, intl, stateData } = props;
+  const { unitType, type, tx, intl, stateData, currentUser } = props;
+  console.log('🚀 | file: InboxPage.js | line 267 | tx', tx);
+  console.log('🚀 | file: InboxPage.js | line 265 | currentUser', currentUser);
+  console.log('🚀 | file: InboxPage.js | line 265 | tx', tx);
   const { customer, provider, listing } = tx;
-  const isOrder = type === 'order';
+  const isOrder = provider.id.uuid !== currentUser.id.uuid;
+  console.log('🚀 | file: InboxPage.js | line 269 | isOrder', isOrder);
   const listingTitle = listing?.attributes?.title;
   const otherUser = isOrder ? provider : customer;
   const otherUserDisplayName = <UserDisplayName user={otherUser} intl={intl} />;
   const isOtherUserBanned = otherUser.attributes.banned;
 
-  const isSaleNotification = !isOrder && txIsRequested(tx);
+  const isSaleNotification = isOrder ? txNeedsNotificationOrder(tx) : txNeedsNotificationSale(tx);
   const rowNotificationDot = isSaleNotification ? <div className={css.notificationDot} /> : null;
   const lastTransitionedAt = formatDate(intl, tx.attributes.lastTransitionedAt);
 
@@ -344,25 +352,25 @@ export const InboxPageComponent = props => {
   const { tab } = params;
   const ensuredCurrentUser = ensureCurrentUser(currentUser);
 
-  const validTab = tab === 'orders' || tab === 'sales';
-  if (!validTab) {
-    return <NotFoundPage />;
-  }
-
-  const isOrders = tab === 'orders';
-
-  const ordersTitle = intl.formatMessage({ id: 'InboxPage.ordersTitle' });
-  const salesTitle = intl.formatMessage({ id: 'InboxPage.salesTitle' });
-  const title = isOrders ? ordersTitle : salesTitle;
+  const title = intl.formatMessage({ id: 'InboxPage.ordersTitle' });
 
   const toTxItem = tx => {
-    const type = isOrders ? 'order' : 'sale';
+    console.log('🚀 | file: InboxPage.js | line 357 | tx', tx);
+    const isCustomer = ensuredCurrentUser.id.uuid === tx.customer.id.uuid;
+    const type = isCustomer ? 'sale' : 'order';
     const stateData = txState(intl, tx, type);
     console.log('🚀 | file: InboxPage.js | line 369 | stateData', stateData);
     // Render InboxItem only if the latest transition of the transaction is handled in the `txState` function.
     return stateData ? (
       <li key={tx.id.uuid} className={css.listItem}>
-        <InboxItem unitType={unitType} type={type} tx={tx} intl={intl} stateData={stateData} />
+        <InboxItem
+          unitType={unitType}
+          type={type}
+          tx={tx}
+          intl={intl}
+          stateData={stateData}
+          currentUser={ensuredCurrentUser}
+        />
       </li>
     ) : null;
   };
@@ -380,13 +388,10 @@ export const InboxPageComponent = props => {
       </li>
     ) : null;
 
-  const hasOrderOrSaleTransactions = (tx, isOrdersTab, user) => {
-    return isOrdersTab
-      ? user.id && tx && tx.length > 0 && tx[0].customer.id.uuid === user.id.uuid
-      : user.id && tx && tx.length > 0 && tx[0].provider.id.uuid === user.id.uuid;
+  const hasOrderOrSaleTransactions = tx => {
+    return tx && tx.length > 0;
   };
-  const hasTransactions =
-    !fetchInProgress && hasOrderOrSaleTransactions(transactions, isOrders, ensuredCurrentUser);
+  const hasTransactions = !fetchInProgress && hasOrderOrSaleTransactions(transactions);
   const pagingLinks =
     hasTransactions && pagination && pagination.totalPages > 1 ? (
       <PaginationLinks
@@ -398,20 +403,17 @@ export const InboxPageComponent = props => {
     ) : null;
 
   const providerNotificationBadge =
-    providerNotificationCount > 0 ? <NotificationBadge count={providerNotificationCount} /> : null;
+    providerNotificationCount > 0 ? (
+      <NotificationBadge count={providerNotificationCount} />
+    ) : (
+      'fdassfs'
+    );
+  console.log(
+    '🚀 | file: InboxPage.js | line 397 | providerNotificationCount',
+    providerNotificationCount
+  );
+
   const tabs = [
-    {
-      text: (
-        <span>
-          <FormattedMessage id="InboxPage.ordersTabTitle" />
-        </span>
-      ),
-      selected: isOrders,
-      linkProps: {
-        name: 'InboxPage',
-        params: { tab: 'orders' },
-      },
-    },
     {
       text: (
         <span>
@@ -419,15 +421,12 @@ export const InboxPageComponent = props => {
           {providerNotificationBadge}
         </span>
       ),
-      selected: !isOrders,
+      selected: true,
       linkProps: {
         name: 'InboxPage',
-        params: { tab: 'sales' },
       },
     },
   ];
-  const nav = <TabNav rootClassName={css.tabs} tabRootClassName={css.tab} tabs={tabs} />;
-  console.log('🚀 | file: InboxPage.js | line 437 | transactions', transactions);
 
   return (
     <Page title={title} scrollingDisabled={scrollingDisabled}>
