@@ -4,7 +4,7 @@ export const nestedRegions = [
     label: 'North Island',
     subdivs: [
       {
-        key: 'bayOfPlenty',
+        key: 'BayPlenty',
         label: 'Bay of Plenty Region',
         subdivs: [
           { key: 'kawerau', label: 'Kawerau District' },
@@ -15,7 +15,7 @@ export const nestedRegions = [
         ],
       },
       {
-        key: 'hawkesBay',
+        key: 'HawkesBay',
         label: "Hawke's Bay Region",
         subdivs: [
           { key: 'hastings', label: 'Hastings District' },
@@ -23,7 +23,7 @@ export const nestedRegions = [
         ],
       },
       {
-        key: 'manawatu',
+        key: 'Manawatu',
         label: 'Manawatū-Whanganui Region',
         subdivs: [
           { key: 'horowhenua', label: 'Horowhenua District' },
@@ -33,7 +33,7 @@ export const nestedRegions = [
         ],
       },
       {
-        key: 'northland',
+        key: 'Northland',
         label: 'Northland Region',
         subdivs: [
           { key: 'farNorth', label: 'Far North District' },
@@ -42,7 +42,7 @@ export const nestedRegions = [
         ],
       },
       {
-        key: 'taranaki',
+        key: 'Taranaki',
         label: 'Taranaki Region',
         subdivs: [
           { key: 'newPlymouth', label: 'New Plymouth District' },
@@ -50,7 +50,7 @@ export const nestedRegions = [
         ],
       },
       {
-        key: 'waikato',
+        key: 'Waikato',
         label: 'Waikato Region',
         subdivs: [
           { key: 'hauraki', label: 'Hauraki District' },
@@ -63,7 +63,7 @@ export const nestedRegions = [
         ],
       },
       {
-        key: 'wellington',
+        key: 'Wellington',
         label: 'Wellington Region',
         subdivs: [
           { key: 'carterton', label: 'Carterton District' },
@@ -104,7 +104,7 @@ export const nestedRegions = [
         ],
       },
       {
-        key: 'unitaryAuthority',
+        key: 'UnitaryAuthority',
         label: 'Unitary Authority',
         subdivs: [{ key: 'gisborne', label: 'Gisborne District' }],
       },
@@ -115,7 +115,7 @@ export const nestedRegions = [
     label: 'South Island',
     subdivs: [
       {
-        key: 'canterbury',
+        key: 'Canterbury',
         label: 'Canterbury Region',
         subdivs: [
           { key: 'ashburton', label: 'Ashburton District' },
@@ -129,7 +129,7 @@ export const nestedRegions = [
         ],
       },
       {
-        key: 'otago',
+        key: 'Otago',
         label: 'Otago Region',
         subdivs: [
           { key: 'centralOtago', label: 'Central Otago District' },
@@ -138,7 +138,7 @@ export const nestedRegions = [
         ],
       },
       {
-        key: 'southland',
+        key: 'Southland',
         label: 'Southland Region',
         subdivs: [
           { key: 'gore', label: 'Gore District' },
@@ -146,7 +146,7 @@ export const nestedRegions = [
         ],
       },
       {
-        key: 'westCoast',
+        key: 'WestCoast',
         label: 'West Coast Region',
         subdivs: [
           { key: 'buller', label: 'Buller District' },
@@ -155,7 +155,7 @@ export const nestedRegions = [
         ],
       },
       {
-        key: 'mixed',
+        key: 'Mixed',
         label: 'Mixed',
         subdivs: [
           {
@@ -165,7 +165,7 @@ export const nestedRegions = [
         ],
       },
       {
-        key: 'unitaryAuthority',
+        key: 'UnitaryAuthority',
         label: 'Unitary Authority',
         subdivs: [
           { key: 'marlborough', label: 'Marlborough District' },

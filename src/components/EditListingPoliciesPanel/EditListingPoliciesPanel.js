@@ -8,6 +8,7 @@ import { ListingLink } from '../../components';
 import { EditListingPoliciesForm } from '../../forms';
 
 import css from './EditListingPoliciesPanel.module.css';
+import { ensureArray } from '../../util/userHelpers'
 
 const EditListingPoliciesPanel = props => {
   const {
@@ -49,7 +50,7 @@ const EditListingPoliciesPanel = props => {
             publicData: {
               rules,
               groundRules,
-              accessFrequency,
+              accessFrequency: ensureArray(accessFrequency),
             },
           };
           onSubmit(updateValues);

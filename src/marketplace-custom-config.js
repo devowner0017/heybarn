@@ -291,7 +291,7 @@ export const filters = [
         },
         {
           key: 'weekendsOnly',
-          label: 'prefer only weekends',
+          label: 'Prefer only weekends',
         },
         {
           key: 'weekdaysOnly',

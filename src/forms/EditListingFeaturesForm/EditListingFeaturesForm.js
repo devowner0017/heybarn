@@ -65,6 +65,7 @@ const EditListingFeaturesFormComponent = props => (
                 className={classNames(css.features, css.numberInput)}
                 label={<FormattedMessage id="EditListingFeaturesForm.sizeOfSpaceLabel" />}
                 id={'sizeOfSpace'}
+                placeholder={'m2'}
                 name={'sizeOfSpace'}
                 config={sizeOptions}
                 validate={required('Required')}
@@ -72,6 +73,7 @@ const EditListingFeaturesFormComponent = props => (
               <FieldNumberInput
                 className={classNames(css.features, css.numberInput)}
                 label={<FormattedMessage id="EditListingFeaturesForm.ageOfSpaceLabel" />}
+                placeholder={'years'}
                 id={'ageOfSpace'}
                 name={'ageOfSpace'}
                 config={ageOptions}

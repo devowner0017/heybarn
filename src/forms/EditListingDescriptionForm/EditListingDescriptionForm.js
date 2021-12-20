@@ -37,42 +37,39 @@ const EditListingDescriptionFormComponent = props => (
         fetchErrors,
         listingType,
       } = formRenderProps;
-      console.log(
-        '🚀 | file: EditListingDescriptionForm.js | line 36 | formRenderProps',
-        formRenderProps
-      );
+        console.log("🚀 | file: EditListingDescriptionForm.js | line 40 | listingType", listingType);
 
       const titleMessage = intl.formatMessage({
-        id: 'EditListingDescriptionForm.title',
+        id: `EditListingDescriptionForm.${listingType}_title`,
       });
       const titlePlaceholderMessage = intl.formatMessage({
-        id: 'EditListingDescriptionForm.titlePlaceholder',
+        id: `EditListingDescriptionForm.${listingType}_titlePlaceholder`,
       });
       const titleRequiredMessage = intl.formatMessage({
-        id: 'EditListingDescriptionForm.titleRequired',
+        id: `EditListingDescriptionForm.titleRequired`,
       });
       const maxLengthMessage = intl.formatMessage(
-        { id: 'EditListingDescriptionForm.maxLength' },
+        { id: `EditListingDescriptionForm.maxLength` },
         {
           maxLength: TITLE_MAX_LENGTH,
         }
       );
 
       const preferredUseLabel = intl.formatMessage({
-        id: 'EditListingDescriptionForm.preferredUseLabel',
+        id: `EditListingDescriptionForm.${listingType}_preferredUseLabel`,
       });
       const preferredUseRequiredMessage = intl.formatMessage({
-        id: 'EditListingDescriptionForm.preferredUseRequired',
+        id: `EditListingDescriptionForm.preferredUseRequired`,
       });
       const descriptionMessage = intl.formatMessage({
-        id: 'EditListingDescriptionForm.description',
+        id: `EditListingDescriptionForm.${listingType}_description`,
       });
       const descriptionPlaceholderMessage = intl.formatMessage({
-        id: 'EditListingDescriptionForm.descriptionPlaceholder',
+        id: `EditListingDescriptionForm.${listingType}_descriptionPlaceholder`,
       });
       const maxLength60Message = maxLength(maxLengthMessage, TITLE_MAX_LENGTH);
       const descriptionRequiredMessage = intl.formatMessage({
-        id: 'EditListingDescriptionForm.descriptionRequired',
+        id: `EditListingDescriptionForm.descriptionRequired`,
       });
 
       const { updateListingError, createListingDraftError, showListingsError } = fetchErrors || {};
@@ -99,10 +96,6 @@ const EditListingDescriptionFormComponent = props => (
       const submitReady = (updated && pristine) || ready;
       const submitInProgress = updateInProgress;
       const submitDisabled = invalid || disabled || submitInProgress;
-      console.log(
-        '🚀 | file: EditListingDescriptionForm.js | line 127 | submitDisabled',
-        submitDisabled
-      );
 
       return (
         <Form className={classes} onSubmit={handleSubmit}>
@@ -117,7 +110,7 @@ const EditListingDescriptionFormComponent = props => (
             label={titleMessage}
             placeholder={titlePlaceholderMessage}
             maxLength={TITLE_MAX_LENGTH}
-            validate={composeValidators(required(titleRequiredMessage), maxLength60Message)}
+            validate={submitInProgress ? _ => null :  composeValidators(required(titleRequiredMessage), maxLength60Message)}
             autoFocus
           />
 
@@ -128,7 +121,7 @@ const EditListingDescriptionFormComponent = props => (
             type="textarea"
             label={descriptionMessage}
             placeholder={descriptionPlaceholderMessage}
-            validate={composeValidators(required(descriptionRequiredMessage))}
+            validate={submitInProgress ? _ => null :  composeValidators(required(descriptionRequiredMessage))}
           />
           <CustomSelect
             id="preferredUse"

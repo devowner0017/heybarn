@@ -100,7 +100,6 @@ const tabLabel = (intl, tab, listingType) => {
  * @return true if tab / step is completed.
  */
 const tabCompleted = (tab, listing) => {
-  console.log('🚀 | file: EditListingWizard.js | line 103 | tabCompleted | listing', listing);
   const {
     availabilityPlan,
     description,

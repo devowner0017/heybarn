@@ -83,11 +83,11 @@ const paymentFlow = (selectedPaymentMethod, saveAfterOnetimePayment) => {
 
 const initializeOrderPage = (initialValues, routes, dispatch) => {
   const OrderPage = findRouteByRouteName('OrderDetailsPage', routes);
-console.log(1111)
+  console.log(1111);
   // Transaction is already created, but if the initial message
   // sending failed, we tell it to the OrderDetailsPage.
   dispatch(OrderPage.setInitialValues(initialValues));
-console.log(2222)
+  console.log(2222);
 };
 
 const checkIsPaymentExpired = existingTransaction => {
@@ -265,20 +265,6 @@ export class CheckoutPageComponent extends Component {
       : null;
     const selectedPaymentFlow = paymentFlow(selectedPaymentMethod, saveAfterOnetimePayment);
 
-    const fnCreateRecurring = fnParams => {
-    console.log("🚀 | file: CheckoutPage.js | line 269 | CheckoutPageComponent | handlePaymentIntent | fnParams", fnParams);
-      return onCreateRecurring(createRecurringParams)
-        .then(recurringResponse => {
-          console.log(
-            '🚀 | file: CheckoutPage.js | line 281 | CheckoutPageComponent | onCreateRecurring | recurringResponse',
-            recurringResponse
-          );
-          return { ...fnParams, protectedData: { recurringResponse } };
-        })
-        .catch(e => {
-          console.log(e);
-        });
-    };
     // Step 1: initiate order by requesting payment from Marketplace API
     const fnRequestPayment = fnParams => {
       console.log(
@@ -380,7 +366,55 @@ export class CheckoutPageComponent extends Component {
           );
         });
     };
+    // Step 3: optionally save card as defaultPaymentMethod
+    const fnSavePaymentMethod = fnParams => {
+      console.log(
+        '🚀 | file: CheckoutPage.js | line 345 | CheckoutPageComponent | handlePaymentIntent | fnParams',
+        fnParams
+      );
+      const pi = createdPaymentIntent || paymentIntent;
+      console.log(
+        '🚀 | file: CheckoutPage.js | line 377 | CheckoutPageComponent | handlePaymentIntent | paymentIntent',
+        paymentIntent
+      );
+      console.log(
+        '🚀 | file: CheckoutPage.js | line 377 | CheckoutPageComponent | handlePaymentIntent | createdPaymentIntent',
+        createdPaymentIntent
+      );
+      console.log(
+        '🚀 | file: CheckoutPage.js | line 377 | CheckoutPageComponent | handlePaymentIntent | pi',
+        pi
+      );
+      return onSavePaymentMethod(ensuredStripeCustomer, pi.payment_method)
+        .then(response => {
+          if (response.errors) {
+            return { ...fnParams, paymentMethodSaved: false };
+          }
+          return { ...fnParams, paymentMethodSaved: true };
+        })
+        .catch(e => {
+          // Real error cases are catched already in paymentMethods page.
+          return { ...fnParams, paymentMethodSaved: false };
+        });
+    };
 
+    const fnCreateRecurring = fnParams => {
+      console.log(
+        '🚀 | file: CheckoutPage.js | line 269 | CheckoutPageComponent | handlePaymentIntent | fnParams',
+        fnParams
+      );
+      return onCreateRecurring({ ...createRecurringParams, paymentMethod: pi.payment_method })
+        .then(recurringResponse => {
+          console.log(
+            '🚀 | file: CheckoutPage.js | line 281 | CheckoutPageComponent | onCreateRecurring | recurringResponse',
+            recurringResponse
+          );
+          return { ...fnParams, protectedData: { recurringResponse } };
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    };
     // Step 4: send initial message
     const fnSendMessage = fnParams => {
       console.log(
@@ -388,31 +422,6 @@ export class CheckoutPageComponent extends Component {
         fnParams
       );
       return onSendMessage({ ...fnParams, message });
-    };
-
-    // Step 5: optionally save card as defaultPaymentMethod
-    const fnSavePaymentMethod = fnParams => {
-      console.log(
-        '🚀 | file: CheckoutPage.js | line 345 | CheckoutPageComponent | handlePaymentIntent | fnParams',
-        fnParams
-      );
-      const pi = createdPaymentIntent || paymentIntent;
-
-      if (selectedPaymentFlow === PAY_AND_SAVE_FOR_LATER_USE) {
-        return onSavePaymentMethod(ensuredStripeCustomer, pi.payment_method)
-          .then(response => {
-            if (response.errors) {
-              return { ...fnParams, paymentMethodSaved: false };
-            }
-            return { ...fnParams, paymentMethodSaved: true };
-          })
-          .catch(e => {
-            // Real error cases are catched already in paymentMethods page.
-            return { ...fnParams, paymentMethodSaved: false };
-          });
-      } else {
-        return Promise.resolve({ ...fnParams, paymentMethodSaved: true });
-      }
     };
 
     // Here we create promise calls in sequence
@@ -423,12 +432,12 @@ export class CheckoutPageComponent extends Component {
     const applyAsync = (acc, val) => acc.then(val);
     const composeAsync = (...funcs) => x => funcs.reduce(applyAsync, Promise.resolve(x));
     const handlePaymentIntentCreation = composeAsync(
-      fnCreateRecurring,
       fnRequestPayment,
       fnConfirmCardPayment,
       fnConfirmPayment,
-      fnSendMessage,
-      fnSavePaymentMethod
+      fnSavePaymentMethod,
+      fnCreateRecurring,
+      fnSendMessage
     );
 
     // Create order aka transaction
@@ -482,16 +491,8 @@ export class CheckoutPageComponent extends Component {
       '🚀 | file: CheckoutPage.js | line 454 | CheckoutPageComponent | handleSubmit | values',
       values
     );
-    const {
-      name,
-      addressLine1,
-      addressLine2,
-      postal,
-      city,
-      state,
-      country,
-      saveAfterOnetimePayment,
-    } = formValues;
+    const { name, addressLine1, addressLine2, postal, city, state, country } = formValues;
+    const saveAfterOnetimePayment = true;
     const currentUser = ensureCurrentUser(user);
     console.log(
       '🚀 | file: CheckoutPage.js | line 469 | CheckoutPageComponent | handleSubmit | currentUser',
@@ -524,13 +525,16 @@ export class CheckoutPageComponent extends Component {
     const currentAuthor = ensureUser(currentListing.author);
     const price = currentListing.attributes.price;
     const recurringPaymentMethod =
-      paymentMethod === 'defaultCard' ? getPropByName(currentUser, 'stripePaymentMethodId') : card;
+      paymentMethod === 'defaultCard' ? getPropByName(currentUser, 'stripePaymentMethodId') : null;
     console.log(
       '🚀 | file: CheckoutPage.js | line 532 | CheckoutPageComponent | handleSubmit | bookingDates',
       bookingDates
     );
-    const  ongoingContract  = tx.attributes?.protectedData?.ongoingContract;
-    console.log("🚀 | file: CheckoutPage.js | line 531 | CheckoutPageComponent | handleSubmit | tx", tx);
+    const ongoingContract = tx.attributes?.protectedData?.ongoingContract;
+    console.log(
+      '🚀 | file: CheckoutPage.js | line 531 | CheckoutPageComponent | handleSubmit | tx',
+      tx
+    );
     console.log(
       '🚀 | file: CheckoutPage.js | line 531 | CheckoutPageComponent | handleSubmit | ongoingContract',
       ongoingContract

@@ -7,7 +7,13 @@ import arrayMutators from 'final-form-arrays';
 import { intlShape, injectIntl, FormattedMessage } from '../../util/reactIntl';
 import classNames from 'classnames';
 import { propTypes } from '../../util/types';
-import { Form, Button, FieldTextInput, FieldCheckboxGroup } from '../../components';
+import {
+  Form,
+  Button,
+  FieldTextInput,
+  FieldCheckboxGroup,
+  FieldRadioButton,
+} from '../../components';
 import { findConfigForSelectFilter, findOptionsForSelectFilter } from '../../util/search';
 import config from '../../config';
 import css from './EditListingPoliciesForm.module.css';
@@ -30,6 +36,7 @@ export const EditListingPoliciesFormComponent = props => (
         updateInProgress,
         fetchErrors,
         filterConfig,
+        values,
         listingType,
       } = formRenderProps;
 
@@ -63,6 +70,7 @@ export const EditListingPoliciesFormComponent = props => (
         '🚀 | file: EditListingPoliciesForm.js | line 62 | groundRulesOptions',
         groundRulesOptions
       );
+      console.log('🚀 | file: EditListingPoliciesForm.js | line 98 | options', values);
 
       return (
         <Form className={classes} onSubmit={handleSubmit}>
@@ -71,12 +79,13 @@ export const EditListingPoliciesFormComponent = props => (
           {listingType === 'listing' && (
             <h2 className={css.title}>How much access would you permit?</h2>
           )}
-          <FieldCheckboxGroup
-            className={css.features}
-            id={'accessFrequency'}
-            name={'accessFrequency'}
-            options={options}
-          />
+          <div className={css.radioButtonRow}>
+            {options.map(o => {
+              return (
+                <FieldRadioButton id={o.key} name="accessFrequency" label={o.label} value={o.key} />
+              );
+            })}
+          </div>
           {listingType === 'listing' && (
             <>
               <h2 className={css.title}>Other common ground rules</h2>
