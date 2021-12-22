@@ -122,6 +122,7 @@ export const retrieveRecommendedListings = _ => (dispatch, getState, sdk) => {
   const params = {
     pub_listingType: 'listing',
     pub_listingState: LISTING_LIVE,
+    pub_notDeleted: true,
     include: ['author', 'images'],
     'fields.listing': ['title', 'geolocation', 'price', 'publicData'],
     'fields.user': ['profile.displayName', 'profile.abbreviatedName'],
@@ -151,6 +152,7 @@ export const retrieveRecommendedAdverts = _ => (dispatch, getState, sdk) => {
   dispatch(retrieveRecommendedAdvertsRequest());
   const params = {
     pub_listingType: 'advert',
+    pub_notDeleted: true,
     pub_listingState: LISTING_LIVE,
     include: ['author', 'images'],
     'fields.listing': ['title', 'geolocation', 'price', 'publicData'],

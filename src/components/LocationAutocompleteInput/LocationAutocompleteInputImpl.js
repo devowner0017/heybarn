@@ -305,28 +305,16 @@ class LocationAutocompleteInputImpl extends Component {
   // Select the prediction in the given item. This will fetch/read the
   // place details and set it as the selected place.
   selectPrediction(prediction) {
-    console.log(
-      '🚀 | file: LocationAutocompleteInputImpl.js | line 308 | LocationAutocompleteInputImpl | selectPrediction | prediction',
-      prediction
-    );
     this.props.input.onChange({
       ...this.props.input,
       selectedPlace: null,
     });
-    const region = prediction.context.find(c => c.id.includes('region'))?.text
-    console.log(
-      '🚀 | file: LocationAutocompleteInputImpl.js | line 314 | LocationAutocompleteInputImpl | selectPrediction | region',
-      region
-    );
+    const region = prediction?.context?.find(c => c.id.includes('region'))?.text
     this.setState({ fetchingPlaceDetails: true });
 
     this.getGeocoder()
       .getPlaceDetails(prediction)
       .then(place => {
-        console.log(
-          '🚀 | file: LocationAutocompleteInputImpl.js | line 318 | LocationAutocompleteInputImpl | selectPrediction | place',
-          place
-        );
         if (!this._isMounted) {
           // Ignore if component already unmounted
           return;
@@ -372,10 +360,6 @@ class LocationAutocompleteInputImpl extends Component {
     return this.getGeocoder()
       .getPlacePredictions(search)
       .then(results => {
-        console.log(
-          '🚀 | file: LocationAutocompleteInputImpl.js | line 363 | LocationAutocompleteInputImpl | predict | results',
-          results
-        );
         const { search: currentSearch } = currentValue(this.props);
         this.setState({ fetchingPredictions: false });
 

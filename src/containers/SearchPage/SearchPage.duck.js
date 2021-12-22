@@ -164,6 +164,7 @@ export const searchListings = searchParams => (dispatch, getState, sdk) => {
     ...rest,
     ...priceMaybe,
     ...datesMaybe,
+    pub_notDeleted: true,
     per_page: perPage,
   };
 
@@ -219,6 +220,7 @@ export const loadData = (params, search) => {
     ...originMaybe,
     page,
     pub_listingType,
+    pub_notDeleted: true,
     perPage: RESULT_PAGE_SIZE,
     include: ['author', 'images'],
     'fields.listing': ['title', 'geolocation', 'price', 'publicData'],

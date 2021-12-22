@@ -46,10 +46,8 @@
 .darkArrow:after {
   background-color: var(--matterColorAnti);
   border-color: transparent transparent var(--matterColorAnti) var(--matterColorAnti);
-  opacity: .9;
+  opacity: 0.9;
   clip-path: polygon(3% 0, 100% 97%, 100% 100%, 0 100%, 0 0);
-
-
 }
 .menuOverlayWrapper {
   /* Positioning */
@@ -118,6 +116,15 @@
   border-radius: 2px;
 }
 
+.menubarWrapperDraft {
+  /* Position */
+  z-index: 2;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 42px;
+}
 .menubarWrapper {
   /* Position */
   position: absolute;

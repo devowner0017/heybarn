@@ -134,6 +134,8 @@ export const ManageListingCardComponent = props => {
     rootClassName,
     hasClosingError,
     hasOpeningError,
+    hasDiscardingError,
+    hasDeletingError,
     history,
     intl,
     isMenuOpen,
@@ -141,13 +143,17 @@ export const ManageListingCardComponent = props => {
     listing,
     onCloseListing,
     onOpenListing,
+    onDiscardListing,
+    handleDeleteListing,
     onToggleMenu,
     renderSizes,
   } = props;
+  console.log('🚀 | file: ManageListingCard.js | line 149 | props', props);
 
   const currentListing = ensureOwnListing(listing);
   const id = currentListing.id.uuid;
   const { title = '', price, state, publicData } = currentListing.attributes;
+  if (!publicData) return null;
   const { listingState, listingType, transactionId } = publicData;
   const slug = createSlug(title);
   const isPendingApproval = state === LISTING_STATE_PENDING_APPROVAL;
@@ -164,7 +170,7 @@ export const ManageListingCardComponent = props => {
   const transactionUrl = createTransactionURL(routeConfiguration(), currentListing);
   console.log('🚀 | file: ManageListingCard.js | line 165 | transactionUrl', transactionUrl);
   const { formattedPrice, priceTitle } = priceData(price, intl);
-  const hasError = hasOpeningError || hasClosingError;
+  const hasError = hasOpeningError || hasClosingError || hasDiscardingError || hasDeletingError
   const thisListingInProgress =
     actionsInProgressListingId && actionsInProgressListingId.uuid === id;
 
@@ -210,6 +216,55 @@ export const ManageListingCardComponent = props => {
     ? 'ManageListingCard.perDay'
     : 'ManageListingCard.perUnit';
 
+  const draftMenu = (
+    <>
+      <div className={classNames(css.menuOverlayWrapper, { [css.menuOverlayOpen]: isMenuOpen })}>
+        <div className={classNames(css.menuOverlay)} />
+        <div className={css.menuOverlayContent}>
+          <FormattedMessage id={`ManageListingCard.view${listingType}`} />
+        </div>
+      </div>
+      <div className={css.menubarWrapperDraft}>
+        <div className={css.menubarGradient} />
+        <div className={css.menubar}>
+          <Menu
+            className={classNames(css.menu, { [css.cardIsOpen]: !isClosed })}
+            contentPlacementOffset={MENU_CONTENT_OFFSET}
+            contentPosition="left"
+            useArrow={false}
+            onToggleActive={isOpen => {
+              const listingOpen = isOpen ? currentListing : null;
+              onToggleMenu(listingOpen);
+            }}
+            isOpen={isMenuOpen}
+          >
+            <MenuLabel className={css.menuLabel} isOpenClassName={css.listingMenuIsOpen}>
+              <div className={css.iconWrapper}>
+                <MenuIcon className={css.menuIcon} isActive={isMenuOpen} />
+              </div>
+            </MenuLabel>
+            <MenuContent rootClassName={css.menuContent}>
+              <MenuItem key="discard-draft">
+                <InlineTextButton
+                  rootClassName={menuItemClasses}
+                  onClick={event => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    if (!actionsInProgressListingId) {
+                      onToggleMenu(null);
+                      onDiscardListing(currentListing.id);
+                    }
+                  }}
+                >
+                  <FormattedMessage id={`ManageListingCard.discard`} />
+                </InlineTextButton>
+              </MenuItem>
+            </MenuContent>
+          </Menu>
+        </div>
+      </div>
+    </>
+  );
   return (
     <div className={classes}>
       {isUnderEnquiry ? (
@@ -237,6 +292,8 @@ export const ManageListingCardComponent = props => {
       ) : isDraft ? (
         <React.Fragment>
           <div className={classNames({ [css.draftNoImage]: !firstImage })} />
+          {draftMenu}
+
           <Overlay
             message={intl.formatMessage(
               { id: 'ManageListingCard.draftOverlayText' },
@@ -315,51 +372,72 @@ export const ManageListingCardComponent = props => {
             sizes={renderSizes}
           />
         </div>
-        <div className={classNames(css.menuOverlayWrapper, { [css.menuOverlayOpen]: isMenuOpen })}>
-          <div className={classNames(css.menuOverlay)} />
-          <div className={css.menuOverlayContent}>
-            <FormattedMessage id={`ManageListingCard.view${listingType}`} />
-          </div>
-        </div>
-        <div className={css.menubarWrapper}>
-          <div className={css.menubarGradient} />
-          <div className={css.menubar}>
-            <Menu
-              className={classNames(css.menu, { [css.cardIsOpen]: !isClosed })}
-              contentPlacementOffset={MENU_CONTENT_OFFSET}
-              contentPosition="left"
-              useArrow={false}
-              onToggleActive={isOpen => {
-                const listingOpen = isOpen ? currentListing : null;
-                onToggleMenu(listingOpen);
-              }}
-              isOpen={isMenuOpen}
+        {!isDraft && (
+          <>
+            <div
+              className={classNames(css.menuOverlayWrapper, { [css.menuOverlayOpen]: isMenuOpen })}
             >
-              <MenuLabel className={css.menuLabel} isOpenClassName={css.listingMenuIsOpen}>
-                <div className={css.iconWrapper}>
-                  <MenuIcon className={css.menuIcon} isActive={isMenuOpen} />
-                </div>
-              </MenuLabel>
-              <MenuContent rootClassName={css.menuContent}>
-                <MenuItem key="close-listing">
-                  <InlineTextButton
-                    rootClassName={menuItemClasses}
-                    onClick={event => {
-                      event.preventDefault();
-                      event.stopPropagation();
-                      if (!actionsInProgressListingId) {
-                        onToggleMenu(null);
-                        onCloseListing(currentListing.id);
-                      }
-                    }}
-                  >
-                    <FormattedMessage id={`ManageListingCard.close${listingType}`} />
-                  </InlineTextButton>
-                </MenuItem>
-              </MenuContent>
-            </Menu>
-          </div>
-        </div>
+              <div className={classNames(css.menuOverlay)} />
+              <div className={css.menuOverlayContent}>
+                <FormattedMessage id={`ManageListingCard.view${listingType}`} />
+              </div>
+            </div>
+            <div className={css.menubarWrapper}>
+              <div className={css.menubarGradient} />
+              <div className={css.menubar}>
+                <Menu
+                  className={classNames(css.menu, { [css.cardIsOpen]: !isClosed })}
+                  contentPlacementOffset={MENU_CONTENT_OFFSET}
+                  contentPosition="left"
+                  useArrow={false}
+                  onToggleActive={isOpen => {
+                    const listingOpen = isOpen ? currentListing : null;
+                    onToggleMenu(listingOpen);
+                  }}
+                  isOpen={isMenuOpen}
+                >
+                  <MenuLabel className={css.menuLabel} isOpenClassName={css.listingMenuIsOpen}>
+                    <div className={css.iconWrapper}>
+                      <MenuIcon className={css.menuIcon} isActive={isMenuOpen} />
+                    </div>
+                  </MenuLabel>
+                  <MenuContent rootClassName={css.menuContent}>
+                    <MenuItem key="close-listing">
+                      <InlineTextButton
+                        rootClassName={menuItemClasses}
+                        onClick={event => {
+                          event.preventDefault();
+                          event.stopPropagation();
+                          if (!actionsInProgressListingId) {
+                            onToggleMenu(null);
+                            onCloseListing(currentListing.id);
+                          }
+                        }}
+                      >
+                        <FormattedMessage id={`ManageListingCard.close${listingType}`} />
+                      </InlineTextButton>
+                    </MenuItem>
+                    <MenuItem key="delete-listing">
+                      <InlineTextButton
+                        rootClassName={menuItemClasses}
+                        onClick={event => {
+                          event.preventDefault();
+                          event.stopPropagation();
+                          if (!actionsInProgressListingId) {
+                            onToggleMenu(null);
+                            handleDeleteListing(currentListing.id);
+                          }
+                        }}
+                      >
+                        <FormattedMessage id={`ManageListingCard.delete`} />
+                      </InlineTextButton>
+                    </MenuItem>
+                  </MenuContent>
+                </Menu>
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
       <div className={css.info}>

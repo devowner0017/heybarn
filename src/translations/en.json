@@ -519,6 +519,9 @@
   "ManageListingCard.listingHidden": "This listing is currently hidden",
   "ManageListingCard.advertHidden": "This advert is currently hidden",
 
+  "ManageListingCard.discard": "Delete Draft",
+  "ManageListingCard.delete": "Delete",
+
   "ManageListingCard.finishlistingDraft": "Complete draft",
   "ManageListingCard.finishadvertDraft": "Complete draft",
   "ManageListingCard.manageAvailability": "Manage availability",
@@ -546,6 +549,8 @@
   "ManageListingsPage.youHavelisting": "You have {count} {count, plural, one {listing} other {listings}}",
   "ManageListingsPage.youHaveadvert": "You have {count} {count, plural, one {advert} other {adverts}}",
   "ManageListingsPage.yourListings": "My listings and adverts",
+  "ManageListingspage.deleteConfirmationTitle": "Are you sure?",
+  "ManageListingspage.deleteConfirmationSubTitle": "This action cannot be undone.",
   "MapPriceMarker.unsupportedPrice": "({currency})",
   "Modal.close": "CLOSE",
   "Modal.closeModal": "Close modal",

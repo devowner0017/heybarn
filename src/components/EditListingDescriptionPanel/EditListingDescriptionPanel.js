@@ -69,12 +69,14 @@ const EditListingDescriptionPanel = props => {
         onSubmit={values => {
           const { title, description, category, preferredUse } = values;
           const listingState = !currentListingState || !isPublished ? LISTING_LIVE : null;
+          const notDeleted = true
           const updateValues = {
             title: title.trim(),
             description,
             publicData: {
               listingType,
               listingState,
+              notDeleted,
               category,
               preferredUse: ensureArray(preferredUse).map(p => p?.key),
             },

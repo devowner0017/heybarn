@@ -25,6 +25,14 @@ export const CLOSE_LISTING_REQUEST = 'app/ManageListingsPage/CLOSE_LISTING_REQUE
 export const CLOSE_LISTING_SUCCESS = 'app/ManageListingsPage/CLOSE_LISTING_SUCCESS';
 export const CLOSE_LISTING_ERROR = 'app/ManageListingsPage/CLOSE_LISTING_ERROR';
 
+export const DISCARD_LISTING_REQUEST = 'app/ManageListingsPage/DISCARD_LISTING_REQUEST';
+export const DISCARD_LISTING_SUCCESS = 'app/ManageListingsPage/DISCARD_LISTING_SUCCESS';
+export const DISCARD_LISTING_ERROR = 'app/ManageListingsPage/DISCARD_LISTING_ERROR';
+
+export const DELETE_LISTING_REQUEST = 'app/ManageListingsPage/DELETE_LISTING_REQUEST';
+export const DELETE_LISTING_SUCCESS = 'app/ManageListingsPage/DELETE_LISTING_SUCCESS';
+export const DELETE_LISTING_ERROR = 'app/ManageListingsPage/DELETE_LISTING_ERROR';
+
 export const ADD_OWN_ENTITIES = 'app/ManageListingsPage/ADD_OWN_ENTITIES';
 
 // ================ Reducer ================ //
@@ -41,6 +49,11 @@ const initialState = {
   closingListing: null,
   closingListingError: null,
 
+  discardingListing: null,
+  discardingListingError: null,
+
+  deletingListing: null,
+  deletingListingError: null,
   queryTransactionsInProgress: null,
   queryTransactionsError: null,
   transactions: null,
@@ -156,6 +169,53 @@ const manageListingsPageReducer = (state = initialState, action = {}) => {
       };
     }
 
+    case DISCARD_LISTING_REQUEST:
+      return {
+        ...state,
+        discardingListing: payload.listingId,
+        discardingListingError: null,
+      };
+    case DISCARD_LISTING_SUCCESS:
+      return {
+        ...updateListingAttributes(state, payload.data),
+        discardingListing: null,
+      };
+    case DISCARD_LISTING_ERROR: {
+      // eslint-disable-next-line no-console
+      console.error(payload);
+      return {
+        ...state,
+        discardingListing: null,
+        discardingListingError: {
+          listingId: state.discardingListing,
+          error: payload,
+        },
+      };
+    }
+    case DELETE_LISTING_REQUEST:
+      return {
+        ...state,
+        deletingListing: payload.listingId,
+        deletingListingError: null,
+      };
+    case DELETE_LISTING_SUCCESS:
+      return {
+        ...updateListingAttributes(state, payload.data),
+        deletingListing: null,
+      };
+    case DELETE_LISTING_ERROR: {
+      // eslint-disable-next-line no-console
+      console.error(payload);
+      return {
+        ...state,
+        deletingListing: null,
+        deletingListingError: {
+          listingId: state.deletingListing,
+          error: payload,
+        },
+      };
+    }
+
     case ADD_OWN_ENTITIES:
       return merge(state, payload);
 
@@ -226,6 +286,38 @@ export const closeListingError = e => ({
   payload: e,
 });
 
+export const discardListingRequest = listingId => ({
+  type: DISCARD_LISTING_REQUEST,
+  payload: { listingId },
+});
+
+export const discardListingSuccess = response => ({
+  type: DISCARD_LISTING_SUCCESS,
+  payload: response.data,
+});
+
+export const discardListingError = e => ({
+  type: DISCARD_LISTING_ERROR,
+  error: true,
+  payload: e,
+});
+
+export const deleteListingRequest = listingId => ({
+  type: DELETE_LISTING_REQUEST,
+  payload: { listingId },
+});
+
+export const deleteListingSuccess = response => ({
+  type: DELETE_LISTING_SUCCESS,
+  payload: response.data,
+});
+
+export const deleteListingError = e => ({
+  type: DELETE_LISTING_ERROR,
+  error: true,
+  payload: e,
+});
+
 export const queryListingsRequest = queryParams => ({
   type: FETCH_LISTINGS_REQUEST,
   payload: { queryParams },
@@ -266,9 +358,11 @@ export const queryOwnListings = queryParams => (dispatch, getState, sdk) => {
   return sdk.ownListings
     .query(params)
     .then(response => {
+      console.log('🚀 | file: ManageListingsPage.duck.js | line 361 | response', response);
       const filteredResults = response.data.data.filter(r => {
         const responseListingType = r.attributes.publicData.listingType;
-        return responseListingType === listingType;
+        const notDeleted = r.attributes.publicData.notDeleted;
+        return responseListingType === listingType && notDeleted;
       });
       let alteredResponse = response;
       alteredResponse.data.data = filteredResults;
@@ -284,7 +378,6 @@ export const queryOwnListings = queryParams => (dispatch, getState, sdk) => {
 };
 // Throwing error for new (loadData may need that info)
 export const queryOwnTransactions = queryParams => (dispatch, getState, sdk) => {
-
   dispatch(queryTransactionsRequest(queryParams));
   return sdk.transactions
     .query({
@@ -324,6 +417,57 @@ export const closeListing = listingId => (dispatch, getState, sdk) => {
     });
 };
 
+export const discardListing = listingId => (dispatch, getState, sdk) => {
+  dispatch(discardListingRequest(listingId));
+
+  return sdk.ownListings
+    .discardDraft({ id: listingId }, { expand: true })
+    .then(response => {
+      dispatch(discardListingSuccess(response));
+      return response;
+    })
+    .catch(e => {
+      dispatch(discardListingError(storableError(e)));
+    });
+};
+
+export const deleteListing = (listingId, listingType) => (dispatch, getState, sdk) => {
+  dispatch(deleteListingRequest(listingId));
+
+  return sdk.ownListings
+    .update({ id: listingId, publicData: { notDeleted: false } }, { expand: true })
+    .then(response => {
+      dispatch(deleteListingSuccess(response));
+      if (listingType === 'adverts') {
+        dispatch(
+          queryOwnListings({
+            pub_listingType: 'advert',
+            pub_notDeleted: true,
+            perPage: RESULT_PAGE_SIZE,
+            include: ['images'],
+            'fields.image': ['variants.landscape-crop', 'variants.landscape-crop2x'],
+            'limit.images': 1,
+          })
+        );
+      } else {
+        dispatch(
+          queryOwnListings({
+            pub_listingType: 'listing',
+            pub_notDeleted: true,
+            perPage: RESULT_PAGE_SIZE,
+            include: ['images'],
+            'fields.image': ['variants.landscape-crop', 'variants.landscape-crop2x'],
+            'limit.images': 1,
+          })
+        );
+      }
+      return response;
+    })
+    .catch(e => {
+      dispatch(deleteListingError(storableError(e)));
+    });
+};
+
 export const openListing = listingId => (dispatch, getState, sdk) => {
   dispatch(openListingRequest(listingId));
 
@@ -338,7 +482,8 @@ export const openListing = listingId => (dispatch, getState, sdk) => {
     });
 };
 
-export const loadListingData = props => {
+export const loadListingData = (props = {}) => {
+  console.log('🚀 | file: ManageListingsPage.duck.js | line 467 | loadListingData | props', props);
   const { params, search } = props;
   const queryParams = parse(search);
   const page = queryParams.page || 1;
@@ -349,6 +494,7 @@ export const loadListingData = props => {
     ...queryParams,
     page,
     pub_listingType: 'listing',
+    pub_notDeleted: true,
     perPage: RESULT_PAGE_SIZE,
     include: ['images'],
     'fields.image': ['variants.landscape-crop', 'variants.landscape-crop2x'],
@@ -367,10 +513,10 @@ export const loadAdvertData = props => {
     ...queryParams,
     page,
     pub_listingType: 'advert',
+    pub_notDeleted: true,
     perPage: RESULT_PAGE_SIZE,
     include: ['images'],
     'fields.image': ['variants.landscape-crop', 'variants.landscape-crop2x'],
     'limit.images': 1,
   });
 };
-

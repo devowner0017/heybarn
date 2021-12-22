@@ -4,7 +4,6 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl, intlShape } from '../../util/reactIntl';
 import { propTypes } from '../../util/types';
-import { isScrollingDisabled } from '../../ducks/UI.duck';
 import {
   ManageListingCard,
   Page,
@@ -19,15 +18,23 @@ import {
   NotificationBadge,
 } from '../../components';
 import { TopbarContainer } from '../../containers';
+import { isScrollingDisabled, manageDisableScrolling } from '../../ducks/UI.duck';
 
-import { closeListing, openListing, getOwnListingsById } from './ManageListingsPage.duck';
+import {
+  closeListing,
+  openListing,
+  discardListing,
+  deleteListing,
+  getOwnListingsById,
+} from './ManageListingsPage.duck';
 import css from './ManageListingsPage.module.css';
+import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
 
 export class ManageListingsPageComponent extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { listingMenuOpen: null };
+    this.state = { listingMenuOpen: null, showConfirmDeleteModal: false, deleteListingId: null };
     this.onToggleMenu = this.onToggleMenu.bind(this);
   }
 
@@ -42,6 +49,12 @@ export class ManageListingsPageComponent extends Component {
       listings,
       onCloseListing,
       onOpenListing,
+      onDiscardListing,
+      discardingListing,
+      discardingListingError,
+      onDeleteListing,
+      deletingListing,
+      deletingListingError,
       openingListing,
       openingListingError,
       pagination,
@@ -50,8 +63,11 @@ export class ManageListingsPageComponent extends Component {
       queryParams,
       scrollingDisabled,
       providerNotificationCount,
+      onManageDisableScrolling,
       intl,
     } = this.props;
+    console.log("🚀 | file: ManageListingsPage.js | line 69 | ManageListingsPageComponent | render | this.props", this.props);
+      console.log("🚀 | file: ManageListingsPage.js | line 69 | ManageListingsPageComponent | render | deletingListing", deletingListing);
     const listingType = location.pathname.startsWith('/adverts') ? 'advert' : 'listing';
     const hasPaginationInfo = !!pagination && pagination.totalItems != null;
     const listingsAreLoaded = !queryInProgress && hasPaginationInfo;
@@ -101,6 +117,8 @@ export class ManageListingsPageComponent extends Component {
     const listingMenuOpen = this.state.listingMenuOpen;
     const closingErrorListingId = !!closingListingError && closingListingError.listingId;
     const openingErrorListingId = !!openingListingError && openingListingError.listingId;
+    const discardingErrorListingId = !!discardingListingError && discardingListingError.listingId;
+    const deletingErrorListingId = !!deletingListingError && deletingListingError.listingId;
 
     const title = intl.formatMessage({ id: `ManageListingsPage.title${listingType}` });
 
@@ -131,6 +149,9 @@ export class ManageListingsPageComponent extends Component {
         },
       },
     ];
+    const handleDeleteListing = id => {
+      this.setState({ deleteListingId: id, showConfirmDeleteModal: true });
+    };
     return (
       <Page title={title} scrollingDisabled={scrollingDisabled}>
         <LayoutSideNavigation>
@@ -154,11 +175,17 @@ export class ManageListingsPageComponent extends Component {
                     key={l.id.uuid}
                     listing={l}
                     isMenuOpen={!!listingMenuOpen && listingMenuOpen.id.uuid === l.id.uuid}
-                    actionsInProgressListingId={openingListing || closingListing}
+                    actionsInProgressListingId={
+                      openingListing || closingListing || discardingListing || deletingListing
+                    }
                     onToggleMenu={this.onToggleMenu}
                     onCloseListing={onCloseListing}
                     onOpenListing={onOpenListing}
+                    onDiscardListing={onDiscardListing}
+                    handleDeleteListing={handleDeleteListing}
                     hasOpeningError={openingErrorListingId.uuid === l.id.uuid}
+                    hasDiscardingError={discardingErrorListingId.uuid === l.id.uuid}
+                    hasDeletingError={deletingErrorListingId.uuid === l.id.uuid}
                     hasClosingError={closingErrorListingId.uuid === l.id.uuid}
                     renderSizes={renderSizes}
                   />
@@ -166,6 +193,21 @@ export class ManageListingsPageComponent extends Component {
               </div>
               {paginationLinks}
             </div>
+            <ConfirmationModal
+              id="ConfirmationModal"
+              isOpen={this.state.showConfirmDeleteModal}
+              onCloseModal={() => this.setState({ showConfirmDeleteModal: false })}
+              onManageDisableScrolling={onManageDisableScrolling}
+              negativeAction={_ => onDeleteListing(this.state.deleteListingId, listingType)}
+              affirmativeButtonText={'Nevermind!'}
+              negativeButtonText={`Delete this ${listingType}`}
+              affirmativeInProgress={null}
+              negativeInProgress={deletingListing}
+              affirmativeError={null}
+              negativeError={deletingListingError}
+              titleText={<FormattedMessage id="ManageListingspage.deleteConfirmationTitle" />}
+              contentText={<FormattedMessage id="ManageListingspage.deleteConfirmationSubTitle" />}
+            />
           </LayoutWrapperMain>
           <LayoutWrapperFooter>
             <Footer />
@@ -224,6 +266,11 @@ const mapStateToProps = state => {
     openingListingError,
     closingListing,
     closingListingError,
+
+    discardingListing,
+    discardingListingError,
+    deletingListing,
+    deletingListingError,
   } = state.ManageListingsPage;
   const { currentUserNotificationCount: providerNotificationCount } = state.user;
 
@@ -241,12 +288,22 @@ const mapStateToProps = state => {
     closingListing,
     closingListingError,
     providerNotificationCount,
+
+    discardingListing,
+    discardingListingError,
+
+    deletingListing,
+    deletingListingError,
   };
 };
 
 const mapDispatchToProps = dispatch => ({
-  onCloseListing: listingId => dispatch(closeListing(listingId)),
   onOpenListing: listingId => dispatch(openListing(listingId)),
+  onCloseListing: listingId => dispatch(closeListing(listingId)),
+  onDiscardListing: listingId => dispatch(discardListing(listingId)),
+  onDeleteListing: (listingId,listingType) => dispatch(deleteListing(listingId,listingType)),
+  onManageDisableScrolling: (componentId, disableScrolling) =>
+    dispatch(manageDisableScrolling(componentId, disableScrolling)),
 });
 
 const ManageListingsPage = compose(
