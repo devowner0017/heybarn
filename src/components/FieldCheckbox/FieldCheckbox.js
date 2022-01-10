@@ -119,7 +119,7 @@ FieldCheckboxComponent.propTypes = {
 
   // Id is needed to connect the label with input.
   id: string.isRequired,
-  label: node,
+  // label: node,
 
   // Name groups several checkboxes to an array of selected values
   name: string.isRequired,

@@ -68,12 +68,13 @@ export const txState = (intl, tx, type) => {
   console.log('🚀 | file: InboxPage.js | line 68 | txState | type', type);
   console.log('🚀 | file: InboxPage.js | line 225 | txState | tx', tx);
   const isOrder = type === 'order';
+  console.log("🚀 | file: InboxPage.js | line 71 | txState | isOrder", isOrder);
   if (txIsHostEnquired(tx)) {
     return {
       nameClassName: isOrder ? css.nameNotEmphasized : css.nameEmphasized,
       // bookingClassName: isOrder ? css.bookingNoActionNeeded : css.bookingActionNeeded,
       lastTransitionedAtClassName: css.lastTransitionedAtEmphasized,
-      stateClassName: isOrder ? css.stateNoActionNeeded : css.stateActionNeeded,
+      stateClassName: !isOrder ? css.stateNoActionNeeded : css.stateActionNeeded,
       state: intl.formatMessage({
         id: 'InboxPage.stateEnquiry',
       }),

@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   BookingDateRangeFilter,
+  BookingDateFromFilter,
   PriceFilter,
   KeywordFilter,
   SelectSingleFilter,
@@ -22,11 +23,7 @@ const FilterComponent = props => {
     searchType,
     ...rest
   } = props;
-    console.log("🚀 | file: FilterComponent.js | line 24 | initialValues", initialValues);
-  console.log('🚀 | file: FilterComponent.js | line 24 | urlQueryParams', urlQueryParams);
-  console.log('🚀 | file: FilterComponent.js | line 26 | searchType', searchType);
   const { id, type, queryParamNames, label, config, listingType } = filterConfig;
-  console.log('🚀 | file: FilterComponent.js | line 25 | filterConfig', filterConfig);
   const { liveEdit, showAsPopup } = rest;
 
   const useHistoryPush = liveEdit || showAsPopup;
@@ -78,7 +75,7 @@ const FilterComponent = props => {
     }
     case 'BookingDateRangeFilter': {
       return (
-        <BookingDateRangeFilter
+        <BookingDateFromFilter
           id={componentId}
           label={label}
           queryParamNames={queryParamNames}

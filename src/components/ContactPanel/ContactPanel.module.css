@@ -6,6 +6,7 @@
   @apply --marketplaceModalInMobileBaseStyles;
 
   height: 100vh;
+  padding: 1rem;
 
   @media (--viewportMedium) {
     flex-basis: 576px;

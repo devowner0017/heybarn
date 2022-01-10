@@ -113,8 +113,6 @@ const ContactPanel = props => {
         onManageDisableScrolling={onManageDisableScrolling}
       >
         <div className={css.modalHeading}>
-          {/* TODO: DELETE */}
-          <h1 className={css.title}>{title}</h1>
           <h1 className={css.title}>{title}</h1>
           <div className={css.author}>
             <FormattedMessage id="ContactPanel.hostedBy" values={{ name: authorDisplayName }} />
@@ -130,24 +128,6 @@ const ContactPanel = props => {
         <Button rootClassName={css.bookButton} disabled={listingUnderEnquiry} onClick={onSubmit}>
           <FormattedMessage id="ContactPanel.ctaButtonMessage" />
         </Button>
-        {/* {showBookingDatesForm ? (
-          <BookingDatesForm
-            className={css.bookingForm}
-            formId="ContactPanel"
-            submitButtonWrapperClassName={css.bookingDatesSubmitButtonWrapper}
-            unitType={unitType}
-            onSubmit={onSubmit}
-            price={price}
-            listingId={listing.id}
-            isOwnListing={isOwnListing}
-            timeSlots={timeSlots}
-            fetchTimeSlotsError={fetchTimeSlotsError}
-            onFetchTransactionLineItems={onFetchTransactionLineItems}
-            lineItems={lineItems}
-            fetchLineItemsInProgress={fetchLineItemsInProgress}
-            fetchLineItemsError={fetchLineItemsError}
-          />
-        ) : null} */}
       </ModalInMobile>
       <div className={css.openBookingForm}>
         <div className={css.priceContainer}>

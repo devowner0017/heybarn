@@ -122,6 +122,7 @@ export { default as Avatar, AvatarMedium, AvatarLarge } from './Avatar/Avatar';
 export { default as BookingBreakdown } from './BookingBreakdown/BookingBreakdown';
 export { default as SubscriptionBreakdown } from './SubscriptionBreakdown/SubscriptionBreakdown';
 export { default as BookingDateRangeFilter } from './BookingDateRangeFilter/BookingDateRangeFilter';
+export { default as BookingDateFromFilter } from './BookingDateFromFilter/BookingDateFromFilter';
 export { default as BookingTimeInfo } from './BookingTimeInfo/BookingTimeInfo';
 export { default as BookingPanel } from './BookingPanel/BookingPanel';
 export { default as ContactPanel } from './ContactPanel/ContactPanel';

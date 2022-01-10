@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { FormattedMessage, injectIntl, intlShape } from '../../util/reactIntl';
@@ -7,6 +7,7 @@ import classNames from 'classnames';
 import { isTransactionsTransitionAlreadyReviewed } from '../../util/errors';
 import { propTypes } from '../../util/types';
 import { required } from '../../util/validators';
+import arrayMutators from 'final-form-arrays';
 import {
   FieldReviewRating,
   Form,
@@ -16,16 +17,22 @@ import {
   FieldDateInput,
   FieldCheckbox,
   FieldDateRangeInput,
+  FieldCheckboxGroup,
 } from '../../components';
+import config from '../../config';
 
 import css from './RentalAgreementSetupForm.module.css';
 import moment from 'moment';
 import { dateFromLocalToAPI } from '../../util/dates';
+import { formatMoney } from '../../util/currency';
+import { getPropByName } from '../../util/userHelpers';
+import { findOptionsForSelectFilter } from '../../util/search';
 const identity = v => v;
 
 const RentalAgreementSetupFormComponent = props => (
   <FinalForm
     {...props}
+    mutators={{ ...arrayMutators }}
     render={fieldRenderProps => {
       const {
         className,
@@ -40,7 +47,14 @@ const RentalAgreementSetupFormComponent = props => (
         sendReviewError,
         sendReviewInProgress,
         values,
+        listing,
+        filterConfig,
       } = fieldRenderProps;
+      console.log(
+        '🚀 | file: RentalAgreementSetupForm.js | line 47 | fieldRenderProps',
+        fieldRenderProps
+      );
+      console.log('🚀 | file: RentalAgreementSetupForm.js | line 46 | price', listing);
 
       const {
         startDate,
@@ -80,22 +94,38 @@ const RentalAgreementSetupFormComponent = props => (
       // the values here to the bookingData object.
       const handleOnChange = formValues => {
         const { lengthOfContract, startDate, endDate } = formValues.values;
+        console.log(
+          '🚀 | file: RentalAgreementSetupForm.js | line 83 | ongoingContract',
+          ongoingContract
+        );
         if (!startDate) return null;
+
         const endDateMaybe = moment(startDate?.date).add(lengthOfContract, 'weeks');
         if (startDate && lengthOfContract && !moment(endDateMaybe).isSame(moment(endDate))) {
           form.change(`endDate`, endDateMaybe);
         }
       };
+      useEffect(() => {
+        if (!!values?.ongoingContract?.[0]) {
+          form.change(`lengthOfContract`, null);
+          form.change(`endDate`, null);
+        }
+      }, [values.ongoingContract]);
+
+      const groundRulesOptions = findOptionsForSelectFilter(`groundRules`, filterConfig);
+
       return (
         <Form className={classes} onSubmit={handleSubmit}>
           <FieldCheckbox
+            className={css.field}
             id={'ongoingContract'}
             name={'ongoingContract'}
             label={'On Going'}
             value={true}
           />
-          {!values.ongoingContract && (
+          {!values.ongoingContract?.[0] && (
             <FieldNumberInput
+              className={css.field}
               label={<FormattedMessage id="RentalAgreementModal.lengthOfContractLabel" />}
               id={'lengthOfContract'}
               name={'lengthOfContract'}
@@ -115,7 +145,7 @@ const RentalAgreementSetupFormComponent = props => (
           />
 
           <FieldDateInput
-            className={css.bookingDates}
+            className={css.dateField}
             label={'Start'}
             name="startDate"
             id={`startDate`}
@@ -139,7 +169,35 @@ const RentalAgreementSetupFormComponent = props => (
               return false;
             }}
           />
+          <FieldTextInput
+            className={css.field}
+            id="intendedUse"
+            name="intendedUse"
+            type="text"
+            label={'Intended Use'}
+          />
+
+          <h2 className={css.title}>Other common ground rules</h2>
+          <FieldCheckboxGroup
+            className={css.features}
+            id={'groundRules'}
+            name={'groundRules'}
+            options={groundRulesOptions}
+          />
+
           {errorArea}
+          {listing && (
+            <div className={css.detailRow}>
+              <p>Rent</p>
+              <p>{formatMoney(intl, listing?.attributes?.price)}</p>
+            </div>
+          )}
+          {startDate && (
+            <div className={css.detailRow}>
+              <p>Frequency</p>
+              <p>Weekly</p>
+            </div>
+          )}
           {startDate && (
             <div className={css.detailRow}>
               <p>Start Date</p>
@@ -171,6 +229,7 @@ RentalAgreementSetupFormComponent.defaultProps = {
   className: null,
   rootClassName: null,
   sendReviewError: null,
+  filterConfig: config.custom.filters,
 };
 
 const { bool, func, string } = PropTypes;

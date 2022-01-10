@@ -381,6 +381,10 @@ export const filters = [
           key: 'noGuests',
           label: 'No guests',
         },
+        {
+          key: 'noSignage',
+          label: 'No signage',
+        },
       ],
     },
   },

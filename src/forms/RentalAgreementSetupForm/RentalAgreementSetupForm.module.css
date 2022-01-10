@@ -49,7 +49,11 @@
     margin-bottom: 0;
   }
 }
-.bookingDates {
+.dateField{
+  margin-top: 1rem;
+z-index: 2;
+}
+.field {
   margin-top: 1rem;
 }
 .detailRow {

@@ -7,6 +7,7 @@ import { RentalAgreementSetupForm } from '../../forms';
 import { PrimaryButton, SecondaryButton, Modal } from '..';
 
 import css from './RentalAgreementModal.module.css';
+import { ensureArray, getPropByName } from '../../util/userHelpers';
 
 const RentalAgreementModal = props => {
   const {
@@ -32,6 +33,7 @@ const RentalAgreementModal = props => {
     negativeButtonText,
     titleText,
     contentText,
+    listing,
   } = props;
 
   const classes = classNames(rootClassName || css.root, className);
@@ -61,6 +63,12 @@ const RentalAgreementModal = props => {
   const handleSubmit = values => {
     affirmativeAction(values);
   };
+
+  console.log('🚀 | file: RentalAgreementModal.js | line 90 | listing', listing);
+  console.log(
+    "🚀 | file: RentalAgreementModal.js | line 91 | ensureArray(getPropByName(listing,))?.join(', ')",
+    ensureArray(getPropByName(listing, 'preferredUse'))?.join(', ')
+  );
   return (
     <Modal
       id={id}
@@ -84,7 +92,14 @@ const RentalAgreementModal = props => {
         <RentalAgreementSetupForm
           onSubmit={handleSubmit}
           onCloseModal={onCloseModal}
-          initialValues={{ lengthOfContract: null }}
+          initialValues={{
+            lengthOfContract: null,
+            groundRules: getPropByName(listing, 'groundRules'),
+            intendedUse: _.startCase(
+              ensureArray(getPropByName(listing, 'preferredUse'))?.join(', ') || ''
+            ),
+          }}
+          listing={listing}
         />
       </div>
     </Modal>

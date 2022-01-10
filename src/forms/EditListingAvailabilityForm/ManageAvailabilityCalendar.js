@@ -307,6 +307,7 @@ class ManageAvailabilityCalendar extends Component {
   }
 
   onDateChange(date) {
+    console.log("🚀 | file: ManageAvailabilityCalendar.js | line 310 | ManageAvailabilityCalendar | onDateChange | date", date);
     this.setState({ date });
 
     const { availabilityPlan, availability } = this.props;

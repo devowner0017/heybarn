@@ -260,6 +260,7 @@ export class CheckoutPageComponent extends Component {
       ensuredStripeCustomer.attributes.stripeCustomerId &&
       ensuredDefaultPaymentMethod.id
     );
+    console.log("🚀 | file: CheckoutPage.js | line 263 | CheckoutPageComponent | handlePaymentIntent | hasDefaultPaymentMethod", hasDefaultPaymentMethod);
     const stripePaymentMethodId = hasDefaultPaymentMethod
       ? ensuredDefaultPaymentMethod.attributes.stripePaymentMethodId
       : null;
@@ -388,13 +389,13 @@ export class CheckoutPageComponent extends Component {
       return onSavePaymentMethod(ensuredStripeCustomer, pi.payment_method)
         .then(response => {
           if (response.errors) {
-            return { ...fnParams, paymentMethodSaved: false };
+            return { ...fnParams, paymentMethodSaved: false,pi };
           }
-          return { ...fnParams, paymentMethodSaved: true };
+          return { ...fnParams, paymentMethodSaved: true,pi };
         })
         .catch(e => {
-          // Real error cases are catched already in paymentMethods page.
-          return { ...fnParams, paymentMethodSaved: false };
+          // Real error cases are caught already in paymentMethods page.
+          return { ...fnParams, paymentMethodSaved: false , pi};
         });
     };
 
@@ -403,13 +404,14 @@ export class CheckoutPageComponent extends Component {
         '🚀 | file: CheckoutPage.js | line 269 | CheckoutPageComponent | handlePaymentIntent | fnParams',
         fnParams
       );
+      const {pi, ...rest} = fnParams
       return onCreateRecurring({ ...createRecurringParams, paymentMethod: pi.payment_method })
         .then(recurringResponse => {
           console.log(
             '🚀 | file: CheckoutPage.js | line 281 | CheckoutPageComponent | onCreateRecurring | recurringResponse',
             recurringResponse
           );
-          return { ...fnParams, protectedData: { recurringResponse } };
+          return { ...rest, protectedData: { recurringResponse } };
         })
         .catch(e => {
           console.log(e);

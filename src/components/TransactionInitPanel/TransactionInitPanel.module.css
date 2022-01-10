@@ -132,7 +132,7 @@
 
   @media (--viewportLarge) {
     display: block;
-    margin-top: 119px;
+    margin-top: 1rem;
   }
 }
 .avatarDesktop {
@@ -486,4 +486,7 @@
 
   margin-top: 0;
   margin-bottom: 1px;
+}
+.panelContentWrapper{
+  padding: 0 1rem;
 }

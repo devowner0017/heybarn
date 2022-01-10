@@ -351,6 +351,10 @@ export class TransactionPanelComponent extends Component {
       }
       // ****
       else if (txIsRentalAgreementDiscussion(tx)) {
+        console.log(
+          '🚀 | file: TransactionPanel.js | line 354 | TransactionPanelComponent | render | tx',
+          tx
+        );
         return {
           headingState: HEADING_RENTAL_AGREEMENT_DISCUSSION,
           showDetailCardHeadings: true,
@@ -372,15 +376,22 @@ export class TransactionPanelComponent extends Component {
             contentText: <FormattedMessage id="TransactionPanel.cancelConfirmationSubTitle" />,
           },
           rentalAgreementModalProps: {
+            listing: currentListing,
             affirmativeAction: values => {
-            console.log("🚀 | file: TransactionPanel.js | line 376 | TransactionPanelComponent | render | values", values);
+              console.log(
+                '🚀 | file: TransactionPanel.js | line 376 | TransactionPanelComponent | render | values',
+                values
+              );
               const {
                 startDate: { date: startDate },
                 endDate,
-                ongoingContract: [ongoingContract],
+                ongoingContract: [ongoingContract] = [],
                 ...rest
               } = values;
-
+              console.log(
+                '🚀 | file: TransactionPanel.js | line 386 | TransactionPanelComponent | render | values',
+                values
+              );
               onSendRentalAgreement({
                 contractLines: {
                   ongoingContract,
@@ -436,21 +447,30 @@ export class TransactionPanelComponent extends Component {
             contentText: <FormattedMessage id="TransactionPanel.cancelConfirmationSubTitle" />,
           },
           rentalAgreementModalProps: {
+            listing: currentListing,
             affirmativeAction: values => {
+              console.log(
+                '🚀 | file: TransactionPanel.js | line 376 | TransactionPanelComponent | render | values',
+                values
+              );
               const {
                 startDate: { date: startDate },
                 endDate,
+                ongoingContract: [ongoingContract] = [],
                 ...rest
               } = values;
-
+              console.log(
+                '🚀 | file: TransactionPanel.js | line 386 | TransactionPanelComponent | render | values',
+                values
+              );
               onSendRentalAgreement({
                 contractLines: {
+                  ongoingContract,
                   ...rest,
                 },
                 bookingDates: { startDate, endDate },
                 txId: currentTransaction.id,
                 listingId: currentListing.id,
-                wasRequested: true,
               });
               this.handleOpenRentalAgreementModal(false);
             },
@@ -588,8 +608,14 @@ export class TransactionPanelComponent extends Component {
       }
     };
     const stateData = stateDataFn(currentTransaction) || {};
-    console.log("🚀 | file: TransactionPanel.js | line 588 | TransactionPanelComponent | render | stateData", stateData);
-    console.log("🚀 | file: TransactionPanel.js | line 588 | TransactionPanelComponent | render | currentTransaction", currentTransaction);
+    console.log(
+      '🚀 | file: TransactionPanel.js | line 588 | TransactionPanelComponent | render | stateData',
+      stateData
+    );
+    console.log(
+      '🚀 | file: TransactionPanel.js | line 588 | TransactionPanelComponent | render | currentTransaction',
+      currentTransaction
+    );
 
     const handlePaymentRedirect = values => {
       const {
@@ -646,11 +672,18 @@ export class TransactionPanelComponent extends Component {
     } = displayNames(currentUser, currentProvider, currentCustomer, intl);
 
     const { publicData, geolocation } = currentListing.attributes;
+    console.log(
+      '🚀 | file: TransactionPanel.js | line 649 | TransactionPanelComponent | render | currentListing',
+      currentListing
+    );
     const location = publicData && publicData.location ? publicData.location : {};
     const listingType = publicData && publicData.listingType;
     const listingTitle = currentListing.attributes.deleted
       ? deletedListingTitle
       : currentListing.attributes.title;
+
+    const currentListingSlug = createSlug(listingTitle);
+    const relatedListingSlug = createSlug(relatedTitle || '');
 
     const unitType = config.bookingUnitType;
     const isNightly = unitType === LINE_ITEM_NIGHT;
@@ -920,14 +953,22 @@ export class TransactionPanelComponent extends Component {
                 provider={currentProvider}
                 isCustomer={isCustomer}
               />
-              <DetailCardHeadingsMaybe
-                showDetailCardHeadings={stateData.showDetailCardHeadings}
-                listingTitle={listingTitle}
-                subTitle={bookingSubTitle}
-                location={location}
-                geolocation={geolocation}
-                showAddress={stateData.showAddress}
-              />
+              <NamedLink
+                name={currentListing?.id?.uuid ? 'ListingPage' : 'LandingPage'}
+                params={{
+                  id: currentListing?.id?.uuid,
+                  slug: currentListingSlug,
+                }}
+              >
+                <DetailCardHeadingsMaybe
+                  showDetailCardHeadings={stateData.showDetailCardHeadings}
+                  listingTitle={listingTitle}
+                  subTitle={bookingSubTitle}
+                  location={location}
+                  geolocation={geolocation}
+                  showAddress={stateData.showAddress}
+                />
+              </NamedLink>
               {stateData.showBreakdowns && (
                 <BreakdownMaybe
                   className={css.breakdownContainer}
@@ -963,16 +1004,24 @@ export class TransactionPanelComponent extends Component {
                   provider={currentCustomer}
                   isCustomer={isCustomer}
                 />
-                <DetailCardHeadingsMaybe
-                  showDetailCardHeadings={stateData.showDetailCardHeadings}
-                  listingTitle={relatedTitle}
-                  subTitle={relatedBookingSubTitle}
-                />
+                <NamedLink
+                  name={ensuredRelated?.id?.uuid ? 'ListingPage' : 'LandingPage'}
+                  params={{
+                    id: ensuredRelated?.id?.uuid,
+                    slug: relatedListingSlug,
+                  }}
+                >
+                  <DetailCardHeadingsMaybe
+                    showDetailCardHeadings={stateData.showDetailCardHeadings}
+                    listingTitle={relatedTitle}
+                    subTitle={relatedBookingSubTitle}
+                  />
+                </NamedLink>
               </div>
             )}
           </div>
         </div>
-        <ReviewModal
+        {/* <ReviewModal
           id="ReviewOrderModal"
           isOpen={this.state.isReviewModalOpen}
           onCloseModal={() => this.setState({ isReviewModalOpen: false })}
@@ -982,7 +1031,7 @@ export class TransactionPanelComponent extends Component {
           reviewSent={this.state.reviewSubmitted}
           sendReviewInProgress={sendReviewInProgress}
           sendReviewError={sendReviewError}
-        />
+        /> */}
         <ConfirmationModal
           id="ConfirmationModal"
           isOpen={this.state.showConfirmationModal}

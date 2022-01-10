@@ -60,12 +60,23 @@ const EditListingAvailabilityPanel = props => {
         initialValues={{ availabilityPlan }}
         availability={availability}
         availabilityPlan={availabilityPlan}
-        onSubmit={() => {
+        onSubmit={values => {
+          console.log('🚀 | file: EditListingAvailabilityPanel.js | line 71 | values', values);
+          const {
+            startDate: { date: startDate },
+          } = values;
+          const startMS = startDate && Date.parse(startDate).toFixed(0);
+          console.log('🚀 | file: EditListingAvailabilityPanel.js | line 73 | startMS', startMS);
           // We save the default availability plan
           // I.e. this listing is available every night.
           // Exceptions are handled with live edit through a calendar,
           // which is visible on this panel.
-          onSubmit({ availabilityPlan });
+          onSubmit({
+            availabilityPlan,
+            publicData: {
+              availableFrom: startMS,
+            },
+          });
         }}
         onChange={onChange}
         saveActionMsg={submitButtonText}

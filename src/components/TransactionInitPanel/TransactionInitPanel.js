@@ -247,6 +247,8 @@ export class TransactionInitPanelComponent extends Component {
                 <AvatarLarge user={currentCustomer} className={css.avatarDesktop} />
               </div>
             ) : null}
+            <div className={css.panelContentWrapper}>
+
             <PanelHeading
               panelHeadingState={stateData.headingState}
               transactionRole={transactionRole}
@@ -271,7 +273,9 @@ export class TransactionInitPanelComponent extends Component {
             {selectListing}
 
             {paymentForm}
-            {couponCodeComp}
+            {/* {couponCodeComp} */}
+            </div>
+
           </div>
 
           <div className={css.asideDesktop}>

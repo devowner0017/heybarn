@@ -448,7 +448,7 @@
   "ListingPage.listingIdealFor": "Ideal for {uses}",
   "ListingPage.advertIdealFor": "Needed for {uses}",
   "ListingPage.bookingSubTitle": "Start by choosing your dates.",
-  "ListingPage.bookingTitle": "Book {title}",
+  "ListingPage.bookingTitle": "Find out more about {title}",
   "ListingPage.closedListing": "This listing has been closed and can't be booked.",
   "ListingPage.contactUser": "Contact",
   "ListingPage.listingDescriptionTitle": "About this space",
@@ -1261,7 +1261,7 @@
 
   "RentalAgreementModal.later": "Later",
   "RentalAgreementModal.rentalAgreementModalTitle": "Prepare Your Rental Agreement",
-  "RentalAgreementModal.rentalAgreementModalSubTitle": "Enter the details you would like in your rental agreement",
+  "RentalAgreementModal.rentalAgreementModalSubTitle": "Let us know the details of your rental agreement, and we'll create a professional contract just for you.",
   "RentalAgreementModal.lengthOfContractLabel": "How many weeks are you renting the space out?",
   "RentalAgreementSetupForm.submit": "Send",
 

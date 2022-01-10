@@ -89,9 +89,12 @@ export const CANCEL_DURING_RAD_REQUEST = 'app/TransactionPage/CANCEL_DURING_RAD_
 export const CANCEL_DURING_RAD_SUCCESS = 'app/TransactionPage/CANCEL_DURING_RAD_SUCCESS';
 export const CANCEL_DURING_RAD_ERROR = 'app/TransactionPage/CANCEL_DURING_RAD_ERROR';
 
-export const CANCEL_AFTER_AGREEMENT_SENT_REQUEST = 'app/TransactionPage/CANCEL_AFTER_AGREEMENT_SENT_REQUEST';
-export const CANCEL_AFTER_AGREEMENT_SENT_SUCCESS = 'app/TransactionPage/CANCEL_AFTER_AGREEMENT_SENT_SUCCESS';
-export const CANCEL_AFTER_AGREEMENT_SENT_ERROR = 'app/TransactionPage/CANCEL_AFTER_AGREEMENT_SENT_ERROR';
+export const CANCEL_AFTER_AGREEMENT_SENT_REQUEST =
+  'app/TransactionPage/CANCEL_AFTER_AGREEMENT_SENT_REQUEST';
+export const CANCEL_AFTER_AGREEMENT_SENT_SUCCESS =
+  'app/TransactionPage/CANCEL_AFTER_AGREEMENT_SENT_SUCCESS';
+export const CANCEL_AFTER_AGREEMENT_SENT_ERROR =
+  'app/TransactionPage/CANCEL_AFTER_AGREEMENT_SENT_ERROR';
 
 export const ACCEPT_SALE_REQUEST = 'app/TransactionPage/ACCEPT_SALE_REQUEST';
 export const ACCEPT_SALE_SUCCESS = 'app/TransactionPage/ACCEPT_SALE_SUCCESS';
@@ -281,17 +284,20 @@ export default function checkoutPageReducer(state = initialState, action = {}) {
     case CANCEL_DURING_RAD_ERROR:
       return { ...state, cancelDuringRadInProgress: false, cancelDuringRadError: payload };
 
-      case CANCEL_AFTER_AGREEMENT_SENT_REQUEST:
-        return {
-          ...state,
-          cancelAfterAgreementSentInProgress: true,
-          cancelAfterAgreementSentError: null,
-        };
-      case CANCEL_AFTER_AGREEMENT_SENT_SUCCESS:
-        return { ...state, cancelAfterAgreementSentInProgress: false };
-      case CANCEL_AFTER_AGREEMENT_SENT_ERROR:
-        return { ...state, cancelAfterAgreementSentInProgress: false, cancelAfterAgreementSentError: payload };
-
+    case CANCEL_AFTER_AGREEMENT_SENT_REQUEST:
+      return {
+        ...state,
+        cancelAfterAgreementSentInProgress: true,
+        cancelAfterAgreementSentError: null,
+      };
+    case CANCEL_AFTER_AGREEMENT_SENT_SUCCESS:
+      return { ...state, cancelAfterAgreementSentInProgress: false };
+    case CANCEL_AFTER_AGREEMENT_SENT_ERROR:
+      return {
+        ...state,
+        cancelAfterAgreementSentInProgress: false,
+        cancelAfterAgreementSentError: payload,
+      };
 
     case SIGN_RENTAL_AGREEMENT_REQUEST:
       return {
@@ -439,7 +445,6 @@ const cancelDuringRadError = e => ({
   payload: e,
 });
 
-
 const cancelAfterAgreementSentRequest = () => ({ type: CANCEL_AFTER_AGREEMENT_SENT_REQUEST });
 const cancelAfterAgreementSentSuccess = () => ({ type: CANCEL_AFTER_AGREEMENT_SENT_SUCCESS });
 const cancelAfterAgreementSentError = e => ({
@@ -447,7 +452,6 @@ const cancelAfterAgreementSentError = e => ({
   error: true,
   payload: e,
 });
-
 
 const declineCommunicationRequest = () => ({ type: DECLINE_COMMUNICATION_REQUEST });
 const declineCommunicationSuccess = () => ({ type: DECLINE_COMMUNICATION_SUCCESS });
@@ -845,7 +849,7 @@ export const sendRentalAgreement = data => (dispatch, getState, sdk) => {
   // TODO: Add booking data to params here
   const { txId, listingId, wasRequested, contractLines, bookingDates } = data;
 
-  console.log("🚀 | file: TransactionPage.duck.js | line 847 | data", data);
+  console.log('🚀 | file: TransactionPage.duck.js | line 847 | data', data);
   const { startDate } = bookingDates;
   const endDate = bookingDates.endDate || new moment().add(1, 'years');
   console.log('🚀 | file: TransactionPage.duck.js | line 816 | endDate', endDate);
@@ -865,7 +869,7 @@ export const sendRentalAgreement = data => (dispatch, getState, sdk) => {
       listingId: listingId.uuid,
       bookingStart: bookingData.startDate,
       bookingEnd: bookingData.endDate,
-      protectedData: { ...contractLines },
+      protectedData: { ...contractLines, ...bookingData },
     },
   };
   const queryParams = { expand: true };

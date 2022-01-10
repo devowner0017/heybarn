@@ -5,8 +5,8 @@ import { FormattedMessage, injectIntl, intlShape } from '../../util/reactIntl';
 import { Form as FinalForm } from 'react-final-form';
 import classNames from 'classnames';
 import * as validators from '../../util/validators';
-import { Form, PrimaryButton, FieldTextInput } from '../../components';
-
+import { Form, PrimaryButton, FieldTextInput, FieldSelect } from '../../components';
+import config from '../../config';
 import css from './SignupForm.module.css';
 
 const KEY_CODE_ENTER = 13;
@@ -109,13 +109,13 @@ const SignupFormComponent = props => (
       });
       const lastNameRequired = validators.required(lastNameRequiredMessage);
 
-      // bio
-      const bioLabel = intl.formatMessage({
-        id: 'SignupForm.bioLabel',
-      });
-      const bioPlaceholder = intl.formatMessage({
-        id: 'SignupForm.bioPlaceholder',
-      });
+      // // bio
+      // const bioLabel = intl.formatMessage({
+      //   id: 'SignupForm.bioLabel',
+      // });
+      // const bioPlaceholder = intl.formatMessage({
+      //   id: 'SignupForm.bioPlaceholder',
+      // });
 
       const classes = classNames(rootClassName || css.root, className);
       const submitInProgress = inProgress;
@@ -127,6 +127,7 @@ const SignupFormComponent = props => (
           onOpenTermsOfService();
         }
       };
+
       const termsLink = (
         <span
           className={css.termsLink}
@@ -139,6 +140,9 @@ const SignupFormComponent = props => (
         </span>
       );
 
+      const filterConfig = config.custom.filters;
+      const districtConfig = filterConfig.find(f => f.id === 'locDistrict');
+      const districts = districtConfig?.config.options;
       return (
         <Form className={classes} onSubmit={handleSubmit}>
           {stage === 1 && (
@@ -186,9 +190,26 @@ const SignupFormComponent = props => (
               />
             </div>
           )}
+
           {stage === 2 && (
             <div>
-              <FieldTextInput
+              <FieldSelect
+                className={css.category}
+                name={'locDistrict'}
+                id={formId ? `${formId}.locDistrict` : 'locDistrict'}
+                label={'What region are you searching in?'}
+              >
+                <option disabled value="">
+                  {'Select District'}
+                </option>
+                {districts.map(c => (
+                  <option key={c.key} value={c.key}>
+                    {c.label}
+                  </option>
+                ))}
+              </FieldSelect>
+
+              {/* <FieldTextInput
                 className={css.bio}
                 type="textarea"
                 id={formId ? `${formId}.bio` : 'bio'}
@@ -197,6 +218,7 @@ const SignupFormComponent = props => (
                 placeholder={bioPlaceholder}
                 labelClassName={css.secondLabel}
               />
+            */}
               <p className={css.bioExplanationWrapper}>
                 <span className={css.termsText}>
                   <FormattedMessage id="SignupForm.bioExplanation" />
