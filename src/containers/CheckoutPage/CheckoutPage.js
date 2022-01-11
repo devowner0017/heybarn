@@ -72,6 +72,8 @@ const PAY_AND_SAVE_FOR_LATER_USE = 'PAY_AND_SAVE_FOR_LATER_USE';
 const USE_SAVED_CARD = 'USE_SAVED_CARD';
 
 const paymentFlow = (selectedPaymentMethod, saveAfterOnetimePayment) => {
+console.log("🚀 | file: CheckoutPage.js | line 75 | paymentFlow | saveAfterOnetimePayment", saveAfterOnetimePayment);
+console.log("🚀 | file: CheckoutPage.js | line 75 | paymentFlow | selectedPaymentMethod", selectedPaymentMethod);
   // Payment mode could be 'replaceCard', but without explicit saveAfterOnetimePayment flag,
   // we'll handle it as one-time payment
   return selectedPaymentMethod === 'defaultCard'
@@ -265,8 +267,7 @@ export class CheckoutPageComponent extends Component {
       ? ensuredDefaultPaymentMethod.attributes.stripePaymentMethodId
       : null;
     const selectedPaymentFlow = paymentFlow(selectedPaymentMethod, saveAfterOnetimePayment);
-
-    // Step 1: initiate order by requesting payment from Marketplace API
+    console.log("🚀 | file: CheckoutPage.js | line 270 | CheckoutPageComponent | handlePaymentIntent | selectedPaymentFlow", selectedPaymentFlow);
     const fnRequestPayment = fnParams => {
       console.log(
         '🚀 | file: CheckoutPage.js | line 257 | CheckoutPageComponent | handlePaymentIntent | fnParams',
@@ -386,7 +387,8 @@ export class CheckoutPageComponent extends Component {
         '🚀 | file: CheckoutPage.js | line 377 | CheckoutPageComponent | handlePaymentIntent | pi',
         pi
       );
-      return onSavePaymentMethod(ensuredStripeCustomer, pi.payment_method)
+      console.log("🚀 | file: CheckoutPage.js | line 401 | CheckoutPageComponent | handlePaymentIntent | selectedPaymentFlow", selectedPaymentFlow);
+      return  selectedPaymentFlow  !== USE_SAVED_CARD ? onSavePaymentMethod(ensuredStripeCustomer, pi.payment_method)
         .then(response => {
           if (response.errors) {
             return { ...fnParams, paymentMethodSaved: false,pi };
@@ -396,7 +398,8 @@ export class CheckoutPageComponent extends Component {
         .catch(e => {
           // Real error cases are caught already in paymentMethods page.
           return { ...fnParams, paymentMethodSaved: false , pi};
-        });
+        })
+        : { ...fnParams, paymentMethodSaved: true,pi }
     };
 
     const fnCreateRecurring = fnParams => {
@@ -1007,7 +1010,9 @@ export class CheckoutPageComponent extends Component {
                     hasDefaultPaymentMethod ? currentUser.stripeCustomer.defaultPaymentMethod : null
                   }
                   paymentIntent={paymentIntent}
+                  forceSaveCardDetails={true}
                   onStripeInitialized={this.onStripeInitialized}
+                  forceSaveCard={true}
                 />
               ) : null}
               {isPaymentExpired ? (

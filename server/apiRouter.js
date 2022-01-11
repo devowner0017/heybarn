@@ -27,6 +27,7 @@ const createReservationCharge = require('./sph/create-reservation-charge');
 const createRentalPayments = require('./sph/create-recurring-payments');
 const fetchRentalPayments = require('./sph/fetch-recurring-payments');
 const updateListingState = require('./api/update-listing-state');
+const updateTransactionMetadata = require('./api/update-transaction-metadata')
 
 const router = express.Router();
 
@@ -93,5 +94,6 @@ router.post('/create-reservation-charge', createReservationCharge);
 router.post('/create-recurring-payments', createRentalPayments);
 router.post('/fetch-recurring-payments', fetchRentalPayments);
 router.post('/update-listing-state', updateListingState);
+router.post('/update-transaction-metadata', updateTransactionMetadata);
 
 module.exports = router;

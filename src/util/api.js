@@ -155,3 +155,7 @@ export const createRentalPayments = body => {
 export const fetchRentalPayments = body => {
   return post('/api/fetch-recurring-payments', body);
 };
+
+export const updateTransactionMetadata = body => {
+  return post('/api/update-transaction-metadata', body);
+};

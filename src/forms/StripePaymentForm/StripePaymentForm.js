@@ -90,7 +90,16 @@ const cardStyles = {
 };
 
 const OneTimePaymentWithCardElement = props => {
-  const { cardClasses, formId, handleStripeElementRef, hasCardError, error, label, intl } = props;
+  const {
+    cardClasses,
+    formId,
+    handleStripeElementRef,
+    hasCardError,
+    error,
+    label,
+    intl,
+    forceSaveCard,
+  } = props;
   const labelText =
     label || intl.formatMessage({ id: 'StripePaymentForm.saveAfterOnetimePayment' });
   return (
@@ -101,15 +110,17 @@ const OneTimePaymentWithCardElement = props => {
       <div className={cardClasses} id={`${formId}-card`} ref={handleStripeElementRef} />
       {hasCardError ? <span className={css.error}>{error}</span> : null}
       <div className={css.saveForLaterUse}>
-        <FieldCheckbox
-          className={css.saveForLaterUseCheckbox}
-          textClassName={css.saveForLaterUseLabel}
-          id="saveAfterOnetimePayment"
-          name="saveAfterOnetimePayment"
-          label={labelText}
-          value="saveAfterOnetimePayment"
-          useSuccessColor
-        />
+        {!forceSaveCard && (
+          <FieldCheckbox
+            className={css.saveForLaterUseCheckbox}
+            textClassName={css.saveForLaterUseLabel}
+            id="saveAfterOnetimePayment"
+            name="saveAfterOnetimePayment"
+            label={labelText}
+            value="saveAfterOnetimePayment"
+            useSuccessColor
+          />
+        )}
         <span className={css.saveForLaterUseLegalInfo}>
           <FormattedMessage id="StripePaymentForm.saveforLaterUseLegalInfo" />
         </span>
@@ -129,6 +140,7 @@ const PaymentMethodSelector = props => {
     error,
     paymentMethod,
     intl,
+    forceSaveCard
   } = props;
   const last4Digits = defaultPaymentMethod.attributes.card.last4Digits;
   const labelText = intl.formatMessage(
@@ -155,6 +167,7 @@ const PaymentMethodSelector = props => {
           error={error}
           label={labelText}
           intl={intl}
+          forceSaveCard={forceSaveCard}
         />
       ) : null}
     </React.Fragment>
@@ -332,6 +345,7 @@ class StripePaymentForm extends Component {
       form,
       hasHandledCardPayment,
       defaultPaymentMethod,
+      forceSaveCard
     } = formRenderProps;
 
     this.finalFormAPI = form;
@@ -414,6 +428,7 @@ class StripePaymentForm extends Component {
                 error={this.state.error}
                 paymentMethod={selectedPaymentMethod}
                 intl={intl}
+                forceSaveCard={forceSaveCard}
               />
             ) : (
               <React.Fragment>
@@ -427,6 +442,7 @@ class StripePaymentForm extends Component {
                   hasCardError={hasCardError}
                   error={this.state.error}
                   intl={intl}
+                  forceSaveCard={forceSaveCard}
                 />
               </React.Fragment>
             )}

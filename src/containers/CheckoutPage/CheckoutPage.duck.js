@@ -1,6 +1,6 @@
 import pick from 'lodash/pick';
 import config from '../../config';
-import { initiatePrivileged, transitionPrivileged } from '../../util/api';
+import { initiatePrivileged, transitionPrivileged, updateTransactionMetadata } from '../../util/api';
 import { denormalisedResponseEntities } from '../../util/data';
 import { storableError } from '../../util/errors';
 import { createRentalPayments } from '../../util/api';
@@ -317,6 +317,7 @@ export const createRecurring = orderParams => (dispatch, getState, sdk) => {
         '🚀 | file: CheckoutPage.duck.js | line 290 | returncreateRentalPayment | recurringResponse',
         recurringResponse
       );
+      updateTransactionMetadata({transactionId: orderParams.transactionId, recurringResponse})
       createRecurringSuccess(recurringResponse);
       return recurringResponse;
     })

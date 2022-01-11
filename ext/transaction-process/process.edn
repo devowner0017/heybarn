@@ -198,6 +198,36 @@
    :from :state/pending-payment,
    :to :state/preauthorized}
 
+  {:name :transition/customer-update-transaction-after-payment,
+   :actor :actor.role/customer,
+   :actions [
+        {:name :action/privileged-update-metadata}
+   ],
+   :from :state/preauthorized,
+   :to :state/preauthorized
+   :privileged? true }
+
+
+ {:name :transition/provider-update-transaction-after-payment,
+   :actor :actor.role/provider,
+   :actions [
+        {:name :action/privileged-update-metadata}
+   ],
+   :from :state/preauthorized,
+   :to :state/preauthorized
+   :privileged? true }
+
+
+ {:name :transition/operator-update-transaction-after-payment,
+   :actor :actor.role/operator,
+   :actions [
+        {:name :action/privileged-update-metadata}
+   ],
+   :from :state/preauthorized,
+   :to :state/preauthorized
+   :privileged? true }
+
+
   {:name :transition/complete,
    :actor :actor.role/provider,
    :actions [
