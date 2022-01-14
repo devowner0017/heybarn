@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { arrayOf, bool, number, oneOf, shape, string } from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl, intlShape } from '../../util/reactIntl';
 import classNames from 'classnames';
+import { parse } from '../../util/urlHelpers';
 import {
   txIsEnquired,
   txIsRequested,
@@ -52,6 +53,7 @@ import { TopbarContainer, NotFoundPage } from '../../containers';
 import config from '../../config';
 
 import css from './InboxPage.module.css';
+import { getInbox } from './InboxPage.duck';
 
 const formatDate = (intl, date) => {
   return {
@@ -65,10 +67,7 @@ const formatDate = (intl, date) => {
 
 // Translated name of the state of the given transaction
 export const txState = (intl, tx, type) => {
-  console.log('🚀 | file: InboxPage.js | line 68 | txState | type', type);
-  console.log('🚀 | file: InboxPage.js | line 225 | txState | tx', tx);
   const isOrder = type === 'order';
-  console.log("🚀 | file: InboxPage.js | line 71 | txState | isOrder", isOrder);
   if (txIsHostEnquired(tx)) {
     return {
       nameClassName: isOrder ? css.nameNotEmphasized : css.nameEmphasized,
@@ -151,7 +150,6 @@ export const txState = (intl, tx, type) => {
       }),
     };
   } else if (txIsRentalAgreementSent(tx)) {
-    console.log(tx);
     return {
       nameClassName: isOrder ? css.nameNotEmphasized : css.nameEmphasized,
       // bookingClassName: css.bookingActionNeeded,
@@ -269,12 +267,8 @@ BookingInfoMaybe.propTypes = {
 
 export const InboxItem = props => {
   const { unitType, type, tx, intl, stateData, currentUser } = props;
-  console.log('🚀 | file: InboxPage.js | line 267 | tx', tx);
-  console.log('🚀 | file: InboxPage.js | line 265 | currentUser', currentUser);
-  console.log('🚀 | file: InboxPage.js | line 265 | tx', tx);
   const { customer, provider, listing } = tx;
   const isOrder = provider.id.uuid !== currentUser.id.uuid;
-  console.log('🚀 | file: InboxPage.js | line 269 | isOrder', isOrder);
   const listingTitle = listing?.attributes?.title;
   const otherUser = isOrder ? provider : customer;
   const otherUserDisplayName = <UserDisplayName user={otherUser} intl={intl} />;
@@ -349,18 +343,25 @@ export const InboxPageComponent = props => {
     providerNotificationCount,
     scrollingDisabled,
     transactions,
+    fetchInbox,
   } = props;
+  console.log('🚀 | file: InboxPage.js | line 347 | props', props);
   const { tab } = params;
+  const { state } = parse(location.search);
+  console.log('🚀 | file: InboxPage.js | line 351 | state', state);
+  const [filter, setFilter] = useState(null);
   const ensuredCurrentUser = ensureCurrentUser(currentUser);
 
   const title = intl.formatMessage({ id: 'InboxPage.ordersTitle' });
 
+  useEffect(() => {
+    fetchInbox({ state: filter });
+  }, [filter]);
+
   const toTxItem = tx => {
-    console.log('🚀 | file: InboxPage.js | line 357 | tx', tx);
     const isCustomer = ensuredCurrentUser.id.uuid === tx.customer.id.uuid;
     const type = isCustomer ? 'sale' : 'order';
     const stateData = txState(intl, tx, type);
-    console.log('🚀 | file: InboxPage.js | line 369 | stateData', stateData);
     // Render InboxItem only if the latest transition of the transaction is handled in the `txState` function.
     return stateData ? (
       <li key={tx.id.uuid} className={css.listItem}>
@@ -405,10 +406,6 @@ export const InboxPageComponent = props => {
 
   const providerNotificationBadge =
     providerNotificationCount > 0 ? <NotificationBadge count={providerNotificationCount} /> : null;
-  console.log(
-    '🚀 | file: InboxPage.js | line 397 | providerNotificationCount',
-    providerNotificationCount
-  );
 
   const tabs = [
     {
@@ -440,9 +437,27 @@ export const InboxPageComponent = props => {
         <LayoutWrapperManageListingsSideNav currentTab={`InboxTab`} extraTabs={tabs} />
         <LayoutWrapperMain className={css.inboxPageWrapper}>
           {error}
+          <div className={css.titleWrapper}>
+
           <h1 className={css.title}>
             <FormattedMessage id="InboxPage.title" />
           </h1>
+          <div className={css.inboxFilters}>
+            <NamedLink
+              name={'InboxPage'}
+              className={classNames(css.filterLink, { [css.activeFilterLink]: !state })}
+              >
+              All
+            </NamedLink>
+            <NamedLink
+              className={classNames(css.filterLink, { [css.activeFilterLink]: state === 'active' })}
+              name={'InboxPage'}
+              to={{ search: 'state=active' }}
+              >
+              Active
+            </NamedLink>
+          </div>
+              </div>
           <ul className={css.itemList}>
             {!fetchInProgress ? (
               transactions.map(toTxItem)
@@ -505,6 +520,14 @@ const mapStateToProps = state => {
   };
 };
 
-const InboxPage = compose(connect(mapStateToProps), injectIntl)(InboxPageComponent);
+const mapDispatchToProps = dispatch => ({
+  dispatch,
+  fetchInbox: params => dispatch(getInbox(params)),
+});
+
+const InboxPage = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  injectIntl
+)(InboxPageComponent);
 
 export default InboxPage;

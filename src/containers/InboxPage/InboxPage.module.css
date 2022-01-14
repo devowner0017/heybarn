@@ -65,7 +65,15 @@
     padding: 109px 0 82px max(calc((100% - 1600px) / 2), 20px);
   }
 }
-
+.titleWrapper{
+  margin-bottom: 20px;
+  @media (--viewportMedium) {
+    margin-bottom: 40px;
+  }
+  @media (--viewportLarge) {
+    margin-bottom: 80px;
+  }
+}
 .title {
   /* Font */
   @apply --marketplaceH1FontStyles;
@@ -73,17 +81,14 @@
 
   /* Layout */
   margin-top: 0;
-  margin-bottom: 20px;
 
   @media (--viewportMedium) {
     padding-bottom: 10px;
     margin-top: 0;
-    margin-bottom: 40px;
   }
 
   @media (--viewportLarge) {
     padding-bottom: 0;
-    margin-bottom: 80px;
   }
 }
 
@@ -400,4 +405,16 @@
     max-width: 1045px;
     margin-right: auto;
   }
+}
+
+
+
+.inboxFilters{
+  display: flex;
+}
+.filterLink{
+padding: 1rem;
+}
+.activeFilterLink{
+font-weight: 800;
 }

@@ -129,6 +129,7 @@ export const queryUserListings = userId => (dispatch, getState, sdk) => {
   return sdk.listings
     .query({
       author_id: userId,
+      pub_notDeleted: true ,
       include: ['author', 'images'],
       'fields.image': ['variants.landscape-crop', 'variants.landscape-crop2x'],
     })
@@ -184,6 +185,6 @@ export const loadData = params => (dispatch, getState, sdk) => {
     dispatch(fetchCurrentUser()),
     dispatch(showUser(userId)),
     dispatch(queryUserListings(userId)),
-    dispatch(queryUserReviews(userId)),
+    // dispatch(queryUserReviews(userId)),
   ]);
 };

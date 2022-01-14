@@ -156,6 +156,19 @@ export const fetchRentalPayments = body => {
   return post('/api/fetch-recurring-payments', body);
 };
 
+export const cancelRentalPayments = body => {
+  return post('/api/cancel-recurring-payments', body);
+};
+
+
+export const extendRentalPayments = body => {
+  return post('/api/extend-recurring-payments', body);
+};
+
 export const updateTransactionMetadata = body => {
   return post('/api/update-transaction-metadata', body);
+};
+
+export const sendAdminEmail = body => {
+  return post('/api/send-admin-email', body);
 };

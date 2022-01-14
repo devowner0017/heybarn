@@ -219,7 +219,7 @@ export class ProfilePageComponent extends Component {
             </ul>
           </div>
         ) : null}
-        {isMobileLayout ? mobileReviews : desktopReviews}
+        {/* {isMobileLayout ? mobileReviews : desktopReviews} */}
       </div>
     );
 

@@ -102,6 +102,14 @@ export const TransactionPageComponent = props => {
     relatedListing,
     onCompleteSale,
 
+    onCancelStripeAgreement,
+    onExtendStripeAgreement,
+
+    cancelSubscriptionInProgress,
+    cancelSubscriptionError,
+    extendSubscriptionInProgress,
+    extendSubscriptionError,
+
     subscription,
   } = props;
 
@@ -287,6 +295,12 @@ export const TransactionPageComponent = props => {
       cancelAfterAgreementSentInProgress={cancelAfterAgreementSentInProgress}
       cancelAfterAgreementSentError={cancelAfterAgreementSentError}
       onCancelAfterAgreementSent={onCancelAfterAgreementSent}
+      onCancelStripeAgreement={onCancelStripeAgreement}
+      onExtendStripeAgreement={onExtendStripeAgreement}
+      cancelSubscriptionInProgress={cancelSubscriptionInProgress}
+      cancelSubscriptionError={cancelSubscriptionError}
+      extendSubscriptionInProgress={extendSubscriptionInProgress}
+      extendSubscriptionError={extendSubscriptionError}
     />
   ) : (
     loadingOrFailedFetching
@@ -418,7 +432,13 @@ const mapStateToProps = state => {
     signRentalAgreementError,
     relatedListingRef,
   } = state.TransactionPage;
-  const { subscription } = state.stripe;
+  const {
+    subscription,
+    cancelSubscriptionInProgress,
+    cancelSubscriptionError,
+    extendSubscriptionInProgress,
+    extendSubscriptionError,
+  } = state.stripe;
   const { currentUser } = state.user;
   const relatedListing = getMarketplaceEntities(
     state,
@@ -467,6 +487,10 @@ const mapStateToProps = state => {
     signRentalAgreementInProgress,
     signRentalAgreementError,
     relatedListing: relatedListing?.length ? relatedListing[0] : null,
+    cancelSubscriptionInProgress,
+    cancelSubscriptionError,
+    extendSubscriptionInProgress,
+    extendSubscriptionError,
   };
 };
 
@@ -481,6 +505,9 @@ const mapDispatchToProps = dispatch => {
     onCancelDuringRad: transactionId => dispatch(cancelDuringRad(transactionId)),
     onCancelAfterAgreementSent: transactionId => dispatch(cancelAfterAgreementSent(transactionId)),
     onSignRentalAgreement: transactionId => dispatch(signRentalAgreement(transactionId)),
+
+    onCancelStripeAgreement: data => dispatch(cancelStripeAgreement(data)),
+    onExtendStripeAgreement: data => dispatch(extendStripeAgreement(data)),
 
     onCompleteSale: transactionId => dispatch(completeSale(transactionId)),
     onAcceptSale: transactionId => dispatch(acceptSale(transactionId)),

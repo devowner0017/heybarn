@@ -2,7 +2,7 @@ import reverse from 'lodash/reverse';
 import sortBy from 'lodash/sortBy';
 import { storableError } from '../../util/errors';
 import { parse } from '../../util/urlHelpers';
-import { TRANSITIONS } from '../../util/transaction';
+import { TRANSITIONS, TRANSITION_CONFIRM_PAYMENT } from '../../util/transaction';
 import { addMarketplaceEntities } from '../../ducks/marketplaceData.duck';
 
 const sortedTransactions = txs =>
@@ -73,7 +73,60 @@ const fetchOrdersOrSalesError = e => ({
 
 const INBOX_PAGE_SIZE = 10;
 
+export const getInbox = (params, search) => (dispatch, getState, sdk) => {
+  const { state } = params;
+
+
+
+  dispatch(fetchOrdersOrSalesRequest());
+
+  const { page = 1 } = parse(search);
+
+  const filterValues = {
+    active: TRANSITION_CONFIRM_PAYMENT,
+    all: TRANSITIONS
+  };
+  const apiQueryParams = {
+    lastTransitions:filterValues[state],
+    include: [
+      'provider',
+      'provider.profileImage',
+      'customer',
+      'customer.profileImage',
+      'booking',
+      'listing',
+    ],
+    'fields.transaction': [
+      'lastTransition',
+      'lastTransitionedAt',
+      'transitions',
+      'payinTotal',
+      'payoutTotal',
+    ],
+    'fields.user': ['profile.displayName', 'profile.abbreviatedName'],
+    'fields.image': ['variants.square-small', 'variants.square-small2x'],
+    page,
+    per_page: INBOX_PAGE_SIZE,
+  };
+  console.log("🚀 | file: InboxPage.duck.js | line 116 | loadData | apiQueryParams", apiQueryParams);
+
+  return sdk.transactions
+    .query(apiQueryParams)
+    .then(response => {
+    console.log("🚀 | file: InboxPage.duck.js | line 120 | loadData | response", response);
+      dispatch(addMarketplaceEntities(response));
+      dispatch(fetchOrdersOrSalesSuccess(response));
+      return response;
+    })
+    .catch(e => {
+      dispatch(fetchOrdersOrSalesError(storableError(e)));
+      throw e;
+    });
+};
+
 export const loadData = (params, search) => (dispatch, getState, sdk) => {
+console.log("🚀 | file: InboxPage.duck.js | line 127 | loadData | search", search);
+console.log("🚀 | file: InboxPage.duck.js | line 127 | loadData | params", params);
   const { tab } = params;
 
   const onlyFilterValues = {
@@ -88,11 +141,15 @@ export const loadData = (params, search) => (dispatch, getState, sdk) => {
 
   dispatch(fetchOrdersOrSalesRequest());
 
-  const { page = 1 } = parse(search);
+  const { page = 1, state= 'all' } = parse(search);
 
+  const filterValues = {
+    active: TRANSITION_CONFIRM_PAYMENT,
+    all: TRANSITIONS
+  };
   const apiQueryParams = {
     only: onlyFilter,
-    lastTransitions: TRANSITIONS,
+    lastTransitions: filterValues[state],
     include: [
       'provider',
       'provider.profileImage',

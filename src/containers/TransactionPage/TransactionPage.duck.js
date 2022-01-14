@@ -32,6 +32,7 @@ import {
   transactionLineItems,
   transitionPrivileged,
   transitionPrivilegedSimple,
+  sendAdminEmail,
 } from '../../util/api';
 import * as log from '../../util/log';
 import {
@@ -873,7 +874,17 @@ export const sendRentalAgreement = data => (dispatch, getState, sdk) => {
     },
   };
   const queryParams = { expand: true };
-
+  const emailData = { ...contractLines, ...bookingData };
+  console.log(emailData);
+  console.log(Object.entries(emailData));
+  sendAdminEmail({
+    message: {
+      subject: 'NEW RENTAL AGREEMENT REQUESTED',
+      body:
+        'A new rental agreement has been requested. Please generate the appropriate document and contact both parties to have it signed.',
+    },
+    content: { ...contractLines, ...bookingData },
+  });
   const handleSucces = response => {
     const entities = denormalisedResponseEntities(response);
     const order = entities[0];
@@ -881,6 +892,7 @@ export const sendRentalAgreement = data => (dispatch, getState, sdk) => {
     dispatch(addMarketplaceEntities(response));
     dispatch(sendRentalAgreementSuccess());
     dispatch(fetchCurrentUserNotifications());
+
     return order;
   };
 

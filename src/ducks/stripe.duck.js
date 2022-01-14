@@ -34,6 +34,17 @@ export const FETCH_SUBSCRIPTION_REQUEST = 'app/stripe/FETCH_SUBSCRIPTION_REQUEST
 export const FETCH_SUBSCRIPTION_SUCCESS = 'app/stripe/FETCH_SUBSCRIPTION_SUCCESS';
 export const FETCH_SUBSCRIPTION_ERROR = 'app/stripe/FETCH_SUBSCRIPTION_ERROR';
 
+export const CANCEL_SUBSCRIPTION_REQUEST = 'app/stripe/CANCEL_SUBSCRIPTION_REQUEST';
+export const CANCEL_SUBSCRIPTION_SUCCESS = 'app/stripe/CANCEL_SUBSCRIPTION_SUCCESS';
+export const CANCEL_SUBSCRIPTION_ERROR = 'app/stripe/CANCEL_SUBSCRIPTION_ERROR';
+
+export const EXTEND_SUBSCRIPTION_REQUEST = 'app/stripe/EXTEND_SUBSCRIPTION_REQUEST';
+export const EXTEND_SUBSCRIPTION_SUCCESS = 'app/stripe/EXTEND_SUBSCRIPTION_SUCCESS';
+export const EXTEND_SUBSCRIPTION_ERROR = 'app/stripe/EXTEND_SUBSCRIPTION_ERROR';
+
+
+
+
 // ================ Reducer ================ //
 
 const initialState = {
@@ -47,8 +58,15 @@ const initialState = {
   retrievePaymentIntentError: null,
 
   subscription: null,
+
   fetchSubscriptionInProgress: false,
   fetchSubscriptionError: null,
+
+  cancelSubscriptionInProgress: false,
+  cancelSubscriptionError: null,
+
+  extendSubscriptionInProgress: false,
+  extendSubscriptionError: null,
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -165,6 +183,38 @@ export default function reducer(state = initialState, action = {}) {
         fetchSubscriptionInProgress: false,
       };
 
+      case CANCEL_SUBSCRIPTION_REQUEST:
+        return {
+          ...state,
+          cancelSubscriptionError: null,
+          cancelSubscriptionInProgress: true,
+        };
+      case CANCEL_SUBSCRIPTION_SUCCESS:
+        return { ...state, subscription: payload, cancelSubscriptionInProgress: false };
+      case CANCEL_SUBSCRIPTION_ERROR:
+        console.error(payload);
+        return {
+          ...state,
+          cancelSubscriptionError: payload,
+          cancelSubscriptionInProgress: false,
+        };
+
+        case EXTEND_SUBSCRIPTION_REQUEST:
+          return {
+            ...state,
+            extendSubscriptionError: null,
+            extendSubscriptionInProgress: true,
+          };
+        case EXTEND_SUBSCRIPTION_SUCCESS:
+          return { ...state, subscription: payload, extendSubscriptionInProgress: false };
+        case EXTEND_SUBSCRIPTION_ERROR:
+          console.error(payload);
+          return {
+            ...state,
+            extendSubscriptionError: payload,
+            extendSubscriptionInProgress: false,
+          };
+
     default:
       return state;
   }
@@ -224,6 +274,7 @@ export const retrievePaymentIntentError = payload => ({
   payload,
   error: true,
 });
+
 export const fetchSubscriptionRequest = () => ({
   type: FETCH_SUBSCRIPTION_REQUEST,
 });
@@ -235,6 +286,36 @@ export const fetchSubscriptionSuccess = payload => ({
 
 export const fetchSubscriptionError = payload => ({
   type: FETCH_SUBSCRIPTION_ERROR,
+  payload,
+  error: true,
+});
+
+export const cancelSubscriptionRequest = () => ({
+  type: CANCEL_SUBSCRIPTION_REQUEST,
+});
+
+export const cancelSubscriptionSuccess = payload => ({
+  type: CANCEL_SUBSCRIPTION_SUCCESS,
+  payload,
+});
+
+export const cancelSubscriptionError = payload => ({
+  type: CANCEL_SUBSCRIPTION_ERROR,
+  payload,
+  error: true,
+});
+
+export const extendSubscriptionRequest = () => ({
+  type: EXTEND_SUBSCRIPTION_REQUEST,
+});
+
+export const extendSubscriptionSuccess = payload => ({
+  type: EXTEND_SUBSCRIPTION_SUCCESS,
+  payload,
+});
+
+export const extendSubscriptionError = payload => ({
+  type: EXTEND_SUBSCRIPTION_ERROR,
   payload,
   error: true,
 });
@@ -300,6 +381,51 @@ export const fetchSubscription = params => dispatch => {
       log.error(e, 'stripe-fetch-subscription-failed');
     });
 };
+
+export const cancelSubscription = params => dispatch => {
+  dispatch(cancelSubscriptionRequest());
+
+  return cancelRentalPayments(params)
+    .then(response => {
+      console.log('🚀 | file: stripe.duck.js | line 287 | response', response);
+      if (response.error) {
+        return Promise.reject(response);
+      } else {
+        dispatch(cancelSubscriptionSuccess(response));
+        return response;
+      }
+    })
+    .catch(err => {
+      // Unwrap Stripe error.
+      const e = err.error || storableError(err);
+      dispatch(cancelSubscriptionError(e));
+
+      log.error(e, 'stripe-cancel-subscription-failed');
+    });
+};
+
+export const extendSubscription = params => dispatch => {
+  dispatch(extendSubscriptionRequest());
+
+  return extendRentalPayments(params)
+    .then(response => {
+      console.log('🚀 | file: stripe.duck.js | line 287 | response', response);
+      if (response.error) {
+        return Promise.reject(response);
+      } else {
+        dispatch(extendSubscriptionSuccess(response));
+        return response;
+      }
+    })
+    .catch(err => {
+      // Unwrap Stripe error.
+      const e = err.error || storableError(err);
+      dispatch(extendSubscriptionError(e));
+
+      log.error(e, 'stripe-extend-subscription-failed');
+    });
+};
+
 
 export const confirmCardPayment = params => dispatch => {
   console.log('🚀 | file: stripe.duck.js | line 244 | params', params);

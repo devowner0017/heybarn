@@ -317,7 +317,7 @@ export const createRecurring = orderParams => (dispatch, getState, sdk) => {
         '🚀 | file: CheckoutPage.duck.js | line 290 | returncreateRentalPayment | recurringResponse',
         recurringResponse
       );
-      updateTransactionMetadata({transactionId: orderParams.transactionId, recurringResponse})
+      updateTransactionMetadata({transactionId: orderParams.transactionId,recurringResponse})
       createRecurringSuccess(recurringResponse);
       return recurringResponse;
     })

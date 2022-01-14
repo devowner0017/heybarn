@@ -513,7 +513,7 @@ export const TransactionInitPageComponent = props => {
         className={css.selectListing}
       >
         <option disabled value="" selected>
-          Select A Listing
+          Select {listingType === 'listing' ? 'An Advert' : 'A Listing'}
         </option>
         {listings?.map(l => (
           <option key={l.id.uuid} value={l.id.uuid}>

@@ -1,26 +1,44 @@
-const nodemailer = require('nodemailer');
+const sgMail = require('@sendgrid/mail');
+const humanizeString = require('humanize-string');
 
-module.exports = (req, res) => {
-
-let mailTransporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'xyz@gmail.com',
-        pass: '*************'
-    }
-});
-
-let mailDetails = {
-    from: 'xyz@gmail.com',
-    to: 'abc@gmail.com',
-    subject: 'Test mail',
-    text: 'Node.js testing mail for GeeksforGeeks'
+const prettyPrintObject = (object) => {
+  const entries = Object.entries(object);
+  return `
+  <ul>
+  ${entries.map(([key, value]) => {
+    return `
+    <li>${humanizeString(key)}: ${JSON.stringify(value)}</li>
+    `;
+  }).join('')}
+  </ul>`;
 };
 
-mailTransporter.sendMail(mailDetails, function(err, data) {
-    if(err) {
-        console.log('Error Occurs');
-    } else {
-        console.log('Email sent successfully');
-    }
-});
+module.exports = (req, res) => {
+  const { message, content } = req.body;
+
+  sgMail.setApiKey(process.env.SENDGRID_API);
+  const msg = {
+    to: process.env.REACT_APP_ADMIN_EMAIL, // Change to your recipient
+    from: process.env.REACT_APP_ADMIN_EMAIL, // Change to your verified sender
+    subject: message.subject,
+    text: message.body,
+    html: `
+    <p>${message.body}</p>
+    <br/>
+    ${prettyPrintObject(content)}
+    <br/>
+    `
+  };
+  sgMail
+    .send(msg)
+    .then(() => {
+      res
+        .status(200)
+        .set('Content-Type', 'application/transit+json')
+        .send({ data: 'Email sent' })
+        .end();
+    })
+    .catch(error => {
+      console.error(error);
+    });
+};

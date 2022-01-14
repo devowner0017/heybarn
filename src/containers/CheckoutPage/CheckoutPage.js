@@ -599,7 +599,7 @@ export class CheckoutPageComponent extends Component {
         const orderDetailsPath = pathByRouteName('OrderDetailsPage', routes, { id: orderId.uuid });
         const initialValues = {
           initialMessageFailedToTransaction,
-          savePaymentMethodFailed: !paymentMethodSaved,
+          // savePaymentMethodFailed: !paymentMethodSaved,
         };
 
         initializeOrderPage(initialValues, routes, dispatch);
