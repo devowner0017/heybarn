@@ -92,12 +92,16 @@ module.exports = (reportUri, enforceSsl, reportOnly) => {
   // https://content-security-policy.com/
 
   // Example: extend default img directive with custom domain
-  // const { imgSrc = [self] } = defaultDirectives;
-  // const exampleImgSrc = imgSrc.concat('my-custom-domain.example.com');
-
+  const { scriptSrc = [self], frameSrc = [self], connectSrc = [self] } = defaultDirectives;
+  const newScriptSrc = scriptSrc.concat('  *.tawk.to *.hotjar.com ');
+  const newFrameSrc = frameSrc.concat(' *.tawk.to *.hotjar.com ');
+  const newConnectSrc = connectSrc.concat(' *.tawk.to *.hotjar.com ');
   const customDirectives = {
     // Example: Add custom directive override
     // imgSrc: exampleImgSrc,
+    scriptSrc: newScriptSrc,
+    frameSrc: newFrameSrc,
+    connectSrc: newConnectSrc,
   };
 
   // ================ END CUSTOM CSP URLs ================ //

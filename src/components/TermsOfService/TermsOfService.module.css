@@ -12,7 +12,10 @@
       margin: 32px 0 0 0;
     }
   }
-
+  & ul {
+    list-style: inherit;
+    padding-left: 1.2rem;
+  }
   & .lastUpdated {
     @apply --marketplaceBodyFontStyles;
     margin-top: 0;
