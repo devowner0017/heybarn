@@ -23,16 +23,16 @@ const CreateListingModal = props => {
     listingType,
     authorName,
   } = props;
+    console.log("🚀 | file: CreateListingModal.js | line 26 | listingType", listingType);
   const history = useHistory();
 
   const classes = classNames(rootClassName || css.root, className);
   const closeButtonMessage = intl.formatMessage({ id: 'CreateListingModal.later' });
   const handleRedirect = () => {
     const routes = routeConfiguration();
-    history.push(createResourceLocatorString(`New${capitalize(listingType)}Page`, routes, {}, {}));
+    history.push(createResourceLocatorString(`New${listingType === 'listing' ? "Advert" : "Listing"}Page`, routes, {}, {}));
   };
   const handleBack = () => {
-    const routes = routeConfiguration();
     history.goBack();
   };
 

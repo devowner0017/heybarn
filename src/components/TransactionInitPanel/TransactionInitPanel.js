@@ -318,11 +318,6 @@ export class TransactionInitPanelComponent extends Component {
           isOpen={showCreateListingPopup}
           onCloseModal={() => setShowCreateListingPopup(false)}
           onManageDisableScrolling={onManageDisableScrolling}
-          onSubmitReview={this.onSubmitReview}
-          revieweeName={otherUserDisplayName}
-          reviewSent={this.state.reviewSubmitted}
-          sendReviewInProgress={sendReviewInProgress}
-          sendReviewError={sendReviewError}
           listingType={listingType}
           authorName={authorDisplayName}
         />
