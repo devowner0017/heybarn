@@ -170,7 +170,7 @@ export const ManageListingCardComponent = props => {
   const transactionUrl = createTransactionURL(routeConfiguration(), currentListing);
   console.log('🚀 | file: ManageListingCard.js | line 165 | transactionUrl', transactionUrl);
   const { formattedPrice, priceTitle } = priceData(price, intl);
-  const hasError = hasOpeningError || hasClosingError || hasDiscardingError || hasDeletingError
+  const hasError = hasOpeningError || hasClosingError || hasDiscardingError || hasDeletingError;
   const thisListingInProgress =
     actionsInProgressListingId && actionsInProgressListingId.uuid === id;
 
@@ -297,7 +297,7 @@ export const ManageListingCardComponent = props => {
           <Overlay
             message={intl.formatMessage(
               { id: 'ManageListingCard.draftOverlayText' },
-              { listingTitle: title }
+              { listingType }
             )}
           >
             <NamedLink

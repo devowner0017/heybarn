@@ -5,8 +5,7 @@ import { propTypes } from '../../util/types';
 import css from './SubscriptionBreakdown.module.css';
 
 const LineItemWeeksRemaining = props => {
-  const { weeksRemaining } = props;
-  const { ongoingContract } = props.transaction?.attributes?.protectedData || {};
+  const { weeksRemaining,ongoingContract } = props;
 
   return !ongoingContract && (
     <>

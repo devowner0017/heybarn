@@ -12,6 +12,8 @@ import {
   txIsDeclined,
   txIsEnquired,
   txIsPaid,
+  wasCancelled,
+  wasExtended,
   txIsRenterEnquired,
   txIsHostEnquired,
   txIsPaymentExpired,
@@ -75,6 +77,8 @@ import PanelHeading, {
   HEADING_CANCELLED_DURING_RAD,
   HEADING_RENTAL_AGREEMENT_SENT,
   HEADING_CANCELLED_AFTER_AGREEENT_SENT,
+  HEADING_RENT_CANCELLED,
+  HEADING_RENT_EXTENDED,
   HEADING_RENTAL_AGREEMENT_FINALIZED,
 } from './PanelHeading';
 
@@ -259,8 +263,10 @@ export class TransactionPanelComponent extends Component {
       extendSubscriptionError,
       subscription,
     } = this.props;
+    console.log("🚀 | file: TransactionPanel.js | line 261 | TransactionPanelComponent | render | subscription", subscription);
 
     const currentTransaction = ensureTransaction(transaction);
+
     const currentListing = ensureListing(currentTransaction.listing);
     const relatedTitle = ensuredRelated.attributes.title;
     const relatedFirstImage =
@@ -572,7 +578,42 @@ export class TransactionPanelComponent extends Component {
           showPaymentFormButtons: isCustomer && !isProviderBanned,
           allowMessages: true,
         };
-      } else if (txIsPaid(tx)) {
+      }else if (txIsPaid(tx) && wasCancelled(tx)) {
+        return {
+          headingState: HEADING_RENT_CANCELLED,
+          showDetailCardHeadings: isCustomer,
+          showAddress: isCustomer,
+          allowMessages: true,
+          showCompleteButtons: true,
+          showSubscriptionDetails: true,
+          showSubscriptionStats: true,
+          showSubscriptionActions: false,
+        };
+      }
+      else if (txIsPaid(tx) && wasExtended(tx)) {
+        return {
+          headingState: HEADING_RENT_EXTENDED,
+          showDetailCardHeadings: isCustomer,
+          showAddress: isCustomer,
+          allowMessages: true,
+          showCompleteButtons: !isCustomer,
+          stripeActionProps: {
+            cancelAgreement: _ =>
+              onCancelStripeAgreement({
+                txId: tx.id,
+                actor: isCustomer ? 'customer' : 'provider',
+                subscription,
+              }),
+            cancelSubscriptionInProgress,
+            cancelSubscriptionError,
+            extendSubscriptionInProgress,
+            extendSubscriptionError,
+          },
+          showSubscriptionDetails: true,
+          showSubscriptionStats: true,
+          showSubscriptionActions: !isCustomer,
+        };
+      }else if (txIsPaid(tx)) {
         return {
           headingState: HEADING_RENT_PAID,
           showDetailCardHeadings: isCustomer,
@@ -586,12 +627,13 @@ export class TransactionPanelComponent extends Component {
                 actor: isCustomer ? 'customer' : 'provider',
                 subscription,
               }),
-            extendAgreement: _ =>
-              onExtendStripeAgreement({
+            extendAgreement: _ => {
+              return onExtendStripeAgreement({
                 txId: tx.id,
                 actor: isCustomer ? 'customer' : 'provider',
                 subscription,
-              }),
+              });
+            },
             cancelSubscriptionInProgress,
             cancelSubscriptionError,
             extendSubscriptionInProgress,
@@ -610,27 +652,6 @@ export class TransactionPanelComponent extends Component {
           showAddress: isCustomer,
           showBreakdowns: true,
           allowMessages: true,
-
-          // DELETE THIS
-          showSubscriptionActions: !isCustomer,
-          stripeActionProps: {
-            cancelAgreement: _ =>
-              onCancelStripeAgreement({
-                txId: tx.id,
-                actor: isCustomer ? 'customer' : 'provider',
-                subscription,
-              }),
-            extendAgreement: _ =>
-              onExtendStripeAgreement({
-                txId: tx.id,
-                actor: isCustomer ? 'customer' : 'provider',
-                subscription,
-              }),
-              cancelSubscriptionInProgress,
-              cancelSubscriptionError,
-              extendSubscriptionInProgress,
-              extendSubscriptionError,
-          },
         };
       } else if (txIsPaymentPending(tx)) {
         return {
@@ -833,22 +854,6 @@ export class TransactionPanelComponent extends Component {
     );
     const completeButtons = (
       <>
-        <ActionButtonsMaybe
-          showButtons={stateData.showCompleteButtons}
-          title={'Actions'}
-          affirmativeInProgress={signRentalAgreementInProgress}
-          negativeInProgress={null}
-          affirmativeError={signRentalAgreementError}
-          negativeError={null}
-          affirmativeAction={() =>
-            onCompleteSale({
-              txId: currentTransaction.id,
-            })
-          }
-          negativeAction={() => null}
-          affirmativeText={'Complete Sale'}
-          hideNegative={true}
-        />
         <ActionButtonsMaybe
           showButtons={stateData.showCompleteButtons}
           title={'DEV PURPOSES ONLY'}

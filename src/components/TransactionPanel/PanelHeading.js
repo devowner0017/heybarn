@@ -31,6 +31,8 @@ export const HEADING_DECLINED = 'declined';
 export const HEADING_CANCELED = 'canceled';
 export const HEADING_DELIVERED = 'delivered';
 export const HEADING_RENT_PAID = 'rentPaid';
+export const HEADING_RENT_CANCELLED = 'rentCancelled';
+export const HEADING_RENT_EXTENDED = 'rentExtended';
 
 const createListingLink = (listingId, label, listingDeleted, searchParams = {}, className = '') => {
   if (!listingDeleted) {
@@ -364,6 +366,38 @@ const PanelHeading = props => {
             <p className={css.transactionInfoMessage}>
               <FormattedMessage
                 id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalPaidSubTitle`}
+              />
+            </p>
+          ) : null}
+        </HeadingWithSubtitle>
+      );
+    case HEADING_RENT_CANCELLED:
+      return (
+        <HeadingWithSubtitle
+          className={titleClasses}
+          id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalCancelledTitle`}
+          values={{ providerName, listingLink, customerName, listingLink }}
+        >
+          {!listingDeleted ? (
+            <p className={css.transactionInfoMessage}>
+              <FormattedMessage
+                id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalCancelledSubTitle`}
+              />
+            </p>
+          ) : null}
+        </HeadingWithSubtitle>
+      );
+    case HEADING_RENT_EXTENDED:
+      return (
+        <HeadingWithSubtitle
+          className={titleClasses}
+          id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalExtendedTitle`}
+          values={{ providerName, listingLink, customerName, listingLink }}
+        >
+          {!listingDeleted ? (
+            <p className={css.transactionInfoMessage}>
+              <FormattedMessage
+                id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalExtendedSubTitle`}
               />
             </p>
           ) : null}

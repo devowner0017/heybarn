@@ -15,8 +15,8 @@ const StripeActionsMaybe = props => {
     rootClassName,
     showButtons,
     title,
-cancelAgreement,
-extendAgreement,
+    cancelAgreement,
+    extendAgreement,
     extendSubscriptionInProgress,
     cancelSubscriptionInProgress,
     cancelSubscriptionError,
@@ -48,20 +48,24 @@ extendAgreement,
         {declineErrorMessage}
       </div>
       <div className={css.actionButtonWrapper}>
-        <SecondaryButton
-          inProgress={cancelSubscriptionInProgress}
-          disabled={buttonsDisabled}
-          onClick={_ => setShowCancelModal(true)}
-        >
-          {<FormattedMessage id="TransactionPanel.stripeCancelButton" />}
-        </SecondaryButton>
-        <PrimaryButton
-          inProgress={extendSubscriptionInProgress}
-          disabled={buttonsDisabled}
-          onClick={_ => setShowExtendModal(true)}
-        >
-          {<FormattedMessage id="TransactionPanel.stripeExtendButton" />}
-        </PrimaryButton>
+        {!!cancelAgreement && (
+          <SecondaryButton
+            inProgress={cancelSubscriptionInProgress}
+            disabled={buttonsDisabled}
+            onClick={_ => setShowCancelModal(true)}
+          >
+            {<FormattedMessage id="TransactionPanel.stripeCancelButton" />}
+          </SecondaryButton>
+        )}
+        {!!extendAgreement && (
+          <PrimaryButton
+            inProgress={extendSubscriptionInProgress}
+            disabled={buttonsDisabled}
+            onClick={_ => setShowExtendModal(true)}
+          >
+            {<FormattedMessage id="TransactionPanel.stripeExtendButton" />}
+          </PrimaryButton>
+        )}
       </div>
       <ConfirmationModal
         id="StripeCancelModal"
@@ -83,7 +87,7 @@ extendAgreement,
         isOpen={showExtendModal}
         onCloseModal={() => setShowExtendModal(false)}
         onManageDisableScrolling={onManageDisableScrolling}
-        AffirmativeAction={extendAgreement}
+        affirmativeAction={extendAgreement}
         affirmativeButtonText={'Confirm'}
         negativeButtonText={'Nevermind'}
         affirmativeInProgress={extendSubscriptionInProgress}

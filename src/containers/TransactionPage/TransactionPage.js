@@ -14,7 +14,11 @@ import { createSlug } from '../../util/urlHelpers';
 import { txIsPaymentPending } from '../../util/transaction';
 import { getMarketplaceEntities } from '../../ducks/marketplaceData.duck';
 import { isScrollingDisabled, manageDisableScrolling } from '../../ducks/UI.duck';
-import { initializeCardPaymentData } from '../../ducks/stripe.duck.js';
+import {
+  initializeCardPaymentData,
+  extendSubscription,
+  cancelSubscription,
+} from '../../ducks/stripe.duck.js';
 import {
   NamedRedirect,
   TransactionPanel,
@@ -41,6 +45,7 @@ import {
   signRentalAgreement,
   reverseTransactionFlowAndAcceptCommunication,
   cancelAfterAgreementSent,
+  fetchTransaction,
 } from './TransactionPage.duck';
 import css from './TransactionPage.module.css';
 
@@ -111,6 +116,7 @@ export const TransactionPageComponent = props => {
     extendSubscriptionError,
 
     subscription,
+    onFetchTransaction,
   } = props;
 
   const currentTransaction = ensureTransaction(transaction);
@@ -183,6 +189,16 @@ export const TransactionPageComponent = props => {
     redirectToCheckoutPageWithInitialValues(initialValues, currentListing);
   };
 
+  const handleCancelStripeAgreement = data => {
+    onCancelStripeAgreement(data).then(r => {
+      onFetchTransaction(currentTransaction.id, transactionRole);
+    });
+  };
+  const handleExtendStripeAgreement = data => {
+    onExtendStripeAgreement(data).then(_ => {
+      onFetchTransaction(currentTransaction.id, transactionRole);
+    });
+  };
   const deletedListingTitle = intl.formatMessage({
     id: 'TransactionPage.deletedListing',
   });
@@ -295,8 +311,8 @@ export const TransactionPageComponent = props => {
       cancelAfterAgreementSentInProgress={cancelAfterAgreementSentInProgress}
       cancelAfterAgreementSentError={cancelAfterAgreementSentError}
       onCancelAfterAgreementSent={onCancelAfterAgreementSent}
-      onCancelStripeAgreement={onCancelStripeAgreement}
-      onExtendStripeAgreement={onExtendStripeAgreement}
+      onCancelStripeAgreement={handleCancelStripeAgreement}
+      onExtendStripeAgreement={handleExtendStripeAgreement}
       cancelSubscriptionInProgress={cancelSubscriptionInProgress}
       cancelSubscriptionError={cancelSubscriptionError}
       extendSubscriptionInProgress={extendSubscriptionInProgress}
@@ -506,8 +522,8 @@ const mapDispatchToProps = dispatch => {
     onCancelAfterAgreementSent: transactionId => dispatch(cancelAfterAgreementSent(transactionId)),
     onSignRentalAgreement: transactionId => dispatch(signRentalAgreement(transactionId)),
 
-    onCancelStripeAgreement: data => dispatch(cancelStripeAgreement(data)),
-    onExtendStripeAgreement: data => dispatch(extendStripeAgreement(data)),
+    onCancelStripeAgreement: data => dispatch(cancelSubscription(data)),
+    onExtendStripeAgreement: data => dispatch(extendSubscription(data)),
 
     onCompleteSale: transactionId => dispatch(completeSale(transactionId)),
     onAcceptSale: transactionId => dispatch(acceptSale(transactionId)),
@@ -520,6 +536,8 @@ const mapDispatchToProps = dispatch => {
       dispatch(sendReview(role, tx, reviewRating, reviewContent)),
     callSetInitialValues: (setInitialValues, values) => dispatch(setInitialValues(values)),
     onInitializeCardPaymentData: () => dispatch(initializeCardPaymentData()),
+
+    onFetchTransaction: (id, role) => dispatch(fetchTransaction(id, role)),
     onFetchTransactionLineItems: (bookingData, listingId, isOwnListing) =>
       dispatch(fetchTransactionLineItems(bookingData, listingId, isOwnListing)),
   };

@@ -530,6 +530,8 @@ const listingRelationship = txResponse => {
 };
 
 export const fetchTransaction = (id, txRole) => (dispatch, getState, sdk) => {
+console.log("🚀 | file: TransactionPage.duck.js | line 533 | fetchTransaction | txRole", txRole);
+console.log("🚀 | file: TransactionPage.duck.js | line 533 | fetchTransaction | id", id);
   dispatch(fetchTransactionRequest());
   let txResponse = null;
 
@@ -554,6 +556,7 @@ export const fetchTransaction = (id, txRole) => (dispatch, getState, sdk) => {
     )
     .then(response => {
       txResponse = response;
+      console.log("🚀 | file: TransactionPage.duck.js | line 559 | fetchTransaction | response", response);
       const listingId = listingRelationship(response).id;
       const entities = updatedEntities({}, response.data);
       const listingRef = { id: listingId, type: 'listing' };
@@ -1333,6 +1336,7 @@ export const fetchTransactionLineItems = ({ bookingData, listingId, isOwnListing
 // loadData is a collection of async calls that need to be made
 // before page has all the info it needs to render itself
 export const loadData = params => (dispatch, getState) => {
+console.log("🚀 | file: TransactionPage.duck.js | line 1336 | params", params);
   const txId = new UUID(params.id);
   const state = getState().TransactionPage;
   const txRef = state.transactionRef;

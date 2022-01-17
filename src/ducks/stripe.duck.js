@@ -1,4 +1,4 @@
-import { fetchRentalPayments } from '../util/api';
+import { fetchRentalPayments, cancelRentalPayments, extendRentalPayments } from '../util/api';
 import { storableError } from '../util/errors';
 import * as log from '../util/log';
 
@@ -41,9 +41,6 @@ export const CANCEL_SUBSCRIPTION_ERROR = 'app/stripe/CANCEL_SUBSCRIPTION_ERROR';
 export const EXTEND_SUBSCRIPTION_REQUEST = 'app/stripe/EXTEND_SUBSCRIPTION_REQUEST';
 export const EXTEND_SUBSCRIPTION_SUCCESS = 'app/stripe/EXTEND_SUBSCRIPTION_SUCCESS';
 export const EXTEND_SUBSCRIPTION_ERROR = 'app/stripe/EXTEND_SUBSCRIPTION_ERROR';
-
-
-
 
 // ================ Reducer ================ //
 
@@ -183,37 +180,37 @@ export default function reducer(state = initialState, action = {}) {
         fetchSubscriptionInProgress: false,
       };
 
-      case CANCEL_SUBSCRIPTION_REQUEST:
-        return {
-          ...state,
-          cancelSubscriptionError: null,
-          cancelSubscriptionInProgress: true,
-        };
-      case CANCEL_SUBSCRIPTION_SUCCESS:
-        return { ...state, subscription: payload, cancelSubscriptionInProgress: false };
-      case CANCEL_SUBSCRIPTION_ERROR:
-        console.error(payload);
-        return {
-          ...state,
-          cancelSubscriptionError: payload,
-          cancelSubscriptionInProgress: false,
-        };
+    case CANCEL_SUBSCRIPTION_REQUEST:
+      return {
+        ...state,
+        cancelSubscriptionError: null,
+        cancelSubscriptionInProgress: true,
+      };
+    case CANCEL_SUBSCRIPTION_SUCCESS:
+      return { ...state, subscription: payload, cancelSubscriptionInProgress: false };
+    case CANCEL_SUBSCRIPTION_ERROR:
+      console.error(payload);
+      return {
+        ...state,
+        cancelSubscriptionError: payload,
+        cancelSubscriptionInProgress: false,
+      };
 
-        case EXTEND_SUBSCRIPTION_REQUEST:
-          return {
-            ...state,
-            extendSubscriptionError: null,
-            extendSubscriptionInProgress: true,
-          };
-        case EXTEND_SUBSCRIPTION_SUCCESS:
-          return { ...state, subscription: payload, extendSubscriptionInProgress: false };
-        case EXTEND_SUBSCRIPTION_ERROR:
-          console.error(payload);
-          return {
-            ...state,
-            extendSubscriptionError: payload,
-            extendSubscriptionInProgress: false,
-          };
+    case EXTEND_SUBSCRIPTION_REQUEST:
+      return {
+        ...state,
+        extendSubscriptionError: null,
+        extendSubscriptionInProgress: true,
+      };
+    case EXTEND_SUBSCRIPTION_SUCCESS:
+      return { ...state, subscription: payload, extendSubscriptionInProgress: false };
+    case EXTEND_SUBSCRIPTION_ERROR:
+      console.error(payload);
+      return {
+        ...state,
+        extendSubscriptionError: payload,
+        extendSubscriptionInProgress: false,
+      };
 
     default:
       return state;
@@ -361,6 +358,7 @@ export const retrievePaymentIntent = params => dispatch => {
 };
 
 export const fetchSubscription = params => dispatch => {
+console.log("🚀 | file: stripe.duck.js | line 361 | params", params);
   dispatch(fetchSubscriptionRequest());
 
   return fetchRentalPayments(params)
@@ -370,6 +368,7 @@ export const fetchSubscription = params => dispatch => {
         return Promise.reject(response);
       } else {
         dispatch(fetchSubscriptionSuccess(response));
+        fetchSubscription({ subId: response.id })
         return response;
       }
     })
@@ -406,7 +405,7 @@ export const cancelSubscription = params => dispatch => {
 
 export const extendSubscription = params => dispatch => {
   dispatch(extendSubscriptionRequest());
-
+  console.log('🚀 | file: stripe.duck.js | line 411 | params', params);
   return extendRentalPayments(params)
     .then(response => {
       console.log('🚀 | file: stripe.duck.js | line 287 | response', response);
@@ -414,6 +413,7 @@ export const extendSubscription = params => dispatch => {
         return Promise.reject(response);
       } else {
         dispatch(extendSubscriptionSuccess(response));
+        fetchSubscription({ subId: response.id })
         return response;
       }
     })
@@ -425,7 +425,6 @@ export const extendSubscription = params => dispatch => {
       log.error(e, 'stripe-extend-subscription-failed');
     });
 };
-
 
 export const confirmCardPayment = params => dispatch => {
   console.log('🚀 | file: stripe.duck.js | line 244 | params', params);

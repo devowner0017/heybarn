@@ -93,6 +93,7 @@ const RentalAgreementModal = props => {
           onSubmit={handleSubmit}
           onCloseModal={onCloseModal}
           initialValues={{
+            ongoingContract: [],
             lengthOfContract: null,
             groundRules: getPropByName(listing, 'groundRules'),
             intendedUse: _.startCase(

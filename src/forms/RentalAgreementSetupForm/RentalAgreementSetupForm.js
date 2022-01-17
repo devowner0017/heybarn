@@ -93,12 +93,25 @@ const RentalAgreementSetupFormComponent = props => (
       // In case you add more fields to the form, make sure you add
       // the values here to the bookingData object.
       const handleOnChange = formValues => {
-        const { lengthOfContract, startDate, endDate } = formValues.values;
+        const {
+          ongoingContract: [ongoingContract] = [],
+          lengthOfContract,
+          startDate,
+          endDate,
+        } = formValues.values;
+        console.log(
+          '🚀 | file: RentalAgreementSetupForm.js | line 97 | ongoingContract',
+          ongoingContract
+        );
         console.log(
           '🚀 | file: RentalAgreementSetupForm.js | line 83 | ongoingContract',
           ongoingContract
         );
-        if (!startDate) return null;
+        console.log('🚀 | file: RentalAgreementSetupForm.js | line 111 | startDate', startDate);
+
+        if (!startDate) {
+          return null;
+        }
 
         const endDateMaybe = moment(startDate?.date).add(lengthOfContract, 'weeks');
         if (startDate && lengthOfContract && !moment(endDateMaybe).isSame(moment(endDate))) {
@@ -113,6 +126,7 @@ const RentalAgreementSetupFormComponent = props => (
       }, [values.ongoingContract]);
 
       const groundRulesOptions = findOptionsForSelectFilter(`groundRules`, filterConfig);
+      console.log("🚀 | file: RentalAgreementSetupForm.js | line 151 | ongoingContract", ongoingContract);
 
       return (
         <Form className={classes} onSubmit={handleSubmit}>
@@ -168,7 +182,8 @@ const RentalAgreementSetupFormComponent = props => (
             customIsDayOutsideRange={date => {
               return false;
             }}
-          />
+            validate={required('Required') }
+            />
           <FieldTextInput
             className={css.field}
             id="intendedUse"

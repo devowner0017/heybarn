@@ -1,4 +1,5 @@
 import { ensureTransaction } from './data';
+import { getPropByName } from './userHelpers'
 // RENTER RED DOTS
 const ORDER_NOTIFICATION_TRANSITIONS = [
   'transition/host-fee-paid',
@@ -364,7 +365,14 @@ export const txIsRequested = tx =>
 // However, word "requested" is used in many places so that we decided to keep it.
 export const txIsPaid = tx =>
   getTransitionsToState(STATE_PREAUTHORIZED).includes(txLastTransition(tx));
-
+  export const wasCancelled = tx =>{
+  const cancelledAgreement = getPropByName(tx, 'agreementCancelled')
+  return !!cancelledAgreement
+}
+export const wasExtended = tx =>{
+  const extendedAgreement = getPropByName(tx, 'agreementExtended')
+  return !!extendedAgreement
+}
 export const txIsDelivered = tx =>
   getTransitionsToState(STATE_DELIVERED).includes(txLastTransition(tx));
 

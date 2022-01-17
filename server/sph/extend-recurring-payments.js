@@ -1,4 +1,6 @@
 const { serialize } = require('../api-util/sdk');
+const flexIntegrationSdk = require('sharetribe-flex-integration-sdk');
+const UUID = flexIntegrationSdk.types.UUID;
 
 module.exports = async (req, res) => {
   // Set your secret key. Remember to switch to your live secret key in production!
@@ -9,64 +11,47 @@ module.exports = async (req, res) => {
     clientId: process.env.SHARETRIBE_INTEGRATION_CLIENT_ID,
     clientSecret: process.env.SHARETRIBE_INTEGRATION_CLIENT_SECRET,
   });
-  const REACT_APP_LISTING_FEE_CENTS = process.env.REACT_APP_LISTING_FEE_CENTS || 2000;
-  const {
-    weeklyAmount,
-    listingId,
-    paymentMethod,
-    stripeCustomerId,
-    transactionId,
-    hostStripeId,
-    providerUserId,
-    startTimestamp,
-    endTimestamp,
-    ongoingContract,
-  } = req.body;
-  const { author, hostStripeAccount } = await integrationSdk.users
-    .show({ id: providerUserId.uuid, include: ['stripeAccount'] }, { expand: true })
-    .then(res => {
-      const author = res.data.data;
-      const [hostStripeAccount] = res.data.included;
-      return { author, hostStripeAccount };
-    })
-    .catch(e => {
-      return e;
-    });
-  const params = {
-    customer: stripeCustomerId,
-    items: [
-      {
-        price_data: {
-          currency: 'nzd',
-          product: 'prod_Kd6XBmS49INwna',
-          recurring: { interval: 'day' },
-          unit_amount: weeklyAmount,
-        },
-      },
-    ],
-    application_fee_percent: 10,
-    default_payment_method: paymentMethod,
-    expand: ['latest_invoice.payment_intent'],
-    transfer_data: {
-      destination: hostStripeAccount.attributes?.stripeAccountId,
-    },
-    payment_behavior: 'allow_incomplete',
-    proration_behavior: 'none',
-    trial_end: startTimestamp,
-    // cancel_at: ongoingContract ? null : endTimestamp,
-    metadata: { listingId, transactionId },
-  };
+  const { actor, subscription } = req.body;
 
   // TODO: UPDATE ERROR HANDLING
   return stripe.subscriptions
-    .create(ongoingContract ? params : { ...params, cancel_at: endTimestamp })
+    .update(subscription.id, { cancel_at: '' })
     .then(apiResponse => {
+      console.log(
+        '🚀 | file: extend-recurring-payments.js | line 20 | module.exports= | apiResponse',
+        apiResponse
+      );
       const serialRes = serialize(apiResponse);
-      return res
-        .status(200)
-        .set('Content-Type', 'application/transit+json')
-        .send(serialRes)
-        .end();
+
+      const metaParams = {
+        id: new UUID(subscription.metadata.transactionId),
+        metadata: {
+          agreementExtended: {
+            ongoingContract: true,
+            endDate: false,
+            lengthOfContract: false,
+            occurredOn: new Date().toISOString(),
+            extendedBy: actor,
+            extendedSubscription: apiResponse,
+          },
+        },
+      };
+
+      return integrationSdk.transactions
+        .updateMetadata(metaParams, {
+          expand: true,
+        })
+        .then(metaResponse => {
+          console.log(
+            '🚀 | file: extend-recurring-payments.js | line 42 | module.exports= | metaResponse',
+            metaResponse
+          );
+          return res
+            .status(200)
+            .set('Content-Type', 'application/transit+json')
+            .send(serialRes)
+            .end();
+        });
     })
     .catch(e => {
       const serialErr = serialize(e);

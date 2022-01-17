@@ -1260,6 +1260,24 @@
   "TransactionPanel.declineConfirmationTitle": "Are you sure you want to stop the conversation?",
   "TransactionPanel.declineConfirmationSubTitle": "This action is permanent, and you won't have a chance to communicate with the other user anymore.",
 
+  "TransactionPanel.c_rentalExtendedTitle": "This agreement has been extended!",
+  "TransactionPanel.c_rentalExtendedSubTitle": "This agreement is now ongoing. The host requires 2 weeks notice to end the agreement, but it can be ended at any time after the original terms of the contract.",
+  "TransactionPanel.p_rentalExtendedTitle": "You have extended this agreement",
+  "TransactionPanel.p_rentalExtendedSubTitle": "This agreement is now on a week to week basis. The renter must provide you with two weeks notice in order to end the agreement.",
+
+  "TransactionPanel.c_rentalCancelledTitle": "This agreement has been cancelled",
+  "TransactionPanel.c_rentalCancelledSubTitle": "Please organize the removal of your belongings with the property owner.",
+  "TransactionPanel.p_rentalCancelledTitle": "You have cancelled this agreement",
+  "TransactionPanel.p_rentalCancelledSubTitle": "Please organize the next steps with the renter.",
+
+  "TransactionPanel.stripeExtendButton": "Extend this agreement!",
+  "TransactionPanel.stripeExtendConfirmationTitle": "Confirm you wish to extend this agreement",
+  "TransactionPanel.stripeExtendConfirmationSubTitle": "This will extend the agreement indefinitely, but transfer the agreement to a weekly basis. The original terms of the signed agreement are still binding, until the end of the final week of the agreement. ",
+  "TransactionPanel.stripeCancelButton": "Cancel this agreement",
+  "TransactionPanel.stripeCancelConfirmationTitle": "Confirm you wish to cancel this agreement",
+  "TransactionPanel.stripeCancelConfirmationSubTitle": "This will cancel the agreement, effective 2 weeks from the next payment period. This cannot be undone, are you sure?",
+
+
   "RentalAgreementModal.later": "Later",
   "RentalAgreementModal.rentalAgreementModalTitle": "Prepare Your Rental Agreement",
   "RentalAgreementModal.rentalAgreementModalSubTitle": "Let us know the details of your rental agreement, and we'll create a professional contract just for you.",

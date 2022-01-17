@@ -1,5 +1,5 @@
 const { serialize } = require('../api-util/sdk');
-
+const moment = require('moment')
 module.exports = async (req, res) => {
   // Set your secret key. Remember to switch to your live secret key in production!
   // See your keys here: https://dashboard.stripe.com/account/apikeys
@@ -9,66 +9,61 @@ module.exports = async (req, res) => {
     clientId: process.env.SHARETRIBE_INTEGRATION_CLIENT_ID,
     clientSecret: process.env.SHARETRIBE_INTEGRATION_CLIENT_SECRET,
   });
-  const REACT_APP_LISTING_FEE_CENTS = process.env.REACT_APP_LISTING_FEE_CENTS || 2000;
-  const {
-    weeklyAmount,
-    listingId,
-    paymentMethod,
-    stripeCustomerId,
-    transactionId,
-    hostStripeId,
-    providerUserId,
-    startTimestamp,
-    endTimestamp,
-    ongoingContract,
-  } = req.body;
-  const { author, hostStripeAccount } = await integrationSdk.users
-    .show({ id: providerUserId.uuid, include: ['stripeAccount'] }, { expand: true })
-    .then(res => {
-      const author = res.data.data;
-      const [hostStripeAccount] = res.data.included;
-      return { author, hostStripeAccount };
-    })
-    .catch(e => {
-      return e;
-    });
-  const params = {
-    customer: stripeCustomerId,
-    items: [
-      {
-        price_data: {
-          currency: 'nzd',
-          product: 'prod_Kd6XBmS49INwna',
-          recurring: { interval: 'day' },
-          unit_amount: weeklyAmount,
-        },
-      },
-    ],
-    application_fee_percent: 10,
-    default_payment_method: paymentMethod,
-    expand: ['latest_invoice.payment_intent'],
-    transfer_data: {
-      destination: hostStripeAccount.attributes?.stripeAccountId,
-    },
-    payment_behavior: 'allow_incomplete',
-    proration_behavior: 'none',
-    trial_end: startTimestamp,
-    // cancel_at: ongoingContract ? null : endTimestamp,
-    metadata: { listingId, transactionId },
-  };
+const UUID = flexIntegrationSdk.types.UUID;
 
-  // TODO: UPDATE ERROR HANDLING
+  const { actor, subscription, txId } = req.body;
+
+  const oldCancelDate = subscription?.current_period_end;
+  console.log(
+    '🚀 | file: cancel-recurring-payments.js | line 19 | module.exports= | oldCancelDate',
+    oldCancelDate
+  );
+
+  // ADD TWO WEEKS
+  const newCancelDate = oldCancelDate + 1209600;
+  console.log(
+    '🚀 | file: cancel-recurring-payments.js | line 22 | module.exports= | newCancelDate',
+    newCancelDate
+  );
+  // return null;
   return stripe.subscriptions
-    .create(ongoingContract ? params : { ...params, cancel_at: endTimestamp })
+    .update(subscription.id, { cancel_at: newCancelDate })
     .then(apiResponse => {
       const serialRes = serialize(apiResponse);
-      return res
-        .status(200)
-        .set('Content-Type', 'application/transit+json')
-        .send(serialRes)
-        .end();
+      console.log("🚀 | file: cancel-recurring-payments.js | line 30 | module.exports= | apiResponse",  new Date(newCancelDate * 1000));
+
+      const metaParams = {
+        id: new UUID(subscription.metadata.transactionId),
+        metadata: {
+          agreementCancelled: {
+            ongoingContract: false,
+            endDate:   new Date(newCancelDate * 1000).toISOString(),
+            lengthOfContract: false,
+            occurredOn: new Date().toISOString(),
+            cancelledBy: actor,
+            cancelledSubscription: apiResponse,
+          },
+        },
+      };
+
+      return integrationSdk.transactions
+        .updateMetadata(metaParams, {
+          expand: true,
+        })
+        .then(metaResponse => {
+          console.log(
+            '🚀 | file: extend-recurring-payments.js | line 42 | module.exports= | metaResponse',
+            metaResponse
+          );
+          return res
+            .status(200)
+            .set('Content-Type', 'application/transit+json')
+            .send(serialRes)
+            .end();
+        });
     })
     .catch(e => {
+    console.log("🚀 | file: cancel-recurring-payments.js | line 64 | module.exports= | e", e);
       const serialErr = serialize(e);
       return res
         .status(500)

@@ -8,7 +8,6 @@ import css from './SubscriptionBreakdown.module.css';
 
 const BookingPeriod = props => {
   const { startDate, endDate,  ongoingContract } = props;
-
   const dateFormatOptions = {
     month: 'short',
     day: 'numeric',
@@ -39,7 +38,7 @@ const BookingPeriod = props => {
 };
 
 const LineItemBookingPeriod = props => {
-  const { booking, unitType,  ongoingContract } = props;
+  const { booking, unitType,  ongoingContract ,cancelledEndDate} = props;
 
   // Attributes: displayStart and displayEnd can be used to differentiate shown time range
   // from actual start and end times used for availability reservation. It can help in situations
@@ -47,7 +46,7 @@ const LineItemBookingPeriod = props => {
   // Read more: https://www.sharetribe.com/api-reference/marketplace.html#bookings
   const { start, end, displayStart, displayEnd } = booking.attributes;
   const localStartDate = dateFromAPIToLocalNoon(displayStart || start);
-  const localEndDateRaw = dateFromAPIToLocalNoon(displayEnd || end);
+  const localEndDateRaw = dateFromAPIToLocalNoon(cancelledEndDate || displayEnd || end);
 
   const isNightly = unitType === LINE_ITEM_NIGHT;
   const endDay = isNightly ? localEndDateRaw : moment(localEndDateRaw).subtract(1, 'days');
