@@ -73,7 +73,6 @@ export const createStripeSetupIntent = () => (dispatch, getState, sdk) => {
   return sdk.stripeSetupIntents
     .create()
     .then(response => {
-    console.log("🚀 | file: PaymentMethodsPage.duck.js | line 76 | createStripeSetupIntent | response", response);
       const setupIntent = response.data.data;
       dispatch(setupIntentSuccess(setupIntent));
       return setupIntent;
@@ -88,7 +87,6 @@ export const createStripeSetupIntent = () => (dispatch, getState, sdk) => {
 
 export const stripeCustomer = () => (dispatch, getState, sdk) => {
   dispatch(stripeCustomerRequest());
-  console.log(111111)
 
   return dispatch(fetchCurrentUser({ include: ['stripeCustomer.defaultPaymentMethod'] }))
     .then(response => {

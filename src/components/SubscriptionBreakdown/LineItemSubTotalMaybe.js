@@ -96,7 +96,7 @@ const LineItemSubTotalMaybe = props => {
 
 LineItemSubTotalMaybe.propTypes = {
   transaction: propTypes.transaction.isRequired,
-  userRole: string.isRequired,
+  userRole: string,
   intl: intlShape.isRequired,
 };
 

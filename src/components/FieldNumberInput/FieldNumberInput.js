@@ -24,7 +24,6 @@ const FieldNumberInputComponent = props => {
     tooltip,
     ...rest
   } = props;
-    console.log("🚀 | file: FieldNumberInput.js | line 27 | placeholder", placeholder);
   const { min = 1, max = 1000, step = 1, customFormat } = config || {};
   if (label && !id) {
     throw new Error('id required when a label is given');

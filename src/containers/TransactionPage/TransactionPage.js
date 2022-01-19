@@ -18,6 +18,7 @@ import {
   initializeCardPaymentData,
   extendSubscription,
   cancelSubscription,
+  updateSubscriptionPaymentMethod,
 } from '../../ducks/stripe.duck.js';
 import {
   NamedRedirect,
@@ -109,6 +110,7 @@ export const TransactionPageComponent = props => {
 
     onCancelStripeAgreement,
     onExtendStripeAgreement,
+    onUpdateSubscriptionPaymentMethod,
 
     cancelSubscriptionInProgress,
     cancelSubscriptionError,
@@ -196,6 +198,11 @@ export const TransactionPageComponent = props => {
   };
   const handleExtendStripeAgreement = data => {
     onExtendStripeAgreement(data).then(_ => {
+      onFetchTransaction(currentTransaction.id, transactionRole);
+    });
+  };
+  const handleUpdateSubscriptionPaymentMethod = pm => {
+    onUpdateSubscriptionPaymentMethod({subscription, pm, actor: 'customer'}).then(_ => {
       onFetchTransaction(currentTransaction.id, transactionRole);
     });
   };
@@ -313,6 +320,7 @@ export const TransactionPageComponent = props => {
       onCancelAfterAgreementSent={onCancelAfterAgreementSent}
       onCancelStripeAgreement={handleCancelStripeAgreement}
       onExtendStripeAgreement={handleExtendStripeAgreement}
+      onUpdateSubscriptionPaymentMethod={handleUpdateSubscriptionPaymentMethod}
       cancelSubscriptionInProgress={cancelSubscriptionInProgress}
       cancelSubscriptionError={cancelSubscriptionError}
       extendSubscriptionInProgress={extendSubscriptionInProgress}
@@ -524,6 +532,7 @@ const mapDispatchToProps = dispatch => {
 
     onCancelStripeAgreement: data => dispatch(cancelSubscription(data)),
     onExtendStripeAgreement: data => dispatch(extendSubscription(data)),
+    onUpdateSubscriptionPaymentMethod: data => dispatch(updateSubscriptionPaymentMethod(data)),
 
     onCompleteSale: transactionId => dispatch(completeSale(transactionId)),
     onAcceptSale: transactionId => dispatch(acceptSale(transactionId)),

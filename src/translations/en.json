@@ -1270,6 +1270,11 @@
   "TransactionPanel.p_rentalCancelledTitle": "You have cancelled this agreement",
   "TransactionPanel.p_rentalCancelledSubTitle": "Please organize the next steps with the renter.",
 
+  "TransactionPanel.c_rentPaymentMethodMissingTitle": "There has been an issue with your payment method",
+  "TransactionPanel.c_rentPaymentMethodMissingSubTitle": "The payment method you have on file is no longer valid. Please provide a new payment method.",
+  "TransactionPanel.p_rentPaymentMethodMissingTitle": "Your renters payment method is no longer valid",
+  "TransactionPanel.p_rentPaymentMethodMissingSubTitle": "We have notified them and are requesting updated payment details. Please contact them directly for further queries.",
+
   "TransactionPanel.stripeExtendButton": "Extend this agreement!",
   "TransactionPanel.stripeExtendConfirmationTitle": "Confirm you wish to extend this agreement",
   "TransactionPanel.stripeExtendConfirmationSubTitle": "This will extend the agreement indefinitely, but transfer the agreement to a weekly basis. The original terms of the signed agreement are still binding, until the end of the final week of the agreement. ",
@@ -1283,6 +1288,9 @@
   "RentalAgreementModal.rentalAgreementModalSubTitle": "Let us know the details of your rental agreement, and we'll create a professional contract just for you.",
   "RentalAgreementModal.lengthOfContractLabel": "How many weeks are you renting the space out?",
   "RentalAgreementSetupForm.submit": "Send",
+
+  "UpdatePaymentMethodsPanel.heading": "New Payment Method",
+
 
   "ConfirmationModal.defaultTitle": "Are you sure?",
   "ConfirmationModal.defaultSubTitle": "This action may be permanent, are you sure about this?",

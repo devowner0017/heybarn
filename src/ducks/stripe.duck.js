@@ -1,4 +1,4 @@
-import { fetchRentalPayments, cancelRentalPayments, extendRentalPayments } from '../util/api';
+import { fetchRentalPayments, cancelRentalPayments, extendRentalPayments, updateSubscriptionPM } from '../util/api';
 import { storableError } from '../util/errors';
 import * as log from '../util/log';
 
@@ -41,6 +41,10 @@ export const CANCEL_SUBSCRIPTION_ERROR = 'app/stripe/CANCEL_SUBSCRIPTION_ERROR';
 export const EXTEND_SUBSCRIPTION_REQUEST = 'app/stripe/EXTEND_SUBSCRIPTION_REQUEST';
 export const EXTEND_SUBSCRIPTION_SUCCESS = 'app/stripe/EXTEND_SUBSCRIPTION_SUCCESS';
 export const EXTEND_SUBSCRIPTION_ERROR = 'app/stripe/EXTEND_SUBSCRIPTION_ERROR';
+
+export const UPDATE_SUBSCRIPTION_PM_REQUEST = 'app/stripe/UPDATE_SUBSCRIPTION_PM_REQUEST';
+export const UPDATE_SUBSCRIPTION_PM_SUCCESS = 'app/stripe/UPDATE_SUBSCRIPTION_PM_SUCCESS';
+export const UPDATE_SUBSCRIPTION_PM_ERROR = 'app/stripe/UPDATE_SUBSCRIPTION_PM_ERROR';
 
 // ================ Reducer ================ //
 
@@ -196,21 +200,37 @@ export default function reducer(state = initialState, action = {}) {
         cancelSubscriptionInProgress: false,
       };
 
-    case EXTEND_SUBSCRIPTION_REQUEST:
-      return {
-        ...state,
-        extendSubscriptionError: null,
-        extendSubscriptionInProgress: true,
-      };
-    case EXTEND_SUBSCRIPTION_SUCCESS:
-      return { ...state, subscription: payload, extendSubscriptionInProgress: false };
-    case EXTEND_SUBSCRIPTION_ERROR:
-      console.error(payload);
-      return {
-        ...state,
-        extendSubscriptionError: payload,
-        extendSubscriptionInProgress: false,
-      };
+      case EXTEND_SUBSCRIPTION_REQUEST:
+        return {
+          ...state,
+          extendSubscriptionError: null,
+          extendSubscriptionInProgress: true,
+        };
+      case EXTEND_SUBSCRIPTION_SUCCESS:
+        return { ...state, subscription: payload, extendSubscriptionInProgress: false };
+      case EXTEND_SUBSCRIPTION_ERROR:
+        console.error(payload);
+        return {
+          ...state,
+          extendSubscriptionError: payload,
+          extendSubscriptionInProgress: false,
+        };
+
+        case UPDATE_SUBSCRIPTION_PM_REQUEST:
+          return {
+            ...state,
+            updateSubscriptionPaymentMethodError: null,
+            updateSubscriptionPaymentMethodInProgress: true,
+          };
+        case UPDATE_SUBSCRIPTION_PM_SUCCESS:
+          return { ...state, subscription: payload, updateSubscriptionPaymentMethodInProgress: false };
+        case UPDATE_SUBSCRIPTION_PM_ERROR:
+          console.error(payload);
+          return {
+            ...state,
+            updateSubscriptionPaymentMethodError: payload,
+            updateSubscriptionPaymentMethodInProgress: false,
+          };
 
     default:
       return state;
@@ -313,6 +333,21 @@ export const extendSubscriptionSuccess = payload => ({
 
 export const extendSubscriptionError = payload => ({
   type: EXTEND_SUBSCRIPTION_ERROR,
+  payload,
+  error: true,
+});
+
+export const updateSubscriptionPaymentMethodRequest = () => ({
+  type: UPDATE_SUBSCRIPTION_PM_REQUEST,
+});
+
+export const updateSubscriptionPaymentMethodSuccess = payload => ({
+  type: UPDATE_SUBSCRIPTION_PM_SUCCESS,
+  payload,
+});
+
+export const updateSubscriptionPaymentMethodError = payload => ({
+  type: UPDATE_SUBSCRIPTION_PM_ERROR,
   payload,
   error: true,
 });
@@ -423,6 +458,29 @@ export const extendSubscription = params => dispatch => {
       dispatch(extendSubscriptionError(e));
 
       log.error(e, 'stripe-extend-subscription-failed');
+    });
+};
+
+export const updateSubscriptionPaymentMethod = params => dispatch => {
+  dispatch(updateSubscriptionPaymentMethodRequest());
+  console.log('🚀 | file: stripe.duck.js | line 411 | params', params);
+  return updateSubscriptionPM(params)
+    .then(response => {
+      console.log('🚀 | file: stripe.duck.js | line 287 | response', response);
+      if (response.error) {
+        return Promise.reject(response);
+      } else {
+        dispatch(updateSubscriptionPaymentMethodSuccess(response));
+        fetchSubscription({ subId: response.id })
+        return response;
+      }
+    })
+    .catch(err => {
+      // Unwrap Stripe error.
+      const e = err.error || storableError(err);
+      dispatch(updateSubscriptionPaymentMethodError(e));
+
+      log.error(e, 'update-subs-payment-method-failed');
     });
 };
 

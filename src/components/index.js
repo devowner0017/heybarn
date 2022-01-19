@@ -126,6 +126,7 @@ export { default as BookingDateFromFilter } from './BookingDateFromFilter/Bookin
 export { default as BookingTimeInfo } from './BookingTimeInfo/BookingTimeInfo';
 export { default as BookingPanel } from './BookingPanel/BookingPanel';
 export { default as ContactPanel } from './ContactPanel/ContactPanel';
+export { default as UpdatePaymentMethodsPanel } from './UpdatePaymentMethodsPanel/UpdatePaymentMethodsPanel';
 export { default as Discussion } from './Discussion/Discussion';
 export { default as FilterPlain } from './FilterPlain/FilterPlain';
 export { default as FilterPopup } from './FilterPopup/FilterPopup';

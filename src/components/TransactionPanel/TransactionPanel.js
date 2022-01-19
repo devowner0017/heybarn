@@ -51,6 +51,7 @@ import {
   BookingPanel,
   NamedLink,
   ReviewModal,
+  UpdatePaymentMethodsPanel,
   UserDisplayName,
 } from '../../components';
 import { SendMessageForm } from '../../forms';
@@ -80,6 +81,7 @@ import PanelHeading, {
   HEADING_RENT_CANCELLED,
   HEADING_RENT_EXTENDED,
   HEADING_RENTAL_AGREEMENT_FINALIZED,
+  HEADING_RENT_PAYMENT_METHOD_MISSING,
 } from './PanelHeading';
 
 import css from './TransactionPanel.module.css';
@@ -254,16 +256,24 @@ export class TransactionPanelComponent extends Component {
       cancelAfterAgreementSentInProgress,
       cancelAfterAgreementSentError,
       onCancelAfterAgreementSent,
-
       onCancelStripeAgreement,
       onExtendStripeAgreement,
+      onUpdateSubscriptionPaymentMethod,
       cancelSubscriptionInProgress,
       cancelSubscriptionError,
       extendSubscriptionInProgress,
       extendSubscriptionError,
       subscription,
     } = this.props;
-    console.log("🚀 | file: TransactionPanel.js | line 261 | TransactionPanelComponent | render | subscription", subscription);
+    console.log("🚀 | file: TransactionPanel.js | line 268 | TransactionPanelComponent | render | this.props", this.props);
+
+    // THIS NEEDS TO BE A !! IN PRODUCTION
+    const subscriptionHasDefaultPaymentMethod = !!subscription?.default_payment_method;
+
+    console.log(
+      '🚀 | file: TransactionPanel.js | line 268 | TransactionPanelComponent | render | subscriptionHasDefaultPaymentMethod',
+      subscriptionHasDefaultPaymentMethod
+    );
 
     const currentTransaction = ensureTransaction(transaction);
 
@@ -578,7 +588,19 @@ export class TransactionPanelComponent extends Component {
           showPaymentFormButtons: isCustomer && !isProviderBanned,
           allowMessages: true,
         };
-      }else if (txIsPaid(tx) && wasCancelled(tx)) {
+        // THIS CAN BE A STATUS -> WE NEED TO KNOW WHAT HAPPENS WHEN A PAYMENT IS MISSED
+      } else if (txIsPaid(tx) && !wasCancelled(tx) && !subscriptionHasDefaultPaymentMethod) {
+        return {
+          headingState: HEADING_RENT_PAYMENT_METHOD_MISSING,
+          showDetailCardHeadings: isCustomer,
+          showAddress: isCustomer,
+          allowMessages: true,
+          showSubscriptionDetails: true,
+          showSubscriptionStats: true,
+          showSubscriptionActions: !isCustomer,
+          showUpdatePaymentMethodsPanel: true,
+        };
+      } else if (txIsPaid(tx) && wasCancelled(tx)) {
         return {
           headingState: HEADING_RENT_CANCELLED,
           showDetailCardHeadings: isCustomer,
@@ -589,8 +611,7 @@ export class TransactionPanelComponent extends Component {
           showSubscriptionStats: true,
           showSubscriptionActions: false,
         };
-      }
-      else if (txIsPaid(tx) && wasExtended(tx)) {
+      } else if (txIsPaid(tx) && wasExtended(tx)) {
         return {
           headingState: HEADING_RENT_EXTENDED,
           showDetailCardHeadings: isCustomer,
@@ -613,7 +634,7 @@ export class TransactionPanelComponent extends Component {
           showSubscriptionStats: true,
           showSubscriptionActions: !isCustomer,
         };
-      }else if (txIsPaid(tx)) {
+      } else if (txIsPaid(tx)) {
         return {
           headingState: HEADING_RENT_PAID,
           showDetailCardHeadings: isCustomer,
@@ -887,6 +908,7 @@ export class TransactionPanelComponent extends Component {
       !isProviderBanned &&
       !isProviderDeleted &&
       stateData.allowMessages;
+      console.log("🚀 | file: TransactionPanel.js | line 910 | TransactionPanelComponent | render | stateData", stateData);
 
     const sendMessagePlaceholder = intl.formatMessage(
       { id: 'TransactionPanel.sendMessagePlaceholder' },
@@ -952,6 +974,11 @@ export class TransactionPanelComponent extends Component {
                 />
               </p>
             ) : null}
+            {stateData.showUpdatePaymentMethodsPanel && (
+              <UpdatePaymentMethodsPanel
+                onUpdateSubscriptionPaymentMethod={onUpdateSubscriptionPaymentMethod}
+              />
+            )}
             {showSendMessageForm ? (
               <>
                 <FeedSection

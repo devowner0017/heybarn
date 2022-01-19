@@ -28,6 +28,7 @@ const createRentalPayments = require('./sph/create-recurring-payments');
 const fetchRentalPayments = require('./sph/fetch-recurring-payments');
 const extendRentalPayments = require('./sph/extend-recurring-payments');
 const cancelRentalPayments = require('./sph/cancel-recurring-payments');
+const updateSubscriptionPM = require('./sph/update-subscription-payment-method');
 const updateListingState = require('./api/update-listing-state');
 const updateTransactionMetadata = require('./api/update-transaction-metadata')
 const sendAdminEmail = require('./api/send-admin-email.js')
@@ -104,7 +105,7 @@ router.post('/create-recurring-payments', createRentalPayments);
 router.post('/fetch-recurring-payments', fetchRentalPayments);
 router.post('/cancel-recurring-payments', cancelRentalPayments);
 router.post('/extend-recurring-payments', extendRentalPayments);
-
+router.post('/update-subscription-payment-method', updateSubscriptionPM);
 router.post('/update-listing-state', updateListingState);
 router.post('/update-transaction-metadata', updateTransactionMetadata);
 router.post('/send-admin-email', sendAdminEmail);

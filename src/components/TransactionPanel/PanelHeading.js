@@ -33,6 +33,7 @@ export const HEADING_DELIVERED = 'delivered';
 export const HEADING_RENT_PAID = 'rentPaid';
 export const HEADING_RENT_CANCELLED = 'rentCancelled';
 export const HEADING_RENT_EXTENDED = 'rentExtended';
+export const HEADING_RENT_PAYMENT_METHOD_MISSING = 'rentPaymentMethodMissing';
 
 const createListingLink = (listingId, label, listingDeleted, searchParams = {}, className = '') => {
   if (!listingDeleted) {
@@ -382,6 +383,22 @@ const PanelHeading = props => {
             <p className={css.transactionInfoMessage}>
               <FormattedMessage
                 id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalCancelledSubTitle`}
+              />
+            </p>
+          ) : null}
+        </HeadingWithSubtitle>
+      );
+      case HEADING_RENT_PAYMENT_METHOD_MISSING:
+      return (
+        <HeadingWithSubtitle
+          className={titleClasses}
+          id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentPaymentMethodMissingTitle`}
+          values={{ providerName, listingLink, customerName, listingLink }}
+        >
+          {!listingDeleted ? (
+            <p className={css.transactionInfoMessage}>
+              <FormattedMessage
+                id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentPaymentMethodMissingSubTitle`}
               />
             </p>
           ) : null}

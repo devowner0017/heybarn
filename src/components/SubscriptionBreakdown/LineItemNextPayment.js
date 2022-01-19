@@ -8,7 +8,6 @@ import css from './SubscriptionBreakdown.module.css';
 
 const BookingPeriod = props => {
   const { startDate, endDate, ongoingContract } = props;
-  console.log("🚀 | file: LineItemNextPayment.js | line 11 | ongoingContract", ongoingContract);
 
   const dateFormatOptions = {
     month: 'short',

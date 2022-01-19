@@ -164,7 +164,9 @@ export const cancelRentalPayments = body => {
 export const extendRentalPayments = body => {
   return post('/api/extend-recurring-payments', body);
 };
-
+export const updateSubscriptionPM = body => {
+  return post('/api/update-subscription-payment-method', body);
+};
 export const updateTransactionMetadata = body => {
   return post('/api/update-transaction-metadata', body);
 };

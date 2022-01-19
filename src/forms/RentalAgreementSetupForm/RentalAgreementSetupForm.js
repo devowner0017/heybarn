@@ -50,11 +50,6 @@ const RentalAgreementSetupFormComponent = props => (
         listing,
         filterConfig,
       } = fieldRenderProps;
-      console.log(
-        '🚀 | file: RentalAgreementSetupForm.js | line 47 | fieldRenderProps',
-        fieldRenderProps
-      );
-      console.log('🚀 | file: RentalAgreementSetupForm.js | line 46 | price', listing);
 
       const {
         startDate,
@@ -99,15 +94,6 @@ const RentalAgreementSetupFormComponent = props => (
           startDate,
           endDate,
         } = formValues.values;
-        console.log(
-          '🚀 | file: RentalAgreementSetupForm.js | line 97 | ongoingContract',
-          ongoingContract
-        );
-        console.log(
-          '🚀 | file: RentalAgreementSetupForm.js | line 83 | ongoingContract',
-          ongoingContract
-        );
-        console.log('🚀 | file: RentalAgreementSetupForm.js | line 111 | startDate', startDate);
 
         if (!startDate) {
           return null;
@@ -126,7 +112,6 @@ const RentalAgreementSetupFormComponent = props => (
       }, [values.ongoingContract]);
 
       const groundRulesOptions = findOptionsForSelectFilter(`groundRules`, filterConfig);
-      console.log("🚀 | file: RentalAgreementSetupForm.js | line 151 | ongoingContract", ongoingContract);
 
       return (
         <Form className={classes} onSubmit={handleSubmit}>

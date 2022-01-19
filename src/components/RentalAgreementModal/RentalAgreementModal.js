@@ -64,11 +64,6 @@ const RentalAgreementModal = props => {
     affirmativeAction(values);
   };
 
-  console.log('🚀 | file: RentalAgreementModal.js | line 90 | listing', listing);
-  console.log(
-    "🚀 | file: RentalAgreementModal.js | line 91 | ensureArray(getPropByName(listing,))?.join(', ')",
-    ensureArray(getPropByName(listing, 'preferredUse'))?.join(', ')
-  );
   return (
     <Modal
       id={id}
