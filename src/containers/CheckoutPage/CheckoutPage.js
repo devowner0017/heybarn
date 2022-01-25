@@ -72,8 +72,14 @@ const PAY_AND_SAVE_FOR_LATER_USE = 'PAY_AND_SAVE_FOR_LATER_USE';
 const USE_SAVED_CARD = 'USE_SAVED_CARD';
 
 const paymentFlow = (selectedPaymentMethod, saveAfterOnetimePayment) => {
-console.log("🚀 | file: CheckoutPage.js | line 75 | paymentFlow | saveAfterOnetimePayment", saveAfterOnetimePayment);
-console.log("🚀 | file: CheckoutPage.js | line 75 | paymentFlow | selectedPaymentMethod", selectedPaymentMethod);
+  console.log(
+    '🚀 | file: CheckoutPage.js | line 75 | paymentFlow | saveAfterOnetimePayment',
+    saveAfterOnetimePayment
+  );
+  console.log(
+    '🚀 | file: CheckoutPage.js | line 75 | paymentFlow | selectedPaymentMethod',
+    selectedPaymentMethod
+  );
   // Payment mode could be 'replaceCard', but without explicit saveAfterOnetimePayment flag,
   // we'll handle it as one-time payment
   return selectedPaymentMethod === 'defaultCard'
@@ -262,12 +268,18 @@ export class CheckoutPageComponent extends Component {
       ensuredStripeCustomer.attributes.stripeCustomerId &&
       ensuredDefaultPaymentMethod.id
     );
-    console.log("🚀 | file: CheckoutPage.js | line 263 | CheckoutPageComponent | handlePaymentIntent | hasDefaultPaymentMethod", hasDefaultPaymentMethod);
+    console.log(
+      '🚀 | file: CheckoutPage.js | line 263 | CheckoutPageComponent | handlePaymentIntent | hasDefaultPaymentMethod',
+      hasDefaultPaymentMethod
+    );
     const stripePaymentMethodId = hasDefaultPaymentMethod
       ? ensuredDefaultPaymentMethod.attributes.stripePaymentMethodId
       : null;
     const selectedPaymentFlow = paymentFlow(selectedPaymentMethod, saveAfterOnetimePayment);
-    console.log("🚀 | file: CheckoutPage.js | line 270 | CheckoutPageComponent | handlePaymentIntent | selectedPaymentFlow", selectedPaymentFlow);
+    console.log(
+      '🚀 | file: CheckoutPage.js | line 270 | CheckoutPageComponent | handlePaymentIntent | selectedPaymentFlow',
+      selectedPaymentFlow
+    );
     const fnRequestPayment = fnParams => {
       console.log(
         '🚀 | file: CheckoutPage.js | line 257 | CheckoutPageComponent | handlePaymentIntent | fnParams',
@@ -387,19 +399,23 @@ export class CheckoutPageComponent extends Component {
         '🚀 | file: CheckoutPage.js | line 377 | CheckoutPageComponent | handlePaymentIntent | pi',
         pi
       );
-      console.log("🚀 | file: CheckoutPage.js | line 401 | CheckoutPageComponent | handlePaymentIntent | selectedPaymentFlow", selectedPaymentFlow);
-      return  selectedPaymentFlow  !== USE_SAVED_CARD ? onSavePaymentMethod(ensuredStripeCustomer, pi.payment_method)
-        .then(response => {
-          if (response.errors) {
-            return { ...fnParams, paymentMethodSaved: false,pi };
-          }
-          return { ...fnParams, paymentMethodSaved: true,pi };
-        })
-        .catch(e => {
-          // Real error cases are caught already in paymentMethods page.
-          return { ...fnParams, paymentMethodSaved: false , pi};
-        })
-        : { ...fnParams, paymentMethodSaved: true,pi }
+      console.log(
+        '🚀 | file: CheckoutPage.js | line 401 | CheckoutPageComponent | handlePaymentIntent | selectedPaymentFlow',
+        selectedPaymentFlow
+      );
+      return selectedPaymentFlow !== USE_SAVED_CARD
+        ? onSavePaymentMethod(ensuredStripeCustomer, pi.payment_method)
+            .then(response => {
+              if (response.errors) {
+                return { ...fnParams, paymentMethodSaved: false, pi };
+              }
+              return { ...fnParams, paymentMethodSaved: true, pi };
+            })
+            .catch(e => {
+              // Real error cases are caught already in paymentMethods page.
+              return { ...fnParams, paymentMethodSaved: false, pi };
+            })
+        : { ...fnParams, paymentMethodSaved: true, pi };
     };
 
     const fnCreateRecurring = fnParams => {
@@ -407,7 +423,7 @@ export class CheckoutPageComponent extends Component {
         '🚀 | file: CheckoutPage.js | line 269 | CheckoutPageComponent | handlePaymentIntent | fnParams',
         fnParams
       );
-      const {pi, ...rest} = fnParams
+      const { pi, ...rest } = fnParams;
       return onCreateRecurring({ ...createRecurringParams, paymentMethod: pi.payment_method })
         .then(recurringResponse => {
           console.log(
@@ -596,7 +612,8 @@ export class CheckoutPageComponent extends Component {
 
         const routes = routeConfiguration();
         const initialMessageFailedToTransaction = messageSuccess ? null : orderId;
-        const orderDetailsPath = pathByRouteName('OrderDetailsPage', routes, { id: orderId.uuid });
+        const orderDetailsPath =
+          orderId && pathByRouteName('OrderDetailsPage', routes, { id: orderId?.uuid });
         const initialValues = {
           initialMessageFailedToTransaction,
           // savePaymentMethodFailed: !paymentMethodSaved,
@@ -604,7 +621,7 @@ export class CheckoutPageComponent extends Component {
 
         initializeOrderPage(initialValues, routes, dispatch);
         clearData(STORAGE_KEY);
-        history.push(orderDetailsPath);
+        orderDetailsPath && history.push(orderDetailsPath);
       })
       .catch(err => {
         console.error(err);

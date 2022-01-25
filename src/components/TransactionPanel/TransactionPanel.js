@@ -1066,7 +1066,7 @@ export class TransactionPanelComponent extends Component {
               <NamedLink
                 name={currentListing?.id?.uuid ? 'ListingPage' : 'LandingPage'}
                 params={{
-                  id: showOtherListing ? otherListing.id.uuid : currentListing?.id?.uuid,
+                  id: showOtherListing ? otherListing?.id?.uuid : currentListing?.id?.uuid,
                   slug: showOtherListing ? otherListingSlug : currentListingSlug,
                 }}
               >
