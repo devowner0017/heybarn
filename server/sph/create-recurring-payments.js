@@ -38,7 +38,7 @@ module.exports = async (req, res) => {
       {
         price_data: {
           currency: 'nzd',
-          product: 'prod_Kd6XBmS49INwna',
+          product: process.env.REACT_APP_STRIPE_PRODUCT,
           recurring: { interval: 'day' },
           unit_amount: weeklyAmount,
         },
