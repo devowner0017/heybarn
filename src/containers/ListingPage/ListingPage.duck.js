@@ -4,7 +4,7 @@ import config from '../../config';
 import { types as sdkTypes } from '../../util/sdkLoader';
 import { storableError } from '../../util/errors';
 import { addMarketplaceEntities } from '../../ducks/marketplaceData.duck';
-import { transactionLineItems } from '../../util/api';
+import { fetchListingTransactions, transactionLineItems } from '../../util/api';
 import * as log from '../../util/log';
 import { denormalisedResponseEntities } from '../../util/data';
 import { TRANSITION_ENQUIRE } from '../../util/transaction';
@@ -13,9 +13,8 @@ import {
   LISTING_PAGE_PENDING_APPROVAL_VARIANT,
 } from '../../util/urlHelpers';
 import { fetchCurrentUser, fetchCurrentUserHasOrdersSuccess } from '../../ducks/user.duck';
-
+import { ACTIVE_TRANSITIONS } from '../../util/transaction';
 const { UUID } = sdkTypes;
-
 // ================ Action types ================ //
 
 export const SET_INITIAL_VALUES = 'app/ListingPage/SET_INITIAL_VALUES';
@@ -26,6 +25,10 @@ export const SHOW_LISTING_ERROR = 'app/ListingPage/SHOW_LISTING_ERROR';
 export const FETCH_REVIEWS_REQUEST = 'app/ListingPage/FETCH_REVIEWS_REQUEST';
 export const FETCH_REVIEWS_SUCCESS = 'app/ListingPage/FETCH_REVIEWS_SUCCESS';
 export const FETCH_REVIEWS_ERROR = 'app/ListingPage/FETCH_REVIEWS_ERROR';
+
+export const GET_CURRENT_TRANSACTIONS_REQUEST = 'app/ListingPage/GET_CURRENT_TRANSACTIONS_REQUEST';
+export const GET_CURRENT_TRANSACTIONS_SUCCESS = 'app/ListingPage/GET_CURRENT_TRANSACTIONS_SUCCESS';
+export const GET_CURRENT_TRANSACTIONS_ERROR = 'app/ListingPage/GET_CURRENT_TRANSACTIONS_ERROR';
 
 export const FETCH_TIME_SLOTS_REQUEST = 'app/ListingPage/FETCH_TIME_SLOTS_REQUEST';
 export const FETCH_TIME_SLOTS_SUCCESS = 'app/ListingPage/FETCH_TIME_SLOTS_SUCCESS';
@@ -54,6 +57,7 @@ const initialState = {
   sendEnquiryInProgress: false,
   sendEnquiryError: null,
   enquiryModalOpenForListingId: null,
+  currentUserInTransaction: false,
 };
 
 const listingPageReducer = (state = initialState, action = {}) => {
@@ -73,6 +77,13 @@ const listingPageReducer = (state = initialState, action = {}) => {
       return { ...state, reviews: payload };
     case FETCH_REVIEWS_ERROR:
       return { ...state, fetchReviewsError: payload };
+
+    case GET_CURRENT_TRANSACTIONS_REQUEST:
+      return { ...state, getCurrentTransactionsError: null };
+    case GET_CURRENT_TRANSACTIONS_SUCCESS:
+      return { ...state, currentUserInTransaction: payload };
+    case GET_CURRENT_TRANSACTIONS_ERROR:
+      return { ...state, getCurrentTransactionsError: payload };
 
     case FETCH_TIME_SLOTS_REQUEST:
       return { ...state, fetchTimeSlotsError: null };
@@ -124,6 +135,17 @@ export const fetchReviewsRequest = () => ({ type: FETCH_REVIEWS_REQUEST });
 export const fetchReviewsSuccess = reviews => ({ type: FETCH_REVIEWS_SUCCESS, payload: reviews });
 export const fetchReviewsError = error => ({
   type: FETCH_REVIEWS_ERROR,
+  error: true,
+  payload: error,
+});
+
+export const getCurrentTransactionsRequest = () => ({ type: GET_CURRENT_TRANSACTIONS_REQUEST });
+export const getCurrentTransactionsSuccess = reviews => ({
+  type: GET_CURRENT_TRANSACTIONS_SUCCESS,
+  payload: reviews,
+});
+export const getCurrentTransactionsError = error => ({
+  type: GET_CURRENT_TRANSACTIONS_ERROR,
   error: true,
   payload: error,
 });
@@ -195,6 +217,29 @@ export const showListing = (listingId, isOwn = false) => (dispatch, getState, sd
     .catch(e => {
       dispatch(showListingError(storableError(e)));
     });
+};
+const currentTransactions = listingId => (dispatch, getState, sdk) => {
+  dispatch(getCurrentTransactionsRequest());
+
+  return dispatch(fetchCurrentUser()).then(response => {
+    const currentUser = getState().user.currentUser;
+    if (currentUser) {
+      return fetchListingTransactions({
+        listingId: listingId.uuid,
+        customerId: currentUser.id.uuid,
+      })
+        .then(response => {
+          const transactions = denormalisedResponseEntities(response);
+          const activeTransaction = transactions.find(t =>
+            ACTIVE_TRANSITIONS.includes(t.attributes.lastTransition)
+          );
+          dispatch(getCurrentTransactionsSuccess(activeTransaction));
+        })
+        .catch(e => {
+          dispatch(getCurrentTransactionsError(storableError(e)));
+        });
+    }
+  });
 };
 
 export const fetchReviews = listingId => (dispatch, getState, sdk) => {
@@ -323,10 +368,15 @@ export const loadData = (params, search) => dispatch => {
   if (config.enableAvailability) {
     return Promise.all([
       dispatch(showListing(listingId)),
+      dispatch(currentTransactions(listingId)),
       dispatch(fetchTimeSlots(listingId)),
-      dispatch(fetchReviews(listingId)),
+      // dispatch(fetchReviews(listingId)),
     ]);
   } else {
-    return Promise.all([dispatch(showListing(listingId)), dispatch(fetchReviews(listingId))]);
+    return Promise.all([
+      dispatch(showListing(listingId)),
+      dispatch(currentTransactions(listingId)),
+      // dispatch(fetchReviews(listingId))
+    ]);
   }
 };

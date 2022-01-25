@@ -265,7 +265,10 @@ export class TransactionPanelComponent extends Component {
       extendSubscriptionError,
       subscription,
     } = this.props;
-    console.log("🚀 | file: TransactionPanel.js | line 268 | TransactionPanelComponent | render | this.props", this.props);
+    console.log(
+      '🚀 | file: TransactionPanel.js | line 268 | TransactionPanelComponent | render | this.props',
+      this.props
+    );
 
     // THIS NEEDS TO BE A !! IN PRODUCTION
     const subscriptionHasDefaultPaymentMethod = !!subscription?.default_payment_method;
@@ -278,7 +281,23 @@ export class TransactionPanelComponent extends Component {
     const currentTransaction = ensureTransaction(transaction);
 
     const currentListing = ensureListing(currentTransaction.listing);
+    console.log(
+      '🚀 | file: TransactionPanel.js | line 281 | TransactionPanelComponent | render | currentListing',
+      currentListing
+    );
+
+    const showOtherListing = currentListing.author.id.uuid === currentUser.id.uuid;
+    const otherListing = showOtherListing ? ensuredRelated :  currentListing;
+
+    console.log(
+      '🚀 | file: TransactionPanel.js | line 283 | TransactionPanelComponent | render | currentUser',
+      currentUser
+    );
     const relatedTitle = ensuredRelated.attributes.title;
+    console.log(
+      '🚀 | file: TransactionPanel.js | line 286 | TransactionPanelComponent | render | ensuredRelated',
+      ensuredRelated
+    );
     const relatedFirstImage =
       ensuredRelated.images && ensuredRelated.images.length > 0 ? ensuredRelated.images[0] : null;
 
@@ -389,7 +408,7 @@ export class TransactionPanelComponent extends Component {
                 txId: tx.id,
                 actor: isCustomer ? 'customer' : 'provider',
               }),
-            affirmativeButtonText: 'Nevermind!',
+            affirmativeButtonText: 'Do Not Cancel',
             negativeButtonText: 'Cancel This Transaction',
             affirmativeInProgress: sendRentalAgreementInProgress,
             negativeInProgress: cancelDuringRadInProgress,
@@ -532,6 +551,7 @@ export class TransactionPanelComponent extends Component {
       // ****
       else if (txIsCancelledDuringRad(tx)) {
         return {
+          showDetailCardHeadings: true,
           headingState: HEADING_CANCELLED_DURING_RAD,
         };
       }
@@ -793,6 +813,11 @@ export class TransactionPanelComponent extends Component {
     const firstImage =
       currentListing.images && currentListing.images.length > 0 ? currentListing.images[0] : null;
 
+      const otherListingTitle = showOtherListing ? relatedTitle : listingTitle;
+      const otherListingImage = showOtherListing ? relatedFirstImage : firstImage;
+      console.log("🚀 | file: TransactionPanel.js | line 788 | TransactionPanelComponent | render | otherListingImage", otherListingImage);
+      const otherListingSlug = showOtherListing ? relatedListingSlug : currentListingSlug;
+
     const acceptCommunicationButtons = (
       <ActionButtonsMaybe
         showButtons={stateData.showAcceptCommunicationButtons}
@@ -908,7 +933,10 @@ export class TransactionPanelComponent extends Component {
       !isProviderBanned &&
       !isProviderDeleted &&
       stateData.allowMessages;
-      console.log("🚀 | file: TransactionPanel.js | line 910 | TransactionPanelComponent | render | stateData", stateData);
+    console.log(
+      '🚀 | file: TransactionPanel.js | line 910 | TransactionPanelComponent | render | stateData',
+      stateData
+    );
 
     const sendMessagePlaceholder = intl.formatMessage(
       { id: 'TransactionPanel.sendMessagePlaceholder' },
@@ -936,8 +964,8 @@ export class TransactionPanelComponent extends Component {
             <DetailCardImage
               rootClassName={css.imageWrapperMobile}
               avatarWrapperClassName={css.avatarWrapperMobile}
-              listingTitle={listingTitle}
-              image={firstImage}
+              listingTitle={otherListingTitle}
+              image={otherListingImage}
               provider={currentProvider}
               isCustomer={isCustomer}
             />
@@ -1030,22 +1058,23 @@ export class TransactionPanelComponent extends Component {
             <div className={css.detailCard}>
               <DetailCardImage
                 avatarWrapperClassName={css.avatarWrapperDesktop}
-                listingTitle={listingTitle}
-                image={firstImage}
+                listingTitle={showOtherListing ? otherListingTitle : listingTitle}
+                image={showOtherListing ? otherListingImage : firstImage}
                 provider={currentProvider}
                 isCustomer={isCustomer}
               />
               <NamedLink
                 name={currentListing?.id?.uuid ? 'ListingPage' : 'LandingPage'}
                 params={{
-                  id: currentListing?.id?.uuid,
-                  slug: currentListingSlug,
+                  id: showOtherListing ? otherListing.id.uuid : currentListing?.id?.uuid,
+                  slug: showOtherListing ? otherListingSlug : currentListingSlug,
                 }}
               >
                 <DetailCardHeadingsMaybe
                   showDetailCardHeadings={stateData.showDetailCardHeadings}
-                  listingTitle={listingTitle}
-                  subTitle={bookingSubTitle}
+                  listingTitle={showOtherListing ? otherListingTitle : listingTitle}
+
+                  subTitle={showOtherListing ? null : bookingSubTitle}
                   location={location}
                   geolocation={geolocation}
                   showAddress={stateData.showAddress}
@@ -1084,22 +1113,22 @@ export class TransactionPanelComponent extends Component {
               <div className={css.detailCard}>
                 <DetailCardImage
                   avatarWrapperClassName={css.avatarWrapperDesktop}
-                  listingTitle={relatedTitle}
-                  image={relatedFirstImage}
+                  listingTitle={showOtherListing ? listingTitle : relatedTitle}
+                  image={showOtherListing ? firstImage : relatedFirstImage}
                   provider={currentCustomer}
                   isCustomer={isCustomer}
                 />
                 <NamedLink
                   name={ensuredRelated?.id?.uuid ? 'ListingPage' : 'LandingPage'}
                   params={{
-                    id: ensuredRelated?.id?.uuid,
-                    slug: relatedListingSlug,
+                    id: showOtherListing ? currentListing.id.uuid : ensuredRelated?.id?.uuid,
+                    slug: showOtherListing ? currentListingSlug : relatedListingSlug,
                   }}
                 >
                   <DetailCardHeadingsMaybe
                     showDetailCardHeadings={stateData.showDetailCardHeadings}
-                    listingTitle={relatedTitle}
-                    subTitle={relatedBookingSubTitle}
+                    listingTitle={showOtherListing ? listingTitle : relatedTitle}
+                    subTitle={showOtherListing ? null : relatedBookingSubTitle}
                   />
                 </NamedLink>
               </div>

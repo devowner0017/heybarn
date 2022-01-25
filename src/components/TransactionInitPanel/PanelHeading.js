@@ -110,7 +110,7 @@ const PanelHeading = props => {
       return (
         <HeadingWithSubtitle
           className={titleClasses}
-          id={`TransactionInitPanel.${isCustomer ? 'c' : 'p'}_orderReadyTitle`}
+          id={`TransactionInitPanel.${isCustomer ? 'c' : 'p'}_${listingType}ReadyTitle`}
           // subId={`TransactionInitPanel.${isCustomer ? 'c' : 'p'}_renterEnquiredSubTitle`}
           values={{
             otherName: otherUserDisplayName,
@@ -124,7 +124,7 @@ const PanelHeading = props => {
           {!listingDeleted ? (
             <p className={css.transactionInfoMessage}>
               <FormattedMessage
-                id={`TransactionInitPanel.${isCustomer ? 'c' : 'p'}_orderReadySubTitle`}
+                id={`TransactionInitPanel.${isCustomer ? 'c' : 'p'}_${listingType}ReadySubTitle`}
               />
             </p>
           ) : null}

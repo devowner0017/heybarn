@@ -1,4 +1,4 @@
-import React from 'react';
+import React , {useState} from 'react';
 import { bool, func, object, string } from 'prop-types';
 import classNames from 'classnames';
 import { FormattedMessage } from '../../util/reactIntl';
@@ -14,6 +14,7 @@ import _ from 'lodash';
 import { types as sdkTypes } from '../../util/sdkLoader';
 
 import css from './EditListingDescriptionPanel.module.css';
+import { setInitialValues } from '../../containers/CheckoutPage/CheckoutPage.duck'
 
 const { Money } = sdkTypes;
 
@@ -35,9 +36,19 @@ const EditListingDescriptionPanel = props => {
   } = props;
   const classes = classNames(rootClassName || css.root, className);
   const currentListing = ensureOwnListing(listing);
+
   const { description, title, publicData } = currentListing.attributes;
-  const { preferredUse, listingState: currentListingState } = publicData;
+
+  const {
+    preferredUse,
+    listingState: currentListingState,
+    sizeOfSpace,
+    ageOfSpace,
+    amenities,
+  } = publicData;
+
   const isPublished = currentListing.id && currentListing.attributes.state !== LISTING_STATE_DRAFT;
+
   const panelTitle = isPublished ? (
     <FormattedMessage
       id="EditListingDescriptionPanel.title"
@@ -53,23 +64,36 @@ const EditListingDescriptionPanel = props => {
   );
   const categoryOptions = findOptionsForSelectFilter('category', config.custom.filters);
   const preferredUseOptions = findOptionsForSelectFilter('preferredUse', config.custom.filters);
+  const [initValues, setInitValues] = useState({
+    title,
+    description,
+    preferredUse: ensureArray(preferredUse).map(p =>
+      preferredUseOptions.find(o => o.key === p)
+      ),
+      sizeOfSpace,
+      ageOfSpace,
+      amenities,
+    })
+    console.log("🚀 | file: EditListingDescriptionPanel.js | line 68 | initValues", initValues);
   return (
     <div className={classes}>
       <h1 className={css.title}>{panelTitle}</h1>
       <EditListingDescriptionForm
         className={css.form}
-        initialValues={{
-          title,
-          description,
-          preferredUse: ensureArray(preferredUse).map(p =>
-            preferredUseOptions.find(o => o.key === p)
-          ),
-        }}
+        initialValues={initValues}
         saveActionMsg={submitButtonText}
         onSubmit={values => {
-          const { title, description, category, preferredUse } = values;
+          const {
+            title,
+            description,
+            category,
+            preferredUse,
+            sizeOfSpace,
+            ageOfSpace,
+            amenities,
+          } = values;
           const listingState = !currentListingState || !isPublished ? LISTING_LIVE : null;
-          const notDeleted = true
+          const notDeleted = true;
           const updateValues = {
             title: title.trim(),
             description,
@@ -79,11 +103,15 @@ const EditListingDescriptionPanel = props => {
               notDeleted,
               category,
               preferredUse: ensureArray(preferredUse).map(p => p?.key),
+              sizeOfSpace,
+              ageOfSpace,
+              amenities,
             },
           };
           const defaultPrice = new Money(0, config.currency);
           const updateValuesWithPrice =
             listingType === 'listing' ? updateValues : { ...updateValues, price: defaultPrice };
+            setInitValues(updateValues)
           onSubmit(updateValuesWithPrice);
         }}
         onChange={onChange}

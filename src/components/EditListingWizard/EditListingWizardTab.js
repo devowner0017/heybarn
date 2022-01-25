@@ -32,7 +32,7 @@ export const PHOTOS = 'photos';
 // EditListingWizardTab component supports these tabs
 export const SUPPORTED_TABS = [
   DESCRIPTION,
-  FEATURES,
+  // FEATURES,
   POLICY,
   LOCATION,
   PRICING,

@@ -1,19 +1,5 @@
 import { ensureTransaction } from './data';
-import { getPropByName } from './userHelpers'
-// RENTER RED DOTS
-const ORDER_NOTIFICATION_TRANSITIONS = [
-  'transition/host-fee-paid',
-  'transition/host-approved-by-renter',
-  'transition/host-sends-agreement',
-  'transition/host-sends-agreement-after-request',
-  'transition/renter-signs-rental-agreement',
-];
-// HOST RED DOTS
-const SALE_NOTIFICATION_TRANSITIONS = [
-  'transition/renter-fee-paid',
-  'transition/host-accepts-communication',
-  'transition/renter-requests-agreement',
-];
+import { getPropByName } from './userHelpers';
 
 /**
  * Transitions
@@ -95,7 +81,40 @@ export const TRANSITION_EXPIRE_CUSTOMER_REVIEW_PERIOD = 'transition/expire-custo
 export const TRANSITION_EXPIRE_PROVIDER_REVIEW_PERIOD = 'transition/expire-provider-review-period';
 export const TRANSITION_EXPIRE_REVIEW_PERIOD = 'transition/expire-review-period';
 
+// RENTER RED DOTS
+const ORDER_NOTIFICATION_TRANSITIONS = [
+  TRANSITION_HOST_FEE_PAID,
+  TRANSITION_RENTER_FEE_PAID,
+  'transition/host-sends-agreement',
+  'transition/host-sends-agreement-after-request',
+  'transition/renter-signs-rental-agreement',
+];
+// HOST RED DOTS
+const SALE_NOTIFICATION_TRANSITIONS = [
+  'transition/renter-fee-paid',
+  'transition/host-accepts-communication',
+  'transition/renter-requests-agreement',
+];
+export const ACTIVE_TRANSITIONS = [
+  TRANSITION_CONFIRM_PAYMENT,
+  TRANSITION_RENTER_ACCEPTS_COMMUNICATION,
+  TRANSITION_HOST_FEE_PAID,
+  TRANSITION_RENTER_FEE_PAID,
+  TRANSITION_HOST_APPROVED_BY_RENTER,
+  TRANSITION_HOST_ACCEPTS_COMMUNICATION,
+  TRANSITION_RENTER_ACCEPTS_COMMUNICATION,
+  TRANSITION_HOST_SENDS_AGREEMENT,
+  TRANSITION_RENTER_REQUESTS_AGREEMENT,
+  TRANSITION_RENTER_SIGNS_RENTAL_AGREEMENT,
+  TRANSITION_REQUEST_PAYMENT,
+  TRANSITION_CONFIRM_PAYMENT,
+  TRANSITION_COMPLETE,
+  TRANSITION_ENQUIRE,
+  TRANSITION_REQUEST_PAYMENT_AFTER_ENQUIRY,
+];
 /**
+ *
+ *
  * Actors
  *
  * There are 4 different actors that might initiate transitions:
@@ -365,14 +384,14 @@ export const txIsRequested = tx =>
 // However, word "requested" is used in many places so that we decided to keep it.
 export const txIsPaid = tx =>
   getTransitionsToState(STATE_PREAUTHORIZED).includes(txLastTransition(tx));
-  export const wasCancelled = tx =>{
-  const cancelledAgreement = getPropByName(tx, 'agreementCancelled')
-  return !!cancelledAgreement
-}
-export const wasExtended = tx =>{
-  const extendedAgreement = getPropByName(tx, 'agreementExtended')
-  return !!extendedAgreement
-}
+export const wasCancelled = tx => {
+  const cancelledAgreement = getPropByName(tx, 'agreementCancelled');
+  return !!cancelledAgreement;
+};
+export const wasExtended = tx => {
+  const extendedAgreement = getPropByName(tx, 'agreementExtended');
+  return !!extendedAgreement;
+};
 export const txIsDelivered = tx =>
   getTransitionsToState(STATE_DELIVERED).includes(txLastTransition(tx));
 

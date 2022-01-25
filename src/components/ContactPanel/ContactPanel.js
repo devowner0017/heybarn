@@ -9,7 +9,7 @@ import { propTypes, LISTING_STATE_CLOSED, LINE_ITEM_NIGHT, LINE_ITEM_DAY } from 
 import { formatMoney } from '../../util/currency';
 import { parse, stringify } from '../../util/urlHelpers';
 import config from '../../config';
-import { ModalInMobile, Button } from '..';
+import { ModalInMobile, Button, NamedLink } from '..';
 import { BookingDatesForm } from '../../forms';
 
 import css from './ContactPanel.module.css';
@@ -70,8 +70,12 @@ const ContactPanel = props => {
     lineItems,
     fetchLineItemsInProgress,
     fetchLineItemsError,
+    currentUserInTransaction,
   } = props;
-  console.log('🚀 | file: ContactPanel.js | line 74 | listingUnderEnquiry', listingUnderEnquiry);
+  console.log(
+    '🚀 | file: ContactPanel.js | line 75 | currentUserInTransaction',
+    currentUserInTransaction
+  );
 
   const price = listing.attributes.price;
   const hasListingState = !!listing.attributes.state;
@@ -139,7 +143,20 @@ const ContactPanel = props => {
           </div>
         </div>
 
-        {showBookingDatesForm ? (
+        {!!currentUserInTransaction ? (
+          <NamedLink
+            className={css.bookButton}
+            name={'OrderDetailsPage'}
+            params={{ id: currentUserInTransaction.id.uuid }}
+          >
+            <Button
+            rootClassName={css.bookButton}
+          >
+            View Transaction
+            {/* <FormattedMessage id="ContactPanel.ctaButtonMessage" /> */}
+          </Button>
+          </NamedLink>
+        ) : showBookingDatesForm ? (
           <Button
             rootClassName={css.bookButton}
             disabled={listingUnderEnquiry}

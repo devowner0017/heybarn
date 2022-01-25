@@ -32,6 +32,7 @@ const EditListingFeaturesFormComponent = props => (
         filterConfig,
         listingType,
       } = formRenderProps;
+      console.log("🚀 | file: EditListingFeaturesForm.js | line 35 | formRenderProps", formRenderProps);
 
       const classes = classNames(rootClassName || css.root, className);
       const submitReady = (updated && pristine) || ready;

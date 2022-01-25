@@ -23,7 +23,9 @@ const EditListingAvailabilityPanel = props => {
     panelUpdated,
     updateInProgress,
     errors,
+    listingType
   } = props;
+    console.log("🚀 | file: EditListingAvailabilityPanel.js | line 28 | listingType", listingType);
 
   const classes = classNames(rootClassName || css.root, className);
   const currentListing = ensureOwnListing(listing);
@@ -51,7 +53,7 @@ const EditListingAvailabilityPanel = props => {
             values={{ listingTitle: <ListingLink listing={listing} /> }}
           />
         ) : (
-          <FormattedMessage id="EditListingAvailabilityPanel.createListingTitle" />
+          <FormattedMessage id={`EditListingAvailabilityPanel.${listingType}createListingTitle`} />
         )}
       </h1>
       <EditListingAvailabilityForm

@@ -243,7 +243,9 @@ export class ListingPageComponent extends Component {
       lineItems,
       fetchLineItemsInProgress,
       fetchLineItemsError,
+      currentUserInTransaction
     } = this.props;
+    console.log("🚀 | file: ListingPage.js | line 247 | ListingPageComponent | render | currentUserInTransaction", currentUserInTransaction);
 
     const listingId = new UUID(rawParams.id);
     const isPendingApprovalVariant = rawParams.variant === LISTING_PAGE_PENDING_APPROVAL_VARIANT;
@@ -317,7 +319,6 @@ export class ListingPageComponent extends Component {
     const bookingTitle = (
       <FormattedMessage id="ListingPage.bookingTitle" values={{ title: richTitle }} />
     );
-    const bookingSubTitle = intl.formatMessage({ id: 'ListingPage.bookingSubTitle' });
 
     const topbar = <TopbarContainer />;
 
@@ -476,6 +477,7 @@ export class ListingPageComponent extends Component {
                 listing={currentListing}
                 isOwnListing={isOwnListing}
                 listingUnderEnquiry={listingUnderEnquiry}
+                currentUserInTransaction={currentUserInTransaction}
                 editParams={{
                   id: listingId.uuid,
                   slug: listingSlug,
@@ -515,11 +517,11 @@ export class ListingPageComponent extends Component {
                     listingId={currentListing.id}
                     listingType={typeOfListing}
                   />
-                  <SectionReviews
+                  {/* <SectionReviews
                     reviews={reviews}
                     fetchReviewsError={fetchReviewsError}
                     listingType={typeOfListing}
-                  />
+                  /> */}
                   <SectionHostMaybe
                     title={title}
                     listing={currentListing}
@@ -537,7 +539,6 @@ export class ListingPageComponent extends Component {
                   unitType={unitType}
                   onSubmit={handleContactUser}
                   title={bookingTitle}
-                  subTitle={bookingSubTitle}
                   authorDisplayName={authorDisplayName}
                   onManageDisableScrolling={onManageDisableScrolling}
                   timeSlots={timeSlots}
@@ -546,6 +547,7 @@ export class ListingPageComponent extends Component {
                   lineItems={lineItems}
                   fetchLineItemsInProgress={fetchLineItemsInProgress}
                   fetchLineItemsError={fetchLineItemsError}
+                  currentUserInTransaction={currentUserInTransaction}
                 />
               </div>
             </div>
@@ -631,6 +633,7 @@ const mapStateToProps = state => {
     fetchLineItemsInProgress,
     fetchLineItemsError,
     enquiryModalOpenForListingId,
+    currentUserInTransaction
   } = state.ListingPage;
   const { currentUser } = state.user;
 
@@ -663,6 +666,7 @@ const mapStateToProps = state => {
     fetchLineItemsError,
     sendEnquiryInProgress,
     sendEnquiryError,
+    currentUserInTransaction
   };
 };
 

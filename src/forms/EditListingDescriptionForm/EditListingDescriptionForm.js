@@ -3,7 +3,9 @@ import { arrayOf, bool, func, shape, string } from 'prop-types';
 import { compose } from 'redux';
 import { Form as FinalForm } from 'react-final-form';
 import { intlShape, injectIntl, FormattedMessage } from '../../util/reactIntl';
+import { findConfigForSelectFilter, findOptionsForSelectFilter } from '../../util/search';
 import classNames from 'classnames';
+import arrayMutators from 'final-form-arrays';
 import { propTypes } from '../../util/types';
 import {
   maxLength,
@@ -12,7 +14,16 @@ import {
   nonEmptyArray,
   requiredObject,
 } from '../../util/validators';
-import { Form, Button, FieldTextInput, CustomSelect } from '../../components';
+import config from '../../config';
+
+import {
+  Form,
+  Button,
+  FieldTextInput,
+  CustomSelect,
+  FieldCheckboxGroup,
+  FieldNumberInput,
+} from '../../components';
 import css from './EditListingDescriptionForm.module.css';
 
 const TITLE_MAX_LENGTH = 60;
@@ -20,7 +31,7 @@ const TITLE_MAX_LENGTH = 60;
 const EditListingDescriptionFormComponent = props => (
   <FinalForm
     {...props}
-    // validate={validate}
+    mutators={{ ...arrayMutators }}
     render={formRenderProps => {
       const {
         preferredUse,
@@ -36,8 +47,8 @@ const EditListingDescriptionFormComponent = props => (
         updateInProgress,
         fetchErrors,
         listingType,
+        filterConfig,
       } = formRenderProps;
-        console.log("🚀 | file: EditListingDescriptionForm.js | line 40 | listingType", listingType);
 
       const titleMessage = intl.formatMessage({
         id: `EditListingDescriptionForm.${listingType}_title`,
@@ -97,6 +108,10 @@ const EditListingDescriptionFormComponent = props => (
       const submitInProgress = updateInProgress;
       const submitDisabled = invalid || disabled || submitInProgress;
 
+      const options = findOptionsForSelectFilter('amenities', filterConfig);
+      const sizeOptions = findConfigForSelectFilter('sizeOfSpace', filterConfig);
+      const ageOptions = findConfigForSelectFilter('ageOfSpace', filterConfig);
+
       return (
         <Form className={classes} onSubmit={handleSubmit}>
           {errorMessageCreateListingDraft}
@@ -110,8 +125,42 @@ const EditListingDescriptionFormComponent = props => (
             label={titleMessage}
             placeholder={titlePlaceholderMessage}
             maxLength={TITLE_MAX_LENGTH}
-            validate={submitInProgress ? _ => null :  composeValidators(required(titleRequiredMessage), maxLength60Message)}
+            validate={
+              submitInProgress
+                ? _ => null
+                : composeValidators(required(titleRequiredMessage), maxLength60Message)
+            }
             autoFocus
+          />
+
+          {listingType === 'listing' && (
+            <>
+              <FieldNumberInput
+                className={css.title}
+                label={<FormattedMessage id="EditListingFeaturesForm.sizeOfSpaceLabel" />}
+                id={'sizeOfSpace'}
+                placeholder={'m2'}
+                name={'sizeOfSpace'}
+                config={sizeOptions}
+                validate={submitInProgress ? _ => null : required('Required')}
+              />
+              <FieldNumberInput
+                className={css.title}
+                label={<FormattedMessage id="EditListingFeaturesForm.ageOfSpaceLabel" />}
+                placeholder={'years'}
+                id={'ageOfSpace'}
+                name={'ageOfSpace'}
+                config={ageOptions}
+                validate={submitInProgress ? _ => null : required('Required')}
+              />
+            </>
+          )}
+
+          <FieldCheckboxGroup
+            className={css.title}
+            id={'amenities'}
+            name={'amenities'}
+            options={options}
           />
 
           <FieldTextInput
@@ -121,8 +170,11 @@ const EditListingDescriptionFormComponent = props => (
             type="textarea"
             label={descriptionMessage}
             placeholder={descriptionPlaceholderMessage}
-            validate={submitInProgress ? _ => null :  composeValidators(required(descriptionRequiredMessage))}
+            validate={
+              submitInProgress ? _ => null : composeValidators(required(descriptionRequiredMessage))
+            }
           />
+
           <CustomSelect
             id="preferredUse"
             name="preferredUse"
@@ -131,7 +183,9 @@ const EditListingDescriptionFormComponent = props => (
             label={preferredUseLabel}
             isMulti={listingType === 'listing'}
             validate={
-              listingType === 'listing'
+              submitInProgress
+                ? _ => null
+                : listingType === 'listing'
                 ? nonEmptyArray(preferredUseRequiredMessage)
                 : requiredObject(preferredUseRequiredMessage)
             }
@@ -152,7 +206,11 @@ const EditListingDescriptionFormComponent = props => (
   />
 );
 
-EditListingDescriptionFormComponent.defaultProps = { className: null, fetchErrors: null };
+EditListingDescriptionFormComponent.defaultProps = {
+  className: null,
+  fetchErrors: null,
+  filterConfig: config.custom.filters,
+};
 
 EditListingDescriptionFormComponent.propTypes = {
   className: string,

@@ -174,3 +174,6 @@ export const updateTransactionMetadata = body => {
 export const sendAdminEmail = body => {
   return post('/api/send-admin-email', body);
 };
+export const fetchListingTransactions = body => {
+  return post('/api/fetch-listing-transactions', body);
+};

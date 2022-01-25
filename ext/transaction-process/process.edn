@@ -240,7 +240,27 @@
 
 
  :notifications
- [{:name :notification/new-booking-request,
+ [
+   {:name :notification/fee-paid,
+   :on :transition/host-fee-paid,
+   :to :actor.role/customer,
+   :template :fee-paid}
+
+   {:name :notification/fee-paid,
+   :on :transition/renter-fee-paid,
+   :to :actor.role/customer,
+   :template :fee-paid}
+
+{:name :notification/fee-paid,
+   :on :transition/host-fee-paid,
+   :to :actor.role/customer,
+   :template :fee-paid}
+
+
+
+
+
+   {:name :notification/new-booking-request,
    :on :transition/confirm-payment,
    :to :actor.role/provider,
    :template :new-booking-request}

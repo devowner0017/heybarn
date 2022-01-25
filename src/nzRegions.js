@@ -72,42 +72,42 @@ export const nestedRegions = [
           { key: 'southWairarapa', label: 'South Wairarapa District' },
         ],
       },
-      {
-        key: 'mixed',
-        label: 'Mixed',
-        subdivs: [
-          {
-            key: 'rangitikei',
-            label: "Rangitikei District (Manawatū-Whanganui: 86.37%; Hawke's Bay: 13.63%)",
-          },
-          {
-            key: 'rotoruaLakes',
-            label: 'Rotorua Lakes (Bay of Plenty: 61.52%; Waikato: 38.48%)',
-          },
-          {
-            key: 'stratford',
-            label: 'Stratford District (Taranaki: 68.13%; Manawatū-Whanganui: 31.87%)',
-          },
-          {
-            key: 'tararua',
-            label: 'Tararua District (Manawatū-Whanganui: 98.42%; Wellington: 1.58%)',
-          },
-          {
-            key: 'taupo',
-            label:
-              "Taupo District (Waikato: 73.74%; Bay of Plenty: 14.31%; Hawke's Bay: 11.26%; Manawatū-Whanganui: 0.69%)",
-          },
-          {
-            key: 'waitomo',
-            label: 'Waitomo District (Waikato: 94.87%; Manawatū-Whanganui: 5.13%)',
-          },
-        ],
-      },
-      {
-        key: 'UnitaryAuthority',
-        label: 'Unitary Authority',
-        subdivs: [{ key: 'gisborne', label: 'Gisborne District' }],
-      },
+      // {
+      //   key: 'mixed',
+      //   label: 'Mixed',
+      //   subdivs: [
+      //     {
+      //       key: 'rangitikei',
+      //       label: "Rangitikei District (Manawatū-Whanganui: 86.37%; Hawke's Bay: 13.63%)",
+      //     },
+      //     {
+      //       key: 'rotoruaLakes',
+      //       label: 'Rotorua Lakes (Bay of Plenty: 61.52%; Waikato: 38.48%)',
+      //     },
+      //     {
+      //       key: 'stratford',
+      //       label: 'Stratford District (Taranaki: 68.13%; Manawatū-Whanganui: 31.87%)',
+      //     },
+      //     {
+      //       key: 'tararua',
+      //       label: 'Tararua District (Manawatū-Whanganui: 98.42%; Wellington: 1.58%)',
+      //     },
+      //     {
+      //       key: 'taupo',
+      //       label:
+      //         "Taupo District (Waikato: 73.74%; Bay of Plenty: 14.31%; Hawke's Bay: 11.26%; Manawatū-Whanganui: 0.69%)",
+      //     },
+      //     {
+      //       key: 'waitomo',
+      //       label: 'Waitomo District (Waikato: 94.87%; Manawatū-Whanganui: 5.13%)',
+      //     },
+      //   ],
+      // },
+      // {
+      //   key: 'UnitaryAuthority',
+      //   label: 'Unitary Authority',
+      //   subdivs: [{ key: 'gisborne', label: 'Gisborne District' }],
+      // },
     ],
   },
   {
@@ -154,24 +154,24 @@ export const nestedRegions = [
           { key: 'westland', label: 'Westland District' },
         ],
       },
-      {
-        key: 'Mixed',
-        label: 'Mixed',
-        subdivs: [
-          {
-            key: 'waitaki',
-            label: 'Waitaki District (Canterbury: 59.61%; Otago: 40.39%)',
-          },
-        ],
-      },
-      {
-        key: 'UnitaryAuthority',
-        label: 'Unitary Authority',
-        subdivs: [
-          { key: 'marlborough', label: 'Marlborough District' },
-          { key: 'tasman', label: 'Tasman District' },
-        ],
-      },
+      // {
+      //   key: 'Mixed',
+      //   label: 'Mixed',
+      //   subdivs: [
+      //     {
+      //       key: 'waitaki',
+      //       label: 'Waitaki District (Canterbury: 59.61%; Otago: 40.39%)',
+      //     },
+      //   ],
+      // },
+      // {
+      //   key: 'UnitaryAuthority',
+      //   label: 'Unitary Authority',
+      //   subdivs: [
+      //     { key: 'marlborough', label: 'Marlborough District' },
+      //     { key: 'tasman', label: 'Tasman District' },
+      //   ],
+      // },
     ],
   },
 ];

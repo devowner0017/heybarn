@@ -12,7 +12,13 @@ module.exports = async (req, res) => {
     clientSecret: process.env.SHARETRIBE_INTEGRATION_CLIENT_SECRET,
   });
   const { actor, subscription, pm } = req.body;
-
+  if (!subscription) {
+    return res
+      .status(500)
+      .set('Content-Type', 'application/transit+json')
+      .send({ error: 'NO SUBSCRIPTION', message: 'NO SUBSCRIPTION' })
+      .end();
+  }
   // TODO: UPDATE ERROR HANDLING
   return stripe.subscriptions
     .update(subscription.id, { default_payment_method: pm })

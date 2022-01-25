@@ -57,13 +57,13 @@ export class EditListingAvailabilityFormComponent extends Component {
                 /> */}
                 <FieldDateInput
                   className={css.bookingDates}
-                  label={'Start'}
+                  label={'Start Date'}
                   name="startDate"
                   id={`startDate`}
                   unitType={'units'}
                   startDateId={`startDate`}
-                  startDateLabel={'Start'}
-                  startDatePlaceholderText={'StartPlace'}
+                  startDateLabel={'Start Date'}
+                  placeholderText={"Select..."}
                   endDateId={`endDate`}
                   endDateLabel={'EndLabel'}
                   endDatePlaceholderText={'endDatePlaceholderText'}

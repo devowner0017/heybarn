@@ -161,7 +161,8 @@ const PanelHeading = props => {
             <p className={css.transactionInfoMessage}>
               <FormattedMessage
                 id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_hostEnquiredSubTitle`}
-              />
+          values={{ providerName, listingLink, customerName, listingLink }}
+          />
             </p>
           ) : null}
         </HeadingWithSubtitle>
@@ -178,6 +179,8 @@ const PanelHeading = props => {
             <p className={css.transactionInfoMessage}>
               <FormattedMessage
                 id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_renterEnquiredSubTitle`}
+          values={{ providerName, listingLink, customerName, listingLink }}
+
               />
             </p>
           ) : null}

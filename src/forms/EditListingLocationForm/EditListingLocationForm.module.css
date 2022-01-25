@@ -1,3 +1,6 @@
+@import '../../styles/propertySets.css';
+
+
 .root {
   /* Dimensions */
   width: 100%;
@@ -69,10 +72,10 @@
 .locationAddress,
 .building {
   flex-shrink: 0;
-  margin-bottom: 24px;
+  margin-bottom: 12;
 
   @media (--viewportMedium) {
-    margin-bottom: 32px;
+    margin-bottom: 16px;
   }
 }
 
@@ -89,4 +92,8 @@
 
 .regionWrapper {
   padding: 2rem 0;
+}
+
+.disclaimerText{
+  @apply --marketplaceTinyFontStyles;
 }

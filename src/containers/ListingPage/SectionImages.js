@@ -18,6 +18,7 @@ const SectionImages = props => {
     imageCarouselOpen,
     onImageCarouselClose,
     onManageDisableScrolling,
+    currentUserInTransaction,
   } = props;
   const history = useHistory();
 
@@ -31,15 +32,17 @@ const SectionImages = props => {
       <ActionBarMaybe isOwnListing={isOwnListing} listing={listing} editParams={editParams} />
     </div>
   ) : null;
-const listingStateBar = listing.id ? (
-  <div onClick={e => e.stopPropagation()}>
-    <ActionBarMaybe
-      listingUnderEnquiry={listingUnderEnquiry} isOwnListing={isOwnListing}
-      listing={listing}
-      editParams={editParams}
-    />
-  </div>
-) : null;
+  const listingStateBar = listing.id ? (
+    <div onClick={e => e.stopPropagation()}>
+      <ActionBarMaybe
+        listingUnderEnquiry={listingUnderEnquiry}
+        isOwnListing={isOwnListing}
+        currentUserInTransaction={currentUserInTransaction}
+        listing={listing}
+        editParams={editParams}
+      />
+    </div>
+  ) : null;
   const viewPhotosButton = hasImages ? (
     <button className={css.viewPhotos} onClick={handleViewPhotosClick}>
       <FormattedMessage

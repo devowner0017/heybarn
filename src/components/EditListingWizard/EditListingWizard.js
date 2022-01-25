@@ -40,7 +40,7 @@ const availabilityMaybe = config.enableAvailability ? [AVAILABILITY] : [];
 export const TABS = [
   DESCRIPTION,
   LOCATION,
-  FEATURES,
+  // FEATURES,
   POLICY,
   PRICING,
   ...availabilityMaybe,
@@ -49,7 +49,7 @@ export const TABS = [
 export const LISTING_TABS = [
   DESCRIPTION,
   LOCATION,
-  FEATURES,
+  // FEATURES,
   POLICY,
   ...availabilityMaybe,
   PRICING,
@@ -57,7 +57,7 @@ export const LISTING_TABS = [
 ];
 export const ADVERT_TABS = [
   DESCRIPTION,
-  FEATURES,
+  // FEATURES,
   LOCATION,
   ...availabilityMaybe,
   POLICY,
@@ -76,8 +76,8 @@ const tabLabel = (intl, tab, listingType) => {
     key = 'EditListingWizard.tabLabelDescription';
   } else if (tab === LOCATION) {
     key = 'EditListingWizard.tabLabelLocation';
-  } else if (tab === FEATURES) {
-    key = 'EditListingWizard.tabLabelFeatures';
+  // } else if (tab === FEATURES) {
+  //   key = 'EditListingWizard.tabLabelFeatures';
   } else if (tab === POLICY) {
     key = `EditListingWizard.tabLabel${listingType}Policy`;
   } else if (tab === PRICING) {
@@ -123,8 +123,8 @@ const tabCompleted = (tab, listing) => {
         publicData.location &&
         publicData.location.address
       );
-    case FEATURES:
-      return !!(!!listingType && publicData && publicData.amenities);
+    // case FEATURES:
+    //   return !!(!!listingType && publicData && publicData.amenities);
     case POLICY:
       return !!(!!listingType && publicData && typeof publicData.rules !== 'undefined');
     case PRICING:

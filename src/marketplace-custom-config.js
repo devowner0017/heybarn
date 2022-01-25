@@ -140,7 +140,7 @@ export const filters = [
     queryParamNames: ['pub_ageOfSpace'],
     config: {
       min: 1,
-      max: 50,
+      max: 100,
       step: 1,
       customFormat: 'years',
     },

@@ -14,7 +14,14 @@ import EditIcon from './EditIcon';
 import css from './ListingPage.module.css';
 
 export const ActionBarMaybe = props => {
-  const { isOwnListing, listingUnderEnquiry, listing, editParams } = props;
+  const {
+    isOwnListing,
+    listingUnderEnquiry,
+    listing,
+    editParams,
+    currentUserInTransaction,
+  } = props;
+    console.log("🚀 | file: ActionBarMaybe.js | line 24 | currentUserInTransaction", currentUserInTransaction);
   const state = listing.attributes.state;
   const isPendingApproval = state === LISTING_STATE_PENDING_APPROVAL;
   const isClosed = state === LISTING_STATE_CLOSED;
@@ -22,7 +29,6 @@ export const ActionBarMaybe = props => {
 
   if (isOwnListing) {
     let ownListingTextTranslationId = 'ListingPage.ownListing';
-
     if (isPendingApproval) {
       ownListingTextTranslationId = 'ListingPage.ownListingPendingApproval';
     } else if (isClosed) {
@@ -46,6 +52,14 @@ export const ActionBarMaybe = props => {
           <EditIcon className={css.editIcon} />
           <FormattedMessage id={message} />
         </NamedLink>
+      </div>
+    );
+  } else if (!!currentUserInTransaction) {
+    return (
+      <div className={css.actionBar}>
+        <p className={css.closedListingText}>
+          <FormattedMessage id="ListingPage.currentUserInTransaction" />
+        </p>
       </div>
     );
   } else if (isClosed) {

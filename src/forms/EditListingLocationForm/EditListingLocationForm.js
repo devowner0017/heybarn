@@ -39,9 +39,7 @@ export const EditListingLocationFormComponent = props => (
         values,
         listingType,
       } = formRenderProps;
-      console.log("🚀 | file: EditListingLocationForm.js | line 42 | formRenderProps", formRenderProps);
-      const region = getPropByName(values, 'region');
-      console.log('🚀 | file: EditListingLocationForm.js | line 42 | region', region);
+      const region = getPropByName(values, 'locRegion');
 
       const titleRequiredMessage = intl.formatMessage({ id: 'EditListingLocationForm.address' });
       const addressPlaceholderMessage = intl.formatMessage({
@@ -73,37 +71,32 @@ export const EditListingLocationFormComponent = props => (
       const submitDisabled = invalid || disabled || submitInProgress;
       const filterConfig = config.custom.filters;
       const islandConfig = filterConfig.find(f => f.id === 'locIsland');
-      console.log('🚀 | file: EditListingLocationForm.js | line 75 | islandConfig', islandConfig);
       const islands = islandConfig?.config.options;
-      console.log('🚀 | file: EditListingLocationForm.js | line 76 | islands', islands);
       const regionConfig = filterConfig.find(f => f.id === 'locRegion');
-      console.log('🚀 | file: EditListingLocationForm.js | line 79 | regionConfig', regionConfig);
       const regions = regionConfig?.config.options;
-      console.log('🚀 | file: EditListingLocationForm.js | line 81 | regions', regions);
       const districtConfig = filterConfig.find(f => f.id === 'locDistrict');
       const districts = districtConfig.config.options;
       const filteredRegions = regions?.filter(r => r.parent === values?.locIsland);
-      console.log("🚀 | file: EditListingLocationForm.js | line 85 | filteredRegions", filteredRegions);
       const filteredDistricts = districts?.filter(r => r.parent === values?.locRegion);
-      console.log("🚀 | file: EditListingLocationForm.js | line 87 | filteredDistricts", filteredDistricts);
 
       useEffect(() => {
-        console.log('🚀 | file: EditListingLocationForm.js | line 46 | useEffect | region', region);
         const regionValue = regions.find(r => r.key === region);
+        console.log(
+          '🚀 | file: EditListingLocationForm.js | line 85 | useEffect | regionValue',
+          regionValue
+        );
         if (!!regionValue) {
-          console.log("🚀 | file: EditListingLocationForm.js | line 91 | useEffect | regionValue", regionValue);
           form.change('locIsland', regionValue.parent);
         }
       }, [region]);
+      console.log('🚀 | file: EditListingLocationForm.js | line 90 | region', region);
       useEffect(() => {
-        console.log('🚀 | file: EditListingLocationForm.js | line 46 | useEffect | region', region);
         const regionValue = regions.find(r => r.key === region);
         if (!!regionValue) {
-          console.log("🚀 | file: EditListingLocationForm.js | line 91 | useEffect | regionValue", regionValue);
           form.change('locRegion', region);
         }
       }, [values.locIsland]);
-      console.log(values);
+
       return (
         <Form className={classes} onSubmit={handleSubmit}>
           {errorMessage}
@@ -111,10 +104,10 @@ export const EditListingLocationFormComponent = props => (
           <FormSpy
             subscription={{ values: true }}
             onChange={val => {
-              if (val?.values?.locIsland !== values?.locIsland) {
-                form.change('locRegion', null);
-                form.change('locDistrict', null);
-              }
+              // if (val?.values?.locIsland !== values?.locIsland) {
+              //   form.change('locRegion', null);
+              //   form.change('locDistrict', null);
+              // }
               if (val?.values?.locRegion !== values?.locRegion) {
                 form.change('locDistrict', null);
               }
@@ -126,7 +119,7 @@ export const EditListingLocationFormComponent = props => (
               <h2 className={css.title}>Where is this listing located?</h2>
             )}
 
-            <FieldSelect
+            {/* <FieldSelect
               className={css.category}
               name={'locIsland'}
               id={'locIsland'}
@@ -140,7 +133,7 @@ export const EditListingLocationFormComponent = props => (
                   {c.label}
                 </option>
               ))}
-            </FieldSelect>
+            </FieldSelect> */}
             <FieldSelect
               className={css.category}
               name={'locRegion'}
@@ -150,7 +143,7 @@ export const EditListingLocationFormComponent = props => (
               <option disabled value="">
                 {'Select Region'}
               </option>
-              {filteredRegions.map(c => (
+              {regions.map(c => (
                 <option key={c.key} value={c.key}>
                   {c.label}
                 </option>
@@ -191,7 +184,11 @@ export const EditListingLocationFormComponent = props => (
               autocompletePlaceSelected(addressNotRecognizedMessage)
             )}
           />
-
+          <p className={css.disclaimerText}>
+            Your data security is our highest concern and your address will not be made available to
+            any other user. Your location will be contained in a 2km circle on our location map and
+            this address will only be used to populate search queries.
+          </p>
           <Button
             className={css.submitButton}
             type="submit"
