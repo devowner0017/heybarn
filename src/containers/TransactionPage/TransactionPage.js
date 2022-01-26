@@ -203,7 +203,10 @@ export const TransactionPageComponent = props => {
   };
   const handleUpdateSubscriptionPaymentMethod = pm => {
     onUpdateSubscriptionPaymentMethod({subscription, pm, actor: 'customer'}).then(_ => {
-      onFetchTransaction(currentTransaction.id, transactionRole);
+      console.log("🚀 | file: TransactionPage.js | line 206 | onUpdateSubscriptionPaymentMethod | _", _);
+      onFetchTransaction(currentTransaction.id, transactionRole).then(() => {
+        onFetchTransaction(currentTransaction.id, transactionRole)
+      })
     });
   };
   const deletedListingTitle = intl.formatMessage({

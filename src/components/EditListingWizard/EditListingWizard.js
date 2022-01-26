@@ -306,6 +306,7 @@ class EditListingWizard extends Component {
       isAdvert,
       ...rest
     } = this.props;
+    console.log("🚀 | file: EditListingWizard.js | line 309 | EditListingWizard | render | this.props", this.props);
 
     const selectedTab = params.tab;
     const isNewListingFlow = [LISTING_PAGE_PARAM_TYPE_NEW, LISTING_PAGE_PARAM_TYPE_DRAFT].includes(

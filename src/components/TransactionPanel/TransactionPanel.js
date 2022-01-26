@@ -287,7 +287,7 @@ export class TransactionPanelComponent extends Component {
     );
 
     const showOtherListing = currentListing.author.id.uuid === currentUser.id.uuid;
-    const otherListing = showOtherListing ? ensuredRelated :  currentListing;
+    const otherListing = showOtherListing ? ensuredRelated : currentListing;
 
     console.log(
       '🚀 | file: TransactionPanel.js | line 283 | TransactionPanelComponent | render | currentUser',
@@ -316,6 +316,8 @@ export class TransactionPanelComponent extends Component {
     const isProviderDeleted = isProviderLoaded && currentProvider.attributes.deleted;
 
     const stateDataFn = tx => {
+      const relatedTxId = getPropByName(tx, 'relatedTxId');
+
       if (txIsRenterEnquired(tx)) {
         const transitions = Array.isArray(nextTransitions)
           ? nextTransitions.map(transition => {
@@ -381,6 +383,7 @@ export class TransactionPanelComponent extends Component {
       else if (txHasHostDeclined(tx)) {
         return {
           headingState: HEADING_HOST_DECLINED_COMMUNICATION,
+          relatedTxId,
           showDetailCardHeadings: true,
         };
       }
@@ -388,6 +391,7 @@ export class TransactionPanelComponent extends Component {
       else if (txHasRenterDeclined(tx)) {
         return {
           headingState: HEADING_RENTER_DECLINED_COMMUNICATION,
+          relatedTxId,
           showDetailCardHeadings: true,
         };
       }
@@ -399,6 +403,7 @@ export class TransactionPanelComponent extends Component {
         );
         return {
           headingState: HEADING_RENTAL_AGREEMENT_DISCUSSION,
+          relatedTxId,
           showDetailCardHeadings: true,
           showRentalAgreementButtons: true,
           allowMessages: true,
@@ -467,6 +472,7 @@ export class TransactionPanelComponent extends Component {
       else if (txIsRentalAgreementRequested(tx)) {
         return {
           headingState: HEADING_RENTAL_AGREEMENT_REQUESTED,
+          relatedTxId,
           showDetailCardHeadings: true,
           showRentalAgreementButtons: true,
           allowMessages: true,
@@ -513,6 +519,7 @@ export class TransactionPanelComponent extends Component {
                 bookingDates: { startDate, endDate },
                 txId: currentTransaction.id,
                 listingId: currentListing.id,
+                wasRequested: true,
               });
               this.handleOpenRentalAgreementModal(false);
             },
@@ -567,8 +574,7 @@ export class TransactionPanelComponent extends Component {
         return {
           headingState: HEADING_RENTAL_AGREEMENT_SENT,
           showDetailCardHeadings: true,
-          showRentalSignatureButtons: isCustomer && hasCorrectNextTransition,
-          // TODO: Fix THIS STEP
+          showRentalSignatureButtons: config.dev ,
           showBreakdowns: isCustomer,
           allowMessages: false,
 
@@ -708,6 +714,7 @@ export class TransactionPanelComponent extends Component {
       }
     };
     const stateData = stateDataFn(currentTransaction) || {};
+    console.log("🚀 | file: TransactionPanel.js | line 717 | TransactionPanelComponent | render | stateData", stateData);
     console.log(
       '🚀 | file: TransactionPanel.js | line 588 | TransactionPanelComponent | render | stateData',
       stateData
@@ -813,10 +820,13 @@ export class TransactionPanelComponent extends Component {
     const firstImage =
       currentListing.images && currentListing.images.length > 0 ? currentListing.images[0] : null;
 
-      const otherListingTitle = showOtherListing ? relatedTitle : listingTitle;
-      const otherListingImage = showOtherListing ? relatedFirstImage : firstImage;
-      console.log("🚀 | file: TransactionPanel.js | line 788 | TransactionPanelComponent | render | otherListingImage", otherListingImage);
-      const otherListingSlug = showOtherListing ? relatedListingSlug : currentListingSlug;
+    const otherListingTitle = showOtherListing ? relatedTitle : listingTitle;
+    const otherListingImage = showOtherListing ? relatedFirstImage : firstImage;
+    console.log(
+      '🚀 | file: TransactionPanel.js | line 788 | TransactionPanelComponent | render | otherListingImage',
+      otherListingImage
+    );
+    const otherListingSlug = showOtherListing ? relatedListingSlug : currentListingSlug;
 
     const acceptCommunicationButtons = (
       <ActionButtonsMaybe
@@ -886,7 +896,7 @@ export class TransactionPanelComponent extends Component {
           })
         }
         negativeAction={() => this.setShowConfirmationModal(true)}
-        affirmativeText={'Sign Rental Agreement'}
+        affirmativeText={'Sign Rental Agreement _ RENTER & DEV ONLY'}
       />
     );
 
@@ -971,6 +981,7 @@ export class TransactionPanelComponent extends Component {
             />
             <PanelHeading
               panelHeadingState={stateData.headingState}
+              relatedTxId={stateData.relatedTxId}
               transactionRole={transactionRole}
               providerName={authorDisplayName}
               customerName={customerDisplayName}
@@ -978,6 +989,7 @@ export class TransactionPanelComponent extends Component {
               listingId={currentListing.id && currentListing.id.uuid}
               listingTitle={listingTitle}
               listingDeleted={listingDeleted}
+              listingType={listingType}
             />
             <div className={css.bookingDetailsMobile}>
               <AddressLinkMaybe
@@ -1004,7 +1016,10 @@ export class TransactionPanelComponent extends Component {
             ) : null}
             {stateData.showUpdatePaymentMethodsPanel && (
               <UpdatePaymentMethodsPanel
+                currentUser={currentUser}
                 onUpdateSubscriptionPaymentMethod={onUpdateSubscriptionPaymentMethod}
+                subscription={subscription}
+                transaction={ensureTransaction(transaction)}
               />
             )}
             {showSendMessageForm ? (
@@ -1063,23 +1078,25 @@ export class TransactionPanelComponent extends Component {
                 provider={currentProvider}
                 isCustomer={isCustomer}
               />
-              <NamedLink
-                name={currentListing?.id?.uuid ? 'ListingPage' : 'LandingPage'}
-                params={{
-                  id: showOtherListing ? otherListing?.id?.uuid : currentListing?.id?.uuid,
-                  slug: showOtherListing ? otherListingSlug : currentListingSlug,
-                }}
-              >
-                <DetailCardHeadingsMaybe
-                  showDetailCardHeadings={stateData.showDetailCardHeadings}
-                  listingTitle={showOtherListing ? otherListingTitle : listingTitle}
+              {!!(showOtherListing ? otherListing?.id?.uuid : currentListing?.id?.uuid) && (
+                <NamedLink
+                  name={currentListing?.id?.uuid ? 'ListingPage' : 'LandingPage'}
+                  params={{
+                    id: showOtherListing ? otherListing?.id?.uuid : currentListing?.id?.uuid,
+                    slug: showOtherListing ? otherListingSlug : currentListingSlug,
+                  }}
+                >
+                  <DetailCardHeadingsMaybe
+                    showDetailCardHeadings={stateData.showDetailCardHeadings}
+                    listingTitle={showOtherListing ? otherListingTitle : listingTitle}
+                    subTitle={showOtherListing ? null : bookingSubTitle}
+                    location={location}
+                    geolocation={geolocation}
+                    showAddress={stateData.showAddress}
+                  />
+                </NamedLink>
+              )}
 
-                  subTitle={showOtherListing ? null : bookingSubTitle}
-                  location={location}
-                  geolocation={geolocation}
-                  showAddress={stateData.showAddress}
-                />
-              </NamedLink>
               {stateData.showBreakdowns && (
                 <BreakdownMaybe
                   className={css.breakdownContainer}

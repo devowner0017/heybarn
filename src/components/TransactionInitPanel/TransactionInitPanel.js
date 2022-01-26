@@ -7,7 +7,7 @@ import { LINE_ITEM_NIGHT, LINE_ITEM_DAY, propTypes } from '../../util/types';
 import { ensureTransaction, ensureUser, userDisplayNameAsString } from '../../util/data';
 import { isMobileSafari } from '../../util/userAgent';
 import { formatMoney } from '../../util/currency';
-import { AvatarLarge, CreateListingModal, NamedLink, UserDisplayName } from '..';
+import { AvatarLarge, CreateListingModal, NamedLink, UserDisplayName, Button } from '..';
 import config from '../../config';
 
 // These are internal components that make this file more readable.
@@ -16,7 +16,8 @@ import DetailCardImage from './DetailCardImage';
 import PanelHeading, { HEADING_READY, HEADING_ENQUIRED } from './PanelHeading';
 
 import css from './TransactionInitPanel.module.css';
-import { useHistory } from 'react-router';
+import routeConfiguration from '../../routeConfiguration';
+import { createResourceLocatorString } from '../../util/routes';
 
 // Helper function to get display names for different roles
 const displayNames = (currentUser, currentProvider, currentCustomer, intl) => {
@@ -129,6 +130,8 @@ export class TransactionInitPanelComponent extends Component {
   render() {
     const {
       rootClassName,
+      history,
+      pageLocation,
       className,
       currentUser,
       currentListing,
@@ -146,7 +149,14 @@ export class TransactionInitPanelComponent extends Component {
       selectedListing,
       couponCodeComp,
       listingType,
+      guest,
+      host,
+      contactingAs,
     } = this.props;
+    console.log(
+      '🚀 | file: TransactionInitPanel.js | line 151 | TransactionInitPanelComponent | render | location',
+      pageLocation
+    );
 
     const currentProvider = ensureUser(currentListing.author);
     const currentCustomer = ensureUser(currentUser);
@@ -182,7 +192,28 @@ export class TransactionInitPanelComponent extends Component {
       }
     };
     const stateData = stateDataFn(currentListing);
-
+    const handleRedirect = () => {
+      console.log(1111111111111);
+      const routes = routeConfiguration();
+      console.log(
+        '🚀 | file: CreateListingModal.js | line 35 | handleRedirect | pageLocation.pathname',
+        pageLocation.pathname
+      );
+      history.push(
+        createResourceLocatorString(
+          `New${listingType === 'listing' ? 'Advert' : 'Listing'}Page`,
+          routes,
+          {},
+          {}
+        ),
+        {
+          fromPage: pageLocation.pathname,
+          guest,
+          host,
+          contactingAs,
+        }
+      );
+    };
     const deletedListingTitle = intl.formatMessage({
       id: 'TransactionInitPanel.deletedListingTitle',
     });
@@ -228,6 +259,14 @@ export class TransactionInitPanelComponent extends Component {
         <FormattedMessage id="TransactionInitPanel.paymentMethodsPageLink" />
       </NamedLink>
     );
+    const createAListingButton = (
+      <Button className={css.createAListingButton} onClick={() => handleRedirect()}>
+        <FormattedMessage
+          id="TransactionInitPanel.createAListingButton"
+          values={{ listingType: listingType === 'listing' ? 'advert' : 'listing' }}
+        />
+      </Button>
+    );
 
     const classes = classNames(rootClassName || css.root, className);
     return (
@@ -248,34 +287,33 @@ export class TransactionInitPanelComponent extends Component {
               </div>
             ) : null}
             <div className={css.panelContentWrapper}>
+              <PanelHeading
+                panelHeadingState={stateData.headingState}
+                transactionRole={transactionRole}
+                providerName={authorDisplayName}
+                customerName={customerDisplayName}
+                otherUserDisplayName={otherUserDisplayName}
+                isCustomerBanned={isCustomerBanned}
+                listingId={currentListing.id && currentListing.id.uuid}
+                listingTitle={listingTitle}
+                listingDeleted={listingDeleted}
+                listingType={listingType}
+              />
+              {savePaymentMethodFailed ? (
+                <p className={css.genericError}>
+                  <FormattedMessage
+                    id="TransactionInitPanel.savePaymentMethodFailed"
+                    values={{ paymentMethodsPageLink }}
+                  />
+                </p>
+              ) : null}
 
-            <PanelHeading
-              panelHeadingState={stateData.headingState}
-              transactionRole={transactionRole}
-              providerName={authorDisplayName}
-              customerName={customerDisplayName}
-              otherUserDisplayName={otherUserDisplayName}
-              isCustomerBanned={isCustomerBanned}
-              listingId={currentListing.id && currentListing.id.uuid}
-              listingTitle={listingTitle}
-              listingDeleted={listingDeleted}
-              listingType={listingType}
-            />
-            {savePaymentMethodFailed ? (
-              <p className={css.genericError}>
-                <FormattedMessage
-                  id="TransactionInitPanel.savePaymentMethodFailed"
-                  values={{ paymentMethodsPageLink }}
-                />
-              </p>
-            ) : null}
-
-            {selectListing}
-
-            {paymentForm}
-            {/* {couponCodeComp} */}
+              {createAListingButton}
+              <div style={{textAlign: 'center'}}>Or</div>
+              {selectListing}
+              {paymentForm}
+              {/* {couponCodeComp} */}
             </div>
-
           </div>
 
           <div className={css.asideDesktop}>
@@ -292,7 +330,7 @@ export class TransactionInitPanelComponent extends Component {
                 listingTitle={listingTitle}
                 listing={currentListing}
                 subTitle={bookingSubTitle}
-                location={location}
+                location={pageLocation}
                 geolocation={geolocation}
               />
             </div>
@@ -319,7 +357,9 @@ export class TransactionInitPanelComponent extends Component {
           onCloseModal={() => setShowCreateListingPopup(false)}
           onManageDisableScrolling={onManageDisableScrolling}
           listingType={listingType}
+          pageLocation={pageLocation}
           authorName={authorDisplayName}
+          redirectProps={{ guest, host, contactingAs }}
         />
       </div>
     );

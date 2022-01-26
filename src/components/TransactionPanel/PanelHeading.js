@@ -2,10 +2,15 @@ import React from 'react';
 import { FormattedMessage } from '../../util/reactIntl';
 import classNames from 'classnames';
 import { createSlug, stringify } from '../../util/urlHelpers';
-import { NamedLink } from '../../components';
+import { NamedLink, Button } from '../../components';
 
 import css from './TransactionPanel.module.css';
-
+const lineBreak = (
+  <>
+    <br />
+    <br />
+  </>
+);
 export const HEADING_HOST_ENQUIRED = 'host_enquired';
 export const HEADING_RENTER_ENQUIRED = 'renter_enquired';
 export const HEADING_HOST_DECLINED_COMMUNICATION = 'host_declined_communication';
@@ -137,14 +142,49 @@ const PanelHeading = props => {
     listingTitle,
     listingDeleted,
     isCustomerBanned,
+    otherUserDisplayName,
+    listingType,
+    relatedTxId,
   } = props;
+  console.log('🚀 | file: PanelHeading.js | line 141 | providerName', providerName);
+  console.log('🚀 | file: PanelHeading.js | line 141 | customerName', customerName);
 
   const isCustomer = props.transactionRole === 'customer';
 
   const defaultRootClassName = css.heading;
   const titleClasses = classNames(rootClassName || defaultRootClassName, className);
   const listingLink = createListingLink(listingId, listingTitle, listingDeleted);
-
+  const browseLink = (
+    <NamedLink
+      className={css.buttonLink}
+      name={'SearchPage'}
+      to={{
+        search: `?pub_listingType=${listingType}`,
+      }}
+    >
+      <Button className={css.roundButton}>Browse</Button>
+    </NamedLink>
+  );
+  const accountSettingsLink = (
+    <NamedLink
+      className={css.buttonLink}
+      name={'AccountSettingsPage'}
+    >
+      <Button className={css.roundButton}>Account Settings</Button>
+    </NamedLink>
+  );
+  const messageValues = {
+    otherName: otherUserDisplayName,
+    providerName,
+    listingLink,
+    listingTitle,
+    customerName,
+    listingLink,
+    listingType,
+    lineBreak,
+    browseLink,
+    accountSettingsLink
+  };
   switch (panelHeadingState) {
     case HEADING_HOST_ENQUIRED:
       return (
@@ -152,7 +192,7 @@ const PanelHeading = props => {
           className={titleClasses}
           id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_hostEnquiredTitle`}
           // subId={`TransactionPanel.${isCustomer ? 'c' : 'p'}_hostEnquiredSubTitle`}
-          values={{ listingLink, providerName, customerName, listingLink }}
+          values={messageValues}
           listingDeleted={listingDeleted}
           isProvider={!isCustomer}
           isCustomerBanned={isCustomerBanned}
@@ -161,8 +201,8 @@ const PanelHeading = props => {
             <p className={css.transactionInfoMessage}>
               <FormattedMessage
                 id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_hostEnquiredSubTitle`}
-          values={{ providerName, listingLink, customerName, listingLink }}
-          />
+                values={messageValues}
+              />
             </p>
           ) : null}
         </HeadingWithSubtitle>
@@ -172,15 +212,13 @@ const PanelHeading = props => {
         <HeadingWithSubtitle
           className={titleClasses}
           id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_renterEnquiredTitle`}
-          // subId={`TransactionPanel.${isCustomer ? 'c' : 'p'}_renterEnquiredSubTitle`}
-          values={{ providerName, listingLink, customerName, listingLink }}
+          values={messageValues}
         >
           {!listingDeleted ? (
             <p className={css.transactionInfoMessage}>
               <FormattedMessage
                 id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_renterEnquiredSubTitle`}
-          values={{ providerName, listingLink, customerName, listingLink }}
-
+                values={messageValues}
               />
             </p>
           ) : null}
@@ -191,14 +229,18 @@ const PanelHeading = props => {
       return (
         <HeadingWithSubtitle
           className={titleClasses}
-          id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_hostDeclinedTitle`}
-          // subId={`TransactionPanel.${isCustomer ? 'c' : 'p'}_renterEnquiredSubTitle`}
-          values={{ providerName, listingLink, customerName, listingLink }}
+          id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_hostDeclinedTitle${
+            !!relatedTxId ? '_rev' : ''
+          }`}
+          values={messageValues}
         >
           {!listingDeleted ? (
             <p className={css.transactionInfoMessage}>
               <FormattedMessage
-                id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_hostDeclinedSubTitle`}
+                id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_hostDeclinedSubTitle${
+                  !!relatedTxId ? '_rev' : ''
+                }`}
+                values={messageValues}
               />
             </p>
           ) : null}
@@ -208,14 +250,18 @@ const PanelHeading = props => {
       return (
         <HeadingWithSubtitle
           className={titleClasses}
-          id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_renterDeclinedTitle`}
-          // subId={`TransactionPanel.${isCustomer ? 'c' : 'p'}_renterEnquiredSubTitle`}
-          values={{ providerName, listingLink, customerName, listingLink }}
+          id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_renterDeclinedTitle${
+            !!relatedTxId ? '_rev' : ''
+          }`}
+          values={messageValues}
         >
           {!listingDeleted ? (
             <p className={css.transactionInfoMessage}>
               <FormattedMessage
-                id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_renterDeclinedSubTitle`}
+                id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_renterDeclinedSubTitle${
+                  !!relatedTxId ? '_rev' : ''
+                }`}
+                values={messageValues}
               />
             </p>
           ) : null}
@@ -225,14 +271,18 @@ const PanelHeading = props => {
       return (
         <HeadingWithSubtitle
           className={titleClasses}
-          id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementDiscussionTitle`}
-          // subId={`TransactionPanel.${isCustomer ? 'c' : 'p'}_renterEnquiredSubTitle`}
-          values={{ providerName, listingLink, customerName, listingLink }}
+          id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementDiscussionTitle${
+            !!relatedTxId ? '_rev' : ''
+          }`}
+          values={messageValues}
         >
           {!listingDeleted ? (
             <p className={css.transactionInfoMessage}>
               <FormattedMessage
-                id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementDiscussionSubTitle`}
+                id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementDiscussionSubTitle${
+                  !!relatedTxId ? '_rev' : ''
+                }`}
+                values={messageValues}
               />
             </p>
           ) : null}
@@ -243,13 +293,13 @@ const PanelHeading = props => {
         <HeadingWithSubtitle
           className={titleClasses}
           id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_wasApprovedByRenterTitle`}
-          // subId={`TransactionPanel.${isCustomer ? 'c' : 'p'}_renterEnquiredSubTitle`}
-          values={{ providerName, listingLink, customerName, listingLink }}
+          values={messageValues}
         >
           {!listingDeleted ? (
             <p className={css.transactionInfoMessage}>
               <FormattedMessage
                 id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_wasApprovedByRenterSubTitle`}
+                values={messageValues}
               />
             </p>
           ) : null}
@@ -260,13 +310,13 @@ const PanelHeading = props => {
         <HeadingWithSubtitle
           className={titleClasses}
           id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_reversedTransactionFlowTitle`}
-          // subId={`TransactionPanel.${isCustomer ? 'c' : 'p'}_renterEnquiredSubTitle`}
-          values={{ providerName, listingLink, customerName, listingLink }}
+          values={messageValues}
         >
           {!listingDeleted ? (
             <p className={css.transactionInfoMessage}>
               <FormattedMessage
                 id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_reversedTransactionFlowSubTitle`}
+                values={messageValues}
               />
             </p>
           ) : null}
@@ -277,30 +327,31 @@ const PanelHeading = props => {
         <HeadingWithSubtitle
           className={titleClasses}
           id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_cancelledDuringRadTitle`}
-          // subId={`TransactionPanel.${isCustomer ? 'c' : 'p'}_renterEnquiredSubTitle`}
-          values={{ providerName, listingLink, customerName, listingLink }}
+          values={messageValues}
         >
           {!listingDeleted ? (
             <p className={css.transactionInfoMessage}>
               <FormattedMessage
                 id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_cancelledDuringRadSubTitle`}
+                values={messageValues}
               />
             </p>
           ) : null}
         </HeadingWithSubtitle>
       );
     case HEADING_RENTAL_AGREEMENT_REQUESTED:
+      console.log('🚀 | file: PanelHeading.js | line 298 | customerName', customerName);
       return (
         <HeadingWithSubtitle
           className={titleClasses}
           id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementRequestedTitle`}
-          // subId={`TransactionPanel.${isCustomer ? 'c' : 'p'}_renterEnquiredSubTitle`}
-          values={{ providerName, listingLink, customerName, listingLink }}
+          values={messageValues}
         >
           {!listingDeleted ? (
             <p className={css.transactionInfoMessage}>
               <FormattedMessage
                 id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementRequestedSubTitle`}
+                values={messageValues}
               />
             </p>
           ) : null}
@@ -311,13 +362,13 @@ const PanelHeading = props => {
         <HeadingWithSubtitle
           className={titleClasses}
           id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementSentTitle`}
-          // subId={`TransactionPanel.${isCustomer ? 'c' : 'p'}_renterEnquiredSubTitle`}
-          values={{ providerName, listingLink, customerName, listingLink }}
+          values={messageValues}
         >
           {!listingDeleted ? (
             <p className={css.transactionInfoMessage}>
               <FormattedMessage
                 id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementSentSubTitle`}
+                values={messageValues}
               />
             </p>
           ) : null}
@@ -328,8 +379,7 @@ const PanelHeading = props => {
         <HeadingWithSubtitle
           className={titleClasses}
           id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_cancelledAfterAgreementSentTitle`}
-          // subId={`TransactionPanel.${isCustomer ? 'c' : 'p'}_renterEnquiredSubTitle`}
-          values={{ providerName, listingLink, customerName, listingLink }}
+          values={messageValues}
         >
           {!listingDeleted ? (
             <p className={css.transactionInfoMessage}>
@@ -337,6 +387,7 @@ const PanelHeading = props => {
                 id={`TransactionPanel.${
                   isCustomer ? 'c' : 'p'
                 }_cancelledAfterAgreementSentSubTitle`}
+                values={messageValues}
               />
             </p>
           ) : null}
@@ -347,13 +398,13 @@ const PanelHeading = props => {
         <HeadingWithSubtitle
           className={titleClasses}
           id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedTitle`}
-          // subId={`TransactionPanel.${isCustomer ? 'c' : 'p'}_renterEnquiredSubTitle`}
-          values={{ providerName, listingLink, customerName, listingLink }}
+          values={messageValues}
         >
           {!listingDeleted ? (
             <p className={css.transactionInfoMessage}>
               <FormattedMessage
                 id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalAgreementFinalizedSubTitle`}
+                values={messageValues}
               />
             </p>
           ) : null}
@@ -364,12 +415,13 @@ const PanelHeading = props => {
         <HeadingWithSubtitle
           className={titleClasses}
           id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalPaidTitle`}
-          values={{ providerName, listingLink, customerName, listingLink }}
+          values={messageValues}
         >
           {!listingDeleted ? (
             <p className={css.transactionInfoMessage}>
               <FormattedMessage
                 id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalPaidSubTitle`}
+                values={messageValues}
               />
             </p>
           ) : null}
@@ -380,28 +432,30 @@ const PanelHeading = props => {
         <HeadingWithSubtitle
           className={titleClasses}
           id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalCancelledTitle`}
-          values={{ providerName, listingLink, customerName, listingLink }}
+          values={messageValues}
         >
           {!listingDeleted ? (
             <p className={css.transactionInfoMessage}>
               <FormattedMessage
                 id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalCancelledSubTitle`}
+                values={messageValues}
               />
             </p>
           ) : null}
         </HeadingWithSubtitle>
       );
-      case HEADING_RENT_PAYMENT_METHOD_MISSING:
+    case HEADING_RENT_PAYMENT_METHOD_MISSING:
       return (
         <HeadingWithSubtitle
           className={titleClasses}
           id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentPaymentMethodMissingTitle`}
-          values={{ providerName, listingLink, customerName, listingLink }}
+          values={messageValues}
         >
           {!listingDeleted ? (
             <p className={css.transactionInfoMessage}>
               <FormattedMessage
                 id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentPaymentMethodMissingSubTitle`}
+                values={messageValues}
               />
             </p>
           ) : null}
@@ -412,12 +466,13 @@ const PanelHeading = props => {
         <HeadingWithSubtitle
           className={titleClasses}
           id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalExtendedTitle`}
-          values={{ providerName, listingLink, customerName, listingLink }}
+          values={messageValues}
         >
           {!listingDeleted ? (
             <p className={css.transactionInfoMessage}>
               <FormattedMessage
                 id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_rentalExtendedSubTitle`}
+                values={messageValues}
               />
             </p>
           ) : null}
@@ -428,14 +483,14 @@ const PanelHeading = props => {
         <HeadingCustomer
           className={titleClasses}
           id="TransactionPanel.orderPaymentExpiredTitle"
-          values={{ listingLink }}
+          values={messageValues}
           listingDeleted={listingDeleted}
         />
       ) : (
         <HeadingProvider
           className={titleClasses}
           id="TransactionPanel.salePaymentExpiredTitle"
-          values={{ customerName, listingLink }}
+          values={messageValues}
           isCustomerBanned={isCustomerBanned}
         />
       );
@@ -444,15 +499,15 @@ const PanelHeading = props => {
         <HeadingCustomerWithSubtitle
           className={titleClasses}
           id="TransactionPanel.orderPreauthorizedTitle"
-          values={{ customerName }}
+          values={messageValues}
           subtitleId="TransactionPanel.orderPreauthorizedSubtitle"
-          subtitleValues={{ listingLink }}
+          subtitleValues={messageValues}
         >
           {!listingDeleted ? (
             <p className={css.transactionInfoMessage}>
               <FormattedMessage
                 id="TransactionPanel.orderPreauthorizedInfo"
-                values={{ providerName }}
+                values={messageValues}
               />
             </p>
           ) : null}
@@ -461,11 +516,11 @@ const PanelHeading = props => {
         <HeadingProvider
           className={titleClasses}
           id="TransactionPanel.saleRequestedTitle"
-          values={{ customerName, listingLink }}
+          values={messageValues}
         >
           {!isCustomerBanned ? (
             <p className={titleClasses}>
-              <FormattedMessage id="TransactionPanel.saleRequestedInfo" values={{ customerName }} />
+              <FormattedMessage id="TransactionPanel.saleRequestedInfo" values={messageValues} />
             </p>
           ) : null}
         </HeadingProvider>
@@ -475,15 +530,15 @@ const PanelHeading = props => {
         <HeadingCustomerWithSubtitle
           className={titleClasses}
           id="TransactionPanel.orderPreauthorizedTitle"
-          values={{ customerName }}
+          values={messageValues}
           subtitleId="TransactionPanel.orderAcceptedSubtitle"
-          subtitleValues={{ listingLink }}
+          subtitleValues={messageValues}
         />
       ) : (
         <HeadingProvider
           className={titleClasses}
           id="TransactionPanel.saleAcceptedTitle"
-          values={{ customerName, listingLink }}
+          values={messageValues}
         />
       );
     case HEADING_DECLINED:
@@ -491,13 +546,13 @@ const PanelHeading = props => {
         <HeadingCustomer
           className={titleClasses}
           id="TransactionPanel.orderDeclinedTitle"
-          values={{ customerName, listingLink }}
+          values={messageValues}
         />
       ) : (
         <HeadingProvider
           className={titleClasses}
           id="TransactionPanel.saleDeclinedTitle"
-          values={{ customerName, listingLink }}
+          values={messageValues}
           isCustomerBanned={isCustomerBanned}
         />
       );
@@ -506,13 +561,13 @@ const PanelHeading = props => {
         <HeadingCustomer
           className={titleClasses}
           id="TransactionPanel.orderCancelledTitle"
-          values={{ customerName, listingLink }}
+          values={messageValues}
         />
       ) : (
         <HeadingProvider
           className={titleClasses}
           id="TransactionPanel.saleCancelledTitle"
-          values={{ customerName, listingLink }}
+          values={messageValues}
         />
       );
     case HEADING_DELIVERED:
@@ -520,14 +575,14 @@ const PanelHeading = props => {
         <HeadingCustomer
           className={titleClasses}
           id="TransactionPanel.orderDeliveredTitle"
-          values={{ customerName, listingLink }}
+          values={messageValues}
           isCustomerBanned={isCustomerBanned}
         />
       ) : (
         <HeadingProvider
           className={titleClasses}
           id="TransactionPanel.saleDeliveredTitle"
-          values={{ customerName, listingLink }}
+          values={messageValues}
           isCustomerBanned={isCustomerBanned}
         />
       );

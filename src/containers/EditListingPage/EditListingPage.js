@@ -1,7 +1,7 @@
 import React from 'react';
 import { bool, func, object, shape, string, oneOf } from 'prop-types';
 import { compose } from 'redux';
-import { withRouter } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
 import { intlShape, injectIntl } from '../../util/reactIntl';
 import { connect } from 'react-redux';
 import { types as sdkTypes } from '../../util/sdkLoader';
@@ -12,6 +12,7 @@ import {
   LISTING_PAGE_PENDING_APPROVAL_VARIANT,
   createSlug,
 } from '../../util/urlHelpers';
+import { initializeCardPaymentData } from '../../ducks/stripe.duck.js';
 import { LISTING_STATE_DRAFT, LISTING_STATE_PENDING_APPROVAL, propTypes } from '../../util/types';
 import { ensureOwnListing } from '../../util/data';
 import { getMarketplaceEntities } from '../../ducks/marketplaceData.duck';
@@ -39,8 +40,11 @@ import {
   clearUpdatedTab,
   savePayoutDetails,
 } from './EditListingPage.duck';
+import { setInitialValues } from '../ListingPage/ListingPage.duck';
 
 import css from './EditListingPage.module.css';
+import routeConfiguration from '../../routeConfiguration';
+import { findRouteByRouteName } from '../../util/routes';
 
 const STRIPE_ONBOARDING_RETURN_URL_SUCCESS = 'success';
 const STRIPE_ONBOARDING_RETURN_URL_FAILURE = 'failure';
@@ -54,6 +58,7 @@ const { UUID } = sdkTypes;
 // N.B. All the presentational content needs to be extracted to their own components
 export const EditListingPageComponent = props => {
   const {
+    location,
     currentUser,
     createStripeAccountError,
     fetchInProgress,
@@ -69,6 +74,8 @@ export const EditListingPageComponent = props => {
     onFetchBookings,
     onCreateListingDraft,
     onPublishListingDraft,
+    callSetInitialValues,
+    onInitializeCardPaymentData,
     onUpdateListing,
     onImageUpload,
     onRemoveListingImage,
@@ -85,7 +92,8 @@ export const EditListingPageComponent = props => {
     stripeAccount,
     updateStripeAccountError,
   } = props;
-  const isAdvert = props.location?.pathname?.startsWith('/a/');
+  console.log('🚀 | file: EditListingPage.js | line 89 | location', location);
+  const isAdvert = location?.pathname?.startsWith('/a/');
   const { id, type, returnURLType } = params;
   const isNewURI = type === LISTING_PAGE_PARAM_TYPE_NEW;
   const isDraftURI = type === LISTING_PAGE_PARAM_TYPE_DRAFT;
@@ -97,6 +105,7 @@ export const EditListingPageComponent = props => {
 
   const isPastDraft = currentListingState && currentListingState !== LISTING_STATE_DRAFT;
   const shouldRedirect = isNewListingFlow && listingId && isPastDraft;
+  console.log('🚀 | file: EditListingPage.js | line 102 | shouldRedirect', shouldRedirect);
 
   const hasStripeOnboardingDataIfNeeded = returnURLType ? !!(currentUser && currentUser.id) : true;
   const showForm = hasStripeOnboardingDataIfNeeded && (isNewURI || currentListing.id);
@@ -104,11 +113,37 @@ export const EditListingPageComponent = props => {
   if (shouldRedirect) {
     const isPendingApproval =
       currentListing && currentListingState === LISTING_STATE_PENDING_APPROVAL;
-
+    const { fromPage, ...rest } = location.state;
+    console.log('🚀 | file: EditListingPage.js | line 111 | fromPage', fromPage);
     // If page has already listingId (after submit) and current listings exist
     // redirect to listing page
     const listingSlug = currentListing ? createSlug(currentListing.attributes.title) : null;
 
+    if (!!fromPage) {
+      console.log("🚀 | file: EditListingPage.js | line 123 | fromPage", fromPage);
+      const initialValues = {
+        ...rest,
+        confirmPaymentError: null,
+      };
+
+      console.log("🚀 | file: EditListingPage.js | line 125 | initialValues", initialValues);
+      const saveToSessionStorage = !currentUser;
+      const routes = routeConfiguration();
+      // Customize checkout page state with current listing and selected bookingDates
+      const { setInitialValues: setInitialValuesRedirect } = findRouteByRouteName(
+        `TransactionInitPage${isAdvert ? 'L' : 'A'}`,
+        routes
+      );
+      callSetInitialValues(setInitialValuesRedirect, initialValues, saveToSessionStorage);
+
+      // Clear previous Stripe errors from store if there is any
+      onInitializeCardPaymentData();
+      console.log("🚀 | file: EditListingPage.js | line 143 | history", history);
+console.log(11111);
+      // Redirect to CheckoutPage
+      // history.push(fromPage);
+      return <Redirect to={{ pathname: fromPage }} push={true} />
+    }
     const redirectProps = isPendingApproval
       ? {
           name: 'ListingPageVariant',
@@ -178,6 +213,7 @@ export const EditListingPageComponent = props => {
         />
         <EditListingWizard
           id="EditListingWizard"
+          location={location}
           className={css.wizard}
           params={params}
           isAdvert={isAdvert}
@@ -351,6 +387,10 @@ const mapDispatchToProps = dispatch => ({
   onUpdateImageOrder: imageOrder => dispatch(updateImageOrder(imageOrder)),
   onRemoveListingImage: imageId => dispatch(removeListingImage(imageId)),
   onChange: () => dispatch(clearUpdatedTab()),
+  callSetInitialValues: (setInitialValues, values, saveToSessionStorage) =>
+    dispatch(setInitialValues(values, saveToSessionStorage)),
+    onInitializeCardPaymentData: () => dispatch(initializeCardPaymentData()),
+
 });
 
 // Note: it is important that the withRouter HOC is **outside** the
@@ -361,10 +401,7 @@ const mapDispatchToProps = dispatch => ({
 // See: https://github.com/ReactTraining/react-router/issues/4671
 const EditListingPage = compose(
   withRouter,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )
+  connect(mapStateToProps, mapDispatchToProps)
 )(injectIntl(EditListingPageComponent));
 
 export default EditListingPage;

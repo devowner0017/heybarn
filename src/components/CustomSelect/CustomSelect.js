@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Field } from 'react-final-form';
-import { propTypes } from '../../util/types';
 import { ValidationError } from '../../components';
 
 import css from './CustomSelect.module.css';
@@ -23,7 +22,6 @@ const CustomSelect = props => {
     input,
     ...rest
   } = props;
-  console.log('🚀 | file: CustomSelect.js | line 28 | props', props);
 
   const { valid, invalid, touched, error } = meta || {};
   const hasError = !!customErrorText || !!(touched && invalid && error);
@@ -42,7 +40,6 @@ const CustomSelect = props => {
 
   const fieldMeta = { touched: hasError, error: errorText };
   const selectProps = { className: selectClasses, id, ...input, ...rest };
-  console.log('🚀 | file: CustomSelect.js | line 46 | selectProps', selectProps);
   return (
     <div className={classes}>
       {label ? (
@@ -77,10 +74,8 @@ class FieldCustomSelectInput extends Component {
   componentWillUnmount() {
     // Unmounting happens too late if it is done inside Field component
     // (Then Form has already registered its (new) fields and
-      console.log(2222222222)
     // changing the value without corresponding field is prohibited in Final Form
     if (this.props.onUnmount) {
-      console.log(111111111)
       this.props.onUnmount();
     }
   }

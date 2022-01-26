@@ -39,7 +39,7 @@ module.exports = async (req, res) => {
         price_data: {
           currency: 'nzd',
           product: process.env.REACT_APP_STRIPE_PRODUCT,
-          recurring: { interval: 'day' },
+          recurring: { interval: 'week' },
           unit_amount: weeklyAmount,
         },
       },
@@ -56,6 +56,7 @@ module.exports = async (req, res) => {
     // cancel_at: ongoingContract ? null : endTimestamp,
     metadata: { listingId, transactionId },
   };
+  console.log("🚀 | file: create-recurring-payments.js | line 59 | module.exports= | params", params);
 
   // TODO: UPDATE ERROR HANDLING
   return stripe.subscriptions
@@ -69,6 +70,7 @@ module.exports = async (req, res) => {
         .end();
     })
     .catch(e => {
+    console.log("🚀 | file: create-recurring-payments.js | line 73 | module.exports= | e", e);
       const serialErr = serialize(e);
       return res
         .status(500)

@@ -57,7 +57,6 @@ class FieldDateInputComponent extends Component {
       ...restOfInput,
       ...rest,
     };
-    console.log("🚀 | file: FieldDateInput.js | line 60 | FieldDateInputComponent | render | inputProps", inputProps);
     const classes = classNames(rootClassName || css.fieldRoot, className);
     const errorClasses = classNames({ [css.mobileMargins]: useMobileMargins });
 

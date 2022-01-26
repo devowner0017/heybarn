@@ -50,7 +50,7 @@ const pathParamsToNextTab = (params, tab, marketplaceTabs) => {
 };
 
 // When user has update draft listing, he should be redirected to next EditListingWizardTab
-const redirectAfterDraftUpdate = (listingId, params, tab, marketplaceTabs, history, isAdvert) => {
+const redirectAfterDraftUpdate = (listingId, params, tab, marketplaceTabs, history, isAdvert, location) => {
   const currentPathParams = {
     ...params,
     type: LISTING_PAGE_PARAM_TYPE_DRAFT,
@@ -78,11 +78,12 @@ const redirectAfterDraftUpdate = (listingId, params, tab, marketplaceTabs, histo
     nextPathParams,
     {}
   );
-  history.push(to);
+  history.push(to, location.state);
 };
 
 const EditListingWizardTab = props => {
   const {
+    location,
     tab,
     marketplaceTabs,
     params,
@@ -108,6 +109,7 @@ const EditListingWizardTab = props => {
     isAdvert,
     listingType,
   } = props;
+    console.log("🚀 | file: EditListingWizardTab.js | line 112 | location", location);
   const { type } = params;
   const isNewURI = type === LISTING_PAGE_PARAM_TYPE_NEW;
   const isDraftURI = type === LISTING_PAGE_PARAM_TYPE_DRAFT;
@@ -147,7 +149,8 @@ const EditListingWizardTab = props => {
               tab,
               marketplaceTabs,
               history,
-              isAdvert
+              isAdvert,
+              location
             );
           } else {
             handlePublishListing(currentListing.id);

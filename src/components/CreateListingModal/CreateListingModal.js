@@ -3,14 +3,12 @@ import PropTypes from 'prop-types';
 import { FormattedMessage, intlShape, injectIntl } from '../../util/reactIntl';
 import classNames from 'classnames';
 import { propTypes } from '../../util/types';
-import { IconReviewUser, Modal, ActionButtons, NamedRedirect } from '..';
-import { ReviewForm } from '../../forms';
+import { Modal, ActionButtons } from '..';
 
 import css from './CreateListingModal.module.css';
 import { useHistory } from 'react-router';
-import { capitalize } from 'lodash';
 import routeConfiguration from '../../routeConfiguration';
-import { createResourceLocatorString, findRouteByRouteName } from '../../util/routes';
+import { createResourceLocatorString } from '../../util/routes';
 
 const CreateListingModal = props => {
   const {
@@ -22,15 +20,34 @@ const CreateListingModal = props => {
     onManageDisableScrolling,
     listingType,
     authorName,
+    pageLocation,
+    redirectProps
   } = props;
-    console.log("🚀 | file: CreateListingModal.js | line 26 | listingType", listingType);
+  console.log('🚀 | file: CreateListingModal.js | line 27 | location', pageLocation);
+  console.log('🚀 | file: CreateListingModal.js | line 26 | listingType', listingType);
   const history = useHistory();
 
   const classes = classNames(rootClassName || css.root, className);
   const closeButtonMessage = intl.formatMessage({ id: 'CreateListingModal.later' });
   const handleRedirect = () => {
+    console.log(1111111111111);
     const routes = routeConfiguration();
-    history.push(createResourceLocatorString(`New${listingType === 'listing' ? "Advert" : "Listing"}Page`, routes, {}, {}));
+    console.log(
+      '🚀 | file: CreateListingModal.js | line 35 | handleRedirect | pageLocation.pathname',
+      pageLocation.pathname
+    );
+    history.push(
+      createResourceLocatorString(
+        `New${listingType === 'listing' ? 'Advert' : 'Listing'}Page`,
+        routes,
+        {},
+        {}
+      ),
+      {
+        fromPage: pageLocation.pathname,
+        ...redirectProps
+      }
+    );
   };
   const handleBack = () => {
     history.goBack();

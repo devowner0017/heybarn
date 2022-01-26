@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -7,6 +7,7 @@ import classNames from 'classnames';
 import { FormattedMessage, intlShape, injectIntl } from '../../util/reactIntl';
 import { propTypes } from '../../util/types';
 import { createSlug } from '../../util/urlHelpers';
+import { useHistory } from 'react-router';
 import { txIsPaymentPending } from '../../util/transaction';
 import { getMarketplaceEntities } from '../../ducks/marketplaceData.duck';
 import { isScrollingDisabled, manageDisableScrolling } from '../../ducks/UI.duck';
@@ -70,6 +71,7 @@ const checkCouponCode = (coupon, currentUser) => {};
 // TransactionInitPage handles data loading for Sale and Order views to transaction pages in Inbox.
 export const TransactionInitPageComponent = props => {
   const {
+    location,
     currentUser,
     getListing,
     params: rawParams,
@@ -95,6 +97,8 @@ export const TransactionInitPageComponent = props => {
     listings,
     queryInProgress,
   } = props;
+  const scrollRef = useRef(null);
+  const history = useHistory();
   const [showCreateListingPopup, setShowCreateListingPopup] = useState(null);
   const [couponCode, setCouponCode] = useState('');
   const [validCouponCode, setValidCouponCode] = useState(null);
@@ -136,13 +140,13 @@ export const TransactionInitPageComponent = props => {
   const onStripeInitialized = stripe => {
     setStripeFunction(stripe);
   };
+
   const listingId = new UUID(rawParams.id);
   const currentListing = ensureListing(getListing(listingId));
   const currentAuthor = ensureUser(currentListing.author);
   const listingType = getPropByName(currentListing, 'listingType');
 
   const currentTransaction = ensureTransaction(transaction);
-  const isCustomerRole = transactionRole === CUSTOMER;
 
   const deletedListingTitle = intl.formatMessage({
     id: 'TransactionInitPage.deletedListing',
@@ -163,6 +167,7 @@ export const TransactionInitPageComponent = props => {
   const isDataAvailable = currentUser && hasGuestAndHost;
   const hasRequiredData = hasGuestAndHost;
   const canShowPage = hasRequiredData && !isOwnListing;
+
   const shouldRedirect =
     currentUser?.id?.uuid && currentListing?.id?.uuid && !isDataAvailable && !canShowPage;
 
@@ -181,12 +186,8 @@ export const TransactionInitPageComponent = props => {
 
   const detailsClassName = classNames(css.tabContent, css.tabContentVisible);
 
-  const fetchErrorMessage = isCustomerRole
-    ? 'TransactionInitPage.fetchOrderFailed'
-    : 'TransactionInitPage.fetchSaleFailed';
-  const loadingMessage = isCustomerRole
-    ? 'TransactionInitPage.loadingOrderData'
-    : 'TransactionInitPage.loadingSaleData';
+  const fetchErrorMessage = 'TransactionInitPage.fetchOrderFailed';
+  const loadingMessage = 'TransactionInitPage.loadingOrderData';
 
   const loadingOrFailedFetching = showListingError ? (
     <p className={css.error}>
@@ -498,6 +499,7 @@ export const TransactionInitPageComponent = props => {
     ensureStripeCustomer(currentUser.stripeCustomer).attributes.stripeCustomerId &&
     ensurePaymentMethodCard(currentUser.stripeCustomer.defaultPaymentMethod).id
   );
+
   const selectListing = (
     <>
       <h3 className={css.selectListingHeading}>
@@ -509,6 +511,7 @@ export const TransactionInitPageComponent = props => {
           const listingId = e.target.value;
           setSelectedListingId(listingId);
           setSelectedListing(listings.find(l => l.id.uuid === listingId));
+          scrollRef.current.scrollIntoView();
         }}
         className={css.selectListing}
       >
@@ -534,38 +537,40 @@ export const TransactionInitPageComponent = props => {
         Submit
       </button>
     ) : (
-      <StripePaymentFormPlatformFee
-        className={css.paymentForm}
-        onSubmit={handleSubmitPlatformFee}
-        inProgress={submittingPlatformFee}
-        disabled={showCreateListingPopup || !selectedListing}
-        formId="TransactionInitPagePaymentForm"
-        // Message above submit button
-        // paymentInfo={intl.formatMessage({
-        //   id: 'TransactionInitPage.paymentInfo',
-        // })}
-        // authorDisplayName={currentAuthor.attributes.profile.displayName}
-        authorDisplayName={'currentAuthor'}
-        showInitialMessageInput={false}
-        initialValues={initalValuesForStripePayment}
-        // initiateOrderError={initiateOrderError}
-        initiateOrderError={null}
-        // confirmCardPaymentError={confirmCardPaymentError}
-        confirmCardPaymentError={null}
-        // confirmPaymentError={confirmPaymentError}
-        confirmPaymentError={null}
-        // hasHandledCardPayment={hasPaymentIntentUserActionsDone}
-        hasHandledCardPayment={false}
-        // loadingData={!stripeCustomerFetched}
-        loadingData={false}
-        defaultPaymentMethod={
-          hasDefaultPaymentMethod ? currentUser.stripeCustomer.defaultPaymentMethod : null
-        }
-        paymentIntent={null}
-        // paymentIntent={paymentIntent}
-        onStripeInitialized={onStripeInitialized}
-        showInitialMessageInput={true}
-      />
+      <>
+        <StripePaymentFormPlatformFee
+          className={css.paymentForm}
+          onSubmit={handleSubmitPlatformFee}
+          inProgress={submittingPlatformFee}
+          disabled={showCreateListingPopup || !selectedListing}
+          formId="TransactionInitPagePaymentForm"
+          // Message above submit button
+          // paymentInfo={intl.formatMessage({
+          //   id: 'TransactionInitPage.paymentInfo',
+          // })}
+          // authorDisplayName={currentAuthor.attributes.profile.displayName}
+          authorDisplayName={'currentAuthor'}
+          showInitialMessageInput={false}
+          initialValues={initalValuesForStripePayment}
+          // initiateOrderError={initiateOrderError}
+          initiateOrderError={null}
+          // confirmCardPaymentError={confirmCardPaymentError}
+          confirmCardPaymentError={null}
+          // confirmPaymentError={confirmPaymentError}
+          confirmPaymentError={null}
+          // hasHandledCardPayment={hasPaymentIntentUserActionsDone}
+          hasHandledCardPayment={false}
+          // loadingData={!stripeCustomerFetched}
+          loadingData={false}
+          defaultPaymentMethod={
+            hasDefaultPaymentMethod ? currentUser.stripeCustomer.defaultPaymentMethod : null
+          }
+          paymentIntent={null}
+          // paymentIntent={paymentIntent}
+          onStripeInitialized={onStripeInitialized}
+          showInitialMessageInput={true}
+        />
+      </>
     )
   ) : null;
 
@@ -582,7 +587,10 @@ export const TransactionInitPageComponent = props => {
   // TransactionPanel is presentational component
   // that currently handles showing everything inside layout's main view area.
   const panel = isDataAvailable ? (
+    <>
     <TransactionInitPanel
+      pageLocation={location}
+      history={history}
       className={detailsClassName}
       currentUser={currentUser}
       currentListing={currentListing}
@@ -604,7 +612,12 @@ export const TransactionInitPageComponent = props => {
       couponCodeComp={couponCodeComp}
       validCouponCode={validCouponCode}
       listingType={listingType}
+      guest={guest}
+      host={host}
+      contactingAs={contactingAs}
     />
+    <span ref={scrollRef}></span>
+</>
   ) : (
     loadingOrFailedFetching
   );

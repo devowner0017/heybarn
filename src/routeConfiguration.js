@@ -137,21 +137,16 @@ const routeConfiguration = () => {
       component: ListingPage,
       loadData: pageDataLoadingAPI.ListingPage.loadData,
     },
-
-
-
-
-
-
-
     {
       path: '/l/new',
       name: 'NewListingPage',
       auth: true,
-      component: () => (
+      component: (props) => (
         <NamedRedirect
           name="EditListingPage"
           params={{ slug: draftSlug, id: draftId, type: 'new', tab: 'description', listingType: "listing" }}
+          state={props.location.state}
+
         />
       ),
     },
@@ -159,10 +154,11 @@ const routeConfiguration = () => {
       path: '/a/new',
       name: 'NewAdvertPage',
       auth: true,
-      component: () => (
+      component: (props) => (
         <NamedRedirect
           name="EditAdvertPage"
           params={{ slug: draftSlug, id: draftId, type: 'new', tab: 'description' , listingType: "listing"}}
+          state={props.location.state}
         />
       ),
     },

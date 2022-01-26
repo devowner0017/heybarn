@@ -560,6 +560,7 @@ export class CheckoutPageComponent extends Component {
       '🚀 | file: CheckoutPage.js | line 531 | CheckoutPageComponent | handleSubmit | ongoingContract',
       ongoingContract
     );
+
     const createRecurringParams = {
       weeklyAmount: price?.amount,
       listingId: currentListing?.id?.uuid,

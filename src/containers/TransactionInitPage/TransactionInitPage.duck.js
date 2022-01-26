@@ -151,6 +151,7 @@ export const getOwnListingsById = (state, listingIds) => {
 
 // ================ Action creators ================ //
 export const setInitialValues = initialValues => {
+console.log("🚀 | file: TransactionInitPage.duck.js | line 154 | initialValues", initialValues);
   return {
     type: SET_INITIAL_VALUES,
     payload: pick(initialValues, Object.keys(initialState)),

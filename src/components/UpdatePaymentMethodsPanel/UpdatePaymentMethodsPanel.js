@@ -19,6 +19,7 @@ import {
   Page,
   UserNav,
 } from '..';
+import moment from 'moment';
 import { TopbarContainer } from '../../containers';
 import { PaymentMethodsForm } from '../../forms';
 import {
@@ -27,6 +28,8 @@ import {
 } from '../../containers/PaymentMethodsPage/PaymentMethodsPage.duck';
 
 import css from './UpdatePaymentMethodsPanel.module.css';
+import { createRecurring } from '../../containers/CheckoutPage/CheckoutPage.duck';
+import { getPropByName } from '../../util/userHelpers';
 
 const UpdatePaymentMethodsPanelComponent = props => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -42,6 +45,7 @@ const UpdatePaymentMethodsPanelComponent = props => {
     onCreateSetupIntent,
     onHandleCardSetup,
     onSavePaymentMethod,
+    onCreateRecurring,
     onDeletePaymentMethod,
     fetchStripeCustomer,
     scrollingDisabled,
@@ -50,7 +54,11 @@ const UpdatePaymentMethodsPanelComponent = props => {
     stripeCustomerFetched,
     onUpdate,
     onUpdateSubscriptionPaymentMethod,
+    subscription,
+    transaction,
   } = props;
+  console.log('🚀 | file: UpdatePaymentMethodsPanel.js | line 56 | transaction', transaction);
+  console.log('🚀 | file: UpdatePaymentMethodsPanel.js | line 56 | subscription', subscription);
   console.log('🚀 | file: UpdatePaymentMethodsPanel.js | line 49 | props', props);
 
   useEffect(() => {
@@ -91,6 +99,44 @@ const UpdatePaymentMethodsPanelComponent = props => {
     return paymentParams;
   };
 
+  const createNewSubscription = data => {
+    console.log('🚀 | file: UpdatePaymentMethodsPanel.js | line 101 | data', data);
+    const {
+      listing,
+      provider,
+      booking: { attributes: bookingDates },
+    } = transaction;
+    console.log('🚀 | file: UpdatePaymentMethodsPanel.js | line 109 | currentUser', currentUser);
+    const createRecurringParams = {
+      weeklyAmount: listing?.attributes?.price?.amount,
+      listingId: listing?.id?.uuid,
+      stripeCustomerId: currentUser?.stripeCustomer?.attributes?.stripeCustomerId,
+      providerUserId: provider.id,
+      paymentMethod: data,
+      transactionId: transaction?.id?.uuid,
+      lengthOfContract: getPropByName(transaction, 'lengthOfContract'),
+      startTimestamp: moment(bookingDates.start)
+        .add({ days: 6, hours: 23, minutes: 59 })
+        .unix(),
+      endTimestamp: moment(bookingDates.end)
+        .subtract({ days: 6, hours: 23, minutes: 59 })
+        .unix(),
+      // transaction: tx,
+      ongoingContract: getPropByName(transaction, 'ongoingContract'),
+    };
+
+    return onCreateRecurring({ ...createRecurringParams, paymentMethod: data })
+      .then(recurringResponse => {
+        console.log(
+          '🚀 | file: CheckoutPage.js | line 281 | CheckoutPageComponent | onCreateRecurring | recurringResponse',
+          recurringResponse
+        );
+        return { ...rest, protectedData: { recurringResponse } };
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  };
   const handleSubmit = params => {
     setIsSubmitting(true);
     const ensuredCurrentUser = ensureCurrentUser(currentUser);
@@ -116,7 +162,14 @@ const UpdatePaymentMethodsPanelComponent = props => {
         );
         // Note: stripe.handleCardSetup might return an error inside successful call (200), but those are rejected in thunk functions.
         return onSavePaymentMethod(stripeCustomer, newPaymentMethod).then(r => {
-          return newPaymentMethod;
+          if (!subscription) {
+            return createNewSubscription(newPaymentMethod).then((subResponse) => {
+              console.log("🚀 | file: UpdatePaymentMethodsPanel.js | line 167 | returncreateNewSubscription | subResponse", subResponse);
+              return {...newPaymentMethod, subResponse};
+            });
+          } else {
+            return newPaymentMethod;
+          }
         });
       })
       .then(r => {
@@ -158,21 +211,11 @@ const UpdatePaymentMethodsPanelComponent = props => {
     ? ensurePaymentMethodCard(currentUser.stripeCustomer.defaultPaymentMethod).attributes.card
     : null;
 
-  const showForm = cardState === 'replaceCard' || !hasDefaultPaymentMethod;
-  const showCardDetails = !!hasDefaultPaymentMethod;
+  const showForm = true; //cardState === 'replaceCard' || !hasDefaultPaymentMethod;
   return (
     <div className={css.content}>
       {!stripeCustomerFetched ? null : (
         <>
-          {showCardDetails ? (
-            <SavedCardDetails
-              card={card}
-              onManageDisableScrolling={onManageDisableScrolling}
-              onChange={setCardState}
-              onDeleteCard={handleRemovePaymentMethod}
-              deletePaymentMethodInProgress={deletePaymentMethodInProgress}
-            />
-          ) : null}
           {showForm ? (
             <PaymentMethodsForm
               className={css.paymentForm}
@@ -253,6 +296,7 @@ const mapDispatchToProps = dispatch => ({
   onSavePaymentMethod: (stripeCustomer, newPaymentMethod) =>
     dispatch(savePaymentMethod(stripeCustomer, newPaymentMethod)),
   onDeletePaymentMethod: params => dispatch(deletePaymentMethod(params)),
+  onCreateRecurring: params => dispatch(createRecurring(params)),
 });
 
 const UpdatePaymentMethodsPanel = compose(

@@ -1193,66 +1193,80 @@
   "TransactionPage.loadingSaleData": "Loading sale data.",
   "TransactionPage.title": "Sale details: {title}",
 
-  "TransactionPanel.c_renterEnquiredTitle": "Done. We've sent {providerName} your advert.",
-  "TransactionPanel.c_renterEnquiredSubTitle": "Sit back, relax and we'll let you know if they're interested.",
-  "TransactionPanel.p_renterEnquiredTitle": "Good news!  You have a potential renter. {customerName} is keen to connect.",
-  "TransactionPanel.p_renterEnquiredSubTitle": "{customerName} has paid to make contact. This means that your listing is reserved by  {customerName}. Take a look at their advert and if this looks like an opportunity that might work, click accept and you can start a conversation with them and even arrange a viewing. If you don't think that they would be right for your listing, then decline and we'll release the reservation and let the renter know (nicely). ",
+  "TransactionPanel.c_renterEnquiredTitle": "Done. {providerName} has been emailed your advert.",
+  "TransactionPanel.c_renterEnquiredSubTitle": "The {listingTitle} is held by you until {providerName} responds to your advert. They should be in contact shortly.{lineBreak}In the meantime, browse other heybarn listings that may meet your needs {browseLink}",
+  "TransactionPanel.p_renterEnquiredTitle": "Good news!  You have a potential renter. {customerName} is interested in your {listingLink}.",
+  "TransactionPanel.p_renterEnquiredSubTitle": "Your listing is being held by {customerName}. Take a look at their advert and if this is the connection for you, click 'accept' and you can start a conversation with them and arrange a viewing. If you don't think they will be what you need, then select 'decline' and we'll release the hold on your listing and let the renter know (nicely).{lineBreak}See #FAQ# for our tips when organising a viewing.{lineBreak}Please note: if you select 'accept', you are not agreeing to a rental arrangement with the renter. We recommend that you arrange a viewing and then, if appropriate, commit to a rental agreement.",
 
-  "TransactionPanel.c_hostEnquiredTitle": "Done. We've sent {providerName} your advert.",
-  "TransactionPanel.c_hostEnquiredSubTitle": "Sit back, relax and we'll let you know if they're interested.",
-  "TransactionPanel.p_hostEnquiredTitle": "Good news! You've got a potential host. {customerName} is keen to connect.",
-  "TransactionPanel.p_hostEnquiredSubTitle": "{customerName} has paid to make contact. This means that your advert is reserved by {customerName}. Take a look at their listing and if this looks like an opportunity that might work, click accept and you can start a conversation with them and even arrange a viewing. If you don't think that they would be right for your advert, then decline and we'll release the reservation and let the host know (nicely).",
+  "TransactionPanel.c_hostEnquiredTitle": "Done. {providerName} has been sent your listing.",
+  "TransactionPanel.c_hostEnquiredSubTitle": "The advert {listingTitle} is held by you until {providerName} responds to your listing. They should be in contact shortly.{lineBreak}In the meantime, browse other heybarn adverts that may meet your needs. {browseLink}",
+  "TransactionPanel.p_hostEnquiredTitle": "Good news! You have a potential host. {customerName} is interested in your {listingTitle}.",
+  "TransactionPanel.p_hostEnquiredSubTitle": "Your advert is being held by {customerName}.{lineBreak}Take a look at their listing and if this is the connection for you, select 'accept' and you can start a conversation with them and arrange a viewing. If you don't think their space will be what you need, then select 'decline' and we'll release the hold on your advert and let the host know (nicely).{lineBreak}See #FAQ# for our tips when organising a viewing.{lineBreak}Please note: if you select 'accept', you are not yet renting the space. We recommend that you arrange a viewing and then, if appropriate, commit to a rental agreement.",
 
   "TransactionPanel.c_rentalAgreementDiscussionTitle": "Good news! {providerName} is keen to talk more.",
-  "TransactionPanel.c_rentalAgreementDiscussionSubTitle": "Lets start a conversation with them...",
-  "TransactionPanel.p_rentalAgreementDiscussionTitle": "Great! You've been connected to {customerName}.",
-  "TransactionPanel.p_rentalAgreementDiscussionSubTitle": "Start a conversation with them...",
+  "TransactionPanel.c_rentalAgreementDiscussionSubTitle": "If you agree to a viewing, take a look at these #FAQ#{lineBreak}Heybarn recommend that all rentals have a signed rental agreement in place before you start renting. Use heybarns rental agreement that has been specifically written for these circumstances. It is secure, easy to complete and 100% online.{lineBreak}Before you create a rental agreement, make sure that you and {providerName} have agreed on the rental terms (i.e. weekly rental amount, duration, access and use). Please agree on these terms before creating the rental agreement.",
+  "TransactionPanel.p_rentalAgreementDiscussionTitle": "Great! We've let {customerName} know.",
+  "TransactionPanel.p_rentalAgreementDiscussionSubTitle": "You can chat directly to {customerName} here in your heybarn inbox.{lineBreak}If you agree to a viewing with {customerName}, take a look at these #FAQ#{lineBreak}Heybarn recommend that all rentals have a signed rental agreement in place before you start renting. Use heybarns rental agreement that has been specifically written for these circumstances. It is secure, easy to complete and 100% online.{lineBreak}Before you create a rental agreement, make sure that you have agreed on the rental terms with {customerName} (i.e. weekly rental amount, duration, access and use). Please agree on these terms before creating the rental agreement.",
+
+  "TransactionPanel.c_rentalAgreementDiscussionTitle_rev": "Great! We've let {providerName} know.",
+  "TransactionPanel.c_rentalAgreementDiscussionSubTitle_rev": "If you agree to a viewing, take a look at these #FAQ#{lineBreak}Heybarn recommend that all rentals have a signed rental agreement in place before you start renting. Use heybarns rental agreement that has been specifically written for these circumstances. It is secure, easy to complete and 100% online.{lineBreak}Before you create a rental agreement, make sure that you and {providerName} have agreed on the rental terms (i.e. weekly rental amount, duration, access and use). Please agree on these terms before creating the rental agreement.",
+  "TransactionPanel.p_rentalAgreementDiscussionTitle_rev": "Good news! {customerName} is keen to talk more.",
+  "TransactionPanel.p_rentalAgreementDiscussionSubTitle_rev": "If you agree to a viewing with {customerName}, take a look at these #FAQ#{lineBreak}Heybarn recommend that all rentals have a signed rental agreement in place before you start renting. Use heybarns rental agreement that has been specifically written for these circumstances. It is secure, easy to complete and 100% online.{lineBreak}Before you create a rental agreement, make sure that you have agreed on the rental terms with {customerName} (i.e. weekly rental amount, duration, access and use). Please agree on these terms before creating the rental agreement.",
 
   "TransactionPanel.p_wasApprovedByRenterTitle": "Good news! {customerName} is keen to talk more.",
   "TransactionPanel.p_wasApprovedByRenterSubTitle": "Lets start a conversation with them...",
-  "TransactionPanel.c_wasApprovedByRenterTitle": "Great! We’ve let {providerName} know.",
+  "TransactionPanel.c_wasApprovedByRenterTitle": "Great! We've let {providerName} know.",
   "TransactionPanel.c_wasApprovedByRenterSubTitle": "Lets start a conversation with them...",
 
-  "TransactionPanel.c_rentalAgreementSentTitle": "Hey, {providerName} has sent you their signed rental agreement for your signature.",
-  "TransactionPanel.c_rentalAgreementSentSubTitle": "Read through this carefully and, if you're happy, sign it and we'll get the rental started.",
-  "TransactionPanel.p_rentalAgreementSentTitle": "Too easy! Your rental agreement has been sent to {customerName} for countersigning.",
-  "TransactionPanel.p_rentalAgreementSentSubTitle": "Feel free to give them a nudge to keep things moving if you don't hear back soon!",
+  "TransactionPanel.c_rentalAgreementSentTitle": "{providerName} has created a rental agreement for {listingTitle}.",
+  "TransactionPanel.c_rentalAgreementSentSubTitle": "Please make sure you've confirmed your terms with the host first.{lineBreak}The rental agreement has been drawn up in Docusign, a secure, digital eSignature platform. Please check your email inbox and spam folder for an email from DocuSign  over the next 24 hours. Once you have opened and reviewed it, follow the instructions to insert your eSignature. This eSignature represents your agreement to the rental terms.{lineBreak}Read through the proposed rental agreement carefully. If you wish to make further changes prior to signing, please contact support@heybarn.co.nz.{lineBreak}To authorise the first and last rental payment and on-going weekly payments, either return to the payment link in your inbox or follow the link in the follow up email from heybarn.",
+  "TransactionPanel.p_rentalAgreementSentTitle": "Too easy! The rental agreement for {listingTitle} will be emailed to you for signing within the next 24-48 hours.",
+  "TransactionPanel.p_rentalAgreementSentSubTitle": "Please make sure you've confirmed your terms with the host first.{lineBreak}The rental agreement will been drawn up in Docusign, a secure, digital eSignature platform. Please check your email inbox and spam folder for an email from DocuSign over the next 24 hours. Once you have opened and reviewed it, follow the instructions to insert your eSignature. This eSignature represents your agreement with the rental terms.{lineBreak}If you or the renter wish to make further changes to the rental agreement prior to signing, please contact support@heybarn.co.nz.{lineBreak}Once the rental agreement has been finalised, the renter will be redirected back to their heybarn account page. Here, the renter can easily authorise the first and last rental payment and on-going weekly payments. Heybarn operate a 3% service fee on each weekly rental payment.",
 
-  "TransactionPanel.c_rentalAgreementRequestedTitle": "Great, we've sent a link to {providerName} to complete your personalized rental agreement",
-  "TransactionPanel.c_rentalAgreementRequestedSubTitle": "Feel free to give them a nudge to keep things moving if you don't hear back soon!",
-  "TransactionPanel.p_rentalAgreementRequestedTitle": "{customerName} has asked you for a rental agreement",
-  "TransactionPanel.p_rentalAgreementRequestedSubTitle": "Follow the link below to complete your personalized rental agreement",
+  "TransactionPanel.c_rentalAgreementRequestedTitle": "Great, we've sent a message to {providerName} with your request for a personalized rental agreement.",
+  "TransactionPanel.c_rentalAgreementRequestedSubTitle": "Please make sure you've confirmed your terms with the host first.{lineBreak}The rental agreement has been drawn up in Docusign, a secure, digital eSignature platform. Please check your email inbox and spam folder for an email from DocuSign over the next 24 hours. Once you have opened and reviewed it, follow the instructions to insert your eSignature. This eSignature represents your agreement to the rental terms.{lineBreak}If you or the host wish to make further changes to the rental agreement prior to final sign-off, contact support@heybarn.co.nz.{lineBreak}Once the rental agreement has been finalised, you will be redirected back to your heybarn account page. Here, you can easily authorise the first and last rental payment and on-going weekly payment from your nominated account. You can edit your account details at the link below. {accountSettingsLink}.",
+  "TransactionPanel.p_rentalAgreementRequestedTitle": "{customerName} has asked you to create a rental agreement for {listingLink} through heybarn.",
+  "TransactionPanel.p_rentalAgreementRequestedSubTitle": "To create a rental agreement, follow the link to finalise the agreed terms. Please make sure that you have confirmed these terms with the renter first.{lineBreak}The rental agreement will been drawn up in Docusign, a secure, digital eSignature platform. Please check your email inbox and spam folder within the next 24 hours for an email from DocuSign. Once you have opened and reviewed it, follow the instructions to insert your eSignature. This eSignature represents your agreement to the rental terms.{lineBreak}Once the agreement has arrived, review it, sign it and heybarn will forward a copy to the renter for their signature. If you or the renter wish to make further changes to the rental agreement prior to final sign-off, contact support@heybarn.co.nz.{lineBreak}Once the rental agreement has been finalised, the renter will be redirected back to their heybarn account page. Here, the renter can easily authorise the first and last rental payment and on-going weekly payments. Heybarn operate a 3% service fee on each weekly rental payment.",
 
-  "TransactionPanel.c_hostDeclinedTitle": "Sorry, {providerName} doesn't think that this is the right advert for them",
-  "TransactionPanel.c_hostDeclinedSubTitle": "Other hosts are looking...",
+  "TransactionPanel.c_hostDeclinedTitle": "What a shame. {providerName} doesn't think your advert is the right fit for their space.",
+  "TransactionPanel.c_hostDeclinedSubTitle": "Look on the bright side - there are plenty more fish in the sea and listings on heybarn!{lineBreak}Head back to the search and see if there are other listings that might suit your needs. {browseLink}",
   "TransactionPanel.p_hostDeclinedTitle": "Done. We'll let {customerName} know that this was not the advert for you.",
-  "TransactionPanel.p_hostDeclinedSubTitle": "What about these other listings?",
+  "TransactionPanel.p_hostDeclinedSubTitle": "Browse other heybarn adverts that may meet your needs. {browseLink}",
 
-  "TransactionPanel.c_renterDeclinedTitle": "Done. We've (politely) let {providerName} know that you're not interested",
-  "TransactionPanel.c_renterDeclinedSubTitle": "How about taking a look at some other options?",
-  "TransactionPanel.p_renterDeclinedTitle": "Sorry. {customerName} doesn't think that this is the right listing for them",
-  "TransactionPanel.p_renterDeclinedSubTitle": "More renters are searching...",
+  "TransactionPanel.c_renterDeclinedTitle": "What a shame. {providerName} doesn't think your advert is the right fit for their space.",
+  "TransactionPanel.c_renterDeclinedSubTitle": "Browse other heybarn adverts that may meet your needs. {browseLink}",
+  "TransactionPanel.p_renterDeclinedTitle": "Done. We'll let {customerName} know that this was not the advert for you.",
+  "TransactionPanel.p_renterDeclinedSubTitle": "Browse other heybarn adverts that may meet your needs. {browseLink}",
+
+  "TransactionPanel.c_hostDeclinedTitle_rev": "What a shame. {providerName} doesn't think your advert is the right fit for their space.",
+  "TransactionPanel.c_hostDeclinedSubTitle_rev": "Look on the bright side - there are plenty more fish in the sea and listings on heybarn!{lineBreak}Head back to the search and see if there are other listings that might suit your needs. {browseLink}",
+  "TransactionPanel.p_hostDeclinedTitle_rev": "Done. We'll let {customerName} know that this was not the advert for you.",
+  "TransactionPanel.p_hostDeclinedSubTitle_rev": "Browse other heybarn adverts that may meet your needs. {browseLink}",
+
+  "TransactionPanel.c_renterDeclinedTitle_rev": "What a shame. {providerName} doesn't think your advert is the right fit for their space.",
+  "TransactionPanel.c_renterDeclinedSubTitle_rev": "Browse other heybarn adverts that may meet your needs. {browseLink}",
+  "TransactionPanel.p_renterDeclinedTitle_rev": "Done. We've (politely) let {providerName} know that you're not interested",
+  "TransactionPanel.p_renterDeclinedSubTitle_rev": "Browse other heybarn adverts that may meet your needs. {browseLink}",
 
   "TransactionPanel.c_cancelledDuringRadTitle": "This agreement has been cancelled",
-  "TransactionPanel.c_cancelledDuringRadSubTitle": "How about taking a look at some other options?",
+  "TransactionPanel.c_cancelledDuringRadSubTitle": "Browse other heybarn adverts that may meet your needs. {browseLink}",
   "TransactionPanel.p_cancelledDuringRadTitle": "This agreement has been cancelled",
-  "TransactionPanel.p_cancelledDuringRadSubTitle": "More renters are searching...",
-
+  "TransactionPanel.p_cancelledDuringRadSubTitle": "Browse other heybarn adverts that may meet your needs. {browseLink}",
 
   "TransactionPanel.c_cancelledAfterAgreementSentTitle": "This agreement has been cancelled",
   "TransactionPanel.c_cancelledAfterAgreementSentSubTitle": "How about taking a look at some other options?",
   "TransactionPanel.p_cancelledAfterAgreementSentTitle": "This agreement has been cancelled",
   "TransactionPanel.p_cancelledAfterAgreementSentSubTitle": "More renters are searching...",
 
-  "TransactionPanel.c_rentalAgreementFinalizedTitle": "Congratulations! Your rental agreement is all signed",
-  "TransactionPanel.c_rentalAgreementFinalizedSubTitle": "Keep a copy of this safe and check back in on your heybarn accounts page if you need to change the agreement in the future. Happy renting!",
-  "TransactionPanel.p_rentalAgreementFinalizedTitle": "Congratulations, your rental agreement is all signed and you're good to go!",
-  "TransactionPanel.p_rentalAgreementFinalizedSubTitle": "Keep a copy of this safe and check back in on your heybarn accounts page if you need to change the agreement  in the future. Happy hosting!",
+  "TransactionPanel.c_rentalAgreementFinalizedTitle": "Congratulations! Your rental agreement for {listingLink} is all signed and now you need to authorise payment.",
+  "TransactionPanel.c_rentalAgreementFinalizedSubTitle": "A copy of the signed rental agreement was emailed to you from Docusign. Keep a copy safe.{lineBreak}Select 'Pay Rent' to authorise the first and last rental payments and all ongoing weekly payments from your nominated bank account.{lineBreak}If you wish to cancel the agreement at any time, return to your heybarn inbox and follow the prompts. Happy renting and thank you for using heybarn.{lineBreak}We are constantly working to improve the heybarn experience and would appreciate your thoughts. Please follow this #link# (link to feedback survey) to provide your confidential feedback on your experience with heybarn.",
+  "TransactionPanel.p_rentalAgreementFinalizedTitle": "Congratulations, your rental agreement for {listingLink} is all signed and we're waiting on {customerName}s first payment.",
+  "TransactionPanel.p_rentalAgreementFinalizedSubTitle": "A copy of the signed rental agreement was emailed to you from Docusign. Keep a copy safe.{lineBreak}If you wish to cancel the agreement at any time, return to your heybarn inbox and follow the prompts. Happy hosting and thank you for using heybarn.",
 
-  "TransactionPanel.c_rentalPaidTitle": "Congratulations! Your rental agreement is all signed",
-  "TransactionPanel.c_rentalPaidSubTitle": "Keep a copy of this safe and check back in on your heybarn accounts page if you need to change the agreement in the future. Happy renting!",
-  "TransactionPanel.p_rentalPaidTitle": "Congratulations, your rental agreement is all signed and you're good to go!",
-  "TransactionPanel.p_rentalPaidSubTitle": "Keep a copy of this safe and check back in on your heybarn accounts page if you need to change the agreement  in the future. Happy hosting!",
+  "TransactionPanel.c_rentalPaidTitle": "Congratulations! Your first and last payment have been made to {providerName} and your recurring weekly rental payments will begin one week from the agreed rental start date.",
+  "TransactionPanel.c_rentalPaidSubTitle": "We are constantly working to improve the heybarn experience and would appreciate your thoughts. Please follow this #link# (link to feedback survey) to provide confidential feedback on your experience with heybarn.{lineBreak}Recurring payments are being made through Stripe from your nominated bank account. To see or download your rental agreement, review the email sent from Docusign.",
+  "TransactionPanel.p_rentalPaidTitle": "Congratulations! The first and last rental payments have been made for {listingLink} by {customerName}. Ongoing weekly rental payments will begin one week from the agreed rental start date.",
+  "TransactionPanel.p_rentalPaidSubTitle": "We are constantly working to improve the heybarn experience and would appreciate your thoughts. Please follow this #link# (link to feedback survey) to provide confidential feedback on your experience with heybarn.{lineBreak}Recurring payments are being made through Stripe to your nominated bank account. To see or download your rental agreement, review the email sent from Docusign.",
 
   "TransactionPanel.cancelConfirmationTitle": "Are you sure you want to stop the conversation?",
   "TransactionPanel.cancelConfirmationSubTitle": "This action is permanent, and you won't be able to communicate with the other user anymore.",
@@ -1265,13 +1279,13 @@
   "TransactionPanel.p_rentalExtendedTitle": "You have extended this agreement",
   "TransactionPanel.p_rentalExtendedSubTitle": "This agreement is now on a week to week basis. The renter must provide you with two weeks notice in order to end the agreement.",
 
-  "TransactionPanel.c_rentalCancelledTitle": "This agreement has been cancelled",
-  "TransactionPanel.c_rentalCancelledSubTitle": "Please organize the removal of your belongings with the property owner.",
-  "TransactionPanel.p_rentalCancelledTitle": "You have cancelled this agreement",
-  "TransactionPanel.p_rentalCancelledSubTitle": "Please organize the next steps with the renter.",
+  "TransactionPanel.c_rentalCancelledTitle": "These rental payments have been cancelled",
+  "TransactionPanel.c_rentalCancelledSubTitle": "Sorry to see you go! This is to notify you that rental payments for {listingLink} have been cancelled.  Please refer to the signed rental agreement for this listing for the agreed required number of days notice for termination.{lineBreak}We are constantly working to improve the heybarn experience and would appreciate your thoughts. Please provide confidential feedback on your experience with heybarn here (#survey link#).",
+  "TransactionPanel.p_rentalCancelledTitle": "The rental payments have been cancelled",
+  "TransactionPanel.p_rentalCancelledSubTitle": "This is to notify you that rental payments for {listingLink} have been cancelled. Please refer to the signed rental agreement for this listing for the agreed required number of days notice for termination.{lineBreak}We are constantly working to improve the heybarn experience and would appreciate your thoughts. Please provide confidential feedback on your experience with heybarn here (#survey link#).",
 
   "TransactionPanel.c_rentPaymentMethodMissingTitle": "There has been an issue with your payment method",
-  "TransactionPanel.c_rentPaymentMethodMissingSubTitle": "The payment method you have on file is no longer valid. Please provide a new payment method.",
+  "TransactionPanel.c_rentPaymentMethodMissingSubTitle": "The payment method you have on file is no longer valid. Please provide a new payment method. You will not be charged the first and last weeks deposit again, this is just to confirm your weekly payments.",
   "TransactionPanel.p_rentPaymentMethodMissingTitle": "Your renters payment method is no longer valid",
   "TransactionPanel.p_rentPaymentMethodMissingSubTitle": "We have notified them and are requesting updated payment details. Please contact them directly for further queries.",
 
@@ -1282,7 +1296,6 @@
   "TransactionPanel.stripeCancelConfirmationTitle": "Confirm you wish to cancel this agreement",
   "TransactionPanel.stripeCancelConfirmationSubTitle": "This will cancel the agreement, effective 2 weeks from the next payment period. This cannot be undone, are you sure?",
 
-
   "RentalAgreementModal.later": "Later",
   "RentalAgreementModal.rentalAgreementModalTitle": "Prepare Your Rental Agreement",
   "RentalAgreementModal.rentalAgreementModalSubTitle": "Let us know the details of your rental agreement, and we'll create a professional contract just for you.",
@@ -1290,7 +1303,6 @@
   "RentalAgreementSetupForm.submit": "Send",
 
   "UpdatePaymentMethodsPanel.heading": "New Payment Method",
-
 
   "ConfirmationModal.defaultTitle": "Are you sure?",
   "ConfirmationModal.defaultSubTitle": "This action may be permanent, are you sure about this?",
@@ -1362,20 +1374,18 @@
   "TransactionInitPanel.orderCancelledTitle": "{customerName}, your booking for {listingLink} has been cancelled.",
   "TransactionInitPanel.orderDeclinedTitle": "{customerName}, your booking for {listingLink} has been declined.",
 
-
-  "TransactionInitPanel.c_listingReadyTitle": "Great, lets reach out to {otherName} and let them know you're interested in their listing",
-  "TransactionInitPanel.c_listingReadySubTitle": "To use the heybarn connection, we need to tell the host how you want to use their space. Please either create a new advert or select an existing advert that we can send to them.",
+  "TransactionInitPanel.c_listingReadyTitle": "Great! Heybarn will hold this listing for you. Create an advert or select an existing advert to show {otherName} how you would like to use this space.",
+  "TransactionInitPanel.c_listingReadySubTitle": "To hold this listing, a $20 fee will be charged. We will send {otherName} your advert and they will be in contact shortly. The listing will be held by you until they reply.{lineBreak}Enter your payment details below. Heybarn uses the {stripeLink} for secure transactions.{lineBreak}Please note that payment of the holding fee does not mean you are renting this space. If the host agrees to proceed, we recommend you view the space and, if the connection feels right, then commit to a rental agreement.",
   "TransactionInitPanel.c_listingReadySubSubTitle": "heybarn charges a $20 reservation fee for this process. Noone else can contact the host about this listing until they have responded to you. To understand more about this charge, { link }",
 
   "TransactionInitPanel.p_listingReadyTitle": "Ready to send {otherName} your {listingType}? ",
   "TransactionInitPanel.p_listingReadySubTitle": "Your account will be charged $20",
 
-
   "TransactionInitPanel.c_advertReadyTitle": "Ready to send {otherName} your {listingType}? ",
   "TransactionInitPanel.c_advertReadySubTitle": "Your account will be charged $20",
 
-  "TransactionInitPanel.P_advertReadyTitle": "Ready to send {otherName} your {listingType}? ",
-  "TransactionInitPanel.P_advertReadySubTitle": "Your account will be charged $20",
+  "TransactionInitPanel.p_advertReadyTitle": "Great! Heybarn can hold this advert for you. Create a listing or select an existing listing to show {providerName} the possibilities your space offers.",
+  "TransactionInitPanel.p_advertReadySubTitle": "To hold this advert, a $20 fee will be charged. We will send {providerName} your listing and they will be in contact shortly. The advert will be held by you until they reply.{lineBreak}Enter your payment details below. Heybarn uses the {stripeLink} for secure transactions. {lineBreak}Please note that payment of the holding fee does not mean you have rented out your space. If the renter agrees to proceed, we recommend you arrange a viewing and, if the connection feels right, then commit to a rental agreement.",
 
   "TransactionInitPanel.saleReadyTitle": "Ready to send {otherName} your {listingType}? ",
   "TransactionInitPanel.orderDeliveredTitle": "{customerName}, your booking for {listingLink} has been completed.",
@@ -1386,6 +1396,7 @@
   "TransactionInitPanel.orderPreauthorizedSubtitle": "You have requested to book {listingLink}.",
   "TransactionInitPanel.orderPreauthorizedTitle": "Great success, {customerName}!",
   "TransactionInitPanel.paymentMethodsPageLink": "payment method page",
+  "TransactionInitPanel.createAListingButton": "Create a new {listingType}",
   "TransactionInitPanel.perDay": "per day",
   "TransactionInitPanel.perNight": "per night",
   "TransactionInitPanel.perWeek": "per week",

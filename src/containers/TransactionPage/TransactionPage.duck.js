@@ -33,6 +33,7 @@ import {
   transitionPrivileged,
   transitionPrivilegedSimple,
   sendAdminEmail,
+  updateListingState,
 } from '../../util/api';
 import * as log from '../../util/log';
 import {
@@ -44,6 +45,7 @@ import { addMarketplaceEntities } from '../../ducks/marketplaceData.duck';
 import { fetchCurrentUserNotifications } from '../../ducks/user.duck';
 import { getPropByName } from '../../util/userHelpers';
 import { fetchSubscription } from '../../ducks/stripe.duck';
+import { LISTING_LIVE, LISTING_UNDER_OFFER } from '../../util/types';
 
 const { UUID } = sdkTypes;
 
@@ -529,9 +531,9 @@ const listingRelationship = txResponse => {
   return txResponse.data.data.relationships.listing.data;
 };
 
-export const fetchTransaction = (id, txRole) => (dispatch, getState, sdk) => {
-console.log("🚀 | file: TransactionPage.duck.js | line 533 | fetchTransaction | txRole", txRole);
-console.log("🚀 | file: TransactionPage.duck.js | line 533 | fetchTransaction | id", id);
+export const fetchTransaction = (id, txRole, fetchSub) => (dispatch, getState, sdk) => {
+  console.log('🚀 | file: TransactionPage.duck.js | line 533 | fetchTransaction | txRole', txRole);
+  console.log('🚀 | file: TransactionPage.duck.js | line 533 | fetchTransaction | id', id);
   dispatch(fetchTransactionRequest());
   let txResponse = null;
 
@@ -556,7 +558,10 @@ console.log("🚀 | file: TransactionPage.duck.js | line 533 | fetchTransaction 
     )
     .then(response => {
       txResponse = response;
-      console.log("🚀 | file: TransactionPage.duck.js | line 559 | fetchTransaction | response", response);
+      console.log(
+        '🚀 | file: TransactionPage.duck.js | line 559 | fetchTransaction | response',
+        response
+      );
       const listingId = listingRelationship(response).id;
       const entities = updatedEntities({}, response.data);
       const listingRef = { id: listingId, type: 'listing' };
@@ -793,9 +798,19 @@ export const declineCommunication = data => (dispatch, getState, sdk) => {
           : TRANSITION_RENTER_DECLINES_COMMUNICATION,
         params: {},
       },
-      { expand: true }
+      { expand: true, include: ['listing'] }
     )
     .then(response => {
+      console.log('🚀 | file: TransactionPage.duck.js | line 801 | response', response);
+      const transaction = denormalisedResponseEntities(response)?.[0];
+      const listing = getPropByName(transaction, 'listing');
+      updateListingState({
+        id: listing.id.uuid,
+        listingState: LISTING_LIVE,
+        transactionId: '',
+      })
+        .then(r => {})
+        .catch(e => {});
       dispatch(addMarketplaceEntities(response));
       dispatch(declineCommunicationSuccess());
       dispatch(fetchCurrentUserNotifications());
@@ -804,7 +819,7 @@ export const declineCommunication = data => (dispatch, getState, sdk) => {
     .catch(e => {
       dispatch(declineCommunicationError(storableError(e)));
       log.error(e, 'decline-communication-failed', {
-        txId: id,
+        txId: txId,
         transition: isRenterEnquired
           ? TRANSITION_HOST_DECLINES_COMMUNICATION
           : TRANSITION_RENTER_DECLINES_COMMUNICATION,
@@ -939,12 +954,30 @@ export const requestRentalAgreement = data => (dispatch, getState, sdk) => {
       bookingEnd: bookingData.endDate,
     },
   };
-  const queryParams = { expand: true };
+  const queryParams = { expand: true, include: ['listing'] };
 
   const handleSucces = response => {
     const entities = denormalisedResponseEntities(response);
+    console.log("🚀 | file: TransactionPage.duck.js | line 961 | entities", entities);
     const order = entities[0];
+    console.log("🚀 | file: TransactionPage.duck.js | line 963 | order", order);
+    const listing = getPropByName(order, 'listing');
+    const relatedListingId = getPropByName(order, 'relatedListingId');
 
+    updateListingState({
+      id: listing.id.uuid,
+      listingState: LISTING_UNDER_OFFER,
+      transactionId: order.id.uuid,
+    })
+      .then(r => {})
+      .catch(e => {});
+      updateListingState({
+        id: relatedListingId,
+        listingState: LISTING_UNDER_OFFER,
+        transactionId: order.id.uuid,
+      })
+        .then(r => {})
+        .catch(e => {});
     dispatch(addMarketplaceEntities(response));
     dispatch(requestRentalAgreementSuccess());
     dispatch(fetchCurrentUserNotifications());
@@ -1336,7 +1369,7 @@ export const fetchTransactionLineItems = ({ bookingData, listingId, isOwnListing
 // loadData is a collection of async calls that need to be made
 // before page has all the info it needs to render itself
 export const loadData = params => (dispatch, getState) => {
-console.log("🚀 | file: TransactionPage.duck.js | line 1336 | params", params);
+  console.log('🚀 | file: TransactionPage.duck.js | line 1336 | params', params);
   const txId = new UUID(params.id);
   const state = getState().TransactionPage;
   const txRef = state.transactionRef;

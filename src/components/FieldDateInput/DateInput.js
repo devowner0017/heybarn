@@ -165,7 +165,6 @@ class DateInputComponent extends Component {
       timeSlots,
       ...datePickerProps
     } = this.props;
-    console.log("🚀 | file: DateInput.js | line 168 | DateInputComponent | render | this.props", this.props);
     /* eslint-enable no-unused-vars */
 
     const initialMoment = initialDate ? moment(initialDate) : null;
@@ -177,7 +176,6 @@ class DateInputComponent extends Component {
       : () => false;
 
     const placeholder = placeholderText || intl.formatMessage({ id: 'FieldDateInput.placeholder' });
-    console.log("🚀 | file: DateInput.js | line 179 | DateInputComponent | render | placeholder", placeholder);
 
     const screenReaderInputText =
       screenReaderInputMessage ||
