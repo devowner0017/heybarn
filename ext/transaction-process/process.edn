@@ -242,11 +242,15 @@
  :notifications
  [
 
-{:name :notification/fee-paid,
+{:name :notification/host-fee-paid-to-host,
    :on :transition/host-fee-paid,
    :to :actor.role/customer,
-   :template :fee-paid}
+   :template :host-fee-paid-to-host}
 
+{:name :notification/host-fee-paid-to-renter,
+   :on :transition/host-fee-paid,
+   :to :actor.role/provider,
+   :template :host-fee-paid-to-renter}
 
 
 
