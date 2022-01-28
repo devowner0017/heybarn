@@ -2,6 +2,37 @@
 @import './customMediaQueries.css';
 @import './propertySets.css';
 
+@font-face {
+  font-family: 'apex_serifmedium';
+  src: url('../fonts/apexserif_medium-webfont.woff2') format('woff2'),
+    url('../fonts/apexserif_medium-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'apex_serifbook';
+  src: url('../fonts/apexserif_book-webfont.woff2') format('woff2'),
+    url('../fonts/apexserif_book-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'apex_serifbold';
+  src: url('../fonts/apexserif_bold-webfont.woff2') format('woff2'),
+    url('../fonts/apexserif_bold-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'montserratregular';
+  src: url('../fonts/montserrat-regular-webfont.woff2') format('woff2'),
+    url('../fonts/montserrat-regular-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
 /* ================ Custom Properties aka CSS variables ================ */
 
 /**
@@ -29,7 +60,7 @@
   /* Used with inline CSS SVGs */
   --marketplaceColorEncoded: %23c0392b;
 
-  --successColor: #6D692B;
+  --successColor: #6d692b;
   --successColorDark: #585522;
   --successColorLight: #f0fff6;
   --failColor: #ff0000;
@@ -49,8 +80,8 @@
   --matterColorLightTransparent: rgba(255, 255, 255, 0.65);
 
   /* ================ Font ================ */
-  --fontFamily: 'Zilla Slab', serif;
-  --fontFamilySecondary: 'Montserrat', Helvetica, Arial, sans-serif;
+  --fontFamily: 'apex_serifbook', 'Zilla Slab', serif;
+  --fontFamilySecondary: 'montserratregular', 'Montserrat', Helvetica, Arial, sans-serif;
 
   --fontWeightRegular: 400;
   --fontWeightMedium: 500;
@@ -298,9 +329,9 @@ textarea {
 
 .fontsLoaded {
   & body {
-    font-family: 'Zilla Slab', Helvetica, Arial, sans-serif;
+    font-family: 'apex_serifbook', 'Zilla Slab', Helvetica, Arial, sans-serif;
   }
   & button {
-    font-family: 'Zilla Slab', Helvetica, Arial, sans-serif;
+    font-family: 'apex_serifbook', 'Zilla Slab', Helvetica, Arial, sans-serif;
   }
 }
