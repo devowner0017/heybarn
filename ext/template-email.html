@@ -18,6 +18,8 @@
           ><o:PixelsPerInch>96</o:PixelsPerInch><o:AllowPNG /></o:OfficeDocumentSettings></xml
     ><![endif]-->
     <style>
+      @import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Zilla+Slab:wght@400;500;700&display=swap');
+
       * {
         box-sizing: border-box;
       }
@@ -67,7 +69,7 @@
   </head>
   <body
     style="
-        background-color: #c35827;
+        background-color: #f3ddbc;
         margin: 0;
         padding: 0;
         -webkit-text-size-adjust: none;
@@ -83,7 +85,7 @@
       style="
           mso-table-lspace: 0pt;
           mso-table-rspace: 0pt;
-          background-color: #c35827;
+          background-color: #f3ddbc;
         "
       width="100%"
     >
@@ -186,12 +188,12 @@
                             </table>
 
                             <!-- <table border="0" cellpadding="0" cellspacing="0" class="image_block" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
-                <tr>
-                <td style="width:100%;padding-right:0px;padding-left:0px;">
-                <div align="center" style="line-height:10px"><a href="http://www.example.com/" style="outline:none" tabindex="-1" target="_blank"><img alt="Banner Image 2022" src="images/martin_2022.png" style="display: block; height: auto; border: 0; width: 600px; max-width: 100%;" title="Banner Image 2022" width="600"/></a></div>
-                </td>
-                </tr>
-                </table> -->
+                              <tr>
+                              <td style="width:100%;padding-right:0px;padding-left:0px;">
+                              <div align="center" style="line-height:10px"><a href="http://www.example.com/" style="outline:none" tabindex="-1" target="_blank"><img alt="Banner Image 2022" src="images/martin_2022.png" style="display: block; height: auto; border: 0; width: 600px; max-width: 100%;" title="Banner Image 2022" width="600"/></a></div>
+                              </td>
+                              </tr>
+                              </table> -->
                             {{#with transaction}}
                             <table
                               border="0"
@@ -222,7 +224,7 @@
                                           mso-line-height-alt: 16.8px;
                                           color: #555555;
                                           line-height: 1.2;
-                                          font-family: Helvetica, Georgia, Times,
+                                          font-family: Zilla Slab, Helvetica, Georgia, Times,
                                             Times New Roman, serif;
                                         "
                                     >
@@ -233,20 +235,14 @@
                                             text-align: center;
                                           "
                                       >
-                                        <span style="font-size: 46px; color: #000"
+                                        <span style="font-size: 24px; color: #000"
                                           ><strong>
                                             <!-- S1.0 -->
                                             <!-- HEADERSECTION -->
 
-                                            Good news!
+                                            {{provider.display-name}} has been sent your listing!
                                           </strong></span
                                         >
-                                        <br />
-                                        <span style="font-size: 24px; color: #000">
-                                          {{customer.display-name}} is keen to connect
-
-                                          <hr />
-                                        </span>
                                       </p>
                                     </div>
                                   </div>
@@ -283,7 +279,7 @@
                                           mso-line-height-alt: 21px;
                                           color: #555555;
                                           line-height: 1.5;
-                                          font-family: Helvetica, Georgia, Times,
+                                          font-family: Zilla Slab, Helvetica, Georgia, Times,
                                             Times New Roman, serif;
                                         "
                                     >
@@ -296,8 +292,12 @@
                                       >
                                         <!--  2.0  -->
                                         <!-- CONTENTSECTION  -->
-                                        Does this look like the place for you? Click the button
-                                        below to check it out.
+                                        The {{listing.title}} is held by you until
+                                        {{provider.display-name}} responds to your listing.
+                                        <br />
+                                        They should be in contact shortly. In the meantime, browse
+                                        other heybarn adverts that may meet your needs at the link
+                                        below!
                                       </p>
                                     </div>
                                   </div>
@@ -329,21 +329,21 @@
                                   <div align="center">
                                     <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="http://www.example.com/" style="height:42px;width:132px;v-text-anchor:middle;" arcsize="60%" stroke="false" fillcolor="#f5000c"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#ffffff; font-family:Helvetica, Georgia, serif; font-size:16px"><!
                                     [endif]--><a
-                                      href="{{marketplace.url}}/sale/{{url-encode id}}/details"
+                                      href="{{marketplace.url}}/s?pub_listingType=advert"
                                       style="
                                           text-decoration: none;
                                           display: inline-block;
                                           color: #ffffff;
-                                          background-color: #f5000c;
+                                          background-color: #c35827;
                                           border-radius: 25px;
                                           width: auto;
-                                          border-top: 1px solid #f5000c;
-                                          border-right: 1px solid #f5000c;
-                                          border-bottom: 1px solid #f5000c;
-                                          border-left: 1px solid #f5000c;
+                                          border-top: 1px solid #c35827;
+                                          border-right: 1px solid #c35827;
+                                          border-bottom: 1px solid #c35827;
+                                          border-left: 1px solid #c35827;
                                           padding-top: 5px;
                                           padding-bottom: 5px;
-                                          font-family: Helvetica, Georgia, Times,
+                                          font-family: Zilla Slab, Helvetica, Georgia, Times,
                                             Times New Roman, serif;
                                           text-align: center;
                                           mso-border-alt: none;
@@ -364,8 +364,9 @@
                                               line-height: 2;
                                               word-break: break-word;
                                               mso-line-height-alt: 32px;
+                                              font-family: Montserrat, Arial, Helvetica, sans-serif ;
                                             "
-                                          >Check it out</span
+                                          >Browse</span
                                         ></span
                                       ></a
                                     >
@@ -375,7 +376,8 @@
                               </tr>
                             </table>
 
-                            <table
+                            <!-- COLORED SECTION START -->
+                            <!-- <table
                               border="0"
                               cellpadding="0"
                               cellspacing="0"
@@ -403,13 +405,11 @@
                                         background-color: #c35827;
                                       "
                                   >
-                                    <!-- 3.0 -->
-                                    <!-- COLORED SECTION -->
                                     COLORED SECTION
                                   </div>
                                 </td>
                               </tr>
-                            </table>
+                            </table> -->
                           </td>
                         </tr>
                       </tbody>
@@ -418,6 +418,7 @@
                 </tr>
               </tbody>
             </table>
+
             <table
               align="center"
               border="0"
@@ -525,7 +526,7 @@
                               <tr>
                                 <td
                                   style="
-                                      padding-bottom: 5px;
+                                      padding-bottom: 20px;
                                       padding-left: 10px;
                                       padding-right: 10px;
                                       padding-top: 20px;
@@ -540,9 +541,9 @@
                                     class="social-table"
                                     role="presentation"
                                     style="
-                                        mso-table-lspace: 0pt;
-                                        mso-table-rspace: 0pt;
-                                      "
+                                      mso-table-lspace: 0pt;
+                                      mso-table-rspace: 0pt;
+                                    "
                                     width="208px"
                                   >
                                     <tr>
@@ -553,10 +554,12 @@
                                             height="32"
                                             src="https://cdn.exclaimer.com/Handbook%20Images/facebook-icon_32x32.png?_ga=2.229437916.1378256524.1643273803-251524777.643273802"
                                             style="
-                                                display: block;
-                                                height: auto;
-                                                border: 0;
-                                              "
+                                              display: block;
+                                              height: auto;
+                                              border: 0;
+                                              margin-left: auto;
+      margin-right: auto;
+                                            "
                                             title="Facebook"
                                             width="32"
                                         /></a>
@@ -568,25 +571,29 @@
                                             height="32"
                                             src="https://cdn.exclaimer.com/Handbook%20Images/twitter-icon_32x32.png"
                                             style="
-                                                display: block;
-                                                height: auto;
-                                                border: 0;
-                                              "
+                                              display: block;
+                                              height: auto;
+                                              border: 0;
+                                              margin-left: auto;
+      margin-right: auto;
+                                            "
                                             title="Twitter"
                                             width="32"
                                         /></a>
                                       </td>
-                                      <td style="padding: 0 20px 0 0px">
+                                      <td style="padding: 0 5px 0 0px">
                                         <a href="http://www.exampleinsta.com/" target="_blank"
                                           ><img
                                             alt="Instagram"
                                             height="32"
                                             src="https://cdn.exclaimer.com/Handbook%20Images/instagram-icon_32x32.png"
                                             style="
-                                                display: block;
-                                                height: auto;
-                                                border: 0;
-                                              "
+                                              display: block;
+                                              height: auto;
+                                              border: 0;
+                                              margin-left: auto;
+      margin-right: auto;
+                                            "
                                             title="Instagram"
                                             width="32"
                                         /></a>
@@ -725,7 +732,7 @@
                                           mso-line-height-alt: 16.8px;
                                           color: #555555;
                                           line-height: 1.2;
-                                          font-family: Helvetica, Georgia, Times,
+                                          font-family: Zilla Slab, Helvetica, Georgia, Times,
                                             Times New Roman, serif;
                                         "
                                     >
@@ -736,9 +743,7 @@
                                             text-align: center;
                                           "
                                       >
-                                        <span style=""
-                                          >New Zealand</span
-                                        >
+                                        <span style="">New Zealand</span>
                                       </p>
                                       <p
                                         style="
@@ -780,7 +785,7 @@
                                       </p>
                                       <p
                                         style="
-                                          margin:10px  0;
+                                            margin:10px  0;
                                             font-size: 14px;
                                             text-align: center;
                                           "

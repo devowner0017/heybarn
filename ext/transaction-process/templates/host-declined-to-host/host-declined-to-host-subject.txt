@@ -1,0 +1,1 @@
+You've declined to make contact about {{transaction.relatedListingTitle}}

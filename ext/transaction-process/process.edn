@@ -252,6 +252,93 @@
    :to :actor.role/provider,
    :template :host-fee-paid-to-renter}
 
+   {:name :notification/renter-fee-paid-to-renter,
+   :on :transition/renter-fee-paid,
+   :to :actor.role/customer,
+   :template :renter-fee-paid-to-renter}
+
+   {:name :notification/renter-fee-paid-to-host,
+   :on :transition/renter-fee-paid,
+   :to :actor.role/provider,
+   :template :renter-fee-paid-to-host}
+
+
+
+
+   {:name :notification/renter-accepts-communication-to-host,
+   :on :transition/renter-accepts-communication,
+   :to :actor.role/provider,
+   :template :renter-accepts-communication-to-host}
+
+   {:name :notification/renter-accepts-communication-to-renter,
+   :on :transition/renter-accepts-communication,
+   :to :actor.role/customer,
+   :template :renter-accepts-communication-to-renter}
+
+   {:name :notification/host-accepts-communication-to-host,
+   :on :transition/host-accepts-communication,
+   :to :actor.role/provider,
+   :template :host-accepts-communication-to-host}
+
+   {:name :notification/host-accepts-communication-to-renter,
+   :on :transition/host-accepts-communication,
+   :to :actor.role/customer,
+   :template :host-accepts-communication-to-renter}
+
+   {:name :notification/host-declined-to-host,
+   :on :transition/host-declines-communication,
+   :to :actor.role/provider,
+   :template :host-declined-to-host}
+
+   {:name :notification/host-declined-to-renter,
+   :on :transition/host-declines-communication,
+   :to :actor.role/customer,
+   :template :host-declined-to-renter}
+
+   {:name :notification/renter-declined-to-host,
+   :on :transition/renter-declines-communication,
+   :to :actor.role/provider,
+   :template :renter-declined-to-host}
+
+   {:name :notification/renter-declined-to-renter,
+   :on :transition/renter-declines-communication,
+   :to :actor.role/customer,
+   :template :renter-declined-to-renter}
+
+   {:name :notification/rental-agreement-requested-to-renter,
+   :on :transition/renter-requests-agreement,
+   :to :actor.role/customer,
+   :template :rental-agreement-requested-to-renter}
+
+   {:name :notification/rental-agreement-requested-to-host,
+   :on :transition/renter-requests-agreement,
+   :to :actor.role/provider,
+   :template :rental-agreement-requested-to-host}
+
+   {:name :notification/rental-agreement-sent-to-renter,
+   :on :transition/host-sends-agreement,
+   :to :actor.role/customer,
+   :template :rental-agreement-sent-to-renter}
+
+   {:name :notification/rental-agreement-sent-to-host,
+   :on :transition/host-sends-agreement,
+   :to :actor.role/provider,
+   :template :rental-agreement-sent-to-host}
+
+   {:name :notification/rental-agreement-sent-to-renter-after-request,
+   :on :transition/host-sends-agreement-after-request,
+   :to :actor.role/customer,
+   :template :rental-agreement-sent-to-renter}
+
+   {:name :notification/rental-agreement-sent-to-host-after-request,
+   :on :transition/host-sends-agreement-after-request,
+   :to :actor.role/provider,
+   :template :rental-agreement-sent-to-host}
+
+
+
+
+
 
 
 
@@ -265,4 +352,5 @@
    :on :transition/complete,
    :to :actor.role/provider,
    :template :money-paid}
+
  ]}
