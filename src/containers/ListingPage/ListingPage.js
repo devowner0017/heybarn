@@ -58,7 +58,7 @@ import SectionHostMaybe from './SectionHostMaybe';
 import SectionRulesMaybe from './SectionRulesMaybe';
 import SectionMapMaybe from './SectionMapMaybe';
 import css from './ListingPage.module.css';
-import { capitalizeFirstLetter } from '../../util/userHelpers';
+import { capitalizeFirstLetter } from '../../util/devHelpers';
 import { capitalize } from 'lodash';
 
 const MIN_LENGTH_FOR_LONG_WORDS_IN_TITLE = 16;

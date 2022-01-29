@@ -4,7 +4,7 @@ import { FormattedMessage, intlShape } from '../../util/reactIntl';
 import { propTypes } from '../../util/types';
 
 import css from './SubscriptionBreakdown.module.css';
-import { getPropByName } from '../../util/userHelpers';
+import { getPropByName } from '../../util/devHelpers';
 
 const LineItemLengthOfContract = props => {
   const { transaction, ongoingContract} = props;

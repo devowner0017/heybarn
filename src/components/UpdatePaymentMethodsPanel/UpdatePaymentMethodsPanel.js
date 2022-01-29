@@ -29,7 +29,7 @@ import {
 
 import css from './UpdatePaymentMethodsPanel.module.css';
 import { createRecurring } from '../../containers/CheckoutPage/CheckoutPage.duck';
-import { getPropByName } from '../../util/userHelpers';
+import { getPropByName } from '../../util/devHelpers';
 
 const UpdatePaymentMethodsPanelComponent = props => {
   const [isSubmitting, setIsSubmitting] = useState(false);

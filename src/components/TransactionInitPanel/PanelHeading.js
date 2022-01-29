@@ -121,6 +121,7 @@ const PanelHeading = props => {
     stripeLink: (
       <ExternalLink href="https://www.stripe.com">Stripe payment processing platform</ExternalLink>
     ),
+    faqLink: <NamedLink name={'FAQPage'}>FAQs</NamedLink>,
     lineBreak,
   };
 

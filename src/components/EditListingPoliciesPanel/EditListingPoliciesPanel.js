@@ -8,7 +8,7 @@ import { ListingLink } from '../../components';
 import { EditListingPoliciesForm } from '../../forms';
 
 import css from './EditListingPoliciesPanel.module.css';
-import { ensureArray } from '../../util/userHelpers'
+import { ensureArray } from '../../util/devHelpers'
 
 const EditListingPoliciesPanel = props => {
   const {

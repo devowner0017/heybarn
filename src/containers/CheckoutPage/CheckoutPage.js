@@ -57,7 +57,7 @@ import {
 } from './CheckoutPage.duck';
 import { storeData, storedData, clearData } from './CheckoutPageSessionHelpers';
 import css from './CheckoutPage.module.css';
-import { getPropByName } from '../../util/userHelpers';
+import { getPropByName } from '../../util/devHelpers';
 import moment from 'moment';
 
 const STORAGE_KEY = 'CheckoutPage';

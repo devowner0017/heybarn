@@ -89,7 +89,7 @@ import { cancelDuringRad } from '../../containers/TransactionPage/TransactionPag
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 import RentalAgreementModal from '../RentalAgreementModal/RentalAgreementModal';
 import NamedRedirect from '../NamedRedirect/NamedRedirect';
-import { getPropByName } from '../../util/userHelpers';
+import { getPropByName } from '../../util/devHelpers';
 import SubscriptionBreakdown from '../SubscriptionBreakdown/SubscriptionBreakdown';
 import StripeActionsMaybe from './StripeActionsMaybe';
 
@@ -849,6 +849,7 @@ export class TransactionPanelComponent extends Component {
               relatedTxId: currentTransaction.id,
               // The ADVERT ID to attach to the new transaction
               relatedListingId: currentListing.id,
+              relatedListingTitle: currentListing.attributes.title,
             });
           }
         }}

@@ -25,7 +25,7 @@ import css from './RentalAgreementSetupForm.module.css';
 import moment from 'moment';
 import { dateFromLocalToAPI } from '../../util/dates';
 import { formatMoney } from '../../util/currency';
-import { getPropByName } from '../../util/userHelpers';
+import { getPropByName } from '../../util/devHelpers';
 import { findOptionsForSelectFilter } from '../../util/search';
 const identity = v => v;
 

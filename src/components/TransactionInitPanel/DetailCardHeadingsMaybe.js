@@ -1,5 +1,5 @@
 import React from 'react';
-import { getPropByName } from '../../util/userHelpers';
+import { getPropByName } from '../../util/devHelpers';
 import AddressLinkMaybe from './AddressLinkMaybe';
 
 import css from './TransactionInitPanel.module.css';

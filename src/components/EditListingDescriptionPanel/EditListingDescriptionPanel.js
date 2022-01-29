@@ -5,7 +5,7 @@ import { FormattedMessage } from '../../util/reactIntl';
 import { ensureOwnListing } from '../../util/data';
 import { findOptionsForSelectFilter } from '../../util/search';
 import { LISTING_LIVE, LISTING_STATE_DRAFT } from '../../util/types';
-import { getPropByName, ensureArray } from '../../util/userHelpers';
+import { getPropByName, ensureArray } from '../../util/devHelpers';
 import { ListingLink } from '../../components';
 import { EditListingDescriptionForm } from '../../forms';
 import { propTypes } from '../../util/types';

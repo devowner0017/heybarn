@@ -6,7 +6,7 @@ import config from '../../config';
 import { capitalize } from 'lodash';
 
 import css from './ListingPage.module.css';
-import { ensureArray } from '../../util/userHelpers';
+import { ensureArray } from '../../util/devHelpers';
 
 const SectionHeading = props => {
   const { richTitle, hostLink, region, preferredUse, listingType } = props;

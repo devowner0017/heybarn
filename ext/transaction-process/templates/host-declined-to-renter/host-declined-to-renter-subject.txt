@@ -1,1 +1,1 @@
-Your advert {{transaction.relatedListingTitle}} was declined by {{provider.displayName}}.
+Your advert {{transaction.metadata.relatedListingTitle}} was declined by {{provider.displayName}}.

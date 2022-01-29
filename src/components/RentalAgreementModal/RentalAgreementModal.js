@@ -7,7 +7,7 @@ import { RentalAgreementSetupForm } from '../../forms';
 import { PrimaryButton, SecondaryButton, Modal } from '..';
 
 import css from './RentalAgreementModal.module.css';
-import { ensureArray, getPropByName } from '../../util/userHelpers';
+import { ensureArray, getPropByName } from '../../util/devHelpers';
 
 const RentalAgreementModal = props => {
   const {
@@ -77,12 +77,8 @@ const RentalAgreementModal = props => {
     >
       <div className={css.modalWrapper}>
         <div className={css.contentWrapper}>
-          <p className={css.modalTitle}>
-            {titleText || <FormattedMessage id="RentalAgreementModal.defaultTitle" />}
-          </p>
-          <p className={css.modalMessage}>
-            {contentText || <FormattedMessage id="RentalAgreementModal.defaultSubTitle" />}
-          </p>
+          <p className={css.modalTitle}>{titleText}</p>
+          <p className={css.modalMessage}>{contentText}</p>
         </div>
         <RentalAgreementSetupForm
           onSubmit={handleSubmit}

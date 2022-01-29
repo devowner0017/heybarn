@@ -43,7 +43,7 @@ import {
 } from '../../util/data';
 import { addMarketplaceEntities } from '../../ducks/marketplaceData.duck';
 import { fetchCurrentUserNotifications } from '../../ducks/user.duck';
-import { getPropByName } from '../../util/userHelpers';
+import { getPropByName } from '../../util/devHelpers';
 import { fetchSubscription } from '../../ducks/stripe.duck';
 import { LISTING_LIVE, LISTING_UNDER_OFFER } from '../../util/types';
 
@@ -694,7 +694,7 @@ export const reverseTransactionFlowAndAcceptCommunication = data => (dispatch, g
   // listingId is the HOSTS LISTING
   // relatedTxId is the CURRENT HOST->RENTER TRANSACTION that is invalid
   // relatedListingId is the RENTERS ADVERT
-  const { listingId, relatedTxId, relatedListingId } = data;
+  const { listingId, relatedTxId, relatedListingId, relatedListingTitle } = data;
   if (acceptOrDeclineInProgress(getState())) {
     return Promise.reject(new Error('Accept or decline already in progress'));
   }
@@ -706,7 +706,11 @@ export const reverseTransactionFlowAndAcceptCommunication = data => (dispatch, g
     transition: TRANSITION_HOST_APPROVED_BY_RENTER,
     params: {
       listingId: listingId.uuid,
-      protectedData: { relatedTxId: relatedTxId.uuid, relatedListingId: relatedListingId.uuid },
+      protectedData: {
+        relatedTxId: relatedTxId.uuid,
+        relatedListingId: relatedListingId.uuid,
+        relatedListingTitle,
+      },
     },
   };
   const queryParams = {
@@ -891,21 +895,31 @@ export const sendRentalAgreement = data => (dispatch, getState, sdk) => {
       protectedData: { ...contractLines, ...bookingData },
     },
   };
-  const queryParams = { expand: true };
+  const queryParams = { expand: true, include: ['customer', 'provider', 'listing'] };
   const emailData = { ...contractLines, ...bookingData };
   console.log(emailData);
   console.log(Object.entries(emailData));
-  sendAdminEmail({
-    message: {
-      subject: 'NEW RENTAL AGREEMENT REQUESTED',
-      body:
-        'A new rental agreement has been requested. Please generate the appropriate document and contact both parties to have it signed.',
-    },
-    content: { ...contractLines, ...bookingData },
-  });
   const handleSucces = response => {
     const entities = denormalisedResponseEntities(response);
     const order = entities[0];
+    console.log('🚀 | file: TransactionPage.duck.js | line 901 | order', order);
+    const customer = getPropByName(order, 'customer');
+    const provider = getPropByName(order, 'provider');
+    const listing = getPropByName(order, 'listing');
+    sendAdminEmail({
+      message: {
+        subject: 'NEW RENTAL AGREEMENT REQUESTED',
+        body:
+          'A new rental agreement has been requested. Please generate the appropriate document and contact both parties to have it signed.',
+      },
+      content: {
+        ...contractLines,
+        ...bookingData,
+        rentalAmount: `$${listing.attributes.price.amount / 100}`,
+      },
+      renterId: customer.id.uuid,
+      hostId: provider.id.uuid,
+    });
 
     dispatch(addMarketplaceEntities(response));
     dispatch(sendRentalAgreementSuccess());
@@ -958,9 +972,9 @@ export const requestRentalAgreement = data => (dispatch, getState, sdk) => {
 
   const handleSucces = response => {
     const entities = denormalisedResponseEntities(response);
-    console.log("🚀 | file: TransactionPage.duck.js | line 961 | entities", entities);
+    console.log('🚀 | file: TransactionPage.duck.js | line 961 | entities', entities);
     const order = entities[0];
-    console.log("🚀 | file: TransactionPage.duck.js | line 963 | order", order);
+    console.log('🚀 | file: TransactionPage.duck.js | line 963 | order', order);
     const listing = getPropByName(order, 'listing');
     const relatedListingId = getPropByName(order, 'relatedListingId');
 
@@ -971,13 +985,13 @@ export const requestRentalAgreement = data => (dispatch, getState, sdk) => {
     })
       .then(r => {})
       .catch(e => {});
-      updateListingState({
-        id: relatedListingId,
-        listingState: LISTING_UNDER_OFFER,
-        transactionId: order.id.uuid,
-      })
-        .then(r => {})
-        .catch(e => {});
+    updateListingState({
+      id: relatedListingId,
+      listingState: LISTING_UNDER_OFFER,
+      transactionId: order.id.uuid,
+    })
+      .then(r => {})
+      .catch(e => {});
     dispatch(addMarketplaceEntities(response));
     dispatch(requestRentalAgreementSuccess());
     dispatch(fetchCurrentUserNotifications());

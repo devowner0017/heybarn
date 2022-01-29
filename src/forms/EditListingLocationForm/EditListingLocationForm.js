@@ -14,7 +14,7 @@ import {
 import { Form, LocationAutocompleteInputField, Button, FieldSelect } from '../../components';
 
 import css from './EditListingLocationForm.module.css';
-import { getPropByName } from '../../util/userHelpers';
+import { getPropByName } from '../../util/devHelpers';
 
 const identity = v => v;
 

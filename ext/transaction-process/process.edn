@@ -146,11 +146,20 @@
 
 
 
-  {:name :transition/renter-signs-rental-agreement,
+  {:name :transition/operator-confirms-rental-agreement,
    :actor :actor.role/operator,
    :actions [
     {:name :action/update-protected-data}
-    {:name :action/privileged-update-metadata}
+    ;; {:name :action/privileged-update-metadata}
+   ],
+    :from :state/rental-agreement-sent,
+   :to :state/rental-agreement-finalized }
+
+  {:name :transition/renter-signs-rental-agreement,
+   :actor :actor.role/customer,
+   :actions [
+    {:name :action/update-protected-data}
+    ;; {:name :action/privileged-update-metadata}
    ],
    :from :state/rental-agreement-sent,
    :to :state/rental-agreement-finalized
@@ -207,6 +216,32 @@
    :to :state/preauthorized
    :privileged? true }
 
+  {:name :transition/host-cancels-after-contract-start,
+   :actor :actor.role/provider,
+   :actions [
+        {:name :action/privileged-update-metadata}
+   ],
+   :from :state/preauthorized,
+   :to :state/delivered
+   :privileged? true }
+
+  {:name :transition/renter-cancels-after-contract-start,
+   :actor :actor.role/customer,
+   :actions [
+        {:name :action/privileged-update-metadata}
+   ],
+   :from :state/preauthorized,
+   :to :state/delivered
+   :privileged? true }
+
+  {:name :transition/operator-cancels-after-contract-start,
+   :actor :actor.role/operator,
+   :actions [
+        {:name :action/privileged-update-metadata}
+   ],
+   :from :state/preauthorized,
+   :to :state/delivered
+   :privileged? true }
 
  {:name :transition/provider-update-transaction-after-payment,
    :actor :actor.role/provider,
@@ -242,22 +277,22 @@
  :notifications
  [
 
-{:name :notification/host-fee-paid-to-host,
+{:name :notification/host-fee-paid-:to-host,
    :on :transition/host-fee-paid,
    :to :actor.role/customer,
    :template :host-fee-paid-to-host}
 
-{:name :notification/host-fee-paid-to-renter,
+{:name :notification/host-fee-paid-:to-renter,
    :on :transition/host-fee-paid,
    :to :actor.role/provider,
    :template :host-fee-paid-to-renter}
 
-   {:name :notification/renter-fee-paid-to-renter,
+   {:name :notification/renter-fee-paid-:to-renter,
    :on :transition/renter-fee-paid,
    :to :actor.role/customer,
    :template :renter-fee-paid-to-renter}
 
-   {:name :notification/renter-fee-paid-to-host,
+   {:name :notification/renter-fee-paid-:to-host,
    :on :transition/renter-fee-paid,
    :to :actor.role/provider,
    :template :renter-fee-paid-to-host}
@@ -265,62 +300,62 @@
 
 
 
-   {:name :notification/renter-accepts-communication-to-host,
+   {:name :notification/renter-accepts-communication-:to-host,
    :on :transition/renter-accepts-communication,
    :to :actor.role/provider,
    :template :renter-accepts-communication-to-host}
 
-   {:name :notification/renter-accepts-communication-to-renter,
+   {:name :notification/renter-accepts-communication-:to-renter,
    :on :transition/renter-accepts-communication,
    :to :actor.role/customer,
    :template :renter-accepts-communication-to-renter}
 
-   {:name :notification/host-accepts-communication-to-host,
+   {:name :notification/host-accepts-communication-:to-host,
    :on :transition/host-accepts-communication,
    :to :actor.role/provider,
    :template :host-accepts-communication-to-host}
 
-   {:name :notification/host-accepts-communication-to-renter,
+   {:name :notification/host-accepts-communication-:to-renter,
    :on :transition/host-accepts-communication,
    :to :actor.role/customer,
    :template :host-accepts-communication-to-renter}
 
-   {:name :notification/host-declined-to-host,
+   {:name :notification/host-declined-:to-host,
    :on :transition/host-declines-communication,
    :to :actor.role/provider,
    :template :host-declined-to-host}
 
-   {:name :notification/host-declined-to-renter,
+   {:name :notification/host-declined-:to-renter,
    :on :transition/host-declines-communication,
    :to :actor.role/customer,
    :template :host-declined-to-renter}
 
-   {:name :notification/renter-declined-to-host,
+   {:name :notification/renter-declined-:to-host,
    :on :transition/renter-declines-communication,
    :to :actor.role/provider,
    :template :renter-declined-to-host}
 
-   {:name :notification/renter-declined-to-renter,
+   {:name :notification/renter-declined-:to-renter,
    :on :transition/renter-declines-communication,
    :to :actor.role/customer,
    :template :renter-declined-to-renter}
 
-   {:name :notification/rental-agreement-requested-to-renter,
+   {:name :notification/rental-agreement-requested-:to-renter,
    :on :transition/renter-requests-agreement,
    :to :actor.role/customer,
    :template :rental-agreement-requested-to-renter}
 
-   {:name :notification/rental-agreement-requested-to-host,
+   {:name :notification/rental-agreement-requested-:to-host,
    :on :transition/renter-requests-agreement,
    :to :actor.role/provider,
    :template :rental-agreement-requested-to-host}
 
-   {:name :notification/rental-agreement-sent-to-renter,
+   {:name :notification/rental-agreement-sent-:to-renter,
    :on :transition/host-sends-agreement,
    :to :actor.role/customer,
    :template :rental-agreement-sent-to-renter}
 
-   {:name :notification/rental-agreement-sent-to-host,
+   {:name :notification/rental-agreement-sent-:to-host,
    :on :transition/host-sends-agreement,
    :to :actor.role/provider,
    :template :rental-agreement-sent-to-host}
@@ -336,21 +371,171 @@
    :template :rental-agreement-sent-to-host}
 
 
+   {:name :notification/rental-agreement-signed-:to-host,
+   :on :transition/renter-signs-rental-agreement,
+   :to :actor.role/provider,
+   :template :rental-agreement-signed-to-host}
+
+   {:name :notification/rental-agreement-signed-:to-renter,
+   :on :transition/renter-signs-rental-agreement,
+   :to :actor.role/customer,
+   :template :rental-agreement-signed-to-renter}
+
+   {:name :notification/operator-confirms-rental-agreement-:to-host,
+   :on :transition/operator-confirms-rental-agreement,
+   :to :actor.role/provider,
+   :template :rental-agreement-signed-to-host}
+
+   {:name :notification/operator-confirms-rental-agreement-:to-renter,
+   :on :transition/operator-confirms-rental-agreement,
+   :to :actor.role/customer,
+   :template :rental-agreement-signed-to-renter}
 
 
 
-
-
-
-   {:name :notification/new-booking-request,
+   {:name :notification/payment-initiated-:to-host,
    :on :transition/confirm-payment,
    :to :actor.role/provider,
-   :template :new-booking-request}
+   :template :payment-initiated-to-host}
+
+   {:name :notification/payment-initiated-:to-renter,
+   :on :transition/confirm-payment,
+   :to :actor.role/customer,
+   :template :payment-initiated-to-renter}
 
 
-  {:name :notification/money-paid,
-   :on :transition/complete,
+
+
+;; CANCELLATIONS
+
+   {:name :notification/host-cancels-during-rad-:to-host,
+   :on :transition/host-cancels-during-rad,
    :to :actor.role/provider,
-   :template :money-paid}
+   :template :host-declined-to-host}
+
+   {:name :notification/host-cancels-during-rad-:to-renter,
+   :on :transition/host-cancels-during-rad,
+   :to :actor.role/customer,
+   :template :host-declined-to-renter}
+
+   {:name :notification/renter-cancels-during-rad-:to-host,
+   :on :transition/renter-cancels-during-rad,
+   :to :actor.role/provider,
+   :template :renter-declined-to-host}
+
+   {:name :notification/renter-cancels-during-rad-:to-renter,
+   :on :transition/renter-cancels-during-rad,
+   :to :actor.role/customer,
+   :template :renter-declined-to-renter}
+
+{:name :notification/operator-cancels-during-rad-:to-host,
+   :on :transition/operator-cancels-during-rad,
+   :to :actor.role/provider,
+   :template :transaction-cancelled}
+
+   {:name :notification/operator-cancels-during-rad-:to-renter,
+   :on :transition/operator-cancels-during-rad,
+   :to :actor.role/customer,
+   :template :transaction-cancelled}
+
+
+   {:name :notification/host-cancels-after-request-:to-host,
+   :on :transition/host-cancels-after-request,
+   :to :actor.role/provider,
+   :template :host-declined-to-host}
+
+   {:name :notification/host-cancels-after-request-:to-renter,
+   :on :transition/host-cancels-after-request,
+   :to :actor.role/customer,
+   :template :host-declined-to-renter}
+
+   {:name :notification/renter-cancels-after-request-:to-host,
+   :on :transition/renter-cancels-after-request,
+   :to :actor.role/provider,
+   :template :renter-declined-to-host}
+
+   {:name :notification/renter-cancels-after-request-:to-renter,
+   :on :transition/renter-cancels-after-request,
+   :to :actor.role/customer,
+   :template :renter-declined-to-renter}
+
+{:name :notification/operator-cancels-after-request-:to-host,
+   :on :transition/operator-cancels-after-request,
+   :to :actor.role/provider,
+   :template :transaction-cancelled}
+
+   {:name :notification/operator-cancels-after-request-:to-renter,
+   :on :transition/operator-cancels-after-request,
+   :to :actor.role/customer,
+   :template :transaction-cancelled}
+
+
+
+   {:name :notification/host-cancels-after-agreement-sent-:to-host,
+   :on :transition/host-cancels-after-agreement-sent,
+   :to :actor.role/provider,
+   :template :host-declined-to-host}
+
+   {:name :notification/host-cancels-after-agreement-sent-:to-renter,
+   :on :transition/host-cancels-after-agreement-sent,
+   :to :actor.role/customer,
+   :template :host-declined-to-renter}
+
+   {:name :notification/renter-cancels-after-agreement-sent-:to-host,
+   :on :transition/renter-cancels-after-agreement-sent,
+   :to :actor.role/provider,
+   :template :renter-declined-to-host}
+
+   {:name :notification/renter-cancels-after-agreement-sent-:to-renter,
+   :on :transition/renter-cancels-after-agreement-sent,
+   :to :actor.role/customer,
+   :template :renter-declined-to-renter}
+
+{:name :notification/operator-cancels-after-agreement-sent-:to-host,
+   :on :transition/operator-cancels-after-agreement-sent,
+   :to :actor.role/provider,
+   :template :transaction-cancelled}
+
+   {:name :notification/operator-cancels-after-agreement-sent-:to-renter,
+   :on :transition/operator-cancels-after-agreement-sent,
+   :to :actor.role/customer,
+   :template :transaction-cancelled}
+
+
+
+   {:name :notification/host-cancels-after-contract-start-:to-host,
+   :on :transition/host-cancels-after-contract-start,
+   :to :actor.role/provider,
+   :template :transaction-cancelled-after-signing}
+
+   {:name :notification/host-cancels-after-contract-start-:to-renter,
+   :on :transition/host-cancels-after-contract-start,
+   :to :actor.role/customer,
+   :template :transaction-cancelled-after-signing}
+
+   {:name :notification/renter-cancels-after-contract-start-:to-host,
+   :on :transition/renter-cancels-after-contract-start,
+   :to :actor.role/provider,
+   :template :transaction-cancelled-after-signing}
+
+   {:name :notification/renter-cancels-after-contract-start-:to-renter,
+   :on :transition/renter-cancels-after-contract-start,
+   :to :actor.role/customer,
+   :template :transaction-cancelled-after-signing}
+
+{:name :notification/operator-cancels-after-contract-start-:to-host,
+   :on :transition/operator-cancels-after-contract-start,
+   :to :actor.role/provider,
+   :template :transaction-cancelled-after-signing}
+
+   {:name :notification/operator-cancels-after-contract-start-:to-renter,
+   :on :transition/operator-cancels-after-contract-start,
+   :to :actor.role/customer,
+   :template :transaction-cancelled-after-signing}
+
+
+
+
+
 
  ]}

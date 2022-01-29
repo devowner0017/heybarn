@@ -183,7 +183,9 @@ const PanelHeading = props => {
     listingType,
     lineBreak,
     browseLink,
-    accountSettingsLink
+    accountSettingsLink,
+    faqLink: <NamedLink name={'FAQPage'}>FAQs</NamedLink>,
+
   };
   switch (panelHeadingState) {
     case HEADING_HOST_ENQUIRED:

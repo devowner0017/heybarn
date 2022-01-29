@@ -25,7 +25,7 @@ import LineItemTotalPrice from './LineItemTotalPrice';
 import LineItemUnknownItemsMaybe from './LineItemUnknownItemsMaybe';
 
 import css from './BookingBreakdown.module.css';
-import { getPropByName } from '../../util/userHelpers';
+import { getPropByName } from '../../util/devHelpers';
 import LineItemLengthOfContract from './LineItemLengthOfContract';
 
 export const BookingBreakdownComponent = props => {

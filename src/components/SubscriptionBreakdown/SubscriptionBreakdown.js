@@ -29,7 +29,7 @@ import LineItemNextPayment from './LineItemNextPayment';
 import css from './SubscriptionBreakdown.module.css';
 import LineItemLengthOfContract from './LineItemLengthOfContract';
 import moment from 'moment';
-import { getPropByName } from '../../util/userHelpers'
+import { getPropByName } from '../../util/devHelpers'
 
 export const SubscriptionBreakdownComponent = props => {
   const {

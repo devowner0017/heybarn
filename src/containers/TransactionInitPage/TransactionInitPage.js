@@ -47,7 +47,7 @@ import {
 } from './TransactionInitPage.duck';
 import { types as sdkTypes } from '../../util/sdkLoader';
 import css from './TransactionInitPage.module.css';
-import { getPropByName } from '../../util/userHelpers';
+import { getPropByName } from '../../util/devHelpers';
 
 const { UUID } = sdkTypes;
 const PROVIDER = 'provider';
