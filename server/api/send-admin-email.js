@@ -9,7 +9,9 @@ const prettyPrintObject = object => {
   <ul>
   ${entries
     .map(([key, value]) => {
-      const newValue = ((value instanceof Array ? value : [value]).flatMap(v => !!v ? humanizeString(v.toString()) : []).join(', '))
+      const newValue = (value instanceof Array ? value : [value])
+        .flatMap(v => (!!v ? humanizeString(v.toString()) : []))
+        .join(', ');
       return `
     <li>${humanizeString(key)}: ${newValue}</li>
     `;
@@ -23,42 +25,49 @@ module.exports = async (req, res) => {
     clientId: process.env.SHARETRIBE_INTEGRATION_CLIENT_ID,
     clientSecret: process.env.SHARETRIBE_INTEGRATION_CLIENT_SECRET,
   });
-  const { message, content, renterId, hostId } = req.body;
-const renterData = await integrationSdk.users.show({id: renterId})
-const hostData = await integrationSdk.users.show({id: hostId})
-const renter = renterData.data.data.attributes
-const host = hostData.data.data.attributes
+  const { to, message, content, renterId, hostId } = req.body;
+  const renterData = renterId && (await integrationSdk.users.show({ id: renterId }));
+  const hostData = hostId && (await integrationSdk.users.show({ id: hostId }));
+  const renter = renterData && renterData.data.data.attributes;
+  const host = hostData && hostData.data.data.attributes;
   sgMail.setApiKey(process.env.SENDGRID_API);
   const msg = {
-    to: process.env.REACT_APP_ADMIN_EMAIL, // Change to your recipient
+    to: to || process.env.REACT_APP_ADMIN_EMAIL, // Change to your recipient
     from: process.env.REACT_APP_ADMIN_EMAIL, // Change to your verified sender
     subject: message.subject,
     text: message.body,
     html: `
     <p>${message.body}</p>
     <br/>
-    <h2>Host</h2>
-    <ul>
+    ${host ?
+      `
+      <h2>Host</h2>
+      <ul>
     <li>Email: ${host.email}</li>
     <li>First Name: ${host.profile.firstName}</li>
     <li>Last Name: ${host.profile.lastName}</li>
     <li>Phone Number: ${host.profile.protectedData && host.profile.protectedData.phoneNumber}</li>
   </ul>
+      ` : ''}
+      ${renter ?
+        `
     <h2>Renter</h2>
     <ul>
     <li>Email: ${renter.email}</li>
     <li>First Name: ${renter.profile.firstName}</li>
     <li>Last Name: ${renter.profile.lastName}</li>
-    <li>Phone Number: ${renter.profile.protectedData && renter.profile.protectedData.phoneNumber}</li>
+    <li>Phone Number: ${renter.profile.protectedData &&
+      renter.profile.protectedData.phoneNumber}</li>
   </ul>
+  `: ''}
   <br/>
-  <h2>Terms</h2>
+  <h2>Content</h2>
   ${prettyPrintObject(content)}
     `,
   };
   sgMail
     .send(msg)
-    .then((r) => {
+    .then(r => {
       res
         .status(200)
         .set('Content-Type', 'application/transit+json')

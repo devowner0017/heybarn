@@ -14,6 +14,9 @@
 export { default as IconAdd } from './IconAdd/IconAdd';
 export { default as IconArrowHead } from './IconArrowHead/IconArrowHead';
 export { default as IconBannedUser } from './IconBannedUser/IconBannedUser';
+export { default as IconCamera } from './IconCamera/IconCamera';
+export { default as IconComputer } from './IconComputer/IconComputer';
+export { default as IconHandshake } from './IconHandshake/IconHandshake';
 export { default as IconCard } from './IconCard/IconCard';
 export { default as IconCheckmark } from './IconCheckmark/IconCheckmark';
 export { default as IconClose } from './IconClose/IconClose';

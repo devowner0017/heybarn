@@ -11,6 +11,7 @@ import { NamedRedirect } from './components';
 const pageDataLoadingAPI = getPageDataLoadingAPI();
 
 const AboutPage = loadable(() => import(/* webpackChunkName: "AboutPage" */ './containers/AboutPage/AboutPage'));
+const ContactPage = loadable(() => import(/* webpackChunkName: "AboutPage" */ './containers/ContactPage/ContactPage'));
 const AdminPage = loadable(() => import(/* webpackChunkName: "AboutPage" */ './containers/AdminPage/AdminPage'));
 const AuthenticationPage = loadable(() => import(/* webpackChunkName: "AuthenticationPage" */ './containers/AuthenticationPage/AuthenticationPage'));
 const CheckoutPage = loadable(() => import(/* webpackChunkName: "CheckoutPage" */ './containers/CheckoutPage/CheckoutPage'));
@@ -75,6 +76,11 @@ const routeConfiguration = () => {
       path: '/about',
       name: 'AboutPage',
       component: AboutPage,
+    },
+    {
+      path: '/contact-us',
+      name: 'ContactPage',
+      component: ContactPage,
     },
     {
       path: '/faq',
