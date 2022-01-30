@@ -54,7 +54,7 @@ export const ListingCardComponent = props => {
     minInfo,
     showAvatar,
   } = props;
-  const classes = classNames(rootClassName || css.root, className);
+  const classes = classNames(rootClassName || css.root, className, { [css.minInfo]: minInfo });
   const currentListing = ensureListing(listing);
   const id = currentListing.id.uuid;
   const { title = '', price, publicData } = currentListing.attributes;
@@ -79,10 +79,8 @@ export const ListingCardComponent = props => {
     ? 'ListingCard.perDay'
     : 'ListingCard.perUnit';
   const listingUnderEnquiry = listingState === LISTING_UNDER_ENQUIRY;
-  const useLink = minInfo || !listingUnderEnquiry;
-  console.log("🚀 | file: ListingCard.js | line 83 |  !minInfo",  !minInfo);
-  console.log("🚀 | file: ListingCard.js | line 83 |  !listingUnderEnquiry",  !listingUnderEnquiry);
-  console.log("🚀 | file: ListingCard.js | line 83 |  !minInfo || !listingUnderEnquiry",  !minInfo || !listingUnderEnquiry);
+  const useLink = !minInfo && !listingUnderEnquiry;
+  console.log("🚀 | file: ListingCard.js | line 83 | useLink", useLink);
   const ConditionalWrapper = useCallback(
     ({ condition, wrapper, defaultWrapper, children }) => {
       return condition ? wrapper(children) : !!defaultWrapper ? defaultWrapper(children) : children;
@@ -127,39 +125,58 @@ export const ListingCardComponent = props => {
         </div>
         {showAvatar && <Avatar className={css.avatar} user={listing.author} />}
       </div>
-      {minInfo ? (
-        // TODO FIX THIS
-        'TEST'
-      ) : (
-        <div className={css.info}>
-          <div className={css.mainInfo}>
+
+      <div className={css.info}>
+        <div className={css.mainInfo}>
+          <ConditionalWrapper
+            condition={minInfo}
+            wrapper={children => {
+              return (
+                <NamedLink
+                  className={css.title}
+                  name={`${capitalize(listingType)}Page`}
+                  params={{ id, slug }}
+                >
+                  {children}
+                </NamedLink>
+              );
+            }}
+            defaultWrapper={children => <div className={css.title}>{children}</div>}
+          >
             <div className={css.title}>
               {richText(title, {
                 longWordMinLength: MIN_LENGTH_FOR_LONG_WORDS,
                 longWordClass: css.longWord,
               })}
             </div>
+          </ConditionalWrapper>
+          {minInfo ? null : (
             <div className={css.authorInfo}>
               <FormattedMessage
                 id={`ListingCard.${listingType}By`}
-                values={{ need: capitalize(need), region: capitalize(region), authorName }}
+                values={{
+                  need: capitalize(need),
+                  region: (region && capitalize(region)) || 'NZ',
+                  authorName,
+                }}
               />
             </div>
-          </div>
-          {listingType === 'listing' && (
-            <>
-              <div className={css.price}>
-                <div className={css.priceValue} title={priceTitle}>
-                  {formattedPrice}
-                </div>
-                <div className={css.perUnit}>
-                  <FormattedMessage id={unitTranslationKey} />
-                </div>
-              </div>
-            </>
           )}
         </div>
-      )}
+
+        {listingType === 'listing' && !minInfo && (
+          <>
+            <div className={css.price}>
+              <div className={css.priceValue} title={priceTitle}>
+                {formattedPrice}
+              </div>
+              <div className={css.perUnit}>
+                <FormattedMessage id={unitTranslationKey} />
+              </div>
+            </div>
+          </>
+        )}
+      </div>
     </ConditionalWrapper>
   );
 };

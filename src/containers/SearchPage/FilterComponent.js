@@ -23,6 +23,7 @@ const FilterComponent = props => {
     searchType,
     ...rest
   } = props;
+    console.log("🚀 | file: FilterComponent.js | line 26 | urlQueryParams", urlQueryParams);
   const { id, type, queryParamNames, label, config, listingType } = filterConfig;
   const { liveEdit, showAsPopup } = rest;
 

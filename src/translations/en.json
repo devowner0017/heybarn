@@ -238,6 +238,7 @@
   "EditListingDescriptionForm.advert_title": "Give your advert a title",
   "EditListingDescriptionForm.listing_title": "Give your space a name",
   "EditListingDescriptionForm.advert_titlePlaceholder": "A short overview...",
+  "EditListingDescriptionForm.listing_titlePlaceholder": "A short overview...",
   "EditListingDescriptionForm.titleRequired": "You need to add a name.",
   "EditListingDescriptionForm.advert_description": "Create a brief description",
   "EditListingDescriptionForm.listing_description": "Create a brief description",
@@ -444,7 +445,7 @@
   "ListingCard.unsupportedPriceTitle": "Unsupported currency ({currency})",
 
   "ListingPage.listingBy": "Located in {region} | Hosted by {name}",
-  "ListingPage.advertBy": "Need a space in {region} | Posted by {name}",
+  "ListingPage.advertBy": "Posted by {name} | Needs a space in {region}",
   "ListingPage.listingIdealFor": "Ideal for {uses}",
   "ListingPage.advertIdealFor": "Needed for {uses}",
   "ListingPage.bookingTitle": "Find out more about {title}",

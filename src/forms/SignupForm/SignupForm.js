@@ -141,8 +141,8 @@ const SignupFormComponent = props => (
       );
 
       const filterConfig = config.custom.filters;
-      const districtConfig = filterConfig.find(f => f.id === 'locDistrict');
-      const districts = districtConfig?.config.options;
+      const regionConfig = filterConfig.find(f => f.id === 'locRegion');
+      const regions = regionConfig?.config.options;
       return (
         <Form className={classes} onSubmit={handleSubmit}>
           {stage === 1 && (
@@ -197,12 +197,12 @@ const SignupFormComponent = props => (
                 className={css.category}
                 name={'locDistrict'}
                 id={formId ? `${formId}.locDistrict` : 'locDistrict'}
-                label={'What region are you searching in?'}
+                label={'What region are you searching or listing in?'}
               >
                 <option disabled value="">
-                  {'Select District'}
+                  {'Select Region'}
                 </option>
-                {districts.map(c => (
+                {regions.map(c => (
                   <option key={c.key} value={c.key}>
                     {c.label}
                   </option>

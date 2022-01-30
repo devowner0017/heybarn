@@ -50,14 +50,14 @@ const Item = props => {
   console.log('🚀 | file: PropertyGroup.js | line 47 | props', props);
   const labelClass = isSelected ? css.selectedLabel : css.notSelectedLabel;
   return (
-    <li className={css.item}>
+    <div className={css.item}>
       <span className={css.iconWrapper}>
         {!!icon ? icon : <IconCheck isVisible={isSelected} />}
       </span>
       <div className={css.labelWrapper}>
         <span className={labelClass}>{label}</span>
       </div>
-    </li>
+    </div>
   );
 };
 
@@ -70,11 +70,11 @@ const PropertyGroup = props => {
   console.log('🚀 | file: PropertyGroup.js | line 60 | checked', checked);
 
   return (
-    <ul className={listClasses}>
+    <div className={listClasses}>
       {checked.map(option => (
         <Item key={`${id}.${option.key}`} {...option} />
       ))}
-    </ul>
+    </div>
   );
 };
 

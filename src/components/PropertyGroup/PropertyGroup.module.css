@@ -2,6 +2,9 @@
 
 .root {
   margin: 0;
+  display: flex;
+  flex: 1 1 50%;
+  flex-flow: row wrap;
 }
 
 .twoColumns {
@@ -12,11 +15,13 @@
 
 .item {
   display: flex;
+  width: 100%;
   align-items: center;
   padding: 3px 0;
 
   @media (--viewportMedium) {
     padding: 4px 0;
+    width: 50%;
   }
 }
 

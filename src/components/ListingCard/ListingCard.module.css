@@ -10,7 +10,9 @@
     text-decoration: none;
   }
 }
-
+.minInfo {
+  padding: 0.3rem;
+}
 .threeToTwoWrapper {
   /* Layout */
   display: block;
@@ -54,7 +56,7 @@
   position: absolute;
   bottom: -20px;
   right: 20px;
-  z-index: 2
+  z-index: 2;
 }
 .price {
   /* Layout */

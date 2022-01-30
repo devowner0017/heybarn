@@ -19,7 +19,7 @@ const SectionHeading = props => {
           <br />
           <FormattedMessage
             id={`ListingPage.${listingType}By`}
-            values={{ name: hostLink, region: capitalize(region) }}
+            values={{ name: hostLink, region: (region && capitalize(region)) || 'NZ' }}
           />
           <br />
           <br />

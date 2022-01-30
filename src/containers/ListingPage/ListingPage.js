@@ -245,15 +245,17 @@ export class ListingPageComponent extends Component {
       fetchLineItemsError,
       currentUserInTransaction
     } = this.props;
-    console.log("🚀 | file: ListingPage.js | line 247 | ListingPageComponent | render | currentUserInTransaction", currentUserInTransaction);
+    console.log("🚀 | file: ListingPage.js | line 248 | ListingPageComponent | render | this.props", this.props);
 
     const listingId = new UUID(rawParams.id);
     const isPendingApprovalVariant = rawParams.variant === LISTING_PAGE_PENDING_APPROVAL_VARIANT;
     const isDraftVariant = rawParams.variant === LISTING_PAGE_DRAFT_VARIANT;
     const currentListing =
-      isPendingApprovalVariant || isDraftVariant
-        ? ensureOwnListing(getOwnListing(listingId))
-        : ensureListing(getListing(listingId));
+    isPendingApprovalVariant || isDraftVariant
+    ? ensureOwnListing(getOwnListing(listingId))
+    : ensureListing(getListing(listingId));
+
+    console.log("🚀 | file: ListingPage.js | line 254 | ListingPageComponent | render | currentListing", currentListing);
 
     const listingSlug = rawParams.slug || createSlug(currentListing.attributes.title || '');
     const params = { slug: listingSlug, ...rawParams };
@@ -296,17 +298,9 @@ export class ListingPageComponent extends Component {
       locRegion: region,
       preferredUse: need,
     } = publicData;
-    console.log(
-      '🚀 | file: ListingPage.js | line 302 | ListingPageComponent | render | publicData',
-      publicData
-    );
 
     const listingUnderEnquiry = listingState === LISTING_UNDER_ENQUIRY;
 
-    console.log(
-      '🚀 | file: ListingPage.js | line 110 | ListingPageComponent | submitContactUser | typeOfListing',
-      typeOfListing
-    );
     const richTitle = (
       <span>
         {richText(title, {
@@ -450,7 +444,7 @@ export class ListingPageComponent extends Component {
     );
 
     const amenityOptions = findOptionsForSelectFilter('amenities', filterConfig);
-
+console.log(typeOfListing)
     return (
       <Page
         title={schemaTitle}
@@ -503,13 +497,11 @@ export class ListingPageComponent extends Component {
                     listingType={typeOfListing}
                   />
                   <SectionDescriptionMaybe description={description} listingType={typeOfListing} />
-                  {listingType === 'listing' && (
                     <SectionFeaturesMaybe
                       options={amenityOptions}
                       publicData={publicData}
                       listingType={typeOfListing}
                     />
-                  )}
                   <SectionRulesMaybe publicData={publicData} listingType={typeOfListing} />
                   <SectionMapMaybe
                     geolocation={geolocation}

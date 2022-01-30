@@ -37,15 +37,21 @@ import { nestedRegions } from './nzRegions';
  */
 export const filters = [
   {
-    id: 'dates',
-    label: 'Dates',
-    type: 'BookingDateRangeFilter',
+    id: 'locIsland',
+    label: 'Location',
+    type: 'SelectRegionFilter',
     group: 'primary',
-    // Note: BookingDateRangeFilter is fixed filter,
-    // you can't change "queryParamNames: ['dates'],"
+    queryParamNames: ['pub_locIsland', 'pub_locRegion', 'pub_locDistrict'],
     listingType: ['listing', 'advert'],
-    queryParamNames: ['dates'],
-    config: {},
+    config: {
+      // "key" is the option you see in Flex Console.
+      // "label" is set here for the UI only.
+      // Note: label is not added through the translation files
+      // to make filter customizations a bit easier.
+      options: nestedRegions.map(island => {
+        return { key: island.key, label: island.label };
+      }),
+    },
   },
   {
     id: 'price',
@@ -62,6 +68,37 @@ export const filters = [
       min: 0,
       max: 1000,
       step: 5,
+    },
+  },
+  {
+    id: 'dates',
+    label: 'Dates',
+    type: 'BookingDateRangeFilter',
+    group: 'primary',
+    // Note: BookingDateRangeFilter is fixed filter,
+    // you can't change "queryParamNames: ['dates'],"
+    listingType: ['listing', 'advert'],
+    queryParamNames: ['dates'],
+    config: {},
+  },
+  {
+    id: 'preferredUse',
+    label: 'Preferred Use',
+    type: 'SelectMultipleFilter',
+    group: 'primary',
+    queryParamNames: ['pub_preferredUse'],
+    listingType: ['listing', 'advert'],
+    config: {
+      // "key" is the option you see in Flex Console.
+      // "label" is set here for the UI only.
+      // Note: label is not added through the translation files
+      // to make filter customizations a bit easier.
+      options: [
+        { key: 'storage', label: 'Storage space' },
+        { key: 'creative', label: 'Creative space' },
+        { key: 'work', label: 'Work space' },
+        { key: 'event', label: 'Event space' },
+      ],
     },
   },
   {
@@ -97,26 +134,7 @@ export const filters = [
       ],
     },
   },
-  {
-    id: 'preferredUse',
-    label: 'Preferred Use',
-    type: 'SelectMultipleFilter',
-    group: 'primary',
-    queryParamNames: ['pub_preferredUse'],
-    listingType: ['listing', 'advert'],
-    config: {
-      // "key" is the option you see in Flex Console.
-      // "label" is set here for the UI only.
-      // Note: label is not added through the translation files
-      // to make filter customizations a bit easier.
-      options: [
-        { key: 'storage', label: 'Storage space' },
-        { key: 'creative', label: 'Creative space' },
-        { key: 'work', label: 'Work space' },
-        { key: 'event', label: 'Event space' },
-      ],
-    },
-  },
+
   {
     id: 'sizeOfSpace',
     label: 'Size',
@@ -145,23 +163,7 @@ export const filters = [
       customFormat: 'years',
     },
   },
-  {
-    id: 'locIsland',
-    label: 'Location',
-    type: 'SelectRegionFilter',
-    group: 'primary',
-    queryParamNames: ['pub_locIsland', 'pub_locRegion', 'pub_locDistrict'],
-    listingType: ['listing', 'advert'],
-    config: {
-      // "key" is the option you see in Flex Console.
-      // "label" is set here for the UI only.
-      // Note: label is not added through the translation files
-      // to make filter customizations a bit easier.
-      options: nestedRegions.map(island => {
-        return { key: island.key, label: island.label };
-      }),
-    },
-  },
+
   {
     id: 'locRegion',
     label: 'Region',

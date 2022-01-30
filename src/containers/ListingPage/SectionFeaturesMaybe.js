@@ -6,9 +6,11 @@ import css from './ListingPage.module.css';
 
 const SectionFeaturesMaybe = props => {
   const { options, publicData, listingType } = props;
+  console.log("🚀 | file: SectionFeaturesMaybe.js | line 9 | props", props);
   if (!publicData) {
     return null;
   }
+  console.log("🚀 | file: SectionFeaturesMaybe.js | line 23 | options", options);
 
   const selectedOptions = publicData && publicData.amenities ? publicData.amenities : [];
   return (

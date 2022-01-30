@@ -13,11 +13,6 @@
   @apply --marketplaceCardGridContainer;
 }
 
-.userCards {
-  max-width: 100%;
-  @apply --marketplaceCardUserGridContainer;
-}
-
 .listingCard {
   @apply --marketplaceDefaultListingCard;
 }
