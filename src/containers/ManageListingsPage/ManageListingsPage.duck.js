@@ -33,6 +33,10 @@ export const DELETE_LISTING_REQUEST = 'app/ManageListingsPage/DELETE_LISTING_REQ
 export const DELETE_LISTING_SUCCESS = 'app/ManageListingsPage/DELETE_LISTING_SUCCESS';
 export const DELETE_LISTING_ERROR = 'app/ManageListingsPage/DELETE_LISTING_ERROR';
 
+export const HIDE_LISTING_REQUEST = 'app/ManageListingsPage/HIDE_LISTING_REQUEST';
+export const HIDE_LISTING_SUCCESS = 'app/ManageListingsPage/HIDE_LISTING_SUCCESS';
+export const HIDE_LISTING_ERROR = 'app/ManageListingsPage/HIDE_LISTING_ERROR';
+
 export const ADD_OWN_ENTITIES = 'app/ManageListingsPage/ADD_OWN_ENTITIES';
 
 // ================ Reducer ================ //
@@ -54,6 +58,10 @@ const initialState = {
 
   deletingListing: null,
   deletingListingError: null,
+
+  hidingListing: null,
+  hidingListingError: null,
+
   queryTransactionsInProgress: null,
   queryTransactionsError: null,
   transactions: null,
@@ -215,6 +223,29 @@ const manageListingsPageReducer = (state = initialState, action = {}) => {
         },
       };
     }
+    case HIDE_LISTING_REQUEST:
+      return {
+        ...state,
+        hidingListing: payload.listingId,
+        hidingListingError: null,
+      };
+    case HIDE_LISTING_SUCCESS:
+      return {
+        ...updateListingAttributes(state, payload.data),
+        hidingListing: null,
+      };
+    case HIDE_LISTING_ERROR: {
+      // eslint-disable-next-line no-console
+      console.error(payload);
+      return {
+        ...state,
+        hidingListing: null,
+        hidingListingError: {
+          listingId: state.hidingListing,
+          error: payload,
+        },
+      };
+    }
 
     case ADD_OWN_ENTITIES:
       return merge(state, payload);
@@ -314,6 +345,21 @@ export const deleteListingSuccess = response => ({
 
 export const deleteListingError = e => ({
   type: DELETE_LISTING_ERROR,
+  error: true,
+  payload: e,
+});
+export const hideListingRequest = listingId => ({
+  type: HIDE_LISTING_REQUEST,
+  payload: { listingId },
+});
+
+export const hideListingSuccess = response => ({
+  type: HIDE_LISTING_SUCCESS,
+  payload: response.data,
+});
+
+export const hideListingError = e => ({
+  type: HIDE_LISTING_ERROR,
   error: true,
   payload: e,
 });
@@ -465,6 +511,39 @@ export const deleteListing = (listingId, listingType) => (dispatch, getState, sd
     })
     .catch(e => {
       dispatch(deleteListingError(storableError(e)));
+    });
+};
+
+export const hideListing = (listingId, listingType, hide) => (dispatch, getState, sdk) => {
+  console.log(
+    '🚀 | file: ManageListingsPage.duck.js | line 518 | hideListing | listingType',
+    listingType
+  );
+  console.log(
+    '🚀 | file: ManageListingsPage.duck.js | line 518 | hideListing | listingId',
+    listingId
+  );
+  console.log('🚀 | file: ManageListingsPage.duck.js | line 541 | hideListing | hide', hide);
+  dispatch(hideListingRequest(listingId));
+
+  return sdk.ownListings
+    .update({ id: listingId, publicData: { notHidden: hide } }, { expand: true })
+    .then(response => {
+      dispatch(hideListingSuccess(response));
+      dispatch(
+        queryOwnListings({
+          pub_listingType: listingType,
+          pub_notHidden: true,
+          perPage: RESULT_PAGE_SIZE,
+          include: ['images'],
+          'fields.image': ['variants.landscape-crop', 'variants.landscape-crop2x'],
+          'limit.images': 1,
+        })
+      );
+      return response;
+    })
+    .catch(e => {
+      dispatch(hideListingError(storableError(e)));
     });
 };
 

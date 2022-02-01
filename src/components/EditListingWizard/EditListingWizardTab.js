@@ -50,7 +50,15 @@ const pathParamsToNextTab = (params, tab, marketplaceTabs) => {
 };
 
 // When user has update draft listing, he should be redirected to next EditListingWizardTab
-const redirectAfterDraftUpdate = (listingId, params, tab, marketplaceTabs, history, isAdvert, location) => {
+const redirectAfterDraftUpdate = (
+  listingId,
+  params,
+  tab,
+  marketplaceTabs,
+  history,
+  isAdvert,
+  location
+) => {
   const currentPathParams = {
     ...params,
     type: LISTING_PAGE_PARAM_TYPE_DRAFT,
@@ -109,7 +117,7 @@ const EditListingWizardTab = props => {
     isAdvert,
     listingType,
   } = props;
-    console.log("🚀 | file: EditListingWizardTab.js | line 112 | location", location);
+  console.log('🚀 | file: EditListingWizardTab.js | line 112 | location', location);
   const { type } = params;
   const isNewURI = type === LISTING_PAGE_PARAM_TYPE_NEW;
   const isDraftURI = type === LISTING_PAGE_PARAM_TYPE_DRAFT;
@@ -269,13 +277,17 @@ const EditListingWizardTab = props => {
     }
     case PHOTOS: {
       const submitButtonTranslationKey = isNewListingFlow
-        ? 'EditListingWizard.saveNewPhotos'
+        ? 'EditListingWizard.saveNewPhotos'+ listingType
         : 'EditListingWizard.saveEditPhotos';
 
+      console.log('🚀 | file: EditListingWizardTab.js | line 279 | listingType', listingType);
       return (
         <EditListingPhotosPanel
           {...panelProps(PHOTOS)}
-          submitButtonText={intl.formatMessage({ id: submitButtonTranslationKey })}
+          submitButtonText={intl.formatMessage({
+            id: submitButtonTranslationKey,
+            values: { typeOfListing: listingType },
+          })}
           images={images}
           onImageUpload={onImageUpload}
           onRemoveImage={onRemoveImage}

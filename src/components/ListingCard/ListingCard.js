@@ -59,6 +59,7 @@ export const ListingCardComponent = props => {
   const id = currentListing.id.uuid;
   const { title = '', price, publicData } = currentListing.attributes;
   const { listingType, locRegion: region, preferredUse: need, listingState } = publicData || {};
+  console.log("🚀 | file: ListingCard.js | line 62 | publicData", publicData);
   const slug = createSlug(title);
   const author = ensureUser(listing.author);
   const authorName = author.attributes.profile.displayName;
@@ -80,7 +81,7 @@ export const ListingCardComponent = props => {
     : 'ListingCard.perUnit';
   const listingUnderEnquiry = listingState === LISTING_UNDER_ENQUIRY;
   const useLink = !minInfo && !listingUnderEnquiry;
-  console.log("🚀 | file: ListingCard.js | line 83 | useLink", useLink);
+  console.log('🚀 | file: ListingCard.js | line 83 | useLink', useLink);
   const ConditionalWrapper = useCallback(
     ({ condition, wrapper, defaultWrapper, children }) => {
       return condition ? wrapper(children) : !!defaultWrapper ? defaultWrapper(children) : children;
@@ -164,16 +165,18 @@ export const ListingCardComponent = props => {
           )}
         </div>
 
-        {listingType === 'listing' && !minInfo && (
+        {listingType === 'listing' && (
           <>
-            <div className={css.price}>
-              <div className={css.priceValue} title={priceTitle}>
-                {formattedPrice}
+            {!minInfo && (
+              <div className={css.price}>
+                <div className={css.priceValue} title={priceTitle}>
+                  {formattedPrice}
+                </div>
+                <div className={css.perUnit}>
+                  <FormattedMessage id={unitTranslationKey} />
+                </div>
               </div>
-              <div className={css.perUnit}>
-                <FormattedMessage id={unitTranslationKey} />
-              </div>
-            </div>
+            )}
           </>
         )}
       </div>

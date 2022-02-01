@@ -433,8 +433,13 @@ export class TransactionPanelComponent extends Component {
                 startDate: { date: startDate },
                 endDate,
                 ongoingContract: [ongoingContract] = [],
+                price,
                 ...rest
               } = values;
+              console.log(
+                '🚀 | file: TransactionPanel.js | line 439 | TransactionPanelComponent | render | rest',
+                rest
+              );
               console.log(
                 '🚀 | file: TransactionPanel.js | line 386 | TransactionPanelComponent | render | values',
                 values
@@ -442,6 +447,7 @@ export class TransactionPanelComponent extends Component {
               onSendRentalAgreement({
                 contractLines: {
                   ongoingContract,
+                  price: price.amount,
                   ...rest,
                 },
                 bookingDates: { startDate, endDate },
@@ -505,6 +511,7 @@ export class TransactionPanelComponent extends Component {
                 startDate: { date: startDate },
                 endDate,
                 ongoingContract: [ongoingContract] = [],
+                price,
                 ...rest
               } = values;
               console.log(
@@ -514,12 +521,14 @@ export class TransactionPanelComponent extends Component {
               onSendRentalAgreement({
                 contractLines: {
                   ongoingContract,
+                  price: price.amount,
                   ...rest,
                 },
                 bookingDates: { startDate, endDate },
                 txId: currentTransaction.id,
                 listingId: currentListing.id,
                 wasRequested: true,
+
               });
               this.handleOpenRentalAgreementModal(false);
             },
@@ -564,17 +573,10 @@ export class TransactionPanelComponent extends Component {
       }
       // ****
       else if (txIsRentalAgreementSent(tx)) {
-        const transitions = Array.isArray(nextTransitions)
-          ? nextTransitions.map(transition => {
-              return transition.attributes.name;
-            })
-          : [];
-        const hasCorrectNextTransition =
-          transitions.length > 0 && transitions.includes(TRANSITION_RENTER_SIGNS_RENTAL_AGREEMENT);
         return {
           headingState: HEADING_RENTAL_AGREEMENT_SENT,
           showDetailCardHeadings: true,
-          showRentalSignatureButtons: config.dev ,
+          showRentalSignatureButtons: config.dev,
           showBreakdowns: isCustomer,
           allowMessages: false,
 
@@ -614,7 +616,6 @@ export class TransactionPanelComponent extends Component {
           showPaymentFormButtons: isCustomer && !isProviderBanned,
           allowMessages: true,
         };
-        // THIS CAN BE A STATUS -> WE NEED TO KNOW WHAT HAPPENS WHEN A PAYMENT IS MISSED
       } else if (txIsPaid(tx) && !wasCancelled(tx) && !subscriptionHasDefaultPaymentMethod) {
         return {
           headingState: HEADING_RENT_PAYMENT_METHOD_MISSING,
@@ -714,7 +715,10 @@ export class TransactionPanelComponent extends Component {
       }
     };
     const stateData = stateDataFn(currentTransaction) || {};
-    console.log("🚀 | file: TransactionPanel.js | line 717 | TransactionPanelComponent | render | stateData", stateData);
+    console.log(
+      '🚀 | file: TransactionPanel.js | line 717 | TransactionPanelComponent | render | stateData',
+      stateData
+    );
     console.log(
       '🚀 | file: TransactionPanel.js | line 588 | TransactionPanelComponent | render | stateData',
       stateData

@@ -5,9 +5,10 @@ import { FormattedMessage, injectIntl, intlShape } from '../../util/reactIntl';
 import { Form as FinalForm, FormSpy } from 'react-final-form';
 import classNames from 'classnames';
 import { isTransactionsTransitionAlreadyReviewed } from '../../util/errors';
-import { propTypes } from '../../util/types';
 import { required } from '../../util/validators';
 import arrayMutators from 'final-form-arrays';
+import * as validators from '../../util/validators';
+import { types as sdkTypes } from '../../util/sdkLoader';
 import {
   FieldReviewRating,
   Form,
@@ -18,8 +19,10 @@ import {
   FieldCheckbox,
   FieldDateRangeInput,
   FieldCheckboxGroup,
+  FieldCurrencyInput,
 } from '../../components';
 import config from '../../config';
+import { LINE_ITEM_NIGHT, LINE_ITEM_DAY, propTypes } from '../../util/types';
 
 import css from './RentalAgreementSetupForm.module.css';
 import moment from 'moment';
@@ -28,6 +31,7 @@ import { formatMoney } from '../../util/currency';
 import { getPropByName } from '../../util/devHelpers';
 import { findOptionsForSelectFilter } from '../../util/search';
 const identity = v => v;
+const { Money } = sdkTypes;
 
 const RentalAgreementSetupFormComponent = props => (
   <FinalForm
@@ -75,6 +79,53 @@ const RentalAgreementSetupFormComponent = props => (
       );
       const errorArea = sendReviewError ? errorMessage : <p className={css.errorPlaceholder} />;
 
+      const unitType = config.bookingUnitType;
+      const isNightly = unitType === LINE_ITEM_NIGHT;
+      const isDaily = unitType === LINE_ITEM_DAY;
+
+      const translationKey = isNightly
+        ? 'EditListingPricingForm.pricePerNight'
+        : isDaily
+        ? 'EditListingPricingForm.pricePerDay'
+        : 'EditListingPricingForm.pricePerUnit';
+
+      const pricePerUnitMessage = intl.formatMessage({
+        id: translationKey,
+      });
+
+      const pricePlaceholderMessage = intl.formatMessage({
+        id: 'EditListingPricingForm.priceInputPlaceholder',
+      });
+
+      const priceRequired = validators.required(
+        intl.formatMessage({
+          id: 'EditListingPricingForm.priceRequired',
+        })
+      );
+      const minPrice = new Money(config.listingMinimumPriceSubUnits, config.currency);
+      const minPriceRequired = validators.moneySubUnitAmountAtLeast(
+        intl.formatMessage(
+          {
+            id: 'EditListingPricingForm.priceTooLow',
+          },
+          {
+            minPrice: formatMoney(intl, minPrice),
+          }
+        ),
+        config.listingMinimumPriceSubUnits
+      );
+      const priceValidators = config.listingMinimumPriceSubUnits
+        ? validators.composeValidators(priceRequired, minPriceRequired)
+        : priceRequired;
+
+      const emailRequiredMessage = intl.formatMessage({
+        id: 'SignupForm.emailRequired',
+      });
+      const emailInvalidMessage = intl.formatMessage({
+        id: 'SignupForm.emailInvalid',
+      });
+      const emailRequired = validators.required(emailRequiredMessage);
+      const emailValid = validators.emailFormatValid(emailInvalidMessage);
       const reviewSubmitMessage = intl.formatMessage({
         id: 'RentalAgreementSetupForm.submit',
       });
@@ -115,6 +166,76 @@ const RentalAgreementSetupFormComponent = props => (
 
       return (
         <Form className={classes} onSubmit={handleSubmit}>
+          <h2 className={css.title}>Agreed rental price</h2>
+          <FieldCurrencyInput
+            id="price"
+            name="price"
+            className={css.priceInput}
+            autoFocus
+            label={pricePerUnitMessage}
+            placeholder={pricePlaceholderMessage}
+            currencyConfig={config.currencyConfig}
+            validate={priceValidators}
+          />
+          <h2 className={css.title}>The Hosts details</h2>
+          <div className={css.fieldGroup}>
+            <FieldTextInput
+              className={css.field}
+              id="hostsFirstName"
+              name="hostsFirstName"
+              type="text"
+              label={'First name*'}
+              required
+            />{' '}
+            <FieldTextInput
+              className={css.field}
+              id="hostsLastName"
+              name="hostsLastName"
+              type="text"
+              label={'Last name*'}
+              required
+            />
+          </div>
+          <FieldTextInput
+            type="email"
+            id={'email'}
+            className={css.field}
+            name="hostsEmail"
+            autoComplete="email"
+            label={'Email*'}
+            validate={validators.composeValidators(emailRequired, emailValid)}
+            required
+          />
+          <h2 className={css.title}>The Renter preferred name</h2>
+          <div className={css.fieldGroup}>
+            <FieldTextInput
+              className={css.field}
+              id="rentersFirstName"
+              name="rentersFirstName"
+              type="text"
+              label={'First name*'}
+              required
+            />{' '}
+            <FieldTextInput
+              className={css.field}
+              id="rentersLastName"
+              name="rentersLastName"
+              type="text"
+              label={'Last name*'}
+              required
+            />
+          </div>
+          <FieldTextInput
+            type="email"
+            className={css.field}
+            id={'email'}
+            name="rentersEmail"
+            autoComplete="email"
+            label={'Email*'}
+            validate={validators.composeValidators(emailRequired, emailValid)}
+            required
+          />
+          <h2 className={css.title}>Contract Length</h2>
           <FieldCheckbox
             className={css.field}
             id={'ongoingContract'}
@@ -142,7 +263,6 @@ const RentalAgreementSetupFormComponent = props => (
               handleOnChange(values);
             }}
           />
-
           <FieldDateInput
             className={css.dateField}
             label={'Start'}
@@ -167,8 +287,8 @@ const RentalAgreementSetupFormComponent = props => (
             customIsDayOutsideRange={date => {
               return false;
             }}
-            validate={required('Required') }
-            />
+            validate={required('Required')}
+          />
           <FieldTextInput
             className={css.field}
             id="intendedUse"
@@ -176,7 +296,6 @@ const RentalAgreementSetupFormComponent = props => (
             type="text"
             label={'Intended Use'}
           />
-
           <h2 className={css.title}>Other common ground rules</h2>
           <FieldCheckboxGroup
             className={css.features}
@@ -184,12 +303,18 @@ const RentalAgreementSetupFormComponent = props => (
             name={'groundRules'}
             options={groundRulesOptions}
           />
-
+          <h2 className={css.title}>Additional Information</h2>
+          <FieldTextInput
+            className={css.field}
+            id="additionalInformation"
+            name="additionalInformation"
+            type="textarea"
+          />
           {errorArea}
           {listing && (
             <div className={css.detailRow}>
               <p>Rent</p>
-              <p>{formatMoney(intl, listing?.attributes?.price)}</p>
+              <p>{formatMoney(intl, values.price)}</p>
             </div>
           )}
           {startDate && (

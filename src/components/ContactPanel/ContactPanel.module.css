@@ -197,6 +197,18 @@
   padding: 0;
 }
 
+.deleteButton {
+  @apply --marketplaceButtonStylesPrimary;
+  margin: 0.5rem 0;
+  /* Clear padding that is set for link elements looking like buttons */
+  padding: 0;
+  &:last-child {
+    @apply --marketplaceButtonStylesSecondary;
+    margin: 0.5rem 0;
+    padding: 0;
+  }
+}
+
 .closedListingButton {
   border-left: 1px solid var(--matterColorNegative);
   width: 100%;

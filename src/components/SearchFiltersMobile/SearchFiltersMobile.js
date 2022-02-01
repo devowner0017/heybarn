@@ -72,6 +72,7 @@ class SearchFiltersMobileComponent extends Component {
       onMapIconClick,
       onManageDisableScrolling,
       selectedFiltersCount,
+      typeButton,
       intl,
     } = this.props;
 
@@ -120,13 +121,14 @@ class SearchFiltersMobileComponent extends Component {
           onManageDisableScrolling={onManageDisableScrolling}
           containerClassName={css.modalContainer}
           closeButtonMessage={modalCloseButtonMessage}
-        >
+        >.
           <div className={css.modalHeadingWrapper}>
             <span className={css.modalHeading}>{filtersHeading}</span>
             <button className={css.resetAllButton} onClick={e => this.resetAll(e)}>
               <FormattedMessage id={'SearchFiltersMobile.resetAll'} />
             </button>
           </div>
+        {typeButton}
           {this.state.isFiltersOpenOnMobile ? (
             <div className={css.filtersWrapper}>{children}</div>
           ) : null}

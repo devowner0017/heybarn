@@ -23,7 +23,7 @@
   }
 }
 
-.root:after {
+/* .root:after {
   content: '';
   position: absolute;
   width: 0;
@@ -48,7 +48,7 @@
   border-color: transparent transparent var(--matterColorAnti) var(--matterColorAnti);
   opacity: 0.9;
   clip-path: polygon(3% 0, 100% 97%, 100% 100%, 0 100%, 0 0);
-}
+} */
 .menuOverlayWrapper {
   /* Positioning */
   composes: coverEverything;
@@ -360,7 +360,8 @@
 
 .overlayButton,
 .openListingButton,
-.finishListingDraftLink {
+.finishListingDraftLink,
+.doubleMenuButton {
   @apply --marketplaceButtonStylesPrimary;
   @apply --marketplaceH5FontStyles;
 
@@ -372,7 +373,9 @@
   border-radius: 4px;
   margin-top: 3rem;
 }
-
+.doubleMenuButton{
+  margin-top: 0;
+}
 .menu {
   display: none;
 }

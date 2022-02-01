@@ -63,7 +63,6 @@ const RentalAgreementModal = props => {
   const handleSubmit = values => {
     affirmativeAction(values);
   };
-
   return (
     <Modal
       id={id}
@@ -90,6 +89,7 @@ const RentalAgreementModal = props => {
             intendedUse: _.startCase(
               ensureArray(getPropByName(listing, 'preferredUse'))?.join(', ') || ''
             ),
+            price: getPropByName(listing, 'price'),
           }}
           listing={listing}
         />

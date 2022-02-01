@@ -16,7 +16,6 @@ import { getIcon } from '../../util/muiIconHelper';
 
 const checkSelected = (options, selectedOptions) => {
   return options.map(option => {
-    console.log('🚀 | file: PropertyGroup.js | line 22 | checkSelected | option', option);
     const isSelected = includes(selectedOptions, option.key);
 
     return {
@@ -47,7 +46,6 @@ const IconCheck = props => {
 
 const Item = props => {
   const { label, isSelected, icon } = props;
-  console.log('🚀 | file: PropertyGroup.js | line 47 | props', props);
   const labelClass = isSelected ? css.selectedLabel : css.notSelectedLabel;
   return (
     <div className={css.item}>
@@ -67,7 +65,6 @@ const PropertyGroup = props => {
   const listClasses = twoColumns ? classNames(classes, css.twoColumns) : classes;
 
   const checked = checkSelected(options, selectedOptions);
-  console.log('🚀 | file: PropertyGroup.js | line 60 | checked', checked);
 
   return (
     <div className={listClasses}>

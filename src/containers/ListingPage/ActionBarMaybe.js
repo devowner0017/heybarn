@@ -12,6 +12,7 @@ import { NamedLink } from '../../components';
 import EditIcon from './EditIcon';
 
 import css from './ListingPage.module.css';
+import { capitalize } from 'lodash';
 
 export const ActionBarMaybe = props => {
   const {
@@ -20,8 +21,12 @@ export const ActionBarMaybe = props => {
     listing,
     editParams,
     currentUserInTransaction,
+    typeOfListing
   } = props;
-    console.log("🚀 | file: ActionBarMaybe.js | line 24 | currentUserInTransaction", currentUserInTransaction);
+  console.log(
+    '🚀 | file: ActionBarMaybe.js | line 24 | currentUserInTransaction',
+    currentUserInTransaction
+  );
   const state = listing.attributes.state;
   const isPendingApproval = state === LISTING_STATE_PENDING_APPROVAL;
   const isClosed = state === LISTING_STATE_CLOSED;
@@ -42,15 +47,19 @@ export const ActionBarMaybe = props => {
     const ownListingTextClasses = classNames(css.ownListingText, {
       [css.ownListingTextPendingApproval]: isPendingApproval,
     });
-
+console.log(capitalize(typeOfListing));
     return (
       <div className={css.actionBar}>
         <p className={ownListingTextClasses}>
-          <FormattedMessage id={ownListingTextTranslationId} />
+          <FormattedMessage id={ownListingTextTranslationId} values={{typeOfListing}}/>
         </p>
-        <NamedLink className={css.editListingLink} name="EditListingPage" params={editParams}>
+        <NamedLink
+          className={css.editListingLink}
+          name={`Edit${capitalize(typeOfListing)}Page`}
+          params={editParams}
+        >
           <EditIcon className={css.editIcon} />
-          <FormattedMessage id={message} />
+          <FormattedMessage id={message} values={{typeOfListing}}/>
         </NamedLink>
       </div>
     );
@@ -58,7 +67,7 @@ export const ActionBarMaybe = props => {
     return (
       <div className={css.actionBar}>
         <p className={css.closedListingText}>
-          <FormattedMessage id="ListingPage.currentUserInTransaction" />
+          <FormattedMessage id="ListingPage.currentUserInTransaction" values={{typeOfListing}}/>
         </p>
       </div>
     );
@@ -66,7 +75,7 @@ export const ActionBarMaybe = props => {
     return (
       <div className={css.actionBar}>
         <p className={css.closedListingText}>
-          <FormattedMessage id="ListingPage.closedListing" />
+          <FormattedMessage id="ListingPage.closedListing" values={{typeOfListing}}/>
         </p>
       </div>
     );
@@ -74,7 +83,7 @@ export const ActionBarMaybe = props => {
     return (
       <div className={css.actionBar}>
         <p className={css.closedListingText}>
-          <FormattedMessage id="ListingPage.listingUnderEnquiry" />
+          <FormattedMessage id="ListingPage.listingUnderEnquiry"values={{typeOfListing}}/>
         </p>
       </div>
     );

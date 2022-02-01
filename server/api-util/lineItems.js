@@ -27,8 +27,11 @@ const PROVIDER_COMMISSION_PERCENTAGE = -10;
  * @param {Object} bookingData
  * @returns {Array} lineItems
  */
-exports.transactionLineItems = (listing, bookingData) => {
-  const unitPrice = listing.attributes.price;
+exports.transactionLineItems = (listing, bookingData, newPrice) => {
+  console.log('🚀 | file: lineItems.js | line 32 | newPrice', newPrice);
+  const unitPrice =
+    (newPrice && new Money(newPrice, listing.attributes.price.currency)) ||
+    listing.attributes.price;
   const { startDate, endDate } = bookingData;
 
   /**

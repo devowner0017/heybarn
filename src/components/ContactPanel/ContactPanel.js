@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { intlShape, injectIntl, FormattedMessage } from '../../util/reactIntl';
@@ -9,10 +9,12 @@ import { propTypes, LISTING_STATE_CLOSED, LINE_ITEM_NIGHT, LINE_ITEM_DAY } from 
 import { formatMoney } from '../../util/currency';
 import { parse, stringify } from '../../util/urlHelpers';
 import config from '../../config';
-import { ModalInMobile, Button, NamedLink } from '..';
+import { ModalInMobile, Button, NamedLink, SecondaryButton } from '..';
 import { BookingDatesForm } from '../../forms';
 
 import css from './ContactPanel.module.css';
+import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
+import { getPropByName } from '../../util/devHelpers';
 
 // This defines when ModalInMobile shows content as Modal
 const MODAL_BREAKPOINT = 1023;
@@ -71,12 +73,20 @@ const ContactPanel = props => {
     fetchLineItemsInProgress,
     fetchLineItemsError,
     currentUserInTransaction,
+    hidingListing,
+    hidingListingError,
+    deletingListing,
+    deletingListingError,
+
+    onHideListing,
+    onDeleteListing,
   } = props;
   console.log(
     '🚀 | file: ContactPanel.js | line 75 | currentUserInTransaction',
     currentUserInTransaction
   );
-
+  const [showConfirmActionModal, setShowConfirmActionModal] = useState(false);
+  const [confirmProps, setConfirmProps] = useState(false);
   const price = listing.attributes.price;
   const hasListingState = !!listing.attributes.state;
   const isClosed = hasListingState && listing.attributes.state === LISTING_STATE_CLOSED;
@@ -102,10 +112,37 @@ const ContactPanel = props => {
     : isDaily
     ? 'ContactPanel.perDay'
     : 'ContactPanel.perUnit';
-
+  const listingType = getPropByName(listing, 'listingType');
   const classes = classNames(rootClassName || css.root, className);
   const titleClasses = classNames(titleClassName || css.bookingTitle);
-
+  const handleMakePrivate = () => {
+    setConfirmProps({
+      negativeAction: _ => onHideListing(listing.id.uuid),
+      affirmativeButtonText: 'Nevermind!',
+      negativeButtonText: `Hide this ${listingType}`,
+      affirmativeInProgress: null,
+      negativeInProgress: hidingListing,
+      affirmativeError: null,
+      negativeError: hidingListingError,
+      titleText: <FormattedMessage id="ListingPage.hideConfirmationTitle" />,
+      contentText: <FormattedMessage id="ListingPage.hideConfirmationSubTitle" />,
+    });
+    setShowConfirmActionModal(true);
+  };
+  const handleDeleteListing = () => {
+    setConfirmProps({
+      negativeAction: _ => onDeleteListing(listing.id.uuid),
+      affirmativeButtonText: 'Nevermind!',
+      negativeButtonText: `Delete this ${listingType}`,
+      affirmativeInProgress: null,
+      negativeInProgress: deletingListing,
+      affirmativeError: null,
+      negativeError: deletingListingError,
+      titleText: <FormattedMessage id="ManageListingspage.deleteConfirmationTitle" />,
+      contentText: <FormattedMessage id="ManageListingspage.deleteConfirmationSubTitle" />,
+    });
+    setShowConfirmActionModal(true);
+  };
   return (
     <div className={classes}>
       <ModalInMobile
@@ -123,15 +160,38 @@ const ContactPanel = props => {
           </div>
         </div>
 
-        <div className={css.bookingHeading}>
-          {/* TODO: PUT PRICES IN HERE */}
-          <h2 className={titleClasses}>{title}</h2>
-          {subTitleText ? <div className={css.bookingHelp}>{subTitleText}</div> : null}
-        </div>
-
-        <Button rootClassName={css.bookButton} disabled={listingUnderEnquiry} onClick={onSubmit}>
-          <FormattedMessage id="ContactPanel.ctaButtonMessage" />
-        </Button>
+        {!isOwnListing ? (
+          <>
+            <div className={css.bookingHeading}>
+              <h2 className={titleClasses}>{title}</h2>
+              {subTitleText ? <div className={css.bookingHelp}>{subTitleText}</div> : null}
+            </div>
+            <Button
+              rootClassName={css.bookButton}
+              disabled={listingUnderEnquiry}
+              onClick={onSubmit}
+            >
+              <FormattedMessage id="ContactPanel.ctaButtonMessage" />
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button
+              rootClassName={css.deleteButton}
+              disabled={listingUnderEnquiry}
+              onClick={handleMakePrivate}
+            >
+              Hide It?
+            </Button>
+            <SecondaryButton
+              rootClassName={css.deleteButton}
+              disabled={listingUnderEnquiry}
+              onClick={handleDeleteListing}
+            >
+              Delete Listing?
+            </SecondaryButton>
+          </>
+        )}
       </ModalInMobile>
       <div className={css.openBookingForm}>
         <div className={css.priceContainer}>
@@ -149,12 +209,10 @@ const ContactPanel = props => {
             name={'OrderDetailsPage'}
             params={{ id: currentUserInTransaction.id.uuid }}
           >
-            <Button
-            rootClassName={css.bookButton}
-          >
-            View Transaction
-            {/* <FormattedMessage id="ContactPanel.ctaButtonMessage" /> */}
-          </Button>
+            <Button rootClassName={css.bookButton}>
+              View Transaction
+              {/* <FormattedMessage id="ContactPanel.ctaButtonMessage" /> */}
+            </Button>
           </NamedLink>
         ) : showBookingDatesForm ? (
           <Button
@@ -162,6 +220,7 @@ const ContactPanel = props => {
             disabled={listingUnderEnquiry}
             onClick={() => openBookModal(isOwnListing, isClosed, history, location)}
           >
+            MOBILE
             <FormattedMessage id="ContactPanel.ctaButtonMessage" />
           </Button>
         ) : isClosed ? (
@@ -170,6 +229,13 @@ const ContactPanel = props => {
           </div>
         ) : null}
       </div>
+      <ConfirmationModal
+        id="ConfirmationModal"
+        isOpen={showConfirmActionModal}
+        onCloseModal={() => setShowConfirmActionModal(false)}
+        onManageDisableScrolling={onManageDisableScrolling}
+        {...confirmProps}
+      />
     </div>
   );
 };

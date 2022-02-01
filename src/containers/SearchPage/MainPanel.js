@@ -14,6 +14,7 @@ import {
   SearchFiltersPrimary,
   SearchFiltersSecondary,
   SortBy,
+  Button,
 } from '../../components';
 
 import FilterComponent from './FilterComponent';
@@ -172,6 +173,7 @@ class MainPanel extends Component {
       isMapOpen,
       searchType,
     } = this.props;
+    console.log('🚀 | file: MainPanel.js | line 176 | MainPanel | render | this.props', this.props);
 
     const primaryFilters = filterConfig.filter(f => f.group === 'primary');
     const secondaryFilters = filterConfig.filter(f => f.group !== 'primary');
@@ -183,6 +185,10 @@ class MainPanel extends Component {
 
     // Selected aka active filters
     const selectedFilters = validFilterParams(urlQueryParams, filterConfig);
+    console.log(
+      '🚀 | file: MainPanel.js | line 186 | MainPanel | render | selectedFilters',
+      selectedFilters
+    );
     const selectedFiltersCount = Object.keys(selectedFilters).length;
 
     // Selected aka active secondary filters
@@ -230,7 +236,18 @@ class MainPanel extends Component {
         />
       ) : null;
     };
-
+    const typeButton = (
+      <Button
+        className={css.typeButton}
+        onClick={_ =>
+          this.getHandleChangedValueFn(true)({
+            pub_listingType: searchType === 'advert' ? 'listing' : 'advert',
+          })
+        }
+      >
+        Switch to {searchType === 'advert' ? 'listings' : 'adverts'}
+      </Button>
+    );
     const classes = classNames(rootClassName || css.searchResultContainer, className);
 
     return (
@@ -239,6 +256,8 @@ class MainPanel extends Component {
         <SearchFiltersPrimary
           className={css.searchFiltersPrimary}
           sortByComponent={sortBy('desktop')}
+          typeButton={typeButton}
+          searchType={searchType}
           listingsAreLoaded={listingsAreLoaded}
           resultsCount={totalItems}
           searchInProgress={searchInProgress}
@@ -267,6 +286,8 @@ class MainPanel extends Component {
           sortByComponent={sortBy('mobile')}
           listingsAreLoaded={listingsAreLoaded}
           resultsCount={totalItems}
+          typeButton={typeButton}
+          searchType={searchType}
           searchInProgress={searchInProgress}
           searchListingsError={searchListingsError}
           showAsModalMaxWidth={showAsModalMaxWidth}

@@ -60,6 +60,7 @@ import SectionMapMaybe from './SectionMapMaybe';
 import css from './ListingPage.module.css';
 import { capitalizeFirstLetter } from '../../util/devHelpers';
 import { capitalize } from 'lodash';
+import { deleteListing } from '../ManageListingsPage/ManageListingsPage.duck';
 
 const MIN_LENGTH_FOR_LONG_WORDS_IN_TITLE = 16;
 
@@ -222,7 +223,6 @@ export class ListingPageComponent extends Component {
   render() {
     const {
       unitType,
-      isAuthenticated,
       currentUser,
       getListing,
       getOwnListing,
@@ -232,10 +232,6 @@ export class ListingPageComponent extends Component {
       location,
       scrollingDisabled,
       showListingError,
-      reviews,
-      fetchReviewsError,
-      sendEnquiryInProgress,
-      sendEnquiryError,
       timeSlots,
       fetchTimeSlotsError,
       filterConfig,
@@ -243,9 +239,14 @@ export class ListingPageComponent extends Component {
       lineItems,
       fetchLineItemsInProgress,
       fetchLineItemsError,
-      currentUserInTransaction
+      currentUserInTransaction,
+      hidingListing,
+      hidingListingError,
+      deletingListing,
+      deletingListingError,
+      onHideListing,
+      onDeleteListing,
     } = this.props;
-    console.log("🚀 | file: ListingPage.js | line 248 | ListingPageComponent | render | this.props", this.props);
 
     const listingId = new UUID(rawParams.id);
     const isPendingApprovalVariant = rawParams.variant === LISTING_PAGE_PENDING_APPROVAL_VARIANT;
@@ -255,7 +256,7 @@ export class ListingPageComponent extends Component {
     ? ensureOwnListing(getOwnListing(listingId))
     : ensureListing(getListing(listingId));
 
-    console.log("🚀 | file: ListingPage.js | line 254 | ListingPageComponent | render | currentListing", currentListing);
+    console.log("🚀 | file: ListingPage.js | line 255 | ListingPageComponent | render | currentListing", currentListing);
 
     const listingSlug = rawParams.slug || createSlug(currentListing.attributes.title || '');
     const params = { slug: listingSlug, ...rawParams };
@@ -346,7 +347,7 @@ export class ListingPageComponent extends Component {
       // Still loading the listing
 
       const loadingTitle = intl.formatMessage({
-        id: 'ListingPage.loadingListingTitle',
+        id: `ListingPage.loading${typeOfListing}Title`,
       });
 
       return (
@@ -444,7 +445,6 @@ export class ListingPageComponent extends Component {
     );
 
     const amenityOptions = findOptionsForSelectFilter('amenities', filterConfig);
-console.log(typeOfListing)
     return (
       <Page
         title={schemaTitle}
@@ -482,6 +482,7 @@ console.log(typeOfListing)
                 onImageCarouselClose={() => this.setState({ imageCarouselOpen: false })}
                 handleViewPhotosClick={handleViewPhotosClick}
                 onManageDisableScrolling={onManageDisableScrolling}
+                typeOfListing={typeOfListing}
               />
               <div className={css.contentContainer}>
                 <SectionAvatar user={currentAuthor} params={params} />
@@ -497,11 +498,11 @@ console.log(typeOfListing)
                     listingType={typeOfListing}
                   />
                   <SectionDescriptionMaybe description={description} listingType={typeOfListing} />
-                    <SectionFeaturesMaybe
-                      options={amenityOptions}
-                      publicData={publicData}
-                      listingType={typeOfListing}
-                    />
+                  <SectionFeaturesMaybe
+                    options={amenityOptions}
+                    publicData={publicData}
+                    listingType={typeOfListing}
+                  />
                   <SectionRulesMaybe publicData={publicData} listingType={typeOfListing} />
                   <SectionMapMaybe
                     geolocation={geolocation}
@@ -540,6 +541,12 @@ console.log(typeOfListing)
                   fetchLineItemsInProgress={fetchLineItemsInProgress}
                   fetchLineItemsError={fetchLineItemsError}
                   currentUserInTransaction={currentUserInTransaction}
+                  hidingListing={hidingListing}
+                  hidingListingError={hidingListingError}
+                  deletingListing={deletingListing}
+                  deletingListingError={deletingListingError}
+                  onHideListing={onHideListing}
+                  onDeleteListing={onDeleteListing}
                 />
               </div>
             </div>
@@ -625,10 +632,15 @@ const mapStateToProps = state => {
     fetchLineItemsInProgress,
     fetchLineItemsError,
     enquiryModalOpenForListingId,
-    currentUserInTransaction
+    currentUserInTransaction,
   } = state.ListingPage;
   const { currentUser } = state.user;
-
+  const {
+    hidingListing,
+    hidingListingError,
+    deletingListing,
+    deletingListingError,
+  } = state.ListingPage;
   const getListing = id => {
     const ref = { id, type: 'listing' };
     const listings = getMarketplaceEntities(state, [ref]);
@@ -658,7 +670,11 @@ const mapStateToProps = state => {
     fetchLineItemsError,
     sendEnquiryInProgress,
     sendEnquiryError,
-    currentUserInTransaction
+    currentUserInTransaction,
+    hidingListing,
+    hidingListingError,
+    deletingListing,
+    deletingListingError,
   };
 };
 
@@ -671,6 +687,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch(fetchTransactionLineItems(bookingData, listingId, isOwnListing)),
   onSendEnquiry: (listingId, message) => dispatch(sendEnquiry(listingId, message)),
   onInitializeCardPaymentData: () => dispatch(initializeCardPaymentData()),
+  onDeleteListing: (listingId, listingType) => dispatch(deleteListing(listingId, listingType)),
+  onHideListing: (listingId, listingType) => dispatch(hideListing(listingId, listingType)),
 });
 
 // Note: it is important that the withRouter HOC is **outside** the

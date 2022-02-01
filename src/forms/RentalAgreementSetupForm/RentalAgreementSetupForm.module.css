@@ -49,12 +49,12 @@
     margin-bottom: 0;
   }
 }
-.dateField{
+.dateField {
   margin-top: 1rem;
-z-index: 2;
+  z-index: 2;
 }
 .field {
-  margin-top: 1rem;
+  margin-top: .5rem;
 }
 .detailRow {
   display: flex;
@@ -64,4 +64,8 @@ z-index: 2;
   & > p {
     margin: 0;
   }
+}
+.fieldGroup {
+  display: flex;
+justify-content: space-between;
 }

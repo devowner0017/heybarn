@@ -45,6 +45,7 @@ import { setInitialValues } from '../ListingPage/ListingPage.duck';
 import css from './EditListingPage.module.css';
 import routeConfiguration from '../../routeConfiguration';
 import { findRouteByRouteName } from '../../util/routes';
+import { getPropByName } from '../../util/devHelpers';
 
 const STRIPE_ONBOARDING_RETURN_URL_SUCCESS = 'success';
 const STRIPE_ONBOARDING_RETURN_URL_FAILURE = 'failure';
@@ -92,7 +93,6 @@ export const EditListingPageComponent = props => {
     stripeAccount,
     updateStripeAccountError,
   } = props;
-  console.log('🚀 | file: EditListingPage.js | line 89 | location', location);
   const isAdvert = location?.pathname?.startsWith('/a/');
   const { id, type, returnURLType } = params;
   const isNewURI = type === LISTING_PAGE_PARAM_TYPE_NEW;
@@ -101,11 +101,15 @@ export const EditListingPageComponent = props => {
 
   const listingId = page.submittedListingId || (id ? new UUID(id) : null);
   const currentListing = ensureOwnListing(getOwnListing(listingId));
+  const listingType = getPropByName(currentListing, 'listingType');
+
   const { state: currentListingState } = currentListing.attributes;
 
   const isPastDraft = currentListingState && currentListingState !== LISTING_STATE_DRAFT;
   const shouldRedirect = isNewListingFlow && listingId && isPastDraft;
-  console.log('🚀 | file: EditListingPage.js | line 102 | shouldRedirect', shouldRedirect);
+  const shouldRedirectToDifferentListingType =
+    !!listingType &&
+    ((isAdvert && listingType !== 'advert') || (!isAdvert && listingType !== 'listing'));
 
   const hasStripeOnboardingDataIfNeeded = returnURLType ? !!(currentUser && currentUser.id) : true;
   const showForm = hasStripeOnboardingDataIfNeeded && (isNewURI || currentListing.id);
@@ -113,20 +117,17 @@ export const EditListingPageComponent = props => {
   if (shouldRedirect) {
     const isPendingApproval =
       currentListing && currentListingState === LISTING_STATE_PENDING_APPROVAL;
-    const { fromPage, ...rest } = location.state;
-    console.log('🚀 | file: EditListingPage.js | line 111 | fromPage', fromPage);
+    const { fromPage, ...rest } = location?.state || {};
     // If page has already listingId (after submit) and current listings exist
     // redirect to listing page
     const listingSlug = currentListing ? createSlug(currentListing.attributes.title) : null;
 
     if (!!fromPage) {
-      console.log("🚀 | file: EditListingPage.js | line 123 | fromPage", fromPage);
       const initialValues = {
         ...rest,
         confirmPaymentError: null,
       };
 
-      console.log("🚀 | file: EditListingPage.js | line 125 | initialValues", initialValues);
       const saveToSessionStorage = !currentUser;
       const routes = routeConfiguration();
       // Customize checkout page state with current listing and selected bookingDates
@@ -138,11 +139,9 @@ export const EditListingPageComponent = props => {
 
       // Clear previous Stripe errors from store if there is any
       onInitializeCardPaymentData();
-      console.log("🚀 | file: EditListingPage.js | line 143 | history", history);
-console.log(11111);
       // Redirect to CheckoutPage
       // history.push(fromPage);
-      return <Redirect to={{ pathname: fromPage }} push={true} />
+      return <Redirect to={{ pathname: fromPage }} push={true} />;
     }
     const redirectProps = isPendingApproval
       ? {
@@ -162,6 +161,9 @@ console.log(11111);
         };
 
     return <NamedRedirect {...redirectProps} />;
+  } else if (shouldRedirectToDifferentListingType) {
+    const advertPage = '/a' + location.pathname.slice(2);
+    return <Redirect to={{ pathname: advertPage }} push={true} />;
   } else if (showForm) {
     const {
       createListingDraftError = null,
@@ -389,8 +391,7 @@ const mapDispatchToProps = dispatch => ({
   onChange: () => dispatch(clearUpdatedTab()),
   callSetInitialValues: (setInitialValues, values, saveToSessionStorage) =>
     dispatch(setInitialValues(values, saveToSessionStorage)),
-    onInitializeCardPaymentData: () => dispatch(initializeCardPaymentData()),
-
+  onInitializeCardPaymentData: () => dispatch(initializeCardPaymentData()),
 });
 
 // Note: it is important that the withRouter HOC is **outside** the

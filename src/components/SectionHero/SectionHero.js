@@ -24,7 +24,7 @@ const SectionHero = props => {
           <NamedLink
             name="SearchPage"
             to={{
-              search: 'pub_listingType=listing',
+              search: 'pub_listingType=listing&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618',
             }}
             className={css.heroButton}
           >
@@ -34,7 +34,7 @@ const SectionHero = props => {
           <NamedLink
             name="SearchPage"
             to={{
-              search: 'pub_listingType=advert',
+              search: 'pub_listingType=advert&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618',
             }}
             className={css.heroButton}
           >

@@ -2,7 +2,7 @@ const { transactionLineItems } = require('../api-util/lineItems');
 const { getSdk, getTrustedSdk, handleError, serialize } = require('../api-util/sdk');
 
 module.exports = (req, res) => {
-  const { isSpeculative, bookingData, bodyParams, queryParams } = req.body;
+  const { isSpeculative, bookingData, bodyParams, queryParams, newPrice } = req.body;
 
   const { listingId, ...restParams } = bodyParams && bodyParams.params ? bodyParams.params : {};
 
@@ -13,7 +13,7 @@ module.exports = (req, res) => {
     .show({ id: listingId })
     .then(listingResponse => {
       const listing = listingResponse.data.data;
-      lineItems = transactionLineItems(listing, bookingData);
+      lineItems = transactionLineItems(listing, bookingData, newPrice);
       console.log("🚀 | file: transition-privileged.js | line 17 | lineItems", lineItems);
 
       return getTrustedSdk(req);

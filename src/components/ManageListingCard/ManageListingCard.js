@@ -36,6 +36,7 @@ import {
   NamedLink,
   IconSpinner,
   ResponsiveImage,
+  Button,
 } from '../../components';
 
 import MenuIcon from './MenuIcon';
@@ -96,10 +97,8 @@ const createListingURL = (routes, listing) => {
 };
 
 const createTransactionURL = (routes, listing) => {
-  const id = listing.id.uuid;
   const publicData = getPropByName(listing, 'publicData');
-  const { listingState, transactionId } = publicData;
-  const isPendingApproval = listing.attributes.state === LISTING_STATE_PENDING_APPROVAL;
+  const { transactionId } = publicData;
 
   const linkProps = transactionId && {
     name: 'SaleDetailsPage',
@@ -107,7 +106,6 @@ const createTransactionURL = (routes, listing) => {
       id: transactionId,
     },
   };
-
   return !!linkProps && createResourceLocatorString(linkProps.name, routes, linkProps.params, {});
 };
 
@@ -143,6 +141,7 @@ export const ManageListingCardComponent = props => {
     listing,
     onCloseListing,
     onOpenListing,
+    onHideListing,
     onDiscardListing,
     handleDeleteListing,
     onToggleMenu,
@@ -154,36 +153,25 @@ export const ManageListingCardComponent = props => {
   const id = currentListing.id.uuid;
   const { title = '', price, state, publicData } = currentListing.attributes;
   if (!publicData) return null;
-  const { listingState, listingType, transactionId } = publicData;
+  const { listingState, listingType, transactionId, notHidden } = publicData;
   const slug = createSlug(title);
   const isPendingApproval = state === LISTING_STATE_PENDING_APPROVAL;
   const isClosed = state === LISTING_STATE_CLOSED;
   const isDraft = state === LISTING_STATE_DRAFT;
   const isUnderEnquiry = listingState === LISTING_UNDER_ENQUIRY;
   const isUnderOffer = listingState === LISTING_UNDER_OFFER;
-  const hasRequestedRentalAgreement = listingState === LISTING_RENTAL_AGREEMENT_REQUESTED;
   const firstImage =
     currentListing.images && currentListing.images.length > 0 ? currentListing.images[0] : null;
   const menuItemClasses = classNames(css.menuItem, {
     [css.menuItemDisabled]: !!actionsInProgressListingId,
   });
   const transactionUrl = createTransactionURL(routeConfiguration(), currentListing);
-  console.log('🚀 | file: ManageListingCard.js | line 165 | transactionUrl', transactionUrl);
   const { formattedPrice, priceTitle } = priceData(price, intl);
   const hasError = hasOpeningError || hasClosingError || hasDiscardingError || hasDeletingError;
   const thisListingInProgress =
     actionsInProgressListingId && actionsInProgressListingId.uuid === id;
 
-  const hasOverlay =
-    isDraft ||
-    isUnderEnquiry ||
-    isUnderOffer ||
-    hasRequestedRentalAgreement ||
-    isClosed ||
-    isPendingApproval ||
-    thisListingInProgress ||
-    hasError;
-  const classes = classNames(rootClassName || css.root, className, { [css.darkArrow]: hasOverlay });
+  const classes = classNames(rootClassName || css.root, className);
 
   const onOverListingLink = () => {
     // Enforce preloading of ListingPage (loadable component)
@@ -265,6 +253,7 @@ export const ManageListingCardComponent = props => {
       </div>
     </>
   );
+
   return (
     <div className={classes}>
       {isUnderEnquiry ? (
@@ -288,6 +277,31 @@ export const ManageListingCardComponent = props => {
           >
             <FormattedMessage id={`ManageListingCard.respondToEnquiry`} />
           </NamedLink>
+        </Overlay>
+      ) : notHidden !== undefined && !notHidden ? (
+        <Overlay
+          message={intl.formatMessage(
+            { id: `ManageListingCard.hidden${listingType}` },
+            { listingTitle: title }
+          )}
+        >
+          <NamedLink
+            name={listingType === 'listing' ? 'EditListingPage' : 'EditAdvertPage'}
+            params={{ id, slug, type: editListingLinkType, tab: 'description' }}
+          >
+            <Button className={css.doubleMenuButton}>Edit it</Button>
+          </NamedLink>
+          <Button
+            className={css.doubleMenuButton}
+            disabled={!!actionsInProgressListingId}
+            onClick={event => {
+              if (!actionsInProgressListingId) {
+                onHideListing(currentListing.id, listingType, false);
+              }
+            }}
+          >
+            <FormattedMessage id={`ManageListingCard.unhide${listingType}`} />
+          </Button>
         </Overlay>
       ) : isDraft ? (
         <React.Fragment>
@@ -417,6 +431,21 @@ export const ManageListingCardComponent = props => {
                         <FormattedMessage id={`ManageListingCard.close${listingType}`} />
                       </InlineTextButton>
                     </MenuItem>
+                    <MenuItem key="hide-listing">
+                      <InlineTextButton
+                        rootClassName={menuItemClasses}
+                        onClick={event => {
+                          event.preventDefault();
+                          event.stopPropagation();
+                          if (!actionsInProgressListingId) {
+                            onToggleMenu(null);
+                            onHideListing(currentListing.id, listingType, !notHidden);
+                          }
+                        }}
+                      >
+                        <FormattedMessage id={`ManageListingCard.hide`} />
+                      </InlineTextButton>
+                    </MenuItem>
                     <MenuItem key="delete-listing">
                       <InlineTextButton
                         rootClassName={menuItemClasses}
@@ -465,22 +494,24 @@ export const ManageListingCardComponent = props => {
             <FormattedMessage id={`ManageListingCard.edit${listingType}`} />
           </NamedLink>
 
-          <div className={css.price}>
-            {formattedPrice ? (
-              <React.Fragment>
-                <div className={css.priceValue} title={priceTitle}>
-                  {formattedPrice}
+          {listingType === 'listing' && (
+            <div className={css.price}>
+              {formattedPrice ? (
+                <React.Fragment>
+                  <div className={css.priceValue} title={priceTitle}>
+                    {formattedPrice}
+                  </div>
+                  <div className={css.perUnit}>
+                    <FormattedMessage id={unitTranslationKey} />
+                  </div>
+                </React.Fragment>
+              ) : (
+                <div className={css.noPrice}>
+                  <FormattedMessage id="ManageListingCard.priceNotSet" />
                 </div>
-                <div className={css.perUnit}>
-                  <FormattedMessage id={unitTranslationKey} />
-                </div>
-              </React.Fragment>
-            ) : (
-              <div className={css.noPrice}>
-                <FormattedMessage id="ManageListingCard.priceNotSet" />
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
 
           {/* {availabilityEnabled ? (
             <React.Fragment>

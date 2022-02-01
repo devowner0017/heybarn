@@ -532,8 +532,6 @@ const listingRelationship = txResponse => {
 };
 
 export const fetchTransaction = (id, txRole, fetchSub) => (dispatch, getState, sdk) => {
-  console.log('🚀 | file: TransactionPage.duck.js | line 533 | fetchTransaction | txRole', txRole);
-  console.log('🚀 | file: TransactionPage.duck.js | line 533 | fetchTransaction | id', id);
   dispatch(fetchTransactionRequest());
   let txResponse = null;
 
@@ -558,10 +556,6 @@ export const fetchTransaction = (id, txRole, fetchSub) => (dispatch, getState, s
     )
     .then(response => {
       txResponse = response;
-      console.log(
-        '🚀 | file: TransactionPage.duck.js | line 559 | fetchTransaction | response',
-        response
-      );
       const listingId = listingRelationship(response).id;
       const entities = updatedEntities({}, response.data);
       const listingRef = { id: listingId, type: 'listing' };
@@ -572,10 +566,6 @@ export const fetchTransaction = (id, txRole, fetchSub) => (dispatch, getState, s
       const selectedListingId = getPropByName(transaction, 'selectedListingId');
       const relatedListingId = getPropByName(transaction, 'relatedListingId');
       const recurringResponse = getPropByName(transaction, 'recurringResponse');
-      console.log(
-        '🚀 | file: TransactionPage.duck.js | line 529 | fetchTransaction | recurringResponse',
-        recurringResponse
-      );
       if (!!(relatedListingId || selectedListingId)) {
         sdk.listings
           .show({
@@ -805,7 +795,6 @@ export const declineCommunication = data => (dispatch, getState, sdk) => {
       { expand: true, include: ['listing'] }
     )
     .then(response => {
-      console.log('🚀 | file: TransactionPage.duck.js | line 801 | response', response);
       const transaction = denormalisedResponseEntities(response)?.[0];
       const listing = getPropByName(transaction, 'listing');
       updateListingState({
@@ -833,7 +822,6 @@ export const declineCommunication = data => (dispatch, getState, sdk) => {
 };
 
 export const cancelDuringRad = data => (dispatch, getState, sdk) => {
-  console.log('🚀 | file: TransactionPage.duck.js | line 778 | data', data);
   const { txId, actor, wasRequested } = data;
   dispatch(cancelDuringRadRequest());
   const transition = wasRequested
@@ -872,11 +860,8 @@ export const sendRentalAgreement = data => (dispatch, getState, sdk) => {
   // TODO: Add booking data to params here
   const { txId, listingId, wasRequested, contractLines, bookingDates } = data;
 
-  console.log('🚀 | file: TransactionPage.duck.js | line 847 | data', data);
   const { startDate } = bookingDates;
   const endDate = bookingDates.endDate || new moment().add(1, 'years');
-  console.log('🚀 | file: TransactionPage.duck.js | line 816 | endDate', endDate);
-  console.log('🚀 | file: TransactionPage.duck.js | line 815 | bookingDates', bookingDates);
   dispatch(sendRentalAgreementRequest());
   const bookingData = {
     startDate: startDate.toISOString(),
@@ -896,16 +881,14 @@ export const sendRentalAgreement = data => (dispatch, getState, sdk) => {
     },
   };
   const queryParams = { expand: true, include: ['customer', 'provider', 'listing'] };
-  const emailData = { ...contractLines, ...bookingData };
-  console.log(emailData);
-  console.log(Object.entries(emailData));
+
   const handleSucces = response => {
     const entities = denormalisedResponseEntities(response);
     const order = entities[0];
-    console.log('🚀 | file: TransactionPage.duck.js | line 901 | order', order);
     const customer = getPropByName(order, 'customer');
     const provider = getPropByName(order, 'provider');
     const listing = getPropByName(order, 'listing');
+    const address = getPropByName(listing, 'address');
     sendAdminEmail({
       message: {
         subject: 'NEW RENTAL AGREEMENT REQUESTED',
@@ -914,11 +897,14 @@ export const sendRentalAgreement = data => (dispatch, getState, sdk) => {
       },
       content: {
         ...contractLines,
-        ...bookingData,
+        startDate: moment(bookingData.startDate).format('DD-MMM-YYYY'),
+        endDate: moment(bookingData.endDate).format('DD-MMM-YYYY'),
         rentalAmount: `$${listing.attributes.price.amount / 100}`,
+        rentalAddress: address,
       },
       renterId: customer.id.uuid,
       hostId: provider.id.uuid,
+      address,
     });
 
     dispatch(addMarketplaceEntities(response));
@@ -941,7 +927,12 @@ export const sendRentalAgreement = data => (dispatch, getState, sdk) => {
   };
 
   // transition privileged
-  return transitionPrivileged({ bookingData, bodyParams, queryParams })
+  return transitionPrivileged({
+    bookingData,
+    bodyParams,
+    queryParams,
+    newPrice: contractLines.price,
+  })
     .then(handleSucces)
     .catch(handleError);
 };
@@ -972,9 +963,7 @@ export const requestRentalAgreement = data => (dispatch, getState, sdk) => {
 
   const handleSucces = response => {
     const entities = denormalisedResponseEntities(response);
-    console.log('🚀 | file: TransactionPage.duck.js | line 961 | entities', entities);
     const order = entities[0];
-    console.log('🚀 | file: TransactionPage.duck.js | line 963 | order', order);
     const listing = getPropByName(order, 'listing');
     const relatedListingId = getPropByName(order, 'relatedListingId');
 
@@ -1017,7 +1006,6 @@ export const requestRentalAgreement = data => (dispatch, getState, sdk) => {
 };
 
 export const cancelAfterAgreementSent = data => (dispatch, getState, sdk) => {
-  console.log('🚀 | file: TransactionPage.duck.js | line 778 | data', data);
   const { txId, actor } = data;
   dispatch(cancelAfterAgreementSentRequest());
   const transition =
@@ -1383,7 +1371,6 @@ export const fetchTransactionLineItems = ({ bookingData, listingId, isOwnListing
 // loadData is a collection of async calls that need to be made
 // before page has all the info it needs to render itself
 export const loadData = params => (dispatch, getState) => {
-  console.log('🚀 | file: TransactionPage.duck.js | line 1336 | params', params);
   const txId = new UUID(params.id);
   const state = getState().TransactionPage;
   const txRef = state.transactionRef;

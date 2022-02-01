@@ -19,7 +19,9 @@ const SectionImages = props => {
     onImageCarouselClose,
     onManageDisableScrolling,
     currentUserInTransaction,
+    typeOfListing
   } = props;
+    console.log("🚀 | file: SectionImages.js | line 24 | typeOfListing", typeOfListing);
   const history = useHistory();
 
   const hasImages = listing.images && listing.images.length > 0;
@@ -29,7 +31,7 @@ const SectionImages = props => {
   // to the parent that would otherwise open the image carousel
   const actionBar = listing.id ? (
     <div onClick={e => e.stopPropagation()}>
-      <ActionBarMaybe isOwnListing={isOwnListing} listing={listing} editParams={editParams} />
+      <ActionBarMaybe isOwnListing={isOwnListing} listing={listing} editParams={editParams} typeOfListing={typeOfListing}/>
     </div>
   ) : null;
   const listingStateBar = listing.id ? (
@@ -39,7 +41,7 @@ const SectionImages = props => {
         isOwnListing={isOwnListing}
         currentUserInTransaction={currentUserInTransaction}
         listing={listing}
-        editParams={editParams}
+        editParams={editParams}typeOfListing={typeOfListing}
       />
     </div>
   ) : null;

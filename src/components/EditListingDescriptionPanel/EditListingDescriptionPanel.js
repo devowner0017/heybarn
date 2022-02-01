@@ -1,4 +1,4 @@
-import React , {useState} from 'react';
+import React, { useState } from 'react';
 import { bool, func, object, string } from 'prop-types';
 import classNames from 'classnames';
 import { FormattedMessage } from '../../util/reactIntl';
@@ -14,7 +14,7 @@ import _ from 'lodash';
 import { types as sdkTypes } from '../../util/sdkLoader';
 
 import css from './EditListingDescriptionPanel.module.css';
-import { setInitialValues } from '../../containers/CheckoutPage/CheckoutPage.duck'
+import { setInitialValues } from '../../containers/CheckoutPage/CheckoutPage.duck';
 
 const { Money } = sdkTypes;
 
@@ -45,6 +45,7 @@ const EditListingDescriptionPanel = props => {
     sizeOfSpace,
     ageOfSpace,
     amenities,
+    notHidden,
   } = publicData;
 
   const isPublished = currentListing.id && currentListing.attributes.state !== LISTING_STATE_DRAFT;
@@ -67,14 +68,12 @@ const EditListingDescriptionPanel = props => {
   const [initValues, setInitValues] = useState({
     title,
     description,
-    preferredUse: ensureArray(preferredUse).map(p =>
-      preferredUseOptions.find(o => o.key === p)
-      ),
-      sizeOfSpace,
-      ageOfSpace,
-      amenities,
-    })
-    console.log("🚀 | file: EditListingDescriptionPanel.js | line 68 | initValues", initValues);
+    preferredUse: ensureArray(preferredUse).map(p => preferredUseOptions.find(o => o.key === p)),
+    sizeOfSpace,
+    ageOfSpace,
+    amenities,
+  });
+  console.log('🚀 | file: EditListingDescriptionPanel.js | line 68 | initValues', initValues);
   return (
     <div className={classes}>
       <h1 className={css.title}>{panelTitle}</h1>
@@ -101,6 +100,7 @@ const EditListingDescriptionPanel = props => {
               listingType,
               listingState,
               notDeleted,
+              notHidden: notHidden !== 'undefined' ? notHidden : true,
               category,
               preferredUse: ensureArray(preferredUse).map(p => p?.key),
               sizeOfSpace,
@@ -111,7 +111,7 @@ const EditListingDescriptionPanel = props => {
           const defaultPrice = new Money(0, config.currency);
           const updateValuesWithPrice =
             listingType === 'listing' ? updateValues : { ...updateValues, price: defaultPrice };
-            setInitValues(updateValues)
+          setInitValues(updateValues);
           onSubmit(updateValuesWithPrice);
         }}
         onChange={onChange}

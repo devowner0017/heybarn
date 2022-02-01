@@ -25,6 +25,7 @@ import {
   openListing,
   discardListing,
   deleteListing,
+  hideListing,
   getOwnListingsById,
 } from './ManageListingsPage.duck';
 import css from './ManageListingsPage.module.css';
@@ -53,8 +54,11 @@ export class ManageListingsPageComponent extends Component {
       discardingListing,
       discardingListingError,
       onDeleteListing,
+      onHideListing,
       deletingListing,
       deletingListingError,
+      hidingListing,
+      hidingListingError,
       openingListing,
       openingListingError,
       pagination,
@@ -66,8 +70,10 @@ export class ManageListingsPageComponent extends Component {
       onManageDisableScrolling,
       intl,
     } = this.props;
-    console.log("🚀 | file: ManageListingsPage.js | line 69 | ManageListingsPageComponent | render | this.props", this.props);
-      console.log("🚀 | file: ManageListingsPage.js | line 69 | ManageListingsPageComponent | render | deletingListing", deletingListing);
+    console.log(
+      '🚀 | file: ManageListingsPage.js | line 69 | ManageListingsPageComponent | render | this.props',
+      this.props
+    );
     const listingType = location.pathname.startsWith('/adverts') ? 'advert' : 'listing';
     const hasPaginationInfo = !!pagination && pagination.totalItems != null;
     const listingsAreLoaded = !queryInProgress && hasPaginationInfo;
@@ -119,6 +125,7 @@ export class ManageListingsPageComponent extends Component {
     const openingErrorListingId = !!openingListingError && openingListingError.listingId;
     const discardingErrorListingId = !!discardingListingError && discardingListingError.listingId;
     const deletingErrorListingId = !!deletingListingError && deletingListingError.listingId;
+    const hidingErrorListingId = !!hidingListingError && hidingListingError.listingId;
 
     const title = intl.formatMessage({ id: `ManageListingsPage.title${listingType}` });
 
@@ -183,9 +190,11 @@ export class ManageListingsPageComponent extends Component {
                     onOpenListing={onOpenListing}
                     onDiscardListing={onDiscardListing}
                     handleDeleteListing={handleDeleteListing}
+                    onHideListing={onHideListing}
                     hasOpeningError={openingErrorListingId.uuid === l.id.uuid}
                     hasDiscardingError={discardingErrorListingId.uuid === l.id.uuid}
                     hasDeletingError={deletingErrorListingId.uuid === l.id.uuid}
+                    hasHidingError={hidingErrorListingId.uuid === l.id.uuid}
                     hasClosingError={closingErrorListingId.uuid === l.id.uuid}
                     renderSizes={renderSizes}
                   />
@@ -271,6 +280,8 @@ const mapStateToProps = state => {
     discardingListingError,
     deletingListing,
     deletingListingError,
+    hidingListing,
+    hidingListingError,
   } = state.ManageListingsPage;
   const { currentUserNotificationCount: providerNotificationCount } = state.user;
 
@@ -294,6 +305,8 @@ const mapStateToProps = state => {
 
     deletingListing,
     deletingListingError,
+    hidingListing,
+    hidingListingError,
   };
 };
 
@@ -301,7 +314,9 @@ const mapDispatchToProps = dispatch => ({
   onOpenListing: listingId => dispatch(openListing(listingId)),
   onCloseListing: listingId => dispatch(closeListing(listingId)),
   onDiscardListing: listingId => dispatch(discardListing(listingId)),
-  onDeleteListing: (listingId,listingType) => dispatch(deleteListing(listingId,listingType)),
+  onDeleteListing: (listingId, listingType) => dispatch(deleteListing(listingId, listingType)),
+  onHideListing: (listingId, listingType, hide) =>
+    dispatch(hideListing(listingId, listingType, hide)),
   onManageDisableScrolling: (componentId, disableScrolling) =>
     dispatch(manageDisableScrolling(componentId, disableScrolling)),
 });
