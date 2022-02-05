@@ -225,7 +225,6 @@ const ContactPanel = props => {
           <>
             <Button
               rootClassName={css.deleteButton}
-              disabled={listingUnderEnquiry}
               onClick={isHidden ? handleMakePublic : handleMakePrivate}
             >
               {isHidden ? 'Open' : 'Hide'} It?

@@ -1,1 +1,1 @@
-Get chatting to {{provider.display-name}} about {{transaction.listing.title}}
+Get chatting to {{transaction.provider.display-name}} about {{transaction.listing.title}}

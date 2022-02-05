@@ -1,1 +1,1 @@
-You've declined to make contact about {{transaction.metadata.relatedListingTitle}}
+You've declined to make contact about an advert.

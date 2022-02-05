@@ -159,7 +159,7 @@ const PanelHeading = props => {
       className={css.buttonLink}
       name={'SearchPage'}
       to={{
-        search: `?pub_listingType=${listingType}`,
+        search: `?pub_listingType=${listingType === "listing" && isCustomer ? "listing" : 'advert'}`,
       }}
     >
       <Button className={css.roundButton}>Browse</Button>

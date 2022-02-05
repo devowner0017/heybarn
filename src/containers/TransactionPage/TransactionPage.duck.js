@@ -34,6 +34,7 @@ import {
   transitionPrivilegedSimple,
   sendAdminEmail,
   updateListingState,
+  closeAcceptedListing,
 } from '../../util/api';
 import * as log from '../../util/log';
 import {
@@ -316,19 +317,6 @@ export default function checkoutPageReducer(state = initialState, action = {}) {
         signRentalAgreementInProgress: false,
         signRentalAgreementError: payload,
       };
-    case ACCEPT_SALE_REQUEST:
-      return { ...state, acceptInProgress: true, acceptSaleError: null, declineSaleError: null };
-    case ACCEPT_SALE_SUCCESS:
-      return { ...state, acceptInProgress: false };
-    case ACCEPT_SALE_ERROR:
-      return { ...state, acceptInProgress: false, acceptSaleError: payload };
-
-    case DECLINE_SALE_REQUEST:
-      return { ...state, declineInProgress: true, declineSaleError: null, acceptSaleError: null };
-    case DECLINE_SALE_SUCCESS:
-      return { ...state, declineInProgress: false };
-    case DECLINE_SALE_ERROR:
-      return { ...state, declineInProgress: false, declineSaleError: payload };
 
     case FETCH_MESSAGES_REQUEST:
       return { ...state, fetchMessagesInProgress: true, fetchMessagesError: null };
@@ -786,6 +774,7 @@ export const acceptCommunication = data => (dispatch, getState, sdk) => {
 };
 
 export const declineCommunication = data => (dispatch, getState, sdk) => {
+  console.log('🚀 | file: TransactionPage.duck.js | line 776 | data', data);
   if (acceptOrDeclineInProgress(getState())) {
     return Promise.reject(new Error('Accept or decline already in progress'));
   }
@@ -806,6 +795,7 @@ export const declineCommunication = data => (dispatch, getState, sdk) => {
     .then(response => {
       const transaction = denormalisedResponseEntities(response)?.[0];
       const listing = getPropByName(transaction, 'listing');
+      console.log('🚀 | file: TransactionPage.duck.js | line 797 | listing', listing);
       updateListingState({
         listingId: listing.id.uuid,
         listingState: LISTING_LIVE,
@@ -845,7 +835,7 @@ export const cancelDuringRad = data => (dispatch, getState, sdk) => {
         transition: transition,
         params: {},
       },
-      { expand: true , include: ["listing"]}
+      { expand: true, include: ['listing'] }
     )
     .then(response => {
       const transaction = denormalisedResponseEntities(response)?.[0];
@@ -900,6 +890,7 @@ export const sendRentalAgreement = data => (dispatch, getState, sdk) => {
     const entities = denormalisedResponseEntities(response);
     const order = entities[0];
     const customer = getPropByName(order, 'customer');
+    const selectedListingId = getPropByName(order, 'selectedListingId');
     const provider = getPropByName(order, 'provider');
     const listing = getPropByName(order, 'listing');
     const address = getPropByName(listing, 'address');
@@ -920,7 +911,26 @@ export const sendRentalAgreement = data => (dispatch, getState, sdk) => {
       hostId: provider.id.uuid,
       address,
     });
-
+    try {
+      closeAcceptedListing({
+        listingId: listing.id.uuid,
+      });
+      closeAcceptedListing({
+        listingId: selectedListingId,
+      });
+      updateListingState({
+        listingId: listing.id.uuid,
+        listingState: LISTING_LIVE,
+        transactionId: '',
+      });
+      updateListingState({
+        listingId: selectedListingId,
+        listingState: LISTING_LIVE,
+        transactionId: '',
+      });
+    } catch (e) {
+      console.error(e);
+    }
     dispatch(addMarketplaceEntities(response));
     dispatch(sendRentalAgreementSuccess());
     dispatch(fetchCurrentUserNotifications());
@@ -1039,7 +1049,7 @@ export const cancelAfterAgreementSent = data => (dispatch, getState, sdk) => {
         listingState: LISTING_LIVE,
         transactionId: '',
       });
-            dispatch(addMarketplaceEntities(response));
+      dispatch(addMarketplaceEntities(response));
       dispatch(cancelAfterAgreementSentSuccess());
       dispatch(fetchCurrentUserNotifications());
       return response;

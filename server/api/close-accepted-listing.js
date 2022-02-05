@@ -9,8 +9,9 @@ module.exports = (req, res) => {
     clientId: process.env.REACT_APP_INTEGRATION_SDK_CLIENT_ID,
     clientSecret: process.env.REACT_APP_INTEGRATION_SDK_CLIENT_SECRET,
   });
+  const {listingId} = req.body
   return integrationSdk.listings
-    .close({ id: req.body }, { expand: true })
+    .close({ id: listingId }, { expand: true })
     .then(listingResponse => {
       res
         .status(200)

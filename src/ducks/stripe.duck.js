@@ -1,4 +1,9 @@
-import { fetchRentalPayments, cancelRentalPayments, extendRentalPayments, updateSubscriptionPM } from '../util/api';
+import {
+  fetchRentalPayments,
+  cancelRentalPayments,
+  extendRentalPayments,
+  updateSubscriptionPM,
+} from '../util/api';
 import { storableError } from '../util/errors';
 import * as log from '../util/log';
 
@@ -200,37 +205,37 @@ export default function reducer(state = initialState, action = {}) {
         cancelSubscriptionInProgress: false,
       };
 
-      case EXTEND_SUBSCRIPTION_REQUEST:
-        return {
-          ...state,
-          extendSubscriptionError: null,
-          extendSubscriptionInProgress: true,
-        };
-      case EXTEND_SUBSCRIPTION_SUCCESS:
-        return { ...state, subscription: payload, extendSubscriptionInProgress: false };
-      case EXTEND_SUBSCRIPTION_ERROR:
-        console.error(payload);
-        return {
-          ...state,
-          extendSubscriptionError: payload,
-          extendSubscriptionInProgress: false,
-        };
+    case EXTEND_SUBSCRIPTION_REQUEST:
+      return {
+        ...state,
+        extendSubscriptionError: null,
+        extendSubscriptionInProgress: true,
+      };
+    case EXTEND_SUBSCRIPTION_SUCCESS:
+      return { ...state, subscription: payload, extendSubscriptionInProgress: false };
+    case EXTEND_SUBSCRIPTION_ERROR:
+      console.error(payload);
+      return {
+        ...state,
+        extendSubscriptionError: payload,
+        extendSubscriptionInProgress: false,
+      };
 
-        case UPDATE_SUBSCRIPTION_PM_REQUEST:
-          return {
-            ...state,
-            updateSubscriptionPaymentMethodError: null,
-            updateSubscriptionPaymentMethodInProgress: true,
-          };
-        case UPDATE_SUBSCRIPTION_PM_SUCCESS:
-          return { ...state, subscription: payload, updateSubscriptionPaymentMethodInProgress: false };
-        case UPDATE_SUBSCRIPTION_PM_ERROR:
-          console.error(payload);
-          return {
-            ...state,
-            updateSubscriptionPaymentMethodError: payload,
-            updateSubscriptionPaymentMethodInProgress: false,
-          };
+    case UPDATE_SUBSCRIPTION_PM_REQUEST:
+      return {
+        ...state,
+        updateSubscriptionPaymentMethodError: null,
+        updateSubscriptionPaymentMethodInProgress: true,
+      };
+    case UPDATE_SUBSCRIPTION_PM_SUCCESS:
+      return { ...state, subscription: payload, updateSubscriptionPaymentMethodInProgress: false };
+    case UPDATE_SUBSCRIPTION_PM_ERROR:
+      console.error(payload);
+      return {
+        ...state,
+        updateSubscriptionPaymentMethodError: payload,
+        updateSubscriptionPaymentMethodInProgress: false,
+      };
 
     default:
       return state;
@@ -393,7 +398,7 @@ export const retrievePaymentIntent = params => dispatch => {
 };
 
 export const fetchSubscription = params => dispatch => {
-console.log("🚀 | file: stripe.duck.js | line 361 | params", params);
+  console.log('🚀 | file: stripe.duck.js | line 361 | params', params);
   dispatch(fetchSubscriptionRequest());
 
   return fetchRentalPayments(params)
@@ -403,7 +408,7 @@ console.log("🚀 | file: stripe.duck.js | line 361 | params", params);
         return Promise.reject(response);
       } else {
         dispatch(fetchSubscriptionSuccess(response));
-        fetchSubscription({ subId: response.id })
+        fetchSubscription({ subId: response.id });
         return response;
       }
     })
@@ -416,18 +421,27 @@ console.log("🚀 | file: stripe.duck.js | line 361 | params", params);
     });
 };
 
-export const cancelSubscription = params => dispatch => {
+export const cancelSubscription = params => (dispatch, _, sdk) => {
   dispatch(cancelSubscriptionRequest());
-
+const  { id,  actor, } = params
   return cancelRentalPayments(params)
     .then(response => {
       console.log('🚀 | file: stripe.duck.js | line 287 | response', response);
-      if (response.error) {
-        return Promise.reject(response);
-      } else {
-        dispatch(cancelSubscriptionSuccess(response));
-        return response;
-      }
+
+      const bodyParams = {
+        id,
+        transition:actor === "provider" ?  TRANSITION_HOST_CANCELS_AFTER_CONTRACT_START : TRANSITION_HOST_CANCELS_AFTER_CONTRACT_START  ,
+        params: {},
+      };
+      const queryParams = { expand: true };
+      return transitionPrivilegedSimple({ bodyParams, queryParams }).then(r => {
+        if (response.error) {
+          return Promise.reject(response);
+        } else {
+          dispatch(cancelSubscriptionSuccess(response));
+          return response;
+        }
+      });
     })
     .catch(err => {
       // Unwrap Stripe error.
@@ -448,7 +462,7 @@ export const extendSubscription = params => dispatch => {
         return Promise.reject(response);
       } else {
         dispatch(extendSubscriptionSuccess(response));
-        fetchSubscription({ subId: response.id })
+        fetchSubscription({ subId: response.id });
         return response;
       }
     })
@@ -471,7 +485,7 @@ export const updateSubscriptionPaymentMethod = params => dispatch => {
         return Promise.reject(response);
       } else {
         dispatch(updateSubscriptionPaymentMethodSuccess(response));
-        fetchSubscription({ subId: response.id })
+        fetchSubscription({ subId: response.id });
         return response;
       }
     })

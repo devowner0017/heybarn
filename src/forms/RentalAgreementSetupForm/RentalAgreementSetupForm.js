@@ -314,7 +314,7 @@ const RentalAgreementSetupFormComponent = props => (
           {listing && (
             <div className={css.detailRow}>
               <p>Rent</p>
-              <p>{formatMoney(intl, values.price)}</p>
+              <p>{!!values?.price && formatMoney(intl, values.price)}</p>
             </div>
           )}
           {startDate && (

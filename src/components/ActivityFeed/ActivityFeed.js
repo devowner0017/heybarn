@@ -145,56 +145,56 @@ const resolveTransitionMessage = (
       );
     case TRANSITION_CANCEL:
       return <FormattedMessage id="ActivityFeed.transitionCancel" />;
-    case TRANSITION_COMPLETE:
-      // Show the leave a review link if the state is delivered and if the current user is the first to leave a review
-      const reviewPeriodJustStarted = txIsDelivered(transaction);
+    // case TRANSITION_COMPLETE:
+    //   // Show the leave a review link if the state is delivered and if the current user is the first to leave a review
+    //   const reviewPeriodJustStarted = txIsDelivered(transaction);
 
-      const reviewAsFirstLink = reviewPeriodJustStarted ? (
-        <InlineTextButton onClick={onOpenReviewModal}>
-          <FormattedMessage id="ActivityFeed.leaveAReview" values={{ displayName }} />
-        </InlineTextButton>
-      ) : null;
+    //   const reviewAsFirstLink = reviewPeriodJustStarted ? (
+    //     <InlineTextButton onClick={onOpenReviewModal}>
+    //       <FormattedMessage id="ActivityFeed.leaveAReview" values={{ displayName }} />
+    //     </InlineTextButton>
+    //   ) : null;
 
-      return (
-        <FormattedMessage
-          id="ActivityFeed.transitionComplete"
-          values={{ reviewLink: reviewAsFirstLink }}
-        />
-      );
+    //   return (
+    //     <FormattedMessage
+    //       id="ActivityFeed.transitionComplete"
+    //       values={{ reviewLink: reviewAsFirstLink }}
+    //     />
+    //   );
 
-    case TRANSITION_REVIEW_1_BY_PROVIDER:
-    case TRANSITION_REVIEW_1_BY_CUSTOMER:
-      if (isOwnTransition) {
-        return <FormattedMessage id="ActivityFeed.ownTransitionReview" values={{ displayName }} />;
-      } else {
-        // show the leave a review link if current user is not the first
-        // one to leave a review
-        const reviewPeriodIsOver = txIsReviewed(transaction);
-        const userHasLeftAReview = hasUserLeftAReviewFirst(ownRole, transaction);
-        const reviewAsSecondLink = !(reviewPeriodIsOver || userHasLeftAReview) ? (
-          <InlineTextButton onClick={onOpenReviewModal}>
-            <FormattedMessage id="ActivityFeed.leaveAReviewSecond" values={{ displayName }} />
-          </InlineTextButton>
-        ) : null;
-        return (
-          <FormattedMessage
-            id="ActivityFeed.transitionReview"
-            values={{ displayName, reviewLink: reviewAsSecondLink }}
-          />
-        );
-      }
-    case TRANSITION_REVIEW_2_BY_PROVIDER:
-    case TRANSITION_REVIEW_2_BY_CUSTOMER:
-      if (isOwnTransition) {
-        return <FormattedMessage id="ActivityFeed.ownTransitionReview" values={{ displayName }} />;
-      } else {
-        return (
-          <FormattedMessage
-            id="ActivityFeed.transitionReview"
-            values={{ displayName, reviewLink: null }}
-          />
-        );
-      }
+    // case TRANSITION_REVIEW_1_BY_PROVIDER:
+    // case TRANSITION_REVIEW_1_BY_CUSTOMER:
+    //   if (isOwnTransition) {
+    //     return <FormattedMessage id="ActivityFeed.ownTransitionReview" values={{ displayName }} />;
+    //   } else {
+    //     // show the leave a review link if current user is not the first
+    //     // one to leave a review
+    //     const reviewPeriodIsOver = txIsReviewed(transaction);
+    //     const userHasLeftAReview = hasUserLeftAReviewFirst(ownRole, transaction);
+    //     const reviewAsSecondLink = !(reviewPeriodIsOver || userHasLeftAReview) ? (
+    //       <InlineTextButton onClick={onOpenReviewModal}>
+    //         <FormattedMessage id="ActivityFeed.leaveAReviewSecond" values={{ displayName }} />
+    //       </InlineTextButton>
+    //     ) : null;
+    //     return (
+    //       <FormattedMessage
+    //         id="ActivityFeed.transitionReview"
+    //         values={{ displayName, reviewLink: reviewAsSecondLink }}
+    //       />
+    //     );
+    //   }
+    // case TRANSITION_REVIEW_2_BY_PROVIDER:
+    // case TRANSITION_REVIEW_2_BY_CUSTOMER:
+    //   if (isOwnTransition) {
+    //     return <FormattedMessage id="ActivityFeed.ownTransitionReview" values={{ displayName }} />;
+    //   } else {
+    //     return (
+    //       <FormattedMessage
+    //         id="ActivityFeed.transitionReview"
+    //         values={{ displayName, reviewLink: null }}
+    //       />
+    //     );
+    //   }
 
     default:
       log.error(new Error('Unknown transaction transition type'), 'unknown-transition-type', {

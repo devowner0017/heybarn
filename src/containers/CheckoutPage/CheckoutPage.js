@@ -617,12 +617,12 @@ export class CheckoutPageComponent extends Component {
           orderId && pathByRouteName('OrderDetailsPage', routes, { id: orderId?.uuid });
         const initialValues = {
           initialMessageFailedToTransaction,
-          // savePaymentMethodFailed: !paymentMethodSaved,
         };
-
-        initializeOrderPage(initialValues, routes, dispatch);
-        clearData(STORAGE_KEY);
-        orderDetailsPath && history.push(orderDetailsPath);
+        setTimeout(() => {
+          initializeOrderPage(initialValues, routes, dispatch);
+          clearData(STORAGE_KEY);
+          orderDetailsPath && history.push(orderDetailsPath);
+        }, 2000);
       })
       .catch(err => {
         console.error(err);

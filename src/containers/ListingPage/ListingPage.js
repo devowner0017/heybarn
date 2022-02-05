@@ -12,6 +12,7 @@ import {
   LISTING_STATE_CLOSED,
   LISTING_UNDER_ENQUIRY,
   propTypes,
+  LISTING_LIVE,
 } from '../../util/types';
 import { types as sdkTypes } from '../../util/sdkLoader';
 import {
@@ -320,7 +321,7 @@ export class ListingPageComponent extends Component {
           }}
         />
       );
-    const listingUnderEnquiry = listingState === LISTING_UNDER_ENQUIRY;
+    const listingUnderEnquiry = listingState !== LISTING_LIVE;
 
     const richTitle = (
       <span>

@@ -1,1 +1,1 @@
-Your listing {{transaction.listing.title}} was declined by {{provider.display-name}}.
+Your listing was declined by {{transaction.provider.display-name}}.

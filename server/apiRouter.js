@@ -31,13 +31,12 @@ const cancelRentalPayments = require('./sph/cancel-recurring-payments');
 const updateSubscriptionPM = require('./sph/update-subscription-payment-method');
 const updateListingState = require('./api/update-listing-state');
 const fetchListingTransactions = require('./api/fetch-listing-transactions');
-const updateTransactionMetadata = require('./api/update-transaction-metadata')
-const sendAdminEmail = require('./api/send-admin-email.js')
-
-
+const updateTransactionMetadata = require('./api/update-transaction-metadata');
+const closeAcceptedListing = require('./api/close-accepted-listing');
+const sendAdminEmail = require('./api/send-admin-email.js');
 
 //ADMIN / DEVELOPMENT ONLY
-const updateAllListings = require('./api/update-all-listings')
+const updateAllListings = require('./api/update-all-listings');
 
 const router = express.Router();
 
@@ -107,6 +106,7 @@ router.post('/fetch-recurring-payments', fetchRentalPayments);
 router.post('/cancel-recurring-payments', cancelRentalPayments);
 router.post('/extend-recurring-payments', extendRentalPayments);
 router.post('/update-subscription-payment-method', updateSubscriptionPM);
+router.post('/close-accepted-listing', closeAcceptedListing);
 router.post('/update-listing-state', updateListingState);
 router.post('/update-transaction-metadata', updateTransactionMetadata);
 router.post('/send-admin-email', sendAdminEmail);
