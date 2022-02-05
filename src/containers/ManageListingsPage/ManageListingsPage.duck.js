@@ -231,7 +231,7 @@ const manageListingsPageReducer = (state = initialState, action = {}) => {
       };
     case HIDE_LISTING_SUCCESS:
       return {
-        ...updateListingAttributes(state, payload.data),
+        // ...updateListingAttributes(state, payload.data),
         hidingListing: null,
       };
     case HIDE_LISTING_ERROR: {
@@ -266,6 +266,7 @@ export default manageListingsPageReducer;
  * @param {Array<UUID>} listingIds listing IDs to select from the store
  */
 export const getOwnListingsById = (state, listingIds) => {
+  if (!listingIds?.length) return null;
   const { ownEntities } = state.ManageListingsPage;
   const resources = listingIds.map(id => ({
     id,
@@ -527,8 +528,12 @@ export const hideListing = (listingId, listingType, hide) => (dispatch, getState
   dispatch(hideListingRequest(listingId));
 
   return sdk.ownListings
-    .update({ id: listingId, publicData: { notHidden: hide } }, { expand: true })
+    .update({ id: listingId, publicData: { notHidden: !!hide } }, { expand: true })
     .then(response => {
+      console.log(
+        '🚀 | file: ManageListingsPage.duck.js | line 532 | hideListing | response',
+        response
+      );
       dispatch(hideListingSuccess(response));
       dispatch(
         queryOwnListings({
@@ -543,6 +548,7 @@ export const hideListing = (listingId, listingType, hide) => (dispatch, getState
       return response;
     })
     .catch(e => {
+      console.log('🚀 | file: ManageListingsPage.duck.js | line 547 | hideListing | e', e);
       dispatch(hideListingError(storableError(e)));
     });
 };

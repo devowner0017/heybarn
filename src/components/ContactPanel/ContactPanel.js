@@ -80,6 +80,7 @@ const ContactPanel = props => {
 
     onHideListing,
     onDeleteListing,
+    requestShowListing,
   } = props;
   console.log(
     '🚀 | file: ContactPanel.js | line 75 | currentUserInTransaction',
@@ -94,7 +95,16 @@ const ContactPanel = props => {
   const showClosedListingHelpText = listing.id && isClosed;
   const { formattedPrice, priceTitle } = priceData(price, intl);
   const isBook = !!parse(location.search).book;
-
+  const listingType = getPropByName(listing, 'listingType');
+  const publicData = getPropByName(listing, 'publicData');
+  console.log('🚀 | file: ContactPanel.js | line 100 | publicData', publicData);
+  const isHidden = publicData.notHidden === false;
+  console.log('🚀 | file: ContactPanel.js | line 99 | listing', listing);
+  console.log(
+    "🚀 | file: ContactPanel.js | line 99 | getPropByName(listing, 'notHidden')",
+    getPropByName(publicData, 'notHidden')
+  );
+  console.log('🚀 | file: ContactPanel.js | line 99 | isHidden', isHidden);
   const subTitleText = !!subTitle
     ? subTitle
     : showClosedListingHelpText
@@ -112,34 +122,54 @@ const ContactPanel = props => {
     : isDaily
     ? 'ContactPanel.perDay'
     : 'ContactPanel.perUnit';
-  const listingType = getPropByName(listing, 'listingType');
   const classes = classNames(rootClassName || css.root, className);
   const titleClasses = classNames(titleClassName || css.bookingTitle);
+  const handleTogglePrivate = func => {
+    func().then(() => {
+      requestShowListing(listing.id, isOwnListing);
+    });
+  };
   const handleMakePrivate = () => {
     setConfirmProps({
-      negativeAction: _ => onHideListing(listing.id.uuid),
-      affirmativeButtonText: 'Nevermind!',
+      negativeAction: _ =>
+        handleTogglePrivate(async _ => await onHideListing(listing.id, listingType, false)),
+      affirmativeButtonText: 'Cancel',
       negativeButtonText: `Hide this ${listingType}`,
       affirmativeInProgress: null,
       negativeInProgress: hidingListing,
       affirmativeError: null,
       negativeError: hidingListingError,
-      titleText: <FormattedMessage id="ListingPage.hideConfirmationTitle" />,
-      contentText: <FormattedMessage id="ListingPage.hideConfirmationSubTitle" />,
+      titleText: <FormattedMessage id="ListingPage.hideConfirmationTitle" values={{listingType: listingType}}/>,
+      contentText: <FormattedMessage id="ListingPage.hideConfirmationSubTitle" values={{listingType: listingType}}/>,
+    });
+    setShowConfirmActionModal(true);
+  };
+  const handleMakePublic = () => {
+    setConfirmProps({
+      affirmativeAction: _ =>
+        handleTogglePrivate(async _ => await onHideListing(listing.id, listingType, true)),
+      affirmativeButtonText: `Open this ${listingType}`,
+      negativeButtonText: 'Cancel',
+      affirmativeInProgress: hidingListing,
+      negativeInProgress: null,
+      affirmativeError: hidingListingError,
+      negativeError: null,
+      titleText: <FormattedMessage id="ListingPage.openConfirmationTitle" values={{listingType: listingType}}/>,
+      contentText: <FormattedMessage id="ListingPage.openConfirmationSubTitle" values={{listingType: listingType}}/>,
     });
     setShowConfirmActionModal(true);
   };
   const handleDeleteListing = () => {
     setConfirmProps({
       negativeAction: _ => onDeleteListing(listing.id.uuid),
-      affirmativeButtonText: 'Nevermind!',
+      affirmativeButtonText: 'Cancel',
       negativeButtonText: `Delete this ${listingType}`,
       affirmativeInProgress: null,
       negativeInProgress: deletingListing,
       affirmativeError: null,
       negativeError: deletingListingError,
-      titleText: <FormattedMessage id="ManageListingspage.deleteConfirmationTitle" />,
-      contentText: <FormattedMessage id="ManageListingspage.deleteConfirmationSubTitle" />,
+      titleText: <FormattedMessage id="ManageListingspage.deleteConfirmationTitle" values={{listingType: listingType}}/>,
+      contentText: <FormattedMessage id="ManageListingspage.deleteConfirmationSubTitle" values={{listingType: listingType}}/>,
     });
     setShowConfirmActionModal(true);
   };
@@ -160,7 +190,24 @@ const ContactPanel = props => {
           </div>
         </div>
 
-        {!isOwnListing ? (
+        {!!currentUserInTransaction ? (
+          <>
+            <div className={css.bookingHeading}>
+              <h2 className={titleClasses}>You're already in talks with {authorDisplayName}</h2>
+
+            </div>
+            <NamedLink
+              className={css.bookButton}
+              name={'OrderDetailsPage'}
+              params={{ id: currentUserInTransaction.id.uuid }}
+            >
+              <Button rootClassName={css.bookButton}>
+                View Transaction
+                {/* <FormattedMessage id="ContactPanel.ctaButtonMessage" /> */}
+              </Button>
+            </NamedLink>
+          </>
+        ) : !isOwnListing ? (
           <>
             <div className={css.bookingHeading}>
               <h2 className={titleClasses}>{title}</h2>
@@ -179,9 +226,9 @@ const ContactPanel = props => {
             <Button
               rootClassName={css.deleteButton}
               disabled={listingUnderEnquiry}
-              onClick={handleMakePrivate}
+              onClick={isHidden ? handleMakePublic : handleMakePrivate}
             >
-              Hide It?
+              {isHidden ? 'Open' : 'Hide'} It?
             </Button>
             <SecondaryButton
               rootClassName={css.deleteButton}

@@ -21,7 +21,7 @@ export const ActionBarMaybe = props => {
     listing,
     editParams,
     currentUserInTransaction,
-    typeOfListing
+    typeOfListing,
   } = props;
   console.log(
     '🚀 | file: ActionBarMaybe.js | line 24 | currentUserInTransaction',
@@ -31,7 +31,7 @@ export const ActionBarMaybe = props => {
   const isPendingApproval = state === LISTING_STATE_PENDING_APPROVAL;
   const isClosed = state === LISTING_STATE_CLOSED;
   const isDraft = state === LISTING_STATE_DRAFT;
-
+  const isHidden = listing.attributes.publicData.notHidden === false;
   if (isOwnListing) {
     let ownListingTextTranslationId = 'ListingPage.ownListing';
     if (isPendingApproval) {
@@ -41,17 +41,24 @@ export const ActionBarMaybe = props => {
     } else if (isDraft) {
       ownListingTextTranslationId = 'ListingPage.ownListingDraft';
     }
+    let ownListingAdditionalText = null;
+    if (isHidden) {
+      ownListingAdditionalText = 'ListingPage.hiddenListing';
+    }
 
     const message = isDraft ? 'ListingPage.finishListing' : 'ListingPage.editListing';
 
     const ownListingTextClasses = classNames(css.ownListingText, {
       [css.ownListingTextPendingApproval]: isPendingApproval,
     });
-console.log(capitalize(typeOfListing));
+    console.log(capitalize(typeOfListing));
     return (
       <div className={css.actionBar}>
         <p className={ownListingTextClasses}>
-          <FormattedMessage id={ownListingTextTranslationId} values={{typeOfListing}}/>
+          <FormattedMessage id={ownListingTextTranslationId} values={{ typeOfListing }} />
+          {ownListingAdditionalText && (
+            <FormattedMessage id={ownListingAdditionalText} values={{ typeOfListing }} />
+          )}
         </p>
         <NamedLink
           className={css.editListingLink}
@@ -59,7 +66,7 @@ console.log(capitalize(typeOfListing));
           params={editParams}
         >
           <EditIcon className={css.editIcon} />
-          <FormattedMessage id={message} values={{typeOfListing}}/>
+          <FormattedMessage id={message} values={{ typeOfListing }} />
         </NamedLink>
       </div>
     );
@@ -67,7 +74,7 @@ console.log(capitalize(typeOfListing));
     return (
       <div className={css.actionBar}>
         <p className={css.closedListingText}>
-          <FormattedMessage id="ListingPage.currentUserInTransaction" values={{typeOfListing}}/>
+          <FormattedMessage id="ListingPage.currentUserInTransaction" values={{ typeOfListing }} />
         </p>
       </div>
     );
@@ -75,7 +82,7 @@ console.log(capitalize(typeOfListing));
     return (
       <div className={css.actionBar}>
         <p className={css.closedListingText}>
-          <FormattedMessage id="ListingPage.closedListing" values={{typeOfListing}}/>
+          <FormattedMessage id="ListingPage.closedListing" values={{ typeOfListing }} />
         </p>
       </div>
     );
@@ -83,7 +90,7 @@ console.log(capitalize(typeOfListing));
     return (
       <div className={css.actionBar}>
         <p className={css.closedListingText}>
-          <FormattedMessage id="ListingPage.listingUnderEnquiry"values={{typeOfListing}}/>
+          <FormattedMessage id="ListingPage.listingUnderEnquiry" values={{ typeOfListing }} />
         </p>
       </div>
     );

@@ -206,7 +206,7 @@ const RentalAgreementSetupFormComponent = props => (
             validate={validators.composeValidators(emailRequired, emailValid)}
             required
           />
-          <h2 className={css.title}>The Renter preferred name</h2>
+          <h2 className={css.title}>The Renters details</h2>
           <div className={css.fieldGroup}>
             <FieldTextInput
               className={css.field}

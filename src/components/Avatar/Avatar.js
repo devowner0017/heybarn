@@ -33,6 +33,7 @@ const AVATAR_IMAGE_VARIANTS = [
 ];
 
 export const AvatarComponent = props => {
+console.log("🚀 | file: Avatar.js | line 36 | props", props);
   const { rootClassName, className, user, renderSizes, disableProfileLink, intl } = props;
   const classes = classNames(rootClassName || css.root, className);
 

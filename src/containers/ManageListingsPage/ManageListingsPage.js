@@ -176,7 +176,7 @@ export class ManageListingsPageComponent extends Component {
             <div className={css.listingPanel}>
               {heading}
               <div className={css.listingCards}>
-                {listings.map(l => (
+                {listings?.map(l => (
                   <ManageListingCard
                     className={css.listingCard}
                     key={l.id.uuid}
@@ -208,7 +208,7 @@ export class ManageListingsPageComponent extends Component {
               onCloseModal={() => this.setState({ showConfirmDeleteModal: false })}
               onManageDisableScrolling={onManageDisableScrolling}
               negativeAction={_ => onDeleteListing(this.state.deleteListingId, listingType)}
-              affirmativeButtonText={'Nevermind!'}
+              affirmativeButtonText={'Cancel'}
               negativeButtonText={`Delete this ${listingType}`}
               affirmativeInProgress={null}
               negativeInProgress={deletingListing}

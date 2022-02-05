@@ -1,1 +1,1 @@
-Chat with about {{provider.displayName}} about {{transaction.metadata.relatedListingTitle}}.
+Chat with about {{provider.display-name}} about {{transaction.metadata.relatedListingTitle}}.

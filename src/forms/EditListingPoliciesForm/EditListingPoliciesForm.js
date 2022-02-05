@@ -36,9 +36,12 @@ export const EditListingPoliciesFormComponent = props => (
         updateInProgress,
         fetchErrors,
         filterConfig,
+        initialValues,
         values,
         listingType,
       } = formRenderProps;
+      console.log('🚀 | file: EditListingPoliciesForm.js | line 43 | values', values);
+      console.log('🚀 | file: EditListingPoliciesForm.js | line 43 | initialValues', initialValues);
 
       const rulesLabelMessage = intl.formatMessage({
         id: 'EditListingPoliciesForm.rulesLabel',
@@ -82,7 +85,13 @@ export const EditListingPoliciesFormComponent = props => (
           <div className={css.radioButtonRow}>
             {options.map(o => {
               return (
-                <FieldRadioButton id={o.key} name="accessFrequency" label={o.label} value={o.key} />
+                <FieldRadioButton
+                  id={o.key}
+                  name="accessFrequency"
+                  label={o.label}
+                  value={o.key}
+                  checked={values?.accessFrequency?.includes(o.key)}
+                />
               );
             })}
           </div>

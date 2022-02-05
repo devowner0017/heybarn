@@ -88,6 +88,7 @@ export const ListingCardComponent = props => {
     },
     [listingUnderEnquiry]
   );
+  console.log("🚀 | file: ListingCard.js | line 128 | listing", listing);
   return (
     <ConditionalWrapper
       condition={useLink}

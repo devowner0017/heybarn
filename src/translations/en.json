@@ -445,6 +445,12 @@
   "ListingCard.unsupportedPrice": "({currency})",
   "ListingCard.unsupportedPriceTitle": "Unsupported currency ({currency})",
 
+  "ListingPage.hideConfirmationTitle": "Are you sure you want to hide it?",
+  "ListingPage.hideConfirmationSubTitle": "This {listingType} will no longer be visible on the marketplace. Though users can still view it if you send them the link.",
+
+  "ListingPage.openConfirmationTitle": "Are you sure you want to open it?",
+  "ListingPage.openConfirmationSubTitle": "This {listingType} will be visible on the marketplace. Users will be able to see it in the search results.",
+
   "ListingPage.listingBy": "Located in {region} | Hosted by {name}",
   "ListingPage.advertBy": "Posted by {name} | Needs a space in {region}",
   "ListingPage.listingIdealFor": "Ideal for {uses}",
@@ -468,6 +474,7 @@
   "ListingPage.locationTitle": "Location",
   "ListingPage.ownClosedListing": "Your {typeOfListing} has been closed and can't be booked.",
   "ListingPage.ownListing": "This is your own {typeOfListing}.",
+  "ListingPage.hiddenListing": " It is currently hidden and not visible to the public.",
   "ListingPage.listingUnderEnquiry": "This {typeOfListing} is under enquiry and cannot be approached at this time.",
   "ListingPage.ownListingDraft": "This {typeOfListing} is a draft.",
   "ListingPage.ownListingPendingApproval": "This {typeOfListing} is pending approval.",
@@ -477,7 +484,8 @@
   "ListingPage.perUnit": "per unit",
   "ListingPage.reviewsError": "Loading reviews failed.",
   "ListingPage.reviewsHeading": "Reviews ({count})",
-  "ListingPage.rulesTitle": "Access Frequency",
+  "ListingPage.accessFrequencyTitle": "Access Frequency",
+  "ListingPage.rulesTitle": "Additional Terms",
   "ListingPage.schemaTitle": "{title} - {price} | {siteTitle}",
   "ListingPage.viewImagesButton": "View photos ({count})",
   "ListingPage.listingyourHostHeading": "Your host",
@@ -532,8 +540,8 @@
   "ManageListingCard.openlisting": "List",
   "ManageListingCard.openadvert": "List",
 
-  "ManageListingCard.hiddenlisting": "This listing is hidden and not visible on the marketplace, though users with a link may visit it.",
-  "ManageListingCard.hiddenadvert": "This listing is hidden and not visible on the marketplace, though users with a link may visit it.",
+  "ManageListingCard.hiddenlisting": "This listing is hidden.",
+  "ManageListingCard.hiddenadvert":  "This listing is hidden.",
 
   "ManageListingCard.unhidelisting": "Make public",
   "ManageListingCard.unhideadvert": "Make public",
@@ -1381,7 +1389,7 @@
   "TransactionInitPanel.orderCancelledTitle": "{customerName}, your booking for {listingLink} has been cancelled.",
   "TransactionInitPanel.orderDeclinedTitle": "{customerName}, your booking for {listingLink} has been declined.",
 
-  "TransactionInitPanel.c_listingReadyTitle": "Great! Heybarn will hold this listing for you. Create an advert or select an existing advert to show {otherName} how you would like to use this space.",
+  "TransactionInitPanel.c_listingReadyTitle": "Great! Heybarn will hold this listing for you.{lineBreak}Create an advert or select an existing advert to show {otherName} how you would like to use this space.",
   "TransactionInitPanel.c_listingReadySubTitle": "To hold this listing, a $20 fee will be charged. We will send {otherName} your advert and they will be in contact shortly. The listing will be held by you until they reply.{lineBreak}Enter your payment details below. Heybarn uses the {stripeLink} for secure transactions.{lineBreak}Please note that payment of the holding fee does not mean you are renting this space. If the host agrees to proceed, we recommend you view the space and, if the connection feels right, then commit to a rental agreement.",
   "TransactionInitPanel.c_listingReadySubSubTitle": "heybarn charges a $20 reservation fee for this process. Noone else can contact the host about this listing until they have responded to you. To understand more about this charge, { link }",
 
@@ -1391,7 +1399,7 @@
   "TransactionInitPanel.c_advertReadyTitle": "Ready to send {otherName} your {listingType}? ",
   "TransactionInitPanel.c_advertReadySubTitle": "Your account will be charged $20",
 
-  "TransactionInitPanel.p_advertReadyTitle": "Great! Heybarn can hold this advert for you. Create a listing or select an existing listing to show {providerName} the possibilities your space offers.",
+  "TransactionInitPanel.p_advertReadyTitle": "Great! Heybarn can hold this advert for you.{lineBreak}Create a listing or select an existing listing to show {providerName} the possibilities your space offers.",
   "TransactionInitPanel.p_advertReadySubTitle": "To hold this advert, a $20 fee will be charged. We will send {providerName} your listing and they will be in contact shortly. The advert will be held by you until they reply.{lineBreak}Enter your payment details below. Heybarn uses the {stripeLink} for secure transactions. {lineBreak}Please note that payment of the holding fee does not mean you have rented out your space. If the renter agrees to proceed, we recommend you arrange a viewing and, if the connection feels right, then commit to a rental agreement.",
 
   "TransactionInitPanel.saleReadyTitle": "Ready to send {otherName} your {listingType}? ",

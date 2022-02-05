@@ -20,6 +20,7 @@
 }
 
 .calendarWrapper {
+  display: flex;
   flex-grow: 1;
   position: relative;
   width: 100%;
@@ -52,4 +53,10 @@
     width: 241px;
     margin-top: 86px;
   }
+}
+.fieldWrapper{
+}
+.field{
+  margin: 0.5rem 0.5rem 0.5rem 0;
+max-height: 72px;
 }

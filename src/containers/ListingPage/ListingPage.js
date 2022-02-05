@@ -47,7 +47,12 @@ import {
 } from '../../components';
 import { TopbarContainer, NotFoundPage } from '../../containers';
 
-import { sendEnquiry, fetchTransactionLineItems, setInitialValues } from './ListingPage.duck';
+import {
+  sendEnquiry,
+  fetchTransactionLineItems,
+  setInitialValues,
+  showListing,
+} from './ListingPage.duck';
 import SectionImages from './SectionImages';
 import SectionAvatar from './SectionAvatar';
 import SectionHeading from './SectionHeading';
@@ -60,7 +65,7 @@ import SectionMapMaybe from './SectionMapMaybe';
 import css from './ListingPage.module.css';
 import { capitalizeFirstLetter } from '../../util/devHelpers';
 import { capitalize } from 'lodash';
-import { deleteListing } from '../ManageListingsPage/ManageListingsPage.duck';
+import { deleteListing, hideListing } from '../ManageListingsPage/ManageListingsPage.duck';
 
 const MIN_LENGTH_FOR_LONG_WORDS_IN_TITLE = 16;
 
@@ -246,17 +251,21 @@ export class ListingPageComponent extends Component {
       deletingListingError,
       onHideListing,
       onDeleteListing,
+      requestShowListing,
     } = this.props;
 
     const listingId = new UUID(rawParams.id);
     const isPendingApprovalVariant = rawParams.variant === LISTING_PAGE_PENDING_APPROVAL_VARIANT;
     const isDraftVariant = rawParams.variant === LISTING_PAGE_DRAFT_VARIANT;
     const currentListing =
-    isPendingApprovalVariant || isDraftVariant
-    ? ensureOwnListing(getOwnListing(listingId))
-    : ensureListing(getListing(listingId));
-
-    console.log("🚀 | file: ListingPage.js | line 255 | ListingPageComponent | render | currentListing", currentListing);
+      isPendingApprovalVariant || isDraftVariant
+        ? ensureOwnListing(getOwnListing(listingId))
+        : ensureListing(getListing(listingId));
+    console.log(getListing(listingId));
+    console.log(
+      '🚀 | file: ListingPage.js | line 255 | ListingPageComponent | render | currentListing',
+      currentListing
+    );
 
     const listingSlug = rawParams.slug || createSlug(currentListing.attributes.title || '');
     const params = { slug: listingSlug, ...rawParams };
@@ -293,13 +302,24 @@ export class ListingPageComponent extends Component {
       title = '',
       publicData,
     } = currentListing.attributes;
+
     const {
       listingType: typeOfListing,
       listingState,
       locRegion: region,
       preferredUse: need,
+      notDeleted,
     } = publicData;
-
+    const isDeleted = notDeleted === false;
+    if (isDeleted)
+      return (
+        <NamedRedirect
+          name={'SearchPage'}
+          to={{
+            search: `?address=New%20Zealand&pub_listingType=${typeOfListing}`,
+          }}
+        />
+      );
     const listingUnderEnquiry = listingState === LISTING_UNDER_ENQUIRY;
 
     const richTitle = (
@@ -547,6 +567,7 @@ export class ListingPageComponent extends Component {
                   deletingListingError={deletingListingError}
                   onHideListing={onHideListing}
                   onDeleteListing={onDeleteListing}
+                  requestShowListing={requestShowListing}
                 />
               </div>
             </div>
@@ -634,6 +655,7 @@ const mapStateToProps = state => {
     enquiryModalOpenForListingId,
     currentUserInTransaction,
   } = state.ListingPage;
+  console.log("🚀 | file: ListingPage.js | line 657 | currentUserInTransaction", currentUserInTransaction);
   const { currentUser } = state.user;
   const {
     hidingListing,
@@ -642,6 +664,7 @@ const mapStateToProps = state => {
     deletingListingError,
   } = state.ListingPage;
   const getListing = id => {
+    console.log('🚀 | file: ListingPage.js | line 651 | id', id);
     const ref = { id, type: 'listing' };
     const listings = getMarketplaceEntities(state, [ref]);
     return listings.length === 1 ? listings[0] : null;
@@ -688,7 +711,9 @@ const mapDispatchToProps = dispatch => ({
   onSendEnquiry: (listingId, message) => dispatch(sendEnquiry(listingId, message)),
   onInitializeCardPaymentData: () => dispatch(initializeCardPaymentData()),
   onDeleteListing: (listingId, listingType) => dispatch(deleteListing(listingId, listingType)),
-  onHideListing: (listingId, listingType) => dispatch(hideListing(listingId, listingType)),
+  onHideListing: (listingId, listingType, hide) =>
+    dispatch(hideListing(listingId, listingType, hide)),
+  requestShowListing: listingId => dispatch(showListing(listingId)),
 });
 
 // Note: it is important that the withRouter HOC is **outside** the

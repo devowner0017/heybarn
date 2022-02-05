@@ -211,6 +211,7 @@ export const showListing = (listingId, isOwn = false) => (dispatch, getState, sd
 
   return show
     .then(data => {
+    console.log("🚀 | file: ListingPage.duck.js | line 214 | showListing | data", data);
       dispatch(addMarketplaceEntities(data));
       return data;
     })
@@ -218,26 +219,34 @@ export const showListing = (listingId, isOwn = false) => (dispatch, getState, sd
       dispatch(showListingError(storableError(e)));
     });
 };
+
 const currentTransactions = listingId => (dispatch, getState, sdk) => {
   dispatch(getCurrentTransactionsRequest());
+  const show = sdk.listings.show({ id: listingId, include: ['author'] });
 
   return dispatch(fetchCurrentUser()).then(response => {
     const currentUser = getState().user.currentUser;
     if (currentUser) {
-      return fetchListingTransactions({
-        listingId: listingId.uuid,
-        customerId: currentUser.id.uuid,
-      })
-        .then(response => {
-          const transactions = denormalisedResponseEntities(response);
-          const activeTransaction = transactions.find(t =>
-            ACTIVE_TRANSITIONS.includes(t.attributes.lastTransition)
-          );
-          dispatch(getCurrentTransactionsSuccess(activeTransaction));
+      show.then(data => {
+        const listing = denormalisedResponseEntities(data)?.[0];
+        const authorId = listing?.author.id.uuid;
+        const isOwn = currentUser.id.uuid === authorId;
+        return fetchListingTransactions({
+          listingId: listingId.uuid,
+          customerId: isOwn ? authorId : currentUser.id.uuid,
+          providerId: isOwn ? currentUser.id.uuid : authorId,
         })
-        .catch(e => {
-          dispatch(getCurrentTransactionsError(storableError(e)));
-        });
+          .then(response => {
+            const transactions = denormalisedResponseEntities(response);
+            const activeTransaction = transactions.find(t =>
+              ACTIVE_TRANSITIONS.includes(t.attributes.lastTransition)
+            );
+            dispatch(getCurrentTransactionsSuccess(activeTransaction));
+          })
+          .catch(e => {
+            dispatch(getCurrentTransactionsError(storableError(e)));
+          });
+      });
     }
   });
 };

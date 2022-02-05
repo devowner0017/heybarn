@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import { bool, func, object, string } from 'prop-types';
 import { compose } from 'redux';
-import { Form as FinalForm } from 'react-final-form';
+import { FormSpy, Form as FinalForm } from 'react-final-form';
 import { intlShape, injectIntl, FormattedMessage } from '../../util/reactIntl';
 import classNames from 'classnames';
 import { propTypes } from '../../util/types';
-import { Form, Button, FieldDateInput } from '../../components';
+import { Form, Button, FieldDateInput, FieldCheckbox } from '../../components';
+import { TransitionGroup } from 'react-transition-group';
 
 // import ManageAvailabilityCalendar from './ManageAvailabilityCalendar';
 import css from './EditListingAvailabilityForm.module.css';
+import { Collapse } from '@mui/material';
 const identity = v => v;
 
 export class EditListingAvailabilityFormComponent extends Component {
@@ -18,6 +20,7 @@ export class EditListingAvailabilityFormComponent extends Component {
         {...this.props}
         render={formRenderProps => {
           const {
+            form,
             className,
             rootClassName,
             disabled,
@@ -33,7 +36,11 @@ export class EditListingAvailabilityFormComponent extends Component {
             availability,
             availabilityPlan,
             listingId,
+            initialValues,
+            values,
           } = formRenderProps;
+            console.log("🚀 | file: EditListingAvailabilityForm.js | line 42 | EditListingAvailabilityFormComponent | render | initialValues", initialValues);
+            console.log("🚀 | file: EditListingAvailabilityForm.js | line 41 | EditListingAvailabilityFormComponent | render | values", values);
 
           const errorMessage = updateError ? (
             <p className={css.error}>
@@ -49,36 +56,82 @@ export class EditListingAvailabilityFormComponent extends Component {
           return (
             <Form className={classes} onSubmit={handleSubmit}>
               {errorMessage}
+              <FieldCheckbox
+                className={css.field}
+                id={'perpetual'}
+                name={'perpetual'}
+                label={'Available Indefinitely?'}
+                value={true}
+              />
+              <FormSpy
+                subscription={{ values: true }}
+                onChange={({ values }) => {
+                  const { perpetual, endDate } = values;
+                  if (!!perpetual?.[0] && !!endDate) {
+                    form.change(`endDate`, null);
+                  }
+                }}
+              />
               <div className={css.calendarWrapper}>
                 {/* <ManageAvailabilityCalendar
                   availability={availability}
                   availabilityPlan={availabilityPlan}
                   listingId={listingId}
                 /> */}
-                <FieldDateInput
-                  className={css.bookingDates}
-                  label={'Start Date'}
-                  name="startDate"
-                  id={`startDate`}
-                  unitType={'units'}
-                  startDateId={`startDate`}
-                  startDateLabel={'Start Date'}
-                  placeholderText={"Select..."}
-                  endDateId={`endDate`}
-                  endDateLabel={'EndLabel'}
-                  endDatePlaceholderText={'endDatePlaceholderText'}
-                  endDateReadOnly
-                  // focusedInput={focusedInput}
-                  // onFocusedInputChange={onFocusedInputChange}
-                  format={identity}
-                  // timeSlots={timeSlots}
-                  customIsDayBlocked={date => {
-                    return false;
-                  }}
-                  customIsDayOutsideRange={date => {
-                    return false;
-                  }}
-                />
+                <div className={css.fieldWrapper}>
+                  <FieldDateInput
+                    className={css.field}
+                    label={'Start Date'}
+                    name="startDate"
+                    id={`startDate`}
+                    unitType={'units'}
+                    startDateId={`startDate`}
+                    startDateLabel={'Start Date'}
+                    placeholderText={'Select...'}
+                    endDateId={`endDate`}
+                    endDateLabel={'EndLabel'}
+                    endDatePlaceholderText={'endDatePlaceholderText'}
+                    endDateReadOnly
+                    // focusedInput={focusedInput}
+                    // onFocusedInputChange={onFocusedInputChange}
+                    format={identity}
+                    // timeSlots={timeSlots}
+                    customIsDayBlocked={date => {
+                      return false;
+                    }}
+                    customIsDayOutsideRange={date => {
+                      return false;
+                    }}
+                  />
+                </div>
+
+                <TransitionGroup className={css.field}>
+                  {!values?.perpetual?.[0] && (
+                    <Collapse timeout={300} orientation='horizontal'>
+                      <FieldDateInput
+                        label={'End Date'}
+                        name="endDate"
+                        id={`endDate`}
+                        unitType={'units'}
+                        endDateId={`endDate`}
+                        endDateLabel={'End Date'}
+                        placeholderText={'Select...'}
+                        endDateId={`endDate`}
+                        endDateLabel={'EndLabel'}
+                        endDatePlaceholderText={'endDatePlaceholderText'}
+                        endDateReadOnly
+                        format={identity}
+                        required
+                        customIsDayBlocked={date => {
+                          return false;
+                        }}
+                        customIsDayOutsideRange={date => {
+                          return false;
+                        }}
+                      />
+                    </Collapse>
+                  )}
+                </TransitionGroup>
               </div>
 
               <Button

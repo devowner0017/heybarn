@@ -212,6 +212,7 @@ export class SearchPageComponent extends Component {
       />
     );
 
+    console.log("🚀 | file: SearchPage.js | line 231 | SearchPageComponent | render | listings", listings);
     return (
       <Page
         scrollingDisabled={scrollingDisabled}

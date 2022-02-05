@@ -73,7 +73,7 @@ const StripeActionsMaybe = props => {
         onCloseModal={() => setShowCancelModal(false)}
         onManageDisableScrolling={onManageDisableScrolling}
         negativeAction={cancelAgreement}
-        affirmativeButtonText={'Nevermind!'}
+        affirmativeButtonText={'Cancel'}
         negativeButtonText={'End Agreement'}
         affirmativeInProgress={cancelSubscriptionInProgress}
         // negativeInProgress={declineCommunicationInProgress}
@@ -89,7 +89,7 @@ const StripeActionsMaybe = props => {
         onManageDisableScrolling={onManageDisableScrolling}
         affirmativeAction={extendAgreement}
         affirmativeButtonText={'Confirm'}
-        negativeButtonText={'Nevermind'}
+        negativeButtonText={'Cancel'}
         affirmativeInProgress={extendSubscriptionInProgress}
         // negativeInProgress={declineCommunicationInProgress}
         // affirmativeError={acceptCommunicationError}

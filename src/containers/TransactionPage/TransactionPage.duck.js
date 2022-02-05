@@ -527,6 +527,15 @@ export const fetchLineItemsError = error => ({
 
 // ================ Thunks ================ //
 
+const updateListingStateRequest = (listingId, listingState, transactionId) => {
+  updateListingState({
+    id,
+    listingState: state,
+    transactionId,
+  })
+    .then(r => {})
+    .catch(e => {});
+};
 const listingRelationship = txResponse => {
   return txResponse.data.data.relationships.listing.data;
 };
@@ -798,12 +807,10 @@ export const declineCommunication = data => (dispatch, getState, sdk) => {
       const transaction = denormalisedResponseEntities(response)?.[0];
       const listing = getPropByName(transaction, 'listing');
       updateListingState({
-        id: listing.id.uuid,
+        listingId: listing.id.uuid,
         listingState: LISTING_LIVE,
         transactionId: '',
-      })
-        .then(r => {})
-        .catch(e => {});
+      });
       dispatch(addMarketplaceEntities(response));
       dispatch(declineCommunicationSuccess());
       dispatch(fetchCurrentUserNotifications());
@@ -838,9 +845,16 @@ export const cancelDuringRad = data => (dispatch, getState, sdk) => {
         transition: transition,
         params: {},
       },
-      { expand: true }
+      { expand: true , include: ["listing"]}
     )
     .then(response => {
+      const transaction = denormalisedResponseEntities(response)?.[0];
+      const listing = getPropByName(transaction, 'listing');
+      updateListingState({
+        listingId: listing.id.uuid,
+        listingState: LISTING_LIVE,
+        transactionId: '',
+      });
       dispatch(addMarketplaceEntities(response));
       dispatch(cancelDuringRadSuccess());
       dispatch(fetchCurrentUserNotifications());
@@ -971,16 +985,12 @@ export const requestRentalAgreement = data => (dispatch, getState, sdk) => {
       id: listing.id.uuid,
       listingState: LISTING_UNDER_OFFER,
       transactionId: order.id.uuid,
-    })
-      .then(r => {})
-      .catch(e => {});
+    });
     updateListingState({
       id: relatedListingId,
       listingState: LISTING_UNDER_OFFER,
       transactionId: order.id.uuid,
-    })
-      .then(r => {})
-      .catch(e => {});
+    });
     dispatch(addMarketplaceEntities(response));
     dispatch(requestRentalAgreementSuccess());
     dispatch(fetchCurrentUserNotifications());
@@ -1022,7 +1032,14 @@ export const cancelAfterAgreementSent = data => (dispatch, getState, sdk) => {
       { expand: true }
     )
     .then(response => {
-      dispatch(addMarketplaceEntities(response));
+      const transaction = denormalisedResponseEntities(response)?.[0];
+      const listing = getPropByName(transaction, 'listing');
+      updateListingState({
+        listingId: listing.id.uuid,
+        listingState: LISTING_LIVE,
+        transactionId: '',
+      });
+            dispatch(addMarketplaceEntities(response));
       dispatch(cancelAfterAgreementSentSuccess());
       dispatch(fetchCurrentUserNotifications());
       return response;

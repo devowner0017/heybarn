@@ -154,6 +154,8 @@ export const ManageListingCardComponent = props => {
   const { title = '', price, state, publicData } = currentListing.attributes;
   if (!publicData) return null;
   const { listingState, listingType, transactionId, notHidden } = publicData;
+  const isHidden = notHidden === false
+  console.log("🚀 | file: ManageListingCard.js | line 157 | publicData", publicData);
   const slug = createSlug(title);
   const isPendingApproval = state === LISTING_STATE_PENDING_APPROVAL;
   const isClosed = state === LISTING_STATE_CLOSED;
@@ -278,7 +280,7 @@ export const ManageListingCardComponent = props => {
             <FormattedMessage id={`ManageListingCard.respondToEnquiry`} />
           </NamedLink>
         </Overlay>
-      ) : notHidden !== undefined && !notHidden ? (
+      ) : isHidden ?  (
         <Overlay
           message={intl.formatMessage(
             { id: `ManageListingCard.hidden${listingType}` },
@@ -296,7 +298,7 @@ export const ManageListingCardComponent = props => {
             disabled={!!actionsInProgressListingId}
             onClick={event => {
               if (!actionsInProgressListingId) {
-                onHideListing(currentListing.id, listingType, false);
+                onHideListing(currentListing.id, listingType, true);
               }
             }}
           >
@@ -439,7 +441,7 @@ export const ManageListingCardComponent = props => {
                           event.stopPropagation();
                           if (!actionsInProgressListingId) {
                             onToggleMenu(null);
-                            onHideListing(currentListing.id, listingType, !notHidden);
+                            onHideListing(currentListing.id, listingType, false);
                           }
                         }}
                       >

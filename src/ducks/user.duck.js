@@ -308,10 +308,6 @@ export const fetchCurrentUserNotifications = () => (dispatch, getState, sdk) => 
     page: 1,
     per_page: NOTIFICATION_PAGE_SIZE,
   };
-  console.log(
-    '🚀 | file: user.duck.js | line 302 | fetchCurrentUserNotifications | apiQueryParams',
-    apiQueryParams
-  );
 
   sdk.transactions
     .query(apiQueryParams)

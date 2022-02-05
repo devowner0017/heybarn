@@ -1,11 +1,14 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Slider from 'react-slick';
+import { useHistory } from "react-router-dom";
 
 import { NamedLink, ListingCard } from '..';
 
 import css from './SectionRecommendation.module.css';
+import { Link } from '@mui/material';
+import config from '../../config'
 
 const SectionRecommendation = props => {
   const { rootClassName, listings, heading, linkName, linkText, reversed } = props;
@@ -62,6 +65,13 @@ const SectionRecommendation = props => {
       },
     ],
   };
+  const history = useHistory();
+  const [mouseMoved, setMouseMoved] = useState(false);
+  const handleClick = (id) => {
+    if (!mouseMoved) {
+      history.push(`/l/${id}`);
+    }
+  };
   return (
     <div className={classes}>
       <div className={classNames(css.title, { [css.reversedTitle]: reversed })}>
@@ -72,13 +82,20 @@ const SectionRecommendation = props => {
         <Slider {...sliderSettings}>
           {listings.map((l, index) => {
             return (
-              <ListingCard
-                key={l.id.uuid}
-                listing={l}
-                renderSizes={cardRenderSizes}
-                className={classNames({ [css.reversedListingCard]: reversed })}
-                minInfo
-              />
+              <Link
+                onMouseMove={() => setMouseMoved(true)}
+                onMouseDown={() => setMouseMoved(false)}
+                onMouseUp={() => handleClick(l.id.uuid)}
+                style={{ textDecoration: 'none', cursor: 'pointer' }}
+              >
+                <ListingCard
+                  key={l.id.uuid}
+                  listing={l}
+                  renderSizes={cardRenderSizes}
+                  className={classNames({ [css.reversedListingCard]: reversed })}
+                  minInfo
+                />
+              </Link>
             );
           })}
         </Slider>

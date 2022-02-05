@@ -8,6 +8,8 @@ import { ListingLink } from '../../components';
 import { EditListingAvailabilityForm } from '../../forms';
 
 import css from './EditListingAvailabilityPanel.module.css';
+import { getPropByName } from '../../util/devHelpers';
+import moment from 'moment';
 
 const EditListingAvailabilityPanel = props => {
   const {
@@ -23,9 +25,8 @@ const EditListingAvailabilityPanel = props => {
     panelUpdated,
     updateInProgress,
     errors,
-    listingType
+    listingType,
   } = props;
-    console.log("🚀 | file: EditListingAvailabilityPanel.js | line 28 | listingType", listingType);
 
   const classes = classNames(rootClassName || css.root, className);
   const currentListing = ensureOwnListing(listing);
@@ -43,7 +44,14 @@ const EditListingAvailabilityPanel = props => {
     ],
   };
   const availabilityPlan = currentListing.attributes.availabilityPlan || defaultAvailabilityPlan;
-
+  const publicData = getPropByName(currentListing, 'publicData');
+  const { perpetual: [perpetual] = [true], availableFrom, availableTo } = publicData;
+  console.log('🚀 | file: EditListingAvailabilityPanel.js | line 49 | publicData', publicData);
+  console.log('🚀 | file: EditListingAvailabilityPanel.js | line 55 | startDate', availableFrom);
+  console.log(
+    '🚀 | file: EditListingAvailabilityPanel.js | line 74 | new Date(Date.parse(endDate))',
+    moment(parseInt(availableFrom)).toDate()
+  );
   return (
     <div className={classes}>
       <h1 className={css.title}>
@@ -59,16 +67,23 @@ const EditListingAvailabilityPanel = props => {
       <EditListingAvailabilityForm
         className={css.form}
         listingId={currentListing.id}
-        initialValues={{ availabilityPlan }}
+        initialValues={{
+          availabilityPlan,
+          perpetual: perpetual === undefined ? [true] : perpetual ? [perpetual] : [],
+          startDate: availableFrom ? { date: moment(parseInt(availableFrom)).toDate() } : null,
+          endDate: availableTo ? { date: moment(parseInt(availableTo)).toDate() } : null,
+        }}
         availability={availability}
         availabilityPlan={availabilityPlan}
         onSubmit={values => {
-          console.log('🚀 | file: EditListingAvailabilityPanel.js | line 71 | values', values);
           const {
             startDate: { date: startDate },
+            endDate: endDateMaybe,
+            perpetual,
           } = values;
+          const endDate = endDateMaybe && endDateMaybe.date;
           const startMS = startDate && Date.parse(startDate).toFixed(0);
-          console.log('🚀 | file: EditListingAvailabilityPanel.js | line 73 | startMS', startMS);
+          const endMS = endDate && Date.parse(endDate).toFixed(0);
           // We save the default availability plan
           // I.e. this listing is available every night.
           // Exceptions are handled with live edit through a calendar,
@@ -77,6 +92,8 @@ const EditListingAvailabilityPanel = props => {
             availabilityPlan,
             publicData: {
               availableFrom: startMS,
+              availableTo: endMS,
+              perpetual: [perpetual?.[0] || false],
             },
           });
         }}
