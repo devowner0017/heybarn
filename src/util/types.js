@@ -161,6 +161,7 @@ export const LISTING_LIVE = 'live';
 export const LISTING_UNDER_ENQUIRY = 'listingEnquired';
 export const LISTING_RENTAL_AGREEMENT_REQUESTED = 'listingRentalAgreementRequested';
 export const LISTING_UNDER_OFFER = 'listingUnderOffer';
+export const LISTING_UNDER_CONTRACT = 'listingUnderContract';
 
 const LISTING_STATES = [
   LISTING_STATE_DRAFT,

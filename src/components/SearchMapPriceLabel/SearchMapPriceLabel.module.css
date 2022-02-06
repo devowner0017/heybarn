@@ -27,8 +27,12 @@
    * label must have relative to be included to the same rendering layer
    */
   position: relative;
+  white-space: nowrap;
+  overflow: hidden;
 
-  /* Font */
+  max-width: 150px;
+  text-overflow: ellipsis;
+
   @apply --marketplaceH5FontStyles;
   font-weight: var(--fontWeightSemiBold);
   color: var(--matterColor);
@@ -104,4 +108,21 @@
   /* Same as hover */
   background-color: var(--marketplaceColor);
   border-color: var(--marketplaceColor);
+}
+
+/* Firefox doesn't support image aspect ratio inside flexbox */
+.aspectWrapper {
+  padding-bottom: 66.6667%; /* 3:2 Aspect Ratio */
+  background: var(--matterColorNegative); /* Loading BG color */
+}
+
+.rootForImage {
+  /* Layout - image will take space defined by aspect ratio wrapper */
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  border-radius: var(--borderRadius);
 }

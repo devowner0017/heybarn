@@ -109,6 +109,7 @@ export const EditListingPricingFormComponent = props => (
           >
             {saveActionMsg}
           </Button>
+          {props.backButton}
         </Form>
       );
     }}

@@ -216,6 +216,7 @@ export class EditListingPhotosFormComponent extends Component {
               >
                 {saveActionMsg}
               </Button>
+              {this.props.backButton}
             </Form>
           );
         }}

@@ -174,15 +174,15 @@
 
   /* ================ SectionHero ================ */
 
-  --SectionHero_desktopTitleMaxWidth: 800px;
+  --SectionHero_desktopTitleMaxWidth: 900px;
 
   /* ================ TabNav ================ */
   --TabNav_linkWidth: 240px;
 
   /* ================ LandingPage ================ */
-  --LandingPage_sectionMarginTop: 40px;
-  --LandingPage_sectionMarginTopMedium: 60px;
-  --LandingPage_sectionMarginTopLarge: 94px;
+  --LandingPage_sectionMarginTop: 20px;
+  --LandingPage_sectionMarginTopMedium: 30px;
+  --LandingPage_sectionMarginTopLarge: 40px;
 
   /* ================ EditListingAvailabilityForm, ManageAvailabilityCalendar ================ */
   --ManageAvailabilityCalendar_gridColor: #e0e0e0;

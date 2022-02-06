@@ -59,6 +59,7 @@ class EditListingLocationPanel extends Component {
       updateInProgress,
       errors,
       listingType,
+      backButton,
     } = this.props;
 
     const classes = classNames(rootClassName || css.root, className);
@@ -116,6 +117,7 @@ class EditListingLocationPanel extends Component {
           updateInProgress={updateInProgress}
           fetchErrors={errors}
           locRegionOptions={locRegionOptions}
+          backButton={backButton}
         />
       </div>
     );

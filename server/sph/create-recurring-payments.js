@@ -1,4 +1,4 @@
-const { serialize } = require('../api-util/sdk');
+const { handleError, serialize } = require('../api-util/sdk');
 
 module.exports = async (req, res) => {
   // Set your secret key. Remember to switch to your live secret key in production!

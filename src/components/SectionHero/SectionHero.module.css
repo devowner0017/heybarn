@@ -77,8 +77,9 @@
 }
 
 .heroSubTitle {
-  @apply --marketplaceH4FontStyles;
-
+  @apply --marketplaceH2FontStyles;
+  letter-spacing: 0.3px;
+text-align: center;
   color: var(--matterColorLight);
   margin: 0 0 32px 0;
 
@@ -99,7 +100,7 @@
 
 .heroButton {
   @apply --marketplaceButtonStyles;
-    margin: 0.2rem;
+  margin: 0.2rem;
   composes: animation;
 
   animation-delay: 0.8s;

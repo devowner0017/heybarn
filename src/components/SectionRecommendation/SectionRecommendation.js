@@ -80,7 +80,7 @@ const SectionRecommendation = props => {
       </div>
       <div className={css.sliderWrapper}>
         <Slider {...sliderSettings}>
-          {listings.map((l, index) => {
+          {listings?.map((l, index) => {
             return (
               <Link
                 onMouseMove={() => setMouseMoved(true)}

@@ -116,8 +116,8 @@ const EditListingWizardTab = props => {
     currentUser,
     isAdvert,
     listingType,
+    backButton
   } = props;
-  console.log('🚀 | file: EditListingWizardTab.js | line 112 | location', location);
   const { type } = params;
   const isNewURI = type === LISTING_PAGE_PARAM_TYPE_NEW;
   const isDraftURI = type === LISTING_PAGE_PARAM_TYPE_DRAFT;
@@ -186,6 +186,7 @@ const EditListingWizardTab = props => {
       currentUser,
       isAdvert,
       listingType,
+      backButton
     };
   };
 
@@ -280,7 +281,6 @@ const EditListingWizardTab = props => {
         ? 'EditListingWizard.saveNewPhotos'+ listingType
         : 'EditListingWizard.saveEditPhotos';
 
-      console.log('🚀 | file: EditListingWizardTab.js | line 279 | listingType', listingType);
       return (
         <EditListingPhotosPanel
           {...panelProps(PHOTOS)}

@@ -123,6 +123,8 @@ export const EditListingPoliciesFormComponent = props => (
           >
             {saveActionMsg}
           </Button>
+          {props.backButton}
+
         </Form>
       );
     }}

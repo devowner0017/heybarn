@@ -33,7 +33,9 @@ const EditListingDescriptionPanel = props => {
     panelUpdated,
     updateInProgress,
     errors,
+    backButton
   } = props;
+  console.log("🚀 | file: EditListingDescriptionPanel.js | line 38 | props", props);
   const classes = classNames(rootClassName || css.root, className);
   const currentListing = ensureOwnListing(listing);
 
@@ -100,7 +102,7 @@ const EditListingDescriptionPanel = props => {
               listingType,
               listingState,
               notDeleted,
-              notHidden: notHidden !== 'undefined' ? notHidden : true,
+              notHidden: notHidden !== undefined ? notHidden : true,
               category,
               preferredUse: ensureArray(preferredUse).map(p => p?.key),
               sizeOfSpace,
@@ -123,6 +125,7 @@ const EditListingDescriptionPanel = props => {
         categories={categoryOptions}
         preferredUse={preferredUseOptions}
         listingType={listingType}
+        backButton={backButton}
       />
     </div>
   );

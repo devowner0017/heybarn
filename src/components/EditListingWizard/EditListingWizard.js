@@ -16,7 +16,7 @@ import {
 import { LISTING_STATE_DRAFT } from '../../util/types';
 import { ensureCurrentUser, ensureListing } from '../../util/data';
 
-import { Modal, NamedRedirect, Tabs, StripeConnectAccountStatusBox } from '../../components';
+import { Modal, NamedRedirect, Tabs, StripeConnectAccountStatusBox ,NamedLink} from '../../components';
 import { StripeConnectAccountForm } from '../../forms';
 
 import EditListingWizardTab, {
@@ -76,8 +76,8 @@ const tabLabel = (intl, tab, listingType) => {
     key = 'EditListingWizard.tabLabelDescription';
   } else if (tab === LOCATION) {
     key = 'EditListingWizard.tabLabelLocation';
-  // } else if (tab === FEATURES) {
-  //   key = 'EditListingWizard.tabLabelFeatures';
+    // } else if (tab === FEATURES) {
+    //   key = 'EditListingWizard.tabLabelFeatures';
   } else if (tab === POLICY) {
     key = `EditListingWizard.tabLabel${listingType}Policy`;
   } else if (tab === PRICING) {
@@ -306,7 +306,6 @@ class EditListingWizard extends Component {
       isAdvert,
       ...rest
     } = this.props;
-    console.log("🚀 | file: EditListingWizard.js | line 309 | EditListingWizard | render | this.props", this.props);
 
     const selectedTab = params.tab;
     const isNewListingFlow = [LISTING_PAGE_PARAM_TYPE_NEW, LISTING_PAGE_PARAM_TYPE_DRAFT].includes(
@@ -322,15 +321,14 @@ class EditListingWizard extends Component {
     const listingType = isDraft ? publicData.listingType : isAdvert ? 'advert' : 'listing';
     const tabsForListingType = listingType === 'listing' ? LISTING_TABS : ADVERT_TABS;
     const tabsStatus = tabsActive(isNewListingFlow, currentListing, tabsForListingType);
-
+    const currentTabIndex = tabsForListingType.indexOf(selectedTab);
+    const nearestActiveTab = tabsForListingType
+      .slice(0, currentTabIndex)
+      .reverse()
+      .find(t => tabsStatus[t]);
+    console.log("🚀 | file: EditListingWizard.js | line 329 | EditListingWizard | render | nearestActiveTab", nearestActiveTab);
     // If selectedTab is not active, redirect to the beginning of wizard
     if (!tabsStatus[selectedTab]) {
-      const currentTabIndex = tabsForListingType.indexOf(selectedTab);
-      const nearestActiveTab = tabsForListingType
-        .slice(0, currentTabIndex)
-        .reverse()
-        .find(t => tabsStatus[t]);
-
       return (
         <NamedRedirect
           name={isAdvert ? 'EditAdvertPage' : 'EditListingPage'}
@@ -338,7 +336,14 @@ class EditListingWizard extends Component {
         />
       );
     }
-
+    const backButton = nearestActiveTab && (
+      <NamedLink
+        name={isAdvert ? 'EditAdvertPage' : 'EditListingPage'}
+        params={{ ...params, tab: nearestActiveTab }}
+      >
+        {'< '} Back
+      </NamedLink>
+    );
     const { width } = viewport;
     const hasViewport = width > 0;
     const hasHorizontalTabLayout = hasViewport && width <= MAX_HORIZONTAL_NAV_SCREEN_WIDTH;
@@ -439,6 +444,7 @@ class EditListingWizard extends Component {
                 currentUser={ensuredCurrentUser}
                 isAdvert={isAdvert}
                 listingType={listingType}
+                backButton={backButton}
               />
             );
           })}

@@ -223,6 +223,7 @@ export const loadData = (params, search) => {
     page,
     pub_listingType,
     pub_notDeleted: true,
+    pub_notHidden: true,
     perPage: RESULT_PAGE_SIZE,
     include: ['author', 'author.profileImage', 'images'],
     'fields.listing': ['title', 'geolocation', 'price', 'publicData'],

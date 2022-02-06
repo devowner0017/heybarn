@@ -35,6 +35,7 @@ const RentalAgreementModal = props => {
     contentText,
     listing,
   } = props;
+  console.log('🚀 | file: RentalAgreementModal.js | line 38 | listing', listing);
 
   const classes = classNames(rootClassName || css.root, className);
   const closeButtonMessage = closeText || intl.formatMessage({ id: 'RentalAgreementModal.later' });
@@ -63,6 +64,11 @@ const RentalAgreementModal = props => {
   const handleSubmit = values => {
     affirmativeAction(values);
   };
+  const price = getPropByName(listing, 'price');
+  const groundRules = getPropByName(listing, 'groundRules');
+  const preferredUse = getPropByName(listing, 'preferredUse');
+
+  console.log('🚀 | file: RentalAgreementModal.js | line 68 | price', price);
   return (
     <Modal
       id={id}
@@ -85,11 +91,9 @@ const RentalAgreementModal = props => {
           initialValues={{
             ongoingContract: [],
             lengthOfContract: null,
-            groundRules: getPropByName(listing, 'groundRules'),
-            intendedUse: _.startCase(
-              ensureArray(getPropByName(listing, 'preferredUse'))?.join(', ') || ''
-            ),
-            price: getPropByName(listing, 'price'),
+            groundRules,
+            intendedUse: preferredUse,
+            price,
           }}
           listing={listing}
         />

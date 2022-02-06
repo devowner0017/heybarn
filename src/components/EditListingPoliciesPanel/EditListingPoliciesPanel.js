@@ -24,6 +24,7 @@ const EditListingPoliciesPanel = props => {
     updateInProgress,
     errors,
     listingType,
+    backButton
   } = props;
 
   const classes = classNames(rootClassName || css.root, className);
@@ -63,6 +64,7 @@ const EditListingPoliciesPanel = props => {
         updateInProgress={updateInProgress}
         fetchErrors={errors}
         listingType={listingType}
+        backButton={backButton}
       />
     </div>
   );

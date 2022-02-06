@@ -13,7 +13,6 @@ const SectionImages = props => {
     listing,
     isOwnListing,
     listingUnderEnquiry,
-    editParams,
     handleViewPhotosClick,
     imageCarouselOpen,
     onImageCarouselClose,
@@ -31,7 +30,7 @@ const SectionImages = props => {
   // to the parent that would otherwise open the image carousel
   const actionBar = listing.id ? (
     <div onClick={e => e.stopPropagation()}>
-      <ActionBarMaybe isOwnListing={isOwnListing} listing={listing} editParams={editParams} typeOfListing={typeOfListing}/>
+      <ActionBarMaybe isOwnListing={isOwnListing} listing={listing}  typeOfListing={typeOfListing}/>
     </div>
   ) : null;
   const listingStateBar = listing.id ? (
@@ -41,7 +40,7 @@ const SectionImages = props => {
         isOwnListing={isOwnListing}
         currentUserInTransaction={currentUserInTransaction}
         listing={listing}
-        editParams={editParams}typeOfListing={typeOfListing}
+        typeOfListing={typeOfListing}
       />
     </div>
   ) : null;

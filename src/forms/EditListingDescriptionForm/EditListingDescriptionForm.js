@@ -23,6 +23,7 @@ import {
   CustomSelect,
   FieldCheckboxGroup,
   FieldNumberInput,
+  InlineTextButton,
 } from '../../components';
 import css from './EditListingDescriptionForm.module.css';
 
@@ -78,6 +79,9 @@ const EditListingDescriptionFormComponent = props => (
       const descriptionPlaceholderMessage = intl.formatMessage({
         id: `EditListingDescriptionForm.${listingType}_descriptionPlaceholder`,
       });
+      const moreInfoText = (
+        <FormattedMessage id="EditListingDescriptionForm.moreInfo" values={{listingType}} />
+      );
       const maxLength60Message = maxLength(maxLengthMessage, TITLE_MAX_LENGTH);
       const descriptionRequiredMessage = intl.formatMessage({
         id: `EditListingDescriptionForm.descriptionRequired`,
@@ -190,7 +194,7 @@ const EditListingDescriptionFormComponent = props => (
                 : requiredObject(preferredUseRequiredMessage)
             }
           />
-
+<div className={css.moreInfoText}>{moreInfoText}</div>
           <Button
             className={css.submitButton}
             type="submit"

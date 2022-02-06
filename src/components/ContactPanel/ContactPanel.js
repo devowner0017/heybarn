@@ -9,12 +9,13 @@ import { propTypes, LISTING_STATE_CLOSED, LINE_ITEM_NIGHT, LINE_ITEM_DAY } from 
 import { formatMoney } from '../../util/currency';
 import { parse, stringify } from '../../util/urlHelpers';
 import config from '../../config';
-import { ModalInMobile, Button, NamedLink, SecondaryButton } from '..';
+import { ModalInMobile, Button, NamedLink, SecondaryButton, PrimaryButton } from '..';
 import { BookingDatesForm } from '../../forms';
 
 import css from './ContactPanel.module.css';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 import { getPropByName } from '../../util/devHelpers';
+import { capitalize } from 'lodash';
 
 // This defines when ModalInMobile shows content as Modal
 const MODAL_BREAKPOINT = 1023;
@@ -63,29 +64,19 @@ const ContactPanel = props => {
     subTitle,
     authorDisplayName,
     onManageDisableScrolling,
-    timeSlots,
-    fetchTimeSlotsError,
     history,
     location,
     intl,
-    onFetchTransactionLineItems,
-    lineItems,
-    fetchLineItemsInProgress,
-    fetchLineItemsError,
     currentUserInTransaction,
     hidingListing,
     hidingListingError,
     deletingListing,
     deletingListingError,
-
     onHideListing,
     onDeleteListing,
     requestShowListing,
   } = props;
-  console.log(
-    '🚀 | file: ContactPanel.js | line 75 | currentUserInTransaction',
-    currentUserInTransaction
-  );
+  console.log('🚀 | file: ContactPanel.js | line 78 | props', props);
   const [showConfirmActionModal, setShowConfirmActionModal] = useState(false);
   const [confirmProps, setConfirmProps] = useState(false);
   const price = listing.attributes.price;
@@ -139,8 +130,18 @@ const ContactPanel = props => {
       negativeInProgress: hidingListing,
       affirmativeError: null,
       negativeError: hidingListingError,
-      titleText: <FormattedMessage id="ListingPage.hideConfirmationTitle" values={{listingType: listingType}}/>,
-      contentText: <FormattedMessage id="ListingPage.hideConfirmationSubTitle" values={{listingType: listingType}}/>,
+      titleText: (
+        <FormattedMessage
+          id="ListingPage.hideConfirmationTitle"
+          values={{ listingType: listingType }}
+        />
+      ),
+      contentText: (
+        <FormattedMessage
+          id="ListingPage.hideConfirmationSubTitle"
+          values={{ listingType: listingType }}
+        />
+      ),
     });
     setShowConfirmActionModal(true);
   };
@@ -154,22 +155,45 @@ const ContactPanel = props => {
       negativeInProgress: null,
       affirmativeError: hidingListingError,
       negativeError: null,
-      titleText: <FormattedMessage id="ListingPage.openConfirmationTitle" values={{listingType: listingType}}/>,
-      contentText: <FormattedMessage id="ListingPage.openConfirmationSubTitle" values={{listingType: listingType}}/>,
+      titleText: (
+        <FormattedMessage
+          id="ListingPage.openConfirmationTitle"
+          values={{ listingType: listingType }}
+        />
+      ),
+      contentText: (
+        <FormattedMessage
+          id="ListingPage.openConfirmationSubTitle"
+          values={{ listingType: listingType }}
+        />
+      ),
     });
     setShowConfirmActionModal(true);
   };
   const handleDeleteListing = () => {
     setConfirmProps({
-      negativeAction: _ => onDeleteListing(listing.id.uuid),
+      negativeAction: _ => {
+        onDeleteListing(listing.id.uuid);
+        history.push('/listings');
+      },
       affirmativeButtonText: 'Cancel',
       negativeButtonText: `Delete this ${listingType}`,
       affirmativeInProgress: null,
       negativeInProgress: deletingListing,
       affirmativeError: null,
       negativeError: deletingListingError,
-      titleText: <FormattedMessage id="ManageListingspage.deleteConfirmationTitle" values={{listingType: listingType}}/>,
-      contentText: <FormattedMessage id="ManageListingspage.deleteConfirmationSubTitle" values={{listingType: listingType}}/>,
+      titleText: (
+        <FormattedMessage
+          id="ManageListingspage.deleteConfirmationTitle"
+          values={{ listingType: listingType }}
+        />
+      ),
+      contentText: (
+        <FormattedMessage
+          id="ManageListingspage.deleteConfirmationSubTitle"
+          values={{ listingType: listingType }}
+        />
+      ),
     });
     setShowConfirmActionModal(true);
   };
@@ -194,7 +218,6 @@ const ContactPanel = props => {
           <>
             <div className={css.bookingHeading}>
               <h2 className={titleClasses}>You're already in talks with {authorDisplayName}</h2>
-
             </div>
             <NamedLink
               className={css.bookButton}
@@ -223,18 +246,21 @@ const ContactPanel = props => {
           </>
         ) : (
           <>
+            <NamedLink name={`Edit${capitalize(listingType)}Page`} params={{ ...props.editParams }}>
+              <PrimaryButton rootClassName={css.actionButton}>Edit</PrimaryButton>
+            </NamedLink>
             <Button
-              rootClassName={css.deleteButton}
+              rootClassName={css.actionButton}
               onClick={isHidden ? handleMakePublic : handleMakePrivate}
             >
-              {isHidden ? 'Open' : 'Hide'} It?
+              {isHidden ? `Publish ${listingType}` : "Save but don't publish"} It?
             </Button>
             <SecondaryButton
               rootClassName={css.deleteButton}
               disabled={listingUnderEnquiry}
               onClick={handleDeleteListing}
             >
-              Delete Listing?
+              Delete {capitalize(listingType)}?
             </SecondaryButton>
           </>
         )}

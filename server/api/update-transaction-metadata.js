@@ -1,4 +1,4 @@
-const { serialize } = require('../api-util/sdk');
+const { handleError, serialize } = require('../api-util/sdk');
 const flexIntegrationSdk = require('sharetribe-flex-integration-sdk');
 
 const UUID = flexIntegrationSdk.types.UUID;
@@ -15,6 +15,7 @@ module.exports = async (req, res) => {
     clientId: flexIntegrationClientId,
     clientSecret: flexIntegrationClientSecret,
   });
+
 
   const metaParams = {
     id: new UUID(transactionId),

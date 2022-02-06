@@ -358,6 +358,7 @@ export const fetchOwnListings = listingType => (dispatch, getState, sdk) => {
           publicData: { listingType: responseListingType, listingState },
           state,
         } = r.attributes;
+        console.log("🚀 | file: TransactionInitPage.duck.js | line 367 | r", r);
         return (
           responseListingType === listingType &&
           listingState === LISTING_LIVE &&
@@ -365,6 +366,7 @@ export const fetchOwnListings = listingType => (dispatch, getState, sdk) => {
         );
       });
       let alteredResponse = ownListingsResponse;
+      console.log("🚀 | file: TransactionInitPage.duck.js | line 369 | alteredResponse", alteredResponse);
       alteredResponse.data.data = filteredResults;
       alteredResponse.data.meta.totalItems = filteredResults.length;
       dispatch(addOwnEntities(alteredResponse));

@@ -39,15 +39,17 @@
 .category {
   composes: formMargins;
 }
-
-.submitButton {
+.moreInfoText {
   margin-top: auto;
+  @apply --marketplaceSmallFontStyles;
+}
+.submitButton {
   margin-bottom: 24px;
   flex-shrink: 0;
+  margin-top: 10px;
 
   @media (--viewportLarge) {
     display: inline-block;
     width: 241px;
-    margin-top: 100px;
   }
 }

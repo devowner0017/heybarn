@@ -19,7 +19,6 @@ export const ActionBarMaybe = props => {
     isOwnListing,
     listingUnderEnquiry,
     listing,
-    editParams,
     currentUserInTransaction,
     typeOfListing,
   } = props;
@@ -60,14 +59,14 @@ export const ActionBarMaybe = props => {
             <FormattedMessage id={ownListingAdditionalText} values={{ typeOfListing }} />
           )}
         </p>
-        <NamedLink
+        {/* <NamedLink
           className={css.editListingLink}
           name={`Edit${capitalize(typeOfListing)}Page`}
           params={editParams}
         >
           <EditIcon className={css.editIcon} />
           <FormattedMessage id={message} values={{ typeOfListing }} />
-        </NamedLink>
+        </NamedLink> */}
       </div>
     );
   } else if (!!currentUserInTransaction) {

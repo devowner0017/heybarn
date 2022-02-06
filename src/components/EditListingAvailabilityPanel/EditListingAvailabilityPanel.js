@@ -26,6 +26,7 @@ const EditListingAvailabilityPanel = props => {
     updateInProgress,
     errors,
     listingType,
+    backButton,
   } = props;
 
   const classes = classNames(rootClassName || css.root, className);
@@ -104,6 +105,7 @@ const EditListingAvailabilityPanel = props => {
         updated={panelUpdated}
         updateError={errors.updateListingError}
         updateInProgress={updateInProgress}
+        backButton={backButton}
       />
     </div>
   );

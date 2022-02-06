@@ -12,6 +12,7 @@ import {
 } from '../../util/transaction';
 import * as log from '../../util/log';
 import { fetchCurrentUserHasOrdersSuccess, fetchCurrentUser } from '../../ducks/user.duck';
+import { LISTING_UNDER_OFFER } from '../../util/types'
 
 // ================ Action types ================ //
 
@@ -289,12 +290,21 @@ export const confirmPayment = orderParams => (dispatch, getState, sdk) => {
   };
 
   return sdk.transactions
-    .transition(bodyParams)
+    .transition(bodyParams, {expand: true, include: ["listing"]})
     .then(response => {
       const order = response.data.data;
       dispatch(confirmPaymentSuccess(order.id));
+      const transaction = denormalisedResponseEntities(response)?.[0];
+      const listing = getPropByName(transaction, 'selectedListingId');
+      const selectedListingId = getPropByName(transaction, 'selectedListingId');
+      updateListingState({
+        listingId: selectedListingId,
+        listingState: LISTING_UNDER_CONTRACT,
+        transactionId: '',
+      });
       return order;
     })
+
     .catch(e => {
       dispatch(confirmPaymentError(storableError(e)));
       const transactionIdMaybe = orderParams.transactionId

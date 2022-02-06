@@ -28,6 +28,7 @@ class EditListingPhotosPanel extends Component {
       onSubmit,
       onRemoveImage,
       listingType,
+      backButton,
     } = this.props;
 
     const rootClass = rootClassName || css.root;
@@ -67,6 +68,7 @@ class EditListingPhotosPanel extends Component {
           updated={panelUpdated}
           updateInProgress={updateInProgress}
           listingType={listingType}
+          backButton={backButton}
         />
       </div>
     );

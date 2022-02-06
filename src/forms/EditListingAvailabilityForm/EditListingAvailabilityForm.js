@@ -60,7 +60,7 @@ export class EditListingAvailabilityFormComponent extends Component {
                 className={css.field}
                 id={'perpetual'}
                 name={'perpetual'}
-                label={'Available Indefinitely?'}
+                label={'Ongoing rental (no specific end date)?'}
                 value={true}
               />
               <FormSpy
@@ -143,6 +143,7 @@ export class EditListingAvailabilityFormComponent extends Component {
               >
                 {saveActionMsg}
               </Button>
+              {this.props.backButton}
             </Form>
           );
         }}

@@ -929,6 +929,7 @@ export const sendRentalAgreement = data => (dispatch, getState, sdk) => {
         transactionId: '',
       });
     } catch (e) {
+      console.log("🚀 | file: TransactionPage.duck.js | line 932 | e", e);
       console.error(e);
     }
     dispatch(addMarketplaceEntities(response));
@@ -1039,7 +1040,7 @@ export const cancelAfterAgreementSent = data => (dispatch, getState, sdk) => {
         transition: transition,
         params: {},
       },
-      { expand: true }
+      { expand: true, include: ['listing'] }
     )
     .then(response => {
       const transaction = denormalisedResponseEntities(response)?.[0];

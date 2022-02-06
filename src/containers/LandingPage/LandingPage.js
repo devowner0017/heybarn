@@ -93,7 +93,7 @@ export const LandingPageComponent = props => {
               <li className={css.section}>
                 <div className={classNames(css.sectionContent)}>
                   <SectionRecommendation
-                    listings={pageAdverts}
+                    listings={pageListings}
                     heading={'Find a new exciting idea for your property'}
                     reversed
                     linkName={'NewAdvertPage'}

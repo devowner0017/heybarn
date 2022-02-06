@@ -26,6 +26,7 @@ const EditListingPricingPanel = props => {
     panelUpdated,
     updateInProgress,
     errors,
+    backButton,
   } = props;
 
   const classes = classNames(rootClassName || css.root, className);
@@ -55,6 +56,7 @@ const EditListingPricingPanel = props => {
       updated={panelUpdated}
       updateInProgress={updateInProgress}
       fetchErrors={errors}
+      backButton={backButton}
     />
   ) : (
     <div className={css.priceCurrencyInvalid}>

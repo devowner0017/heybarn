@@ -493,12 +493,6 @@ export class ListingPageComponent extends Component {
                 isOwnListing={isOwnListing}
                 listingUnderEnquiry={listingUnderEnquiry}
                 currentUserInTransaction={currentUserInTransaction}
-                editParams={{
-                  id: listingId.uuid,
-                  slug: listingSlug,
-                  type: listingType,
-                  tab: listingTab,
-                }}
                 imageCarouselOpen={this.state.imageCarouselOpen}
                 onImageCarouselClose={() => this.setState({ imageCarouselOpen: false })}
                 handleViewPhotosClick={handleViewPhotosClick}
@@ -569,6 +563,12 @@ export class ListingPageComponent extends Component {
                   onHideListing={onHideListing}
                   onDeleteListing={onDeleteListing}
                   requestShowListing={requestShowListing}
+                  editParams={{
+                    id: listingId.uuid,
+                    slug: listingSlug,
+                    type: listingType,
+                    tab: listingTab,
+                  }}
                 />
               </div>
             </div>

@@ -4,25 +4,25 @@ import { compose } from 'redux';
 import { FormattedMessage, injectIntl, intlShape } from '../../util/reactIntl';
 import { Form as FinalForm, FormSpy } from 'react-final-form';
 import classNames from 'classnames';
-import { isTransactionsTransitionAlreadyReviewed } from '../../util/errors';
 import { required } from '../../util/validators';
 import arrayMutators from 'final-form-arrays';
 import * as validators from '../../util/validators';
 import { types as sdkTypes } from '../../util/sdkLoader';
 import {
-  FieldReviewRating,
   Form,
   PrimaryButton,
   FieldTextInput,
   FieldNumberInput,
   FieldDateInput,
   FieldCheckbox,
-  FieldDateRangeInput,
   FieldCheckboxGroup,
   FieldCurrencyInput,
+  OutsideClickHandler,
 } from '../../components';
 import config from '../../config';
-import { LINE_ITEM_NIGHT, LINE_ITEM_DAY, propTypes } from '../../util/types';
+import { LINE_ITEM_NIGHT, LINE_ITEM_DAY } from '../../util/types';
+import { TransitionGroup } from 'react-transition-group';
+import { Collapse } from '@mui/material';
 
 import css from './RentalAgreementSetupForm.module.css';
 import moment from 'moment';
@@ -47,9 +47,6 @@ const RentalAgreementSetupFormComponent = props => (
         form,
         formId,
         invalid,
-        reviewSent,
-        sendReviewError,
-        sendReviewInProgress,
         values,
         listing,
         filterConfig,
@@ -62,22 +59,14 @@ const RentalAgreementSetupFormComponent = props => (
         ongoingContract: [ongoingContract] = [],
       } = values;
       const [focusedInput, setFocusedInput] = useState();
+      const [confirmAgreementOpen, setConfirmAgreementOpen] = useState(false);
       // Function that can be passed to nested components
       // so that they can notify this component when the
       // focused input changes.
       const onFocusedInputChange = focusedInput => {
         setFocusedInput(focusedInput);
       };
-      const errorMessage = isTransactionsTransitionAlreadyReviewed(sendReviewError) ? (
-        <p className={css.error}>
-          <FormattedMessage id="RentalAgreementSetupForm.reviewSubmitAlreadySent" />
-        </p>
-      ) : (
-        <p className={css.error}>
-          <FormattedMessage id="RentalAgreementSetupForm.reviewSubmitFailed" />
-        </p>
-      );
-      const errorArea = sendReviewError ? errorMessage : <p className={css.errorPlaceholder} />;
+      const errorArea = false ? errorMessage : <p className={css.errorPlaceholder} />;
 
       const unitType = config.bookingUnitType;
       const isNightly = unitType === LINE_ITEM_NIGHT;
@@ -126,12 +115,12 @@ const RentalAgreementSetupFormComponent = props => (
       });
       const emailRequired = validators.required(emailRequiredMessage);
       const emailValid = validators.emailFormatValid(emailInvalidMessage);
-      const reviewSubmitMessage = intl.formatMessage({
+      const submitMessage = intl.formatMessage({
         id: 'RentalAgreementSetupForm.submit',
       });
 
       const classes = classNames(rootClassName || css.root, className);
-      const submitInProgress = sendReviewInProgress;
+      const submitInProgress = false;
       const submitDisabled = invalid || disabled || submitInProgress;
 
       // When the values of the form are updated we need to fetch
@@ -139,12 +128,7 @@ const RentalAgreementSetupFormComponent = props => (
       // In case you add more fields to the form, make sure you add
       // the values here to the bookingData object.
       const handleOnChange = formValues => {
-        const {
-          ongoingContract: [ongoingContract] = [],
-          lengthOfContract,
-          startDate,
-          endDate,
-        } = formValues.values;
+        const { lengthOfContract, startDate, endDate } = formValues.values;
 
         if (!startDate) {
           return null;
@@ -155,6 +139,10 @@ const RentalAgreementSetupFormComponent = props => (
           form.change(`endDate`, endDateMaybe);
         }
       };
+
+      const toggleConfirmAgreement = val => {
+        setConfirmAgreementOpen(old => (val === undefined ? !old : val));
+      };
       useEffect(() => {
         if (!!values?.ongoingContract?.[0]) {
           form.change(`lengthOfContract`, null);
@@ -163,7 +151,34 @@ const RentalAgreementSetupFormComponent = props => (
       }, [values.ongoingContract]);
 
       const groundRulesOptions = findOptionsForSelectFilter(`groundRules`, filterConfig);
-
+      const breakdown = (
+        <>
+          {listing && (
+            <div className={css.detailRow}>
+              <p>Rent</p>
+              <p>{!!values?.price && formatMoney(intl, values.price)}</p>
+            </div>
+          )}
+          {startDate && (
+            <div className={css.detailRow}>
+              <p>Frequency</p>
+              <p>Weekly</p>
+            </div>
+          )}
+          {startDate && (
+            <>
+              <div className={css.detailRow}>
+                <p>Start Date</p>
+                <p>{moment(startDate.date).format('ddd, DD MMM YYYY')}</p>
+              </div>
+              <div className={css.detailRow}>
+                <p>End Date</p>
+                <p>{endDate ? moment(endDate).format('ddd, DD MMM YYYY') : 'Ongoing'}</p>
+              </div>
+            </>
+          )}
+        </>
+      );
       return (
         <Form className={classes} onSubmit={handleSubmit}>
           <h2 className={css.title}>Agreed rental price</h2>
@@ -311,39 +326,48 @@ const RentalAgreementSetupFormComponent = props => (
             type="textarea"
           />
           {errorArea}
-          {listing && (
-            <div className={css.detailRow}>
-              <p>Rent</p>
-              <p>{!!values?.price && formatMoney(intl, values.price)}</p>
-            </div>
+          <TransitionGroup>
+            {!confirmAgreementOpen && (
+              <Collapse id={'breakdown'} timeout={1000}>
+                {breakdown}
+              </Collapse>
+            )}
+          </TransitionGroup>
+          <TransitionGroup>
+            {confirmAgreementOpen && (
+              <Collapse timeout={1000} id={'confirm'}>
+                <OutsideClickHandler onOutsideClick={_ => toggleConfirmAgreement(false)}>
+                  <h2>Please confirm the details</h2>
+                  <p>
+                    Before sending the agreement, please confirm that the price and dates are all
+                    correct.
+                  </p>
+                  {breakdown}
+                  <PrimaryButton
+                    className={css.submitButton}
+                    type="submit"
+                    inProgress={submitInProgress}
+                    disabled={submitDisabled}
+                  >
+                    FINAL CONFIRM
+                    {submitMessage}
+                  </PrimaryButton>
+                </OutsideClickHandler>
+              </Collapse>
+            )}
+          </TransitionGroup>
+          {!confirmAgreementOpen && (
+            <PrimaryButton
+              className={css.submitButton}
+              type="submit"
+              inProgress={submitInProgress}
+              disabled={submitDisabled}
+              onClick={toggleConfirmAgreement}
+            >
+              INIT
+              {submitMessage}
+            </PrimaryButton>
           )}
-          {startDate && (
-            <div className={css.detailRow}>
-              <p>Frequency</p>
-              <p>Weekly</p>
-            </div>
-          )}
-          {startDate && (
-            <div className={css.detailRow}>
-              <p>Start Date</p>
-              <p>{moment(startDate.date).format('ddd, DD MMM YYYY')}</p>
-            </div>
-          )}
-          {endDate && (
-            <div className={css.detailRow}>
-              <p>End Date</p>
-              <p>{moment(endDate).format('ddd, DD MMM YYYY')}</p>
-            </div>
-          )}
-          <PrimaryButton
-            className={css.submitButton}
-            type="submit"
-            inProgress={submitInProgress}
-            disabled={submitDisabled}
-            ready={reviewSent}
-          >
-            {reviewSubmitMessage}
-          </PrimaryButton>
         </Form>
       );
     }}
@@ -353,7 +377,6 @@ const RentalAgreementSetupFormComponent = props => (
 RentalAgreementSetupFormComponent.defaultProps = {
   className: null,
   rootClassName: null,
-  sendReviewError: null,
   filterConfig: config.custom.filters,
 };
 
@@ -364,9 +387,6 @@ RentalAgreementSetupFormComponent.propTypes = {
   rootClassName: string,
   intl: intlShape.isRequired,
   onSubmit: func.isRequired,
-  reviewSent: bool.isRequired,
-  sendReviewError: propTypes.error,
-  sendReviewInProgress: bool.isRequired,
 };
 
 const RentalAgreementSetupForm = compose(injectIntl)(RentalAgreementSetupFormComponent);

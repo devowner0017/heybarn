@@ -518,11 +518,14 @@ export const TransactionInitPageComponent = props => {
         <option disabled value="" selected>
           Select {listingType === 'listing' ? 'An Advert' : 'A Listing'}
         </option>
-        {listings?.map(l => (
-          <option key={l.id.uuid} value={l.id.uuid}>
-            {l.attributes.title}
-          </option>
-        ))}
+        {listings?.map(l => {
+          if (l.attributes.state !== 'published') return null;
+          return (
+            <option key={l.id.uuid} value={l.id.uuid}>
+              {l.attributes.title}
+            </option>
+          );
+        })}
       </select>
     </>
   );
@@ -588,36 +591,36 @@ export const TransactionInitPageComponent = props => {
   // that currently handles showing everything inside layout's main view area.
   const panel = isDataAvailable ? (
     <>
-    <TransactionInitPanel
-      pageLocation={location}
-      history={history}
-      className={detailsClassName}
-      currentUser={currentUser}
-      currentListing={currentListing}
-      fetchMessagesInProgress={fetchMessagesInProgress}
-      totalMessagePages={totalMessagePages}
-      oldestMessagePageFetched={oldestMessagePageFetched}
-      messages={messages}
-      initialMessageFailed={initialMessageFailed}
-      savePaymentMethodFailed={savePaymentMethodFailed}
-      fetchMessagesError={fetchMessagesError}
-      onManageDisableScrolling={onManageDisableScrolling}
-      transactionRole={transactionRole}
-      nextTransitions={processTransitions}
-      paymentForm={paymentForm}
-      showCreateListingPopup={showCreateListingPopup}
-      setShowCreateListingPopup={setShowCreateListingPopup}
-      selectListing={selectListing}
-      selectedListing={selectedListing}
-      couponCodeComp={couponCodeComp}
-      validCouponCode={validCouponCode}
-      listingType={listingType}
-      guest={guest}
-      host={host}
-      contactingAs={contactingAs}
-    />
-    <span ref={scrollRef}></span>
-</>
+      <TransactionInitPanel
+        pageLocation={location}
+        history={history}
+        className={detailsClassName}
+        currentUser={currentUser}
+        currentListing={currentListing}
+        fetchMessagesInProgress={fetchMessagesInProgress}
+        totalMessagePages={totalMessagePages}
+        oldestMessagePageFetched={oldestMessagePageFetched}
+        messages={messages}
+        initialMessageFailed={initialMessageFailed}
+        savePaymentMethodFailed={savePaymentMethodFailed}
+        fetchMessagesError={fetchMessagesError}
+        onManageDisableScrolling={onManageDisableScrolling}
+        transactionRole={transactionRole}
+        nextTransitions={processTransitions}
+        paymentForm={paymentForm}
+        showCreateListingPopup={showCreateListingPopup}
+        setShowCreateListingPopup={setShowCreateListingPopup}
+        selectListing={selectListing}
+        selectedListing={selectedListing}
+        couponCodeComp={couponCodeComp}
+        validCouponCode={validCouponCode}
+        listingType={listingType}
+        guest={guest}
+        host={host}
+        contactingAs={contactingAs}
+      />
+      <span ref={scrollRef}></span>
+    </>
   ) : (
     loadingOrFailedFetching
   );

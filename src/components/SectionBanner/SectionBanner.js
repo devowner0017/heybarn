@@ -13,10 +13,8 @@ const SectionBanner = props => {
 
   return (
     <div className={classes}>
-      <div className={css.borderBox}>
         <h2 className={css.bannerHeader}>{header}</h2>
         <p className={css.bannerContent}>{content}</p>
-      </div>
     </div>
   );
 };

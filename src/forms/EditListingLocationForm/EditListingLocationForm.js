@@ -10,6 +10,7 @@ import {
   autocompleteSearchRequired,
   autocompletePlaceSelected,
   composeValidators,
+  required,
 } from '../../util/validators';
 import { Form, LocationAutocompleteInputField, Button, FieldSelect } from '../../components';
 
@@ -119,26 +120,13 @@ export const EditListingLocationFormComponent = props => (
               <h2 className={css.title}>Where is this listing located?</h2>
             )}
 
-            {/* <FieldSelect
-              className={css.category}
-              name={'locIsland'}
-              id={'locIsland'}
-              label={'Island'}
-            >
-              <option disabled value="">
-                {'Select Island'}
-              </option>
-              {islands.map(c => (
-                <option key={c.key} value={c.key}>
-                  {c.label}
-                </option>
-              ))}
-            </FieldSelect> */}
             <FieldSelect
               className={css.category}
               name={'locRegion'}
               id={'locRegion'}
+              autoFocus
               label={'Region'}
+              validate={required('Required')}
             >
               <option disabled value="">
                 {'Select Region'}
@@ -154,6 +142,7 @@ export const EditListingLocationFormComponent = props => (
               name={'locDistrict'}
               id={'locDistrict'}
               label={'District'}
+              validate={required('Required')}
             >
               <option disabled value="">
                 {'Select District'}
@@ -172,7 +161,6 @@ export const EditListingLocationFormComponent = props => (
             iconClassName={css.locationAutocompleteInputIcon}
             predictionsClassName={css.predictionsRoot}
             validClassName={css.validLocation}
-            autoFocus
             name="location"
             label={titleRequiredMessage}
             placeholder={addressPlaceholderMessage}
@@ -198,6 +186,7 @@ export const EditListingLocationFormComponent = props => (
           >
             {saveActionMsg}
           </Button>
+          {props.backButton}
         </Form>
       );
     }}

@@ -122,7 +122,7 @@ export const filters = [
     type: 'SelectSingleFilter',
     group: 'primary',
     queryParamNames: ['pub_listingType'],
-    listingType: ['listing', 'advert'],
+    listingType: [],
     config: {
       // "key" is the option you see in Flex Console.
       // "label" is set here for the UI only.
@@ -325,7 +325,7 @@ export const filters = [
       options: [
         {
           key: 'anytimeUnrestricted',
-          label: "All the time (I'll pretty much live there!)",
+          label: "All the time",
         },
         {
           key: 'anytimeArranged',
