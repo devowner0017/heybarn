@@ -253,7 +253,7 @@ const ContactPanel = props => {
               rootClassName={css.actionButton}
               onClick={isHidden ? handleMakePublic : handleMakePrivate}
             >
-              {isHidden ? `Publish ${listingType}` : "Save but don't publish"} It?
+              {isHidden ? `Publish ${listingType}` : "Save but don't publish"}
             </Button>
             <SecondaryButton
               rootClassName={css.deleteButton}
