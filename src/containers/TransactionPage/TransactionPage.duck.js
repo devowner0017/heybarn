@@ -10,8 +10,6 @@ import {
   getReview1Transition,
   getReview2Transition,
   txIsInFirstReviewBy,
-  TRANSITION_ACCEPT,
-  TRANSITION_DECLINE,
   TRANSITION_HOST_APPROVED_BY_RENTER,
   TRANSITION_HOST_ACCEPTS_COMMUNICATION,
   TRANSITION_HOST_DECLINES_COMMUNICATION,
@@ -640,9 +638,6 @@ export const completeSale = data => (dispatch, getState, sdk) => {
 export const createTransaction = orderParams => (dispatch, getState, sdk) => {
   dispatch(initiateOrderRequest());
 
-  // TODO UPDATE THIS WHEN WE BUILD THE OTHER SIDE OF THE MARKETPLACE
-  const isRequestFromHost = orderParams.protectedData.contactingAs === 'host';
-
   const transition = TRANSITION_HOST_APPROVED_BY_RENTER;
 
   const bodyParams = {
@@ -1101,53 +1096,6 @@ export const signRentalAgreement = data => (dispatch, getState, sdk) => {
     });
 };
 
-export const acceptSale = id => (dispatch, getState, sdk) => {
-  if (acceptOrDeclineInProgress(getState())) {
-    return Promise.reject(new Error('Accept or decline already in progress'));
-  }
-  dispatch(acceptSaleRequest());
-
-  return sdk.transactions
-    .transition({ id, transition: TRANSITION_ACCEPT, params: {} }, { expand: true })
-    .then(response => {
-      dispatch(addMarketplaceEntities(response));
-      dispatch(acceptSaleSuccess());
-      dispatch(fetchCurrentUserNotifications());
-      return response;
-    })
-    .catch(e => {
-      dispatch(acceptSaleError(storableError(e)));
-      log.error(e, 'accept-sale-failed', {
-        txId: id,
-        transition: TRANSITION_ACCEPT,
-      });
-      throw e;
-    });
-};
-
-export const declineSale = id => (dispatch, getState, sdk) => {
-  if (acceptOrDeclineInProgress(getState())) {
-    return Promise.reject(new Error('Accept or decline already in progress'));
-  }
-  dispatch(declineSaleRequest());
-
-  return sdk.transactions
-    .transition({ id, transition: TRANSITION_DECLINE, params: {} }, { expand: true })
-    .then(response => {
-      dispatch(addMarketplaceEntities(response));
-      dispatch(declineSaleSuccess());
-      dispatch(fetchCurrentUserNotifications());
-      return response;
-    })
-    .catch(e => {
-      dispatch(declineSaleError(storableError(e)));
-      log.error(e, 'reject-sale-failed', {
-        txId: id,
-        transition: TRANSITION_DECLINE,
-      });
-      throw e;
-    });
-};
 
 const fetchMessages = (txId, page) => (dispatch, getState, sdk) => {
   const paging = { page, per_page: MESSAGES_PAGE_SIZE };

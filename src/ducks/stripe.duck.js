@@ -6,6 +6,7 @@ import {
 } from '../util/api';
 import { storableError } from '../util/errors';
 import * as log from '../util/log';
+import { TRANSITION_HOST_CANCELS_AFTER_CONTRACT_START, TRANSITION_RENTER_CANCELS_AFTER_CONTRACT_START } from '../util/transaction'
 
 // ================ Action types ================ //
 
@@ -430,7 +431,7 @@ const  { id,  actor, } = params
 
       const bodyParams = {
         id,
-        transition:actor === "provider" ?  TRANSITION_HOST_CANCELS_AFTER_CONTRACT_START : TRANSITION_HOST_CANCELS_AFTER_CONTRACT_START  ,
+        transition:actor === "provider" ?  TRANSITION_HOST_CANCELS_AFTER_CONTRACT_START : TRANSITION_RENTER_CANCELS_AFTER_CONTRACT_START  ,
         params: {},
       };
       const queryParams = { expand: true };

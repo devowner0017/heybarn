@@ -31,6 +31,8 @@ export const TRANSITION_HOST_CANCELS_AFTER_REQUEST = 'transition/host-cancels-af
 export const TRANSITION_RENTER_CANCELS_AFTER_REQUEST = 'transition/renter-cancels-after-request';
 export const TRANSITION_OPERATOR_CANCELS_DURING_RAD = 'transition/operator-cancels-during-rad';
 export const TRANSITION_OPERATOR_CANCELS_AFTER_REQUEST = 'transition/operator-cancels-during-rad';
+export const TRANSITION_HOST_CANCELS_AFTER_CONTRACT_START = 'transition/host-cancels-after-contract-start';
+export const TRANSITION_RENTER_CANCELS_AFTER_CONTRACT_START = 'transition/renter-cancels-after-contract-start';
 
 export const TRANSITION_RENTER_SIGNS_RENTAL_AGREEMENT = 'transition/renter-signs-rental-agreement';
 export const TRANSITION_HOST_CANCELS_AFTER_AGREEMENT_SENT =
