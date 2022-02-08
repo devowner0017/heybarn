@@ -92,7 +92,7 @@ module.exports = (reportUri, enforceSsl, reportOnly) => {
   // https://content-security-policy.com/
 
   // Example: extend default img directive with custom domain
-  const { scriptSrc = [self], frameSrc = [self], connectSrc = [self] } = defaultDirectives;
+  const { scriptSrc = [self], frameSrc = [self], connectSrc = [self] ,fontSrc = [self],styleSrc = [self] } = defaultDirectives;
   const newScriptSrc = scriptSrc.concat('  *.tawk.to *.hotjar.com');
   const newFontSrc = fontSrc.concat( '*.cloudflare.com');
   const newFrameSrc = frameSrc.concat(' *.tawk.to *.hotjar.com');
