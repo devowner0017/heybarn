@@ -329,9 +329,9 @@ textarea {
 
 .fontsLoaded {
   & body {
-    font-family: 'apex_serifbook', 'Zilla Slab', Helvetica, Arial, sans-serif;
+    font-family: "Montserrat", Helvetica, sans-serif;
   }
   & button {
-    font-family: 'apex_serifbook', 'Zilla Slab', Helvetica, Arial, sans-serif;
+    font-family: "Montserrat", Helvetica, sans-serif;
   }
 }

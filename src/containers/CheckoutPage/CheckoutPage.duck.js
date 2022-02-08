@@ -1,6 +1,6 @@
 import pick from 'lodash/pick';
 import config from '../../config';
-import { initiatePrivileged, transitionPrivileged, updateTransactionMetadata } from '../../util/api';
+import { initiatePrivileged, transitionPrivileged, updateListingState, updateTransactionMetadata } from '../../util/api';
 import { denormalisedResponseEntities } from '../../util/data';
 import { storableError } from '../../util/errors';
 import { createRentalPayments } from '../../util/api';
@@ -13,6 +13,7 @@ import {
 import * as log from '../../util/log';
 import { fetchCurrentUserHasOrdersSuccess, fetchCurrentUser } from '../../ducks/user.duck';
 import { LISTING_UNDER_OFFER } from '../../util/types'
+import { getPropByName } from '../../util/devHelpers'
 
 // ================ Action types ================ //
 
@@ -295,12 +296,17 @@ export const confirmPayment = orderParams => (dispatch, getState, sdk) => {
       const order = response.data.data;
       dispatch(confirmPaymentSuccess(order.id));
       const transaction = denormalisedResponseEntities(response)?.[0];
-      const listing = getPropByName(transaction, 'selectedListingId');
+      const listing = getPropByName (transaction, 'selectedListingId');
       const selectedListingId = getPropByName(transaction, 'selectedListingId');
+      updateListingState({
+        listingId: listing.id.uuid,
+        listingState: LISTING_UNDER_CONTRACT,
+        transactionId: order.id.uuid,
+      });
       updateListingState({
         listingId: selectedListingId,
         listingState: LISTING_UNDER_CONTRACT,
-        transactionId: '',
+        transactionId: order.id.uuid,
       });
       return order;
     })

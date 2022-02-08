@@ -8,7 +8,7 @@ module.exports = async (req, res) => {
   });
   const { listingId, customerId, providerId } = req.body;
   const customerTransactions = await integrationSdk.transactions
-    .query({ customerId, providerId }, { expand: true, include: ['listing'] })
+    .query({ customerId, providerId, listingId: listingId }, { expand: true, include: ['listing'] })
     .then(transactionResponse => {
       return transactionResponse;
     })
@@ -17,7 +17,7 @@ module.exports = async (req, res) => {
     });
   const providerTransactions = await integrationSdk.transactions
     .query(
-      { customerId: providerId, providerId: customerId },
+      { customerId: providerId, providerId: customerId, listingId: listingId },
       { expand: true, include: ['listing'] }
     )
     .then(transactionResponse => {

@@ -227,10 +227,13 @@ export class TransactionInitPanelComponent extends Component {
 
     const { publicData, geolocation } = currentListing.attributes;
     const location = publicData && publicData.location ? publicData.location : {};
+
     const listingTitle = currentListing.attributes.deleted
       ? deletedListingTitle
       : currentListing.attributes.title;
     const selectedListingTitle = selectedListing?.attributes.title;
+    const selectedListingPriceRaw = selectedListing?.attributes.price;
+    const selectedListingPrice = selectedListingPriceRaw ? `${formatMoney(intl, selectedListingPriceRaw)}` : '';
 
     const unitType = config.bookingUnitType;
     const isNightly = unitType === LINE_ITEM_NIGHT;
@@ -245,8 +248,8 @@ export class TransactionInitPanelComponent extends Component {
       ? 'TransactionInitPanel.perDay'
       : 'TransactionInitPanel.perUnit';
 
-    const price = currentListing.attributes.price;
-    const bookingSubTitle = price ? `${formatMoney(intl, price)}` : '';
+    const priceRaw = currentListing.attributes.price;
+    const price = priceRaw ? `${formatMoney(intl, priceRaw)}` : '';
 
     const firstImage =
       currentListing.images && currentListing.images.length > 0 ? currentListing.images[0] : null;
@@ -309,7 +312,7 @@ export class TransactionInitPanelComponent extends Component {
               ) : null}
 
               {createAListingButton}
-              <div style={{textAlign: 'center'}}>Or</div>
+              <div style={{ textAlign: 'center' }}>Or</div>
               {selectListing}
               {paymentForm}
               {/* {couponCodeComp} */}
@@ -329,9 +332,10 @@ export class TransactionInitPanelComponent extends Component {
                 showDetailCardHeadings={stateData.showDetailCardHeadings}
                 listingTitle={listingTitle}
                 listing={currentListing}
-                subTitle={bookingSubTitle}
+                price={!listingType === 'advert' && price}
                 location={pageLocation}
                 geolocation={geolocation}
+                showPrice={!listingType === 'advert'}
               />
             </div>
             {selectedListing && (
@@ -346,6 +350,11 @@ export class TransactionInitPanelComponent extends Component {
                 <DetailCardHeadingsMaybe
                   showDetailCardHeadings={stateData.showDetailCardHeadings}
                   listingTitle={selectedListingTitle}
+                  listing={currentListing}
+                  price={listingType === 'advert' && selectedListingPrice}
+                  location={pageLocation}
+                  geolocation={geolocation}
+                  showPrice={!listingType === 'advert'}
                 />
               </div>
             )}

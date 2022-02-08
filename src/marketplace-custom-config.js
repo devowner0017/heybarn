@@ -134,7 +134,24 @@ export const filters = [
       ],
     },
   },
-
+  {
+    id: 'listingStatus',
+    label: 'Status',
+    type: 'SelectSingleFilter',
+    group: 'primary',
+    queryParamNames: ['pub_listingState'],
+    listingType: ['listing', 'advert'],
+    config: {
+      // "key" is the option you see in Flex Console.
+      // "label" is set here for the UI only.
+      // Note: label is not added through the translation files
+      // to make filter customizations a bit easier.
+      options: [
+        { key: 'live', label: 'Available Now Only' },
+        { key: null, label: 'All' },
+      ],
+    },
+  },
   {
     id: 'sizeOfSpace',
     label: 'Size',

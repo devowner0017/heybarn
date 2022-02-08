@@ -587,7 +587,6 @@ export class TransactionPanelComponent extends Component {
           showDetailCardHeadings: isCustomer,
           showAddress: isCustomer,
           allowMessages: true,
-          showCompleteButtons: true,
           showSubscriptionDetails: true,
           showSubscriptionStats: true,
           showSubscriptionActions: false,
@@ -598,7 +597,6 @@ export class TransactionPanelComponent extends Component {
           showDetailCardHeadings: isCustomer,
           showAddress: isCustomer,
           allowMessages: true,
-          showCompleteButtons: !isCustomer,
           stripeActionProps: {
             cancelAgreement: _ =>
               onCancelStripeAgreement({
@@ -621,7 +619,6 @@ export class TransactionPanelComponent extends Component {
           showDetailCardHeadings: isCustomer,
           showAddress: isCustomer,
           allowMessages: true,
-          showCompleteButtons: !isCustomer,
           stripeActionProps: {
             cancelAgreement: _ =>
               onCancelStripeAgreement({
@@ -831,26 +828,6 @@ export class TransactionPanelComponent extends Component {
         {...stateData.stripeActionProps}
       />
     );
-    const completeButtons = (
-      <>
-        <ActionButtonsMaybe
-          showButtons={stateData.showCompleteButtons}
-          title={'DEV PURPOSES ONLY'}
-          affirmativeInProgress={signRentalAgreementInProgress}
-          negativeInProgress={null}
-          affirmativeError={signRentalAgreementError}
-          negativeError={null}
-          affirmativeAction={() =>
-            onCompleteSale({
-              txId: currentTransaction.id,
-            })
-          }
-          negativeAction={() => null}
-          affirmativeText={'Complete Sale'}
-          hideNegative={true}
-        />
-      </>
-    );
     const paymentFormButtons = (
       <ActionButtonsMaybe
         showButtons={stateData.showPaymentFormButtons}
@@ -980,9 +957,6 @@ export class TransactionPanelComponent extends Component {
             {stateData.showSubscriptionActions ? (
               <div className={css.mobileActionButtons}>{stripeActionButtons}</div>
             ) : null}
-            {stateData.showCompleteButtons ? (
-              <div className={css.mobileActionButtons}>{completeButtons}</div>
-            ) : null}
           </div>
 
           <div className={css.asideDesktop}>
@@ -1034,9 +1008,6 @@ export class TransactionPanelComponent extends Component {
               ) : null}
               {stateData.showSubscriptionActions ? (
                 <div className={css.desktopActionButtons}>{stripeActionButtons}</div>
-              ) : null}
-              {stateData.showCompleteButtons ? (
-                <div className={css.desktopActionButtons}>{completeButtons}</div>
               ) : null}
             </div>
             {ensuredRelated && (

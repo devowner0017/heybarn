@@ -64,6 +64,7 @@ export const LandingPageComponent = props => {
         </LayoutWrapperTopbar>
         <LayoutWrapperMain>
           <div className={css.heroContainer}>
+
             <SectionHero className={css.hero} history={history} location={location} />
           </div>
           <ul className={css.sections}>
@@ -93,7 +94,7 @@ export const LandingPageComponent = props => {
               <li className={css.section}>
                 <div className={classNames(css.sectionContent)}>
                   <SectionRecommendation
-                    listings={pageListings}
+                    listings={pageAdverts}
                     heading={'Find a new exciting idea for your property'}
                     reversed
                     linkName={'NewAdvertPage'}

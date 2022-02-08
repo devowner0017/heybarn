@@ -9,11 +9,12 @@ const DetailCardHeadingsMaybe = props => {
   const {
     showDetailCardHeadings,
     listingTitle,
-    subTitle,
+    price,
     location,
     geolocation,
     showAddress,
     listing,
+    showPrice
   } = props;
   console.log('🚀 | file: DetailCardHeadingsMaybe.js | line 18 | listing', listing);
   const publicData = getPropByName(listing, 'publicData');
@@ -29,12 +30,12 @@ const DetailCardHeadingsMaybe = props => {
           <p>{sizeOfSpace}</p>
         </div>
       )}
-      {subTitle && (
+      {price && (
         <>
           <hr />
           <div className={css.detailRow}>
             <p>Weekly price</p>
-            <p className={css.detailCardSubtitle}>{subTitle}</p>
+            <p className={css.detailCardSubtitle}>{price}</p>
           </div>
         </>
       )}

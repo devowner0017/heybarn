@@ -189,10 +189,12 @@ export const setActiveListing = listingId => ({
 });
 
 export const searchMapListings = searchParams => (dispatch, getState, sdk) => {
+console.log("🚀 | file: SearchPage.duck.js | line 192 | searchParams", searchParams);
   dispatch(searchMapListingsRequest(searchParams));
 
   const { perPage, ...rest } = searchParams;
   const params = {
+    pub_listingState: 'live',
     ...rest,
     per_page: perPage,
   };

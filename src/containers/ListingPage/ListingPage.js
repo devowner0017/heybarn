@@ -324,12 +324,12 @@ export class ListingPageComponent extends Component {
     const listingUnderEnquiry = listingState !== LISTING_LIVE;
 
     const richTitle = (
-      <span>
+      <>
         {richText(title, {
           longWordMinLength: MIN_LENGTH_FOR_LONG_WORDS_IN_TITLE,
           longWordClass: css.longWord,
         })}
-      </span>
+      </>
     );
 
     const bookingTitle = (

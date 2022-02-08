@@ -39,7 +39,17 @@
   }
 
   @media (--viewportLarge) {
-    padding-top: 60px;
+    padding: 60px 36px 0 36px;
+    max-width: 1528px;
+    border: 0;
+    border-radius: 0;
+
+
+  }
+
+  @media (--viewportXLarge) {
+    max-width: 1056px;
+    padding: 0;
   }
 }
 

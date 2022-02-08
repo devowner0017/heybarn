@@ -67,7 +67,7 @@
   /* ================ Body font ================ */
 
   --marketplaceBodyFontStyles: {
-    font-family: var(--fontFamily);
+    font-family: var(--fontFamilySecondary);
     font-weight: var(--fontWeightMedium);
     font-size: 14px;
     line-height: 24px;
@@ -152,10 +152,11 @@
   /* ================ H1, H2, H3, H4, H5 & H6 ================ */
 
   --marketplaceH1FontStyles: {
+    font-family: var(--fontFamily);
     font-weight: var(--fontWeightSemiBold);
     font-size: 24px;
     line-height: 30px;
-    letter-spacing: -0.5px;
+    letter-spacing: 0.5px;
     /* margin-top + n * line-height + margin-bottom => x * 6px */
     margin-top: 18px;
     margin-bottom: 18px;
@@ -164,7 +165,7 @@
       font-size: 40px;
       font-weight: var(--fontWeightSemiBold);
       line-height: 48px;
-      letter-spacing: -1px;
+      letter-spacing: 1px;
       /* margin-top + n * line-height + margin-bottom => x * 8px */
       margin-top: 24px;
       margin-bottom: 24px;
@@ -395,11 +396,11 @@
   /* ================ Buttons ================ */
 
   --marketplaceButtonFontStyles: {
-    font-family: 'apex_serifbook', 'Zilla Slab', Helvetica, Arial, sans-serif;
+    font-family: var(--fontFamilySecondary);
     font-weight: var(--fontWeightSemiBold);
     font-size: 16px;
     line-height: 24px;
-    letter-spacing: 0.2px;
+    letter-spacing: 0.6px;
 
     @media (--viewportMedium) {
       /* TODO: Make sure button text aligns with the baseline */
@@ -650,14 +651,14 @@
     font-weight: var(--fontWeightSemiBold);
     font-size: 30px;
     line-height: 36px;
-    letter-spacing: -0.5px;
+    letter-spacing: 0.5px;
     margin: 0;
     font-weight: var(--fontWeightBold);
 
     @media (--viewportMedium) {
       font-weight: var(--fontWeightSemiBold);
       line-height: 40px;
-      letter-spacing: -0.9px;
+      letter-spacing: 0.7px;
       margin: 0;
     }
   }
