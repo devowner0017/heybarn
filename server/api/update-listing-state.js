@@ -9,12 +9,12 @@ module.exports = (req, res) => {
     clientId: process.env.SHARETRIBE_INTEGRATION_CLIENT_ID,
     clientSecret: process.env.SHARETRIBE_INTEGRATION_CLIENT_SECRET,
   });
-  const { id, listingState , transactionId} = req.body;
+  const { listingId, listingState , transactionId} = req.body;
   console.log("🚀 | file: update-listing-state.js | line 13 | transactionId", transactionId);
   console.log("🚀 | file: update-listing-state.js | line 13 | listingState", listingState);
   console.log("🚀 | file: update-listing-state.js | line 13 | id", id);
   return integrationSdk.listings
-    .update({ id: new UUID(id), publicData: { listingState, transactionId } }, { expand: true })
+    .update({ id: new UUID(listingId), publicData: { listingState, transactionId } }, { expand: true })
     .then(listingResponse => {
       res
         .status(200)

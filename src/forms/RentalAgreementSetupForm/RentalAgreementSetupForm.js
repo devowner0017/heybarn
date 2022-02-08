@@ -154,8 +154,8 @@ const RentalAgreementSetupFormComponent = props => (
       const breakdown = (
         <>
           {listing && (
-            <div className={css.detailRow}>
-              <p>Rent</p>
+            <div className={classNames(css.detailRow, {[css.bold]:confirmAgreementOpen})}>
+            <p>Rent</p>
               <p>{!!values?.price && formatMoney(intl, values.price)}</p>
             </div>
           )}

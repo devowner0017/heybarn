@@ -65,6 +65,9 @@
     margin: 0;
   }
 }
+.bold{
+  font-weight: 700;
+}
 .fieldGroup {
   display: flex;
 justify-content: space-between;

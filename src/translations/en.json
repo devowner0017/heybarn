@@ -1066,6 +1066,7 @@
   "StripePaymentForm.submitConfirmPaymentInfo": "Confirm request",
   "StripePaymentForm.submitPaymentInfo": "Pay",
 
+  "StripePaymentFormPlatformFee.billingDetails": "Card holder's name",
   "StripePaymentFormPlatformFee.billingDetailsNameLabel": "Card holder's name",
   "StripePaymentFormPlatformFee.billingDetailsNamePlaceholder": "Enter your name…",
   "StripePaymentFormPlatformFee.confirmPaymentError": "Payment has been made but we were unable to confirm the booking. Please try to confirm the booking request again! If the booking is not confirmed in time, the payment will be fully refunded.",

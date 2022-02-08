@@ -93,13 +93,15 @@ module.exports = (reportUri, enforceSsl, reportOnly) => {
 
   // Example: extend default img directive with custom domain
   const { scriptSrc = [self], frameSrc = [self], connectSrc = [self] } = defaultDirectives;
-  const newScriptSrc = scriptSrc.concat('  *.tawk.to *.hotjar.com ');
-  const newFrameSrc = frameSrc.concat(' *.tawk.to *.hotjar.com ');
-  const newConnectSrc = connectSrc.concat(' *.tawk.to *.hotjar.com ');
+  const newScriptSrc = scriptSrc.concat('  *.tawk.to *.hotjar.com');
+  const newFontSrc = frameSrc.concat(' *.tawk.to *.hotjar.com', '*.cloudflare.com');
+  const newFrameSrc = frameSrc.concat(' *.tawk.to *.hotjar.com');
+  const newConnectSrc = connectSrc.concat(' *.tawk.to *.hotjar.com');
   const customDirectives = {
     // Example: Add custom directive override
     // imgSrc: exampleImgSrc,
     scriptSrc: newScriptSrc,
+    fontSrc: newFontSrc,
     frameSrc: newFrameSrc,
     connectSrc: newConnectSrc,
   };
