@@ -80,7 +80,7 @@ const EditListingDescriptionFormComponent = props => (
         id: `EditListingDescriptionForm.${listingType}_descriptionPlaceholder`,
       });
       const moreInfoText = (
-        <FormattedMessage id="EditListingDescriptionForm.moreInfo" values={{listingType}} />
+        <FormattedMessage id="EditListingDescriptionForm.moreInfo" values={{ listingType }} />
       );
       const maxLength60Message = maxLength(maxLengthMessage, TITLE_MAX_LENGTH);
       const descriptionRequiredMessage = intl.formatMessage({
@@ -182,7 +182,7 @@ const EditListingDescriptionFormComponent = props => (
           <CustomSelect
             id="preferredUse"
             name="preferredUse"
-            className={css.description}
+            className={css.idealUses}
             options={preferredUse}
             label={preferredUseLabel}
             isMulti={listingType === 'listing'}
@@ -194,7 +194,14 @@ const EditListingDescriptionFormComponent = props => (
                 : requiredObject(preferredUseRequiredMessage)
             }
           />
-<div className={css.moreInfoText}>{moreInfoText}</div>
+          <div className={css.useText}>
+            These ideal uses are helpful for hosts and renters to understand what frequency of
+            access can be expected. Storage space suggests infrequent visits; Creative space
+            suggests more infrequent and irregular visits, Work space suggests more frequent and
+            regular visits and Event space suggests a short period of use.
+          </div>
+
+          <div className={css.moreInfoText}>{moreInfoText}</div>
           <Button
             className={css.submitButton}
             type="submit"

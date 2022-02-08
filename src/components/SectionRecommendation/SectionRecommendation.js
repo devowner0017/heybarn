@@ -83,10 +83,11 @@ const SectionRecommendation = props => {
           {listings?.map((l, index) => {
             return (
               <Link
+              className={css.recoLink}
                 onMouseMove={() => setMouseMoved(true)}
                 onMouseDown={() => setMouseMoved(false)}
                 onMouseUp={() => handleClick(l.id.uuid)}
-                style={{ textDecoration: 'none', cursor: 'pointer' }}
+                sx={{ textDecoration: 'none', cursor: 'pointer', color: "#4a4a4a"}}
               >
                 <ListingCard
                   key={l.id.uuid}

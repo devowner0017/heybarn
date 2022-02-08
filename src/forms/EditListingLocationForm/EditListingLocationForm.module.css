@@ -94,9 +94,7 @@
   padding: 2rem 0;
 }
 .category{
-  &:first-child{
     padding-bottom: 1rem ;
-  }
 }
 .disclaimerText{
   @apply --marketplaceTinyFontStyles;

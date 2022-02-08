@@ -59,7 +59,7 @@ export const ListingCardComponent = props => {
   const id = currentListing.id.uuid;
   const { title = '', price, publicData } = currentListing.attributes;
   const { listingType, locRegion: region, preferredUse: need, listingState } = publicData || {};
-  console.log("🚀 | file: ListingCard.js | line 62 | publicData", publicData);
+  console.log('🚀 | file: ListingCard.js | line 62 | publicData', publicData);
   const slug = createSlug(title);
   const author = ensureUser(listing.author);
   const authorName = author.attributes.profile.displayName;
@@ -88,7 +88,7 @@ export const ListingCardComponent = props => {
     },
     [listingUnderEnquiry]
   );
-  console.log("🚀 | file: ListingCard.js | line 128 | listing", listing);
+  console.log('🚀 | file: ListingCard.js | line 128 | listing', listing);
   return (
     <ConditionalWrapper
       condition={useLink}
@@ -152,8 +152,8 @@ export const ListingCardComponent = props => {
               })}
             </div>
           </ConditionalWrapper>
-          {minInfo ? null : (
-            <div className={css.authorInfo}>
+          <div className={css.authorInfo}>
+            {minInfo ? (
               <FormattedMessage
                 id={`ListingCard.${listingType}By`}
                 values={{
@@ -162,22 +162,31 @@ export const ListingCardComponent = props => {
                   authorName,
                 }}
               />
-            </div>
-          )}
+            ) : (
+              <FormattedMessage
+                id={`ListingCard.${listingType}By`}
+                values={{
+                  need: capitalize(need),
+                  region: (region && capitalize(region)) || 'NZ',
+                  authorName,
+                }}
+              />
+            )}
+          </div>
         </div>
 
         {listingType === 'listing' && (
           <>
-            {!minInfo && (
-              <div className={css.price}>
-                <div className={css.priceValue} title={priceTitle}>
-                  {formattedPrice}
-                </div>
+            <div className={minInfo ? css.smallPrice : css.price}>
+              <div className={minInfo ?  css.smallPriceValue : css.priceValue} title={priceTitle}>
+                {formattedPrice}
+              </div>
+              {!minInfo && (
                 <div className={css.perUnit}>
                   <FormattedMessage id={unitTranslationKey} />
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </>
         )}
       </div>

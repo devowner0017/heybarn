@@ -39,6 +39,15 @@
 .category {
   composes: formMargins;
 }
+
+.idealUses{
+
+}
+.useText {
+  @apply --marketplaceSmallFontStyles;
+  composes: formMargins;
+
+}
 .moreInfoText {
   margin-top: auto;
   @apply --marketplaceSmallFontStyles;

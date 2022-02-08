@@ -37,4 +37,9 @@
 }
 .recommendationLink {
   @apply --marketplaceH4FontStyles;
+  text-decoration: none;
+}
+.recoLink {
+  text-decoration: none;
+  cursor: pointer;
 }

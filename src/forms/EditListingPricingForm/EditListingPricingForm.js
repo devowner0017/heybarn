@@ -11,6 +11,15 @@ import { formatMoney } from '../../util/currency';
 import { types as sdkTypes } from '../../util/sdkLoader';
 import { Button, Form, FieldCurrencyInput } from '../../components';
 import css from './EditListingPricingForm.module.css';
+import { Grow, Collapse } from '@mui/material';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+
 
 const { Money } = sdkTypes;
 
@@ -76,7 +85,66 @@ export const EditListingPricingFormComponent = props => (
       const submitInProgress = updateInProgress;
       const submitDisabled = invalid || disabled || submitInProgress;
       const { updateListingError, showListingsError } = fetchErrors || {};
-
+      const northIsland = [
+        { region: 'Auckland', price: 79 },
+        { region: 'Auckland', price: 79 },
+        { region: 'Hamilton', price: 62 },
+        { region: 'Manawatu-Wanganui', price: 54 },
+        { region: 'Taranaki', price: 38 },
+        { region: 'Taupo', price: 42 },
+        { region: 'Tauranga', price: 55 },
+        { region: 'Waikato', price: 66 },
+        { region: 'Wellington', price: 60 },
+      ];
+      const southIsland = [
+        { region: 'Canterbury', price: 60 },
+        { region: 'Otago', price: 45 },
+      ];
+      const table = (
+        <TableContainer component={Paper} sx={{maxWidth: 400}}>
+          <Table  size="small"aria-label="simple table">
+            <TableHead>
+              <TableRow sx={{ backgroundColor: '#c35827'}}>
+                <TableCell sx={{color: '#fff', fontWeight: 800 }} >Region</TableCell>
+                <TableCell sx={{color: '#fff', fontWeight: 800 }}  align="center">$ per week per bay of space</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow key={'NORTH_ISLAND'}>
+                <TableCell component="th" scope="row" colSpan={2} sx={{ fontWeight: 800 }}>
+                  NORTH ISLAND
+                </TableCell>
+              </TableRow>
+              {northIsland.map(r => {
+                return (
+                  <TableRow key={r.region}>
+                    <TableCell component="th" scope="row">
+                      {r.region}
+                    </TableCell>
+                    <TableCell align="center">${r.price}</TableCell>
+                  </TableRow>
+                );
+              })}
+              <TableRow key={'BREAK'}></TableRow>
+              <TableRow key={'SOUTH_ISLAND'}>
+                <TableCell component="th" scope="row" colSpan={2} sx={{ fontWeight: 800 }}>
+                  SOUTH ISLAND
+                </TableCell>
+              </TableRow>
+              {southIsland.map(r => {
+                return (
+                  <TableRow key={r.region}>
+                    <TableCell component="th" scope="row">
+                      {r.region}
+                    </TableCell>
+                    <TableCell align="center">${r.price}</TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      );
       return (
         <Form onSubmit={handleSubmit} className={classes}>
           {updateListingError ? (
@@ -99,7 +167,12 @@ export const EditListingPricingFormComponent = props => (
             currencyConfig={config.currencyConfig}
             validate={priceValidators}
           />
-
+<p>To help you select an appropriate rental rate, this table gives the average weekly
+rates being charged for purpose-built, self storage bays (6m x 3m) in February
+2022. Multiply this by the number of available bays you wish to rent and adjust it
+to reflect the quality of the space you think you are offering:
+</p>
+{table}
           <Button
             className={css.submitButton}
             type="submit"
