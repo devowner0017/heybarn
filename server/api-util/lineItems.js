@@ -32,7 +32,6 @@ exports.transactionLineItems = (listing, bookingData, newPrice) => {
   const unitPrice =
     (newPrice && new Money(newPrice, listing.attributes.price.currency)) ||
     listing.attributes.price;
-  const { startDate, endDate } = bookingData;
 
   /**
    * If you want to use pre-defined component and translations for printing the lineItems base price for booking,

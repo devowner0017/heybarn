@@ -15,7 +15,7 @@ const SectionHero = props => {
     <div className={classes}>
       <div className={css.heroContent}>
         <h1 className={css.heroMainTitle}>
-          <FormattedMessage id="SectionHero.title" />
+        Rent your space <span>|</span> Find your space
         </h1>
         <h2 className={css.heroSubTitle}>
           <FormattedMessage id="SectionHero.subTitle" />

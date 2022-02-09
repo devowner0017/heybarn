@@ -119,11 +119,13 @@ export const EditListingLocationFormComponent = props => (
             {listingType === 'listing' && (
               <h2 className={css.title}>Where is this listing located?</h2>
             )}
-          <p >
-              To help renters search for local listings, please select a region and district in
-              which your space is located. To help the maps work to locate the area the listing is
-              in, please provide an address. For those with security concerns, only enter its suburb
-              or nearest town.
+            <p>
+              To help {listingType === 'advert' ? 'hosts' : 'renters'} search for local{' '}
+              {listingType}s, please select a region and district in which{' '}
+              {listingType === 'advert' ? 'you are seeking space' : 'your space is located'}. To
+              help the maps work to locate the area the{' '}
+              {listingType === 'advert' ? 'hosts' : 'renters'} is in, please provide an address. For
+              those with security concerns, only enter a suburb or the nearest town.
             </p>
             <FieldSelect
               className={css.category}

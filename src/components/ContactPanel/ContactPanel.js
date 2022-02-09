@@ -225,8 +225,7 @@ const ContactPanel = props => {
               params={{ id: currentUserInTransaction.id.uuid }}
             >
               <Button rootClassName={css.bookButton}>
-                View Transaction
-                {/* <FormattedMessage id="ContactPanel.ctaButtonMessage" /> */}
+                Return to your decision
               </Button>
             </NamedLink>
           </>

@@ -23,7 +23,7 @@ const SectionHowItWorks = props => {
             <IconCamera />
             {/* <FormattedMessage id="SectionHowItWorks.part1Title" /> */}
           </h2>
-          <p>
+          <p className={css.stepText}>
             <FormattedMessage id="SectionHowItWorks.part1Text" />
           </p>
         </div>
@@ -33,7 +33,7 @@ const SectionHowItWorks = props => {
             <IconComputer />
             {/* <FormattedMessage id="SectionHowItWorks.part2Title" /> */}
           </h2>
-          <p>
+          <p className={css.stepText}>
             <FormattedMessage id="SectionHowItWorks.part2Text" />
           </p>
         </div>
@@ -43,7 +43,7 @@ const SectionHowItWorks = props => {
             <IconHandshake />
             {/* <FormattedMessage id="SectionHowItWorks.part3Title" /> */}
           </h2>
-          <p>
+          <p className={css.stepText}>
             <FormattedMessage id="SectionHowItWorks.part3Text" />
           </p>
         </div>

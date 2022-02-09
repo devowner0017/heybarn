@@ -75,7 +75,9 @@
     max-width: var(--SectionHero_desktopTitleMaxWidth);
   }
 }
-
+.heroMainTitle >span{
+  padding:  0 1.2rem;
+}
 .heroSubTitle {
   @apply --marketplaceH2FontStyles;
   letter-spacing: 0.3px;

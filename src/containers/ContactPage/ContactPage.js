@@ -27,7 +27,6 @@ const ContactPage = () => {
   );
 
   const clearState = () => {
-    console.log(11111);
     setState({ ...initialState });
   };
 
@@ -38,7 +37,6 @@ const ContactPage = () => {
   // prettier-ignore
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(name, email, message)
     setState(prevState => ({ ...prevState, messageSubmitting: true }));
 
 const data ={
@@ -62,10 +60,6 @@ const data ={
   })
 }
 
-  console.log(
-    '🚀 | file: ContactPage.js | line 91 | ContactPage | messageSubmitted',
-    messageSubmitted
-  );
 
   return (
     <StaticPage
