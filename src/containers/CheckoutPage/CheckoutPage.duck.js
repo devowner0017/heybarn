@@ -296,7 +296,7 @@ export const confirmPayment = orderParams => (dispatch, getState, sdk) => {
       const order = response.data.data;
       dispatch(confirmPaymentSuccess(order.id));
       const transaction = denormalisedResponseEntities(response)?.[0];
-      const listing = getPropByName (transaction, 'selectedListingId');
+      const listing = getPropByName (transaction, 'listing');
       const selectedListingId = getPropByName(transaction, 'selectedListingId');
       updateListingState({
         listingId: listing.id.uuid,

@@ -50,6 +50,8 @@ text-decoration: none;
   justify-content: space-between;
   padding: 8px 0 2px 0;
   position: relative;
+  width: 100%;
+
 }
 
 .avatar {
@@ -116,6 +118,7 @@ text-decoration: none;
 .mainInfo {
   display: flex;
   flex-direction: column;
+  margin-right: auto;
 }
 
 .title {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { bool, func, object, shape, string, oneOf } from 'prop-types';
 import { compose } from 'redux';
 import { Redirect, withRouter } from 'react-router-dom';
@@ -93,6 +93,9 @@ export const EditListingPageComponent = props => {
     stripeAccount,
     updateStripeAccountError,
   } = props;
+  const [locationState] = useState(location.state);
+
+  console.log('🚀 | file: EditListingPage.js | line 96 | props', props);
   const isAdvert = location?.pathname?.startsWith('/a/');
   const { id, type, returnURLType } = params;
   const isNewURI = type === LISTING_PAGE_PARAM_TYPE_NEW;
@@ -114,10 +117,11 @@ export const EditListingPageComponent = props => {
   const hasStripeOnboardingDataIfNeeded = returnURLType ? !!(currentUser && currentUser.id) : true;
   const showForm = hasStripeOnboardingDataIfNeeded && (isNewURI || currentListing.id);
 
+  console.log('🚀 | file: EditListingPage.js | line 122 | fromPage', location.state);
   if (shouldRedirect) {
     const isPendingApproval =
       currentListing && currentListingState === LISTING_STATE_PENDING_APPROVAL;
-    const { fromPage, ...rest } = location?.state || {};
+    const { fromPage, ...rest } = locationState || {};
     // If page has already listingId (after submit) and current listings exist
     // redirect to listing page
     const listingSlug = currentListing ? createSlug(currentListing.attributes.title) : null;
@@ -216,6 +220,7 @@ export const EditListingPageComponent = props => {
         <EditListingWizard
           id="EditListingWizard"
           location={location}
+          locationState={locationState}
           className={css.wizard}
           params={params}
           isAdvert={isAdvert}

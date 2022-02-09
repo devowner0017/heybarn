@@ -266,7 +266,6 @@ export class TransactionPanelComponent extends Component {
       subscription,
     } = this.props;
 
-    // THIS NEEDS TO BE A !! IN PRODUCTION
     const subscriptionHasDefaultPaymentMethod = !!subscription?.default_payment_method;
 
 
@@ -274,7 +273,7 @@ export class TransactionPanelComponent extends Component {
 
     const currentListing = ensureListing(currentTransaction.listing);
 
-    const showOtherListing = currentListing.author.id.uuid === currentUser.id.uuid;
+    const showOtherListing = currentListing?.author?.id?.uuid === currentUser?.id?.uuid;
     const otherListing = showOtherListing ? ensuredRelated : currentListing;
 
     const relatedTitle = ensuredRelated.attributes.title;
