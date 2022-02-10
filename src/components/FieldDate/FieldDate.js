@@ -67,10 +67,6 @@ class FieldDateComponent extends Component {
     };
     const classes = classNames(rootClassName || css.fieldRoot, className);
     const errorClasses = classNames({ [css.mobileMargins]: useMobileMargins });
-    console.log(
-      '🚀 | file: FieldDate.js | line 80 | FieldDateComponent | render | pickerClassname',
-      pickerClassname
-    );
 
     return (
       <div className={classes}>
@@ -81,7 +77,7 @@ class FieldDateComponent extends Component {
         ) : null}
         <DatePicker
           inputFormat="DD/MM/yyyy"
-          renderInput={params => <TextField {...params} className={pickerClassname} />}
+          renderInput={params => <TextField {...params} className={classNames(pickerClassname , css.rootPicker)} />}
           {...inputProps}
         />
         <ValidationError className={errorClasses} fieldMeta={meta} />
