@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOMServer from 'react-dom/server';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
 // react-dates needs to be initialized before using any react-dates component
 // https://github.com/airbnb/react-dates#initialize
@@ -17,6 +18,7 @@ import configureStore from './store';
 import routeConfiguration from './routeConfiguration';
 import Routes from './Routes';
 import config from './config';
+import DateAdapter from '@mui/lab/AdapterMoment';
 
 // Flex template application uses English translations as default.
 import defaultMessages from './translations/en.json';
@@ -88,15 +90,17 @@ export const ClientApp = props => {
   const { store } = props;
   setupLocale();
   return (
-    <IntlProvider locale={config.locale} messages={localeMessages} textComponent="span">
-      <Provider store={store}>
-        <HelmetProvider>
-          <BrowserRouter>
-            <Routes routes={routeConfiguration()} />
-          </BrowserRouter>
-        </HelmetProvider>
-      </Provider>
-    </IntlProvider>
+    <LocalizationProvider dateAdapter={DateAdapter}>
+      <IntlProvider locale={config.locale} messages={localeMessages} textComponent="span">
+        <Provider store={store}>
+          <HelmetProvider>
+            <BrowserRouter>
+              <Routes routes={routeConfiguration()} />
+            </BrowserRouter>
+          </HelmetProvider>
+        </Provider>
+      </IntlProvider>
+    </LocalizationProvider>
   );
 };
 

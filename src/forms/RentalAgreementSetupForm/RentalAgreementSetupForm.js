@@ -121,7 +121,7 @@ const RentalAgreementSetupFormComponent = props => (
 
       const classes = classNames(rootClassName || css.root, className);
       const submitInProgress = false;
-      const submitDisabled = invalid || disabled || submitInProgress;
+      const submitDisabled = invalid || disabled || submitInProgress || !values.startDate;
 
       // When the values of the form are updated we need to fetch
       // lineItems from FTW backend for the EstimatedTransactionMaybe
@@ -154,8 +154,8 @@ const RentalAgreementSetupFormComponent = props => (
       const breakdown = (
         <>
           {listing && (
-            <div className={classNames(css.detailRow, {[css.bold]:confirmAgreementOpen})}>
-            <p>Rent</p>
+            <div className={classNames(css.detailRow, { [css.bold]: confirmAgreementOpen })}>
+              <p>Rent</p>
               <p>{!!values?.price && formatMoney(intl, values.price)}</p>
             </div>
           )}
@@ -278,31 +278,12 @@ const RentalAgreementSetupFormComponent = props => (
               handleOnChange(values);
             }}
           />
-          <FieldDateInput
-            className={css.dateField}
-            label={'Start'}
+          <FieldDate
+            pickerClassname={css.dateField}
+            label={'Start Date'}
             name="startDate"
+            minDate={moment()}
             id={`startDate`}
-            unitType={'units'}
-            startDateId={`startDate`}
-            startDateLabel={'Start'}
-            startDatePlaceholderText={'StartPlace'}
-            endDateId={`endDate`}
-            endDateLabel={'EndLabel'}
-            endDatePlaceholderText={'endDatePlaceholderText'}
-            endDateReadOnly
-            focusedInput={focusedInput}
-            onFocusedInputChange={onFocusedInputChange}
-            format={identity}
-            // timeSlots={timeSlots}
-            disabled={!lengthOfContract && !ongoingContract}
-            customIsDayBlocked={date => {
-              return false;
-            }}
-            customIsDayOutsideRange={date => {
-              return false;
-            }}
-            validate={required('Required')}
           />
           <FieldTextInput
             className={css.field}

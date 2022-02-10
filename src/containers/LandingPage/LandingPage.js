@@ -72,9 +72,6 @@ export const LandingPageComponent = props => {
               <div className={css.bannerContent}>
                 <SectionBanner
                   header={'heybarn has big plans but we’re starting small!'}
-                  content={
-                    ' If you’re looking for listings or renters in the Manawatu or lower South Island, you’re in the right place; we’re focusing on your area. If you’re not, don’t go away! We’re coming to the rest of New Zealand very soon. Please sign in and create an account, we’ll let you know as soon as we are in your area. For more information about our plans, read more here'
-                  }
                 />
               </div>
             </li>

@@ -153,25 +153,14 @@ export const ListingCardComponent = props => {
             </div>
           </ConditionalWrapper>
           <div className={css.authorInfo}>
-            {minInfo ? (
               <FormattedMessage
                 id={`ListingCard.${listingType}By`}
                 values={{
-                  need: capitalize(need),
+                  need: `${capitalize(need)} space`,
                   region: (region && capitalize(region)) || 'NZ',
                   authorName,
                 }}
               />
-            ) : (
-              <FormattedMessage
-                id={`ListingCard.${listingType}By`}
-                values={{
-                  need: capitalize(need),
-                  region: (region && capitalize(region)) || 'NZ',
-                  authorName,
-                }}
-              />
-            )}
           </div>
         </div>
 

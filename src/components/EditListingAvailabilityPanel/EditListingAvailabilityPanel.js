@@ -47,12 +47,6 @@ const EditListingAvailabilityPanel = props => {
   const availabilityPlan = currentListing.attributes.availabilityPlan || defaultAvailabilityPlan;
   const publicData = getPropByName(currentListing, 'publicData');
   const { perpetual: [perpetual] = [true], availableFrom, availableTo } = publicData;
-  console.log('🚀 | file: EditListingAvailabilityPanel.js | line 49 | publicData', publicData);
-  console.log('🚀 | file: EditListingAvailabilityPanel.js | line 55 | startDate', availableFrom);
-  console.log(
-    '🚀 | file: EditListingAvailabilityPanel.js | line 74 | new Date(Date.parse(endDate))',
-    moment(parseInt(availableFrom)).toDate()
-  );
   return (
     <div className={classes}>
       <h1 className={css.title}>
@@ -71,20 +65,15 @@ const EditListingAvailabilityPanel = props => {
         initialValues={{
           availabilityPlan,
           perpetual: perpetual === undefined ? [true] : perpetual ? [perpetual] : [],
-          startDate: availableFrom ? { date: moment(parseInt(availableFrom)).toDate() } : null,
-          endDate: availableTo ? { date: moment(parseInt(availableTo)).toDate() } : null,
+          startDate: availableFrom ? moment(parseInt(availableFrom)) : null,
+          endDate: availableTo ? moment(parseInt(availableTo)) : null,
         }}
         availability={availability}
         availabilityPlan={availabilityPlan}
         onSubmit={values => {
-          const {
-            startDate: { date: startDate },
-            endDate: endDateMaybe,
-            perpetual,
-          } = values;
-          const endDate = endDateMaybe && endDateMaybe.date;
-          const startMS = startDate && Date.parse(startDate).toFixed(0);
-          const endMS = endDate && Date.parse(endDate).toFixed(0);
+          const { startDate, endDate, perpetual } = values;
+          const startMS = startDate && startDate.valueOf();
+          const endMS = endDate && endDate.valueOf();
           // We save the default availability plan
           // I.e. this listing is available every night.
           // Exceptions are handled with live edit through a calendar,

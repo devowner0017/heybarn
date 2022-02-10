@@ -5,12 +5,14 @@ import { FormSpy, Form as FinalForm } from 'react-final-form';
 import { intlShape, injectIntl, FormattedMessage } from '../../util/reactIntl';
 import classNames from 'classnames';
 import { propTypes } from '../../util/types';
-import { Form, Button, FieldDateInput, FieldCheckbox } from '../../components';
+import { Form, Button, FieldDateInput, FieldCheckbox, FieldDate } from '../../components';
 import { TransitionGroup } from 'react-transition-group';
 
 // import ManageAvailabilityCalendar from './ManageAvailabilityCalendar';
 import css from './EditListingAvailabilityForm.module.css';
 import { Collapse } from '@mui/material';
+import moment from 'moment'
+import { required } from '../../util/validators'
 const identity = v => v;
 
 export class EditListingAvailabilityFormComponent extends Component {
@@ -39,8 +41,6 @@ export class EditListingAvailabilityFormComponent extends Component {
             initialValues,
             values,
           } = formRenderProps;
-            console.log("🚀 | file: EditListingAvailabilityForm.js | line 42 | EditListingAvailabilityFormComponent | render | initialValues", initialValues);
-            console.log("🚀 | file: EditListingAvailabilityForm.js | line 41 | EditListingAvailabilityFormComponent | render | values", values);
 
           const errorMessage = updateError ? (
             <p className={css.error}>
@@ -51,7 +51,7 @@ export class EditListingAvailabilityFormComponent extends Component {
           const classes = classNames(rootClassName || css.root, className);
           const submitReady = (updated && pristine) || ready;
           const submitInProgress = updateInProgress;
-          const submitDisabled = invalid || disabled || submitInProgress;
+          const submitDisabled = invalid || disabled || submitInProgress || !values.startDate || (values.endDate && values.endDate.isBefore(values.startDate));
 
           return (
             <Form className={classes} onSubmit={handleSubmit}>
@@ -73,62 +73,28 @@ export class EditListingAvailabilityFormComponent extends Component {
                 }}
               />
               <div className={css.calendarWrapper}>
-                {/* <ManageAvailabilityCalendar
-                  availability={availability}
-                  availabilityPlan={availabilityPlan}
-                  listingId={listingId}
-                /> */}
                 <div className={css.fieldWrapper}>
-                  <FieldDateInput
-                    className={css.field}
+                  <FieldDate
+                    pickerClassname={css.dateField}
                     label={'Start Date'}
                     name="startDate"
+                    minDate={moment()}
                     id={`startDate`}
-                    unitType={'units'}
-                    startDateId={`startDate`}
-                    startDateLabel={'Start Date'}
-                    placeholderText={'Select...'}
-                    endDateId={`endDate`}
-                    endDateLabel={'EndLabel'}
-                    endDatePlaceholderText={'endDatePlaceholderText'}
-                    endDateReadOnly
-                    // focusedInput={focusedInput}
-                    // onFocusedInputChange={onFocusedInputChange}
-                    format={identity}
-                    // timeSlots={timeSlots}
-                    customIsDayBlocked={date => {
-                      return false;
-                    }}
-                    customIsDayOutsideRange={date => {
-                      return false;
-                    }}
+                    validators={required("Required")}
+                    required
                   />
                 </div>
 
-                <TransitionGroup className={css.field}>
+                <TransitionGroup className={css.fieldWrapper}>
                   {!values?.perpetual?.[0] && (
                     <Collapse timeout={300} orientation='horizontal'>
-                      <FieldDateInput
-                        label={'End Date'}
-                        name="endDate"
-                        id={`endDate`}
-                        unitType={'units'}
-                        endDateId={`endDate`}
-                        endDateLabel={'End Date'}
-                        placeholderText={'Select...'}
-                        endDateId={`endDate`}
-                        endDateLabel={'EndLabel'}
-                        endDatePlaceholderText={'endDatePlaceholderText'}
-                        endDateReadOnly
-                        format={identity}
-                        required
-                        customIsDayBlocked={date => {
-                          return false;
-                        }}
-                        customIsDayOutsideRange={date => {
-                          return false;
-                        }}
-                      />
+                     <FieldDate
+                    pickerClassname={css.dateField}
+                    label={'End Date'}
+                    name="endDate"
+                    minDate={values?.startDate}
+                    id={`endDate`}
+                  />
                     </Collapse>
                   )}
                 </TransitionGroup>

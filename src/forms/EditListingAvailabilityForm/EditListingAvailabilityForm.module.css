@@ -55,9 +55,17 @@
     margin-top: 86px;
   }
 }
-.fieldWrapper{
+.fieldWrapper:last-child{
+  margin-left: 5px;
 }
 .field{
   margin: 0.5rem 0.5rem 0.5rem 0;
 max-height: 72px;
+}
+
+.dateField > div > fieldset {
+  border: none;
+  border-radius: 0;
+  border-bottom: 2px solid var(--marketplaceColor)
+
 }

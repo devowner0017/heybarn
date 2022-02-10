@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from '../../util/reactIntl';
 import classNames from 'classnames';
 
-import { IconCamera, IconComputer, IconHandshake } from '../../components';
+import { IconCamera, IconComputer, IconHandshake, NamedLink } from '../../components';
 
 import css from './SectionHowItWorks.module.css';
 
@@ -11,6 +11,28 @@ const SectionHowItWorks = props => {
   const { rootClassName, className } = props;
 
   const classes = classNames(rootClassName || css.root, className);
+  const listingLink = (
+    <NamedLink
+      name="SearchPage"
+      to={{
+        search:
+          'pub_listingType=listing&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618',
+      }}
+    >
+      browse listings
+    </NamedLink>
+  );
+  const advertLink = (
+    <NamedLink
+      name="SearchPage"
+      to={{
+        search:
+          'pub_listingType=advert&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618',
+      }}
+    >
+      browse adverts
+    </NamedLink>
+  );
   return (
     <div className={classes}>
       <div className={css.title}>
@@ -44,7 +66,10 @@ const SectionHowItWorks = props => {
             {/* <FormattedMessage id="SectionHowItWorks.part3Title" /> */}
           </h2>
           <p className={css.stepText}>
-            <FormattedMessage id="SectionHowItWorks.part3Text" />
+            <FormattedMessage
+              id="SectionHowItWorks.part3Text"
+              values={{ listingsLink: listingLink, advertsLink: advertLink }}
+            />
           </p>
         </div>
       </div>
