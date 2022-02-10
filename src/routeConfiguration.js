@@ -91,7 +91,7 @@ const routeConfiguration = () => {
     {
       path: '/faq',
       name: 'FAQPage',
-      component: AboutPage,
+      component: FAQPage,
     },
     {
       path: '/s',

@@ -56,13 +56,7 @@ export class EditListingAvailabilityFormComponent extends Component {
           return (
             <Form className={classes} onSubmit={handleSubmit}>
               {errorMessage}
-              <FieldCheckbox
-                className={css.field}
-                id={'perpetual'}
-                name={'perpetual'}
-                label={'Ongoing rental (no specific end date)?'}
-                value={true}
-              />
+
               <FormSpy
                 subscription={{ values: true }}
                 onChange={({ values }) => {
@@ -99,7 +93,13 @@ export class EditListingAvailabilityFormComponent extends Component {
                   )}
                 </TransitionGroup>
               </div>
-
+              <FieldCheckbox
+                className={css.field}
+                id={'perpetual'}
+                name={'perpetual'}
+                label={'Ongoing rental (no specific end date)?'}
+                value={true}
+              />
               <Button
                 className={css.submitButton}
                 type="submit"

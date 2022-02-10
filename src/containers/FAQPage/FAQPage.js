@@ -20,17 +20,17 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import css from './FAQPage.module.css';
 import image from './about-us-1056.jpg';
+import classNames from 'classnames';
 
 const FAQPage = () => {
   const { siteTwitterHandle, siteFacebookPage } = config;
-  const [sectionOpen, setSectionOpen] = useState('') // prettier-ignore
+  const [sectionOpen, setSectionOpen] = useState('general') // prettier-ignore
   const [subSectionOpen, setSubSectionOpen] = useState('') // prettier-ignore
   const siteTwitterPage = twitterPageURL(siteTwitterHandle);
 
-  console.log('🚀 | file: FAQPage.js | line 40 | FAQPage | sectionOpen', sectionOpen);
   const handleSection = section => {
     setSubSectionOpen('');
-    if (section === sectionOpen) setSectionOpen('general');
+    if (section === sectionOpen) return null;
     else setSectionOpen(section);
   };
   const handleSubSection = section => {
@@ -38,9 +38,7 @@ const FAQPage = () => {
       setSubSectionOpen(subSectionOpen.filter(s => s !== section));
     else {
       setSubSectionOpen([...subSectionOpen, section]);
-      console.log('🚀 | file: FAQPage.js | line 34 | FAQPage | section', section);
       var element = document.getElementById(section);
-      console.log('🚀 | file: FAQPage.js | line 35 | FAQPage | element', element);
       element?.scrollIntoView({ behavior: 'smooth', alignToTop: true });
     }
   };
@@ -61,11 +59,13 @@ const FAQPage = () => {
   ];
   const table = (
     <TableContainer component={Paper}>
-      <Table  size="small"aria-label="simple table">
+      <Table size="small" aria-label="simple table">
         <TableHead>
-          <TableRow sx={{ backgroundColor: '#c35827'}}>
-            <TableCell sx={{color: '#fff', fontWeight: 800 }} >Region</TableCell>
-            <TableCell sx={{color: '#fff', fontWeight: 800 }}  align="center">$ per week per bay of space</TableCell>
+          <TableRow sx={{ backgroundColor: '#c35827' }}>
+            <TableCell sx={{ color: '#fff', fontWeight: 800 }}>Region</TableCell>
+            <TableCell sx={{ color: '#fff', fontWeight: 800 }} align="center">
+              $ per week per bay of space
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -120,16 +120,28 @@ const FAQPage = () => {
         </LayoutWrapperTopbar>
 
         <LayoutWrapperMain className={css.staticPageWrapper}>
-          <img className={css.coverImage} src={image} alt="My first ice cream." />
+          {/* <img className={css.coverImage} src={image} alt="My first ice cream." /> */}
+          <div style={{ textAlign: 'center' }}>
+            <h1>FAQ</h1>
+          </div>
           <div className={css.contentWrapper}>
             <div className={css.contentSide}>
-              <h2 className={css.pageTitle} onClick={() => handleSection('general')}>
+              <h2
+                className={classNames(css.pageTitle, { [css.active]: sectionOpen === 'general' })}
+                onClick={() => handleSection('general')}
+              >
                 General heybarn FAQ
               </h2>
-              <h2 className={css.pageTitle} onClick={() => handleSection('host')}>
+              <h2
+                className={classNames(css.pageTitle, { [css.active]: sectionOpen === 'host' })}
+                onClick={() => handleSection('host')}
+              >
                 Being a heybarn host
               </h2>
-              <h2 className={css.pageTitle} onClick={() => handleSection('renter')}>
+              <h2
+                className={classNames(css.pageTitle, { [css.active]: sectionOpen === 'renter' })}
+                onClick={() => handleSection('renter')}
+              >
                 Being a heybarn renter
               </h2>
             </div>

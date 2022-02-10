@@ -35,54 +35,42 @@ const AboutPage = () => {
         </LayoutWrapperTopbar>
 
         <LayoutWrapperMain className={css.staticPageWrapper}>
-          <h1 className={css.pageTitle}>Experience the unique Finnish home sauna.</h1>
-          <img className={css.coverImage} src={image} alt="My first ice cream." />
+          <h1 className={css.pageTitle}>Heybarn</h1>
+          {/* <img className={css.coverImage} src={image} alt="My first ice cream." /> */}
 
           <div className={css.contentWrapper}>
             <div className={css.contentSide}>
-              <p>Did you know that Finland has 3.2 million saunas - almost one sauna per person!</p>
+              <p>Over half of Kiwi's told us that they would rather rent from other Kiwis than commercial operators</p>
             </div>
 
             <div className={css.contentMain}>
-              <h2>
-                Most of the Finnish saunas are located at the homes of individuals - indeed, most
-                people in Finland live in an apartment with sauna in it. In addition, lots of people
-                have lakeside summer cottages, which also typically come with a separate sauna
-                building near the waterfront.
-              </h2>
-
               <p>
-                To truly experience a Finnish sauna, you need to look beyond the public saunas, and
-                instead visit a real home or cottage sauna. Heybarn makes this possible for
-                everyone. All our saunas are owned by individuals willing to let tourists and other
-                curious visitors to enter their sacred spaces.
+              Kiwis need more space. Whether for storage, business, events or creative
+pursuits, space is hard to find with commercial self-storage occupancy rates in
+New Zealand consistently over 90%. Over 28% of lifestyle and rural properties
+throughout New Zealand have quality sheds which are under-utilised and are
+ready to rent. This equates to over 4 million square metres of under-utilised
+space.
               </p>
 
-              <h3 className={css.subtitle}>Are you a sauna owner?</h3>
-
               <p>
-                Heybarn offers you a good way to earn some extra cash! If you're not using your
-                sauna every evening, why not rent it to other people while it's free. And even if
-                you are using your sauna every evening (we understand, it's so good), why not invite
-                other people to join you when the sauna is already warm! A shared sauna experience
-                is often a more fulfilling one.
+              We developed heybarn after realising a site wasn’t available which was
+specifically designed to allow the owners of lifestyle and rural properties in New
+Zealand to advertise their available shed space. By taking the best elements of
+AirBnB, Tinder and commercial real estate agencies, the heybarn user
+experience has been carefully designed with a focus on security, control and
+maximising your chance of finding a successful rental arrangement.
               </p>
 
-              <h3 id="contact" className={css.subtitle}>
-                Create your own marketplace like Heybarn
-              </h3>
+
               <p>
-                Heybarn is brought to you by the good folks at{' '}
-                <ExternalLink href="http://sharetribe.com">Sharetribe</ExternalLink>. Would you like
-                to create your own marketplace platform a bit like Heybarn? Or perhaps a mobile
-                app? With Sharetribe it's really easy. If you have a marketplace idea in mind, do
-                get in touch!
+              The heybarn founders have worked widely within rural New Zealand and live on
+rural properties. They are excited to bring a potential new source of passive
+income to New Zealand property owners, as well as encouraging Kiwis to look
+outside of the urban centres to find a more sustainable alternative to commercial
+building rentals.
               </p>
-              <p>
-                You can also checkout our{' '}
-                <ExternalLink href={siteFacebookPage}>Facebook</ExternalLink> and{' '}
-                <ExternalLink href={siteTwitterPage}>Twitter</ExternalLink>.
-              </p>
+
             </div>
           </div>
         </LayoutWrapperMain>

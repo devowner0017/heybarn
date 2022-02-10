@@ -258,11 +258,14 @@ input {
 }
 
 textarea,
-select,
-li {
+select {
   @apply --marketplaceDefaultFontStyles;
 }
+li {
+  @apply --marketplaceSmallFontStyles;
+  font-family: var(--fontFamilySecondary);
 
+}
 p,
 pre {
   @apply --marketplaceBodyFontStyles;
