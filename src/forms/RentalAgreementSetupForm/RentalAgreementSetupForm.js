@@ -13,7 +13,7 @@ import {
   PrimaryButton,
   FieldTextInput,
   FieldNumberInput,
-  FieldDateInput,
+  FieldDate,
   FieldCheckbox,
   FieldCheckboxGroup,
   FieldCurrencyInput,

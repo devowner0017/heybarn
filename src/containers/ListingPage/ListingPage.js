@@ -507,7 +507,6 @@ export class ListingPageComponent extends Component {
                     formattedPrice={formattedPrice}
                     richTitle={richTitle}
                     hostLink={hostLink}
-                    onContactUser={this.onContactUser}
                     region={region}
                     preferredUse={need}
                     listingType={typeOfListing}

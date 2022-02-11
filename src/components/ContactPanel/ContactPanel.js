@@ -34,13 +34,9 @@ const priceData = (price, intl) => {
 };
 
 const openBookModal = (isOwnListing, isClosed, history, location) => {
-  if (isOwnListing || isClosed) {
-    window.scrollTo(0, 0);
-  } else {
-    const { pathname, search, state } = location;
-    const searchString = `?${stringify({ ...parse(search), book: true })}`;
-    history.push(`${pathname}${searchString}`, state);
-  }
+  const { pathname, search, state } = location;
+  const searchString = `?${stringify({ ...parse(search), book: true })}`;
+  history.push(`${pathname}${searchString}`, state);
 };
 
 const closeBookModal = (history, location) => {
@@ -208,13 +204,41 @@ const ContactPanel = props => {
         onManageDisableScrolling={onManageDisableScrolling}
       >
         <div className={css.modalHeading}>
-          <h1 className={css.title}>{title}</h1>
-          <div className={css.author}>
-            <FormattedMessage id="ContactPanel.hostedBy" values={{ name: authorDisplayName }} />
-          </div>
+          {isOwnListing ? (
+            <>
+              <h1 className={css.title}>What would you like to do?</h1>
+              <div className={css.author}></div>
+            </>
+          ) : (
+            <>
+              <h1 className={css.title}>{title}</h1>
+              <div className={css.author}>
+                <FormattedMessage id="ContactPanel.hostedBy" values={{ name: authorDisplayName }} />
+              </div>
+            </>
+          )}
         </div>
 
-        {!!currentUserInTransaction ? (
+        {isOwnListing ? (
+          <>
+            <NamedLink name={`Edit${capitalize(listingType)}Page`} params={{ ...props.editParams }}>
+              <PrimaryButton rootClassName={css.actionButton}>Edit {listingType}</PrimaryButton>
+            </NamedLink>
+            <Button
+              rootClassName={css.actionButton}
+              onClick={isHidden ? handleMakePublic : handleMakePrivate}
+            >
+              {isHidden ? `Publish ${listingType}` : "Save but don't publish"}
+            </Button>
+            <SecondaryButton
+              rootClassName={css.deleteButton}
+              disabled={listingUnderEnquiry}
+              onClick={handleDeleteListing}
+            >
+              Delete {listingType}?
+            </SecondaryButton>
+          </>
+        ) : !!currentUserInTransaction ? (
           <>
             <div className={css.bookingHeading}>
               <h2 className={titleClasses}>You're already in talks with {authorDisplayName}</h2>
@@ -224,12 +248,10 @@ const ContactPanel = props => {
               name={'OrderDetailsPage'}
               params={{ id: currentUserInTransaction.id.uuid }}
             >
-              <Button rootClassName={css.bookButton}>
-                Return to your decision
-              </Button>
+              <Button rootClassName={css.bookButton}>Return to your decision</Button>
             </NamedLink>
           </>
-        ) : !isOwnListing ? (
+        ) : (
           <>
             <div className={css.bookingHeading}>
               <h2 className={titleClasses}>{title}</h2>
@@ -243,38 +265,32 @@ const ContactPanel = props => {
               <FormattedMessage id="ContactPanel.ctaButtonMessage" />
             </Button>
           </>
-        ) : (
-          <>
-            <NamedLink name={`Edit${capitalize(listingType)}Page`} params={{ ...props.editParams }}>
-              <PrimaryButton rootClassName={css.actionButton}>Edit</PrimaryButton>
-            </NamedLink>
-            <Button
-              rootClassName={css.actionButton}
-              onClick={isHidden ? handleMakePublic : handleMakePrivate}
-            >
-              {isHidden ? `Publish ${listingType}` : "Save but don't publish"}
-            </Button>
-            <SecondaryButton
-              rootClassName={css.deleteButton}
-              disabled={listingUnderEnquiry}
-              onClick={handleDeleteListing}
-            >
-              Delete {capitalize(listingType)}?
-            </SecondaryButton>
-          </>
         )}
       </ModalInMobile>
+
       <div className={css.openBookingForm}>
         <div className={css.priceContainer}>
-          <div className={css.priceValue} title={priceTitle}>
-            {formattedPrice}
-          </div>
-          <div className={css.perUnit}>
-            <FormattedMessage id={unitTranslationKey} />
-          </div>
+          {/* {listingType === 'listing' && (
+            <>
+              <div className={css.priceValue} title={priceTitle}>
+                {formattedPrice}
+              </div>
+              <div className={css.perUnit}>
+                <FormattedMessage id={unitTranslationKey} />
+              </div>
+            </>
+          )} */}
         </div>
 
-        {!!currentUserInTransaction ? (
+        {isOwnListing ? (
+          <Button
+            rootClassName={css.bookButton}
+            disabled={listingUnderEnquiry}
+            onClick={() => openBookModal(isOwnListing, isClosed, history, location)}
+          >
+            Options
+          </Button>
+        ) : !!currentUserInTransaction ? (
           <NamedLink
             className={css.bookButton}
             name={'OrderDetailsPage'}
@@ -291,7 +307,6 @@ const ContactPanel = props => {
             disabled={listingUnderEnquiry}
             onClick={() => openBookModal(isOwnListing, isClosed, history, location)}
           >
-            MOBILE
             <FormattedMessage id="ContactPanel.ctaButtonMessage" />
           </Button>
         ) : isClosed ? (
@@ -300,6 +315,7 @@ const ContactPanel = props => {
           </div>
         ) : null}
       </div>
+
       <ConfirmationModal
         id="ConfirmationModal"
         isOpen={showConfirmActionModal}
