@@ -25,7 +25,6 @@ import * as FieldTextInput from './components/FieldTextInput/FieldTextInput.exam
 import * as FilterPlain from './components/FilterPlain/FilterPlain.example';
 import * as FilterPopup from './components/FilterPopup/FilterPopup.example';
 import * as Footer from './components/Footer/Footer.example';
-import * as IconAdd from './components/IconAdd/IconAdd.example';
 import * as IconBannedUser from './components/IconBannedUser/IconBannedUser.example';
 import * as IconCheckmark from './components/IconCheckmark/IconCheckmark.example';
 import * as IconClose from './components/IconClose/IconClose.example';
@@ -135,7 +134,6 @@ export {
   FilterPlain,
   FilterPopup,
   Footer,
-  IconAdd,
   IconBannedUser,
   IconCheckmark,
   IconClose,

@@ -66,20 +66,29 @@
 
 .heroMainTitle {
   @apply --marketplaceHeroTitleFontStyles;
+  font-size: 50px;
+  white-space: nowrap;
+  word-break: keep-all;
   color: var(--matterColorLight);
   text-align: center;
   composes: animation;
   animation-delay: 0.5s;
+  margin-bottom: 2rem;
   & > span {
     display: block;
     transform: rotate(90deg);
+    margin-top: 1rem;
     @media (--viewportMedium) {
       display: inline-flex;
       transform: none;
     }
   }
   @media (--viewportMedium) {
+    font-size: 4vw;
     max-width: var(--SectionHero_desktopTitleMaxWidth);
+  }
+  @media (--viewportLarge) {
+    font-size: 50px;
   }
 }
 .heroMainTitle > span {
