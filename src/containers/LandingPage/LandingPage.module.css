@@ -48,7 +48,6 @@
   }
 
   @media (--viewportXLarge) {
-    max-width: 1056px;
     padding: 0;
   }
 }
@@ -111,7 +110,6 @@
   }
 
   @media (--viewportXLarge) {
-    max-width: 1056px;
     padding: 0;
   }
 }
