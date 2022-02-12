@@ -23,19 +23,12 @@ const CreateListingModal = props => {
     pageLocation,
     redirectProps
   } = props;
-  console.log('🚀 | file: CreateListingModal.js | line 27 | location', pageLocation);
-  console.log('🚀 | file: CreateListingModal.js | line 26 | listingType', listingType);
   const history = useHistory();
 
   const classes = classNames(rootClassName || css.root, className);
   const closeButtonMessage = intl.formatMessage({ id: 'CreateListingModal.later' });
   const handleRedirect = () => {
-    console.log(1111111111111);
     const routes = routeConfiguration();
-    console.log(
-      '🚀 | file: CreateListingModal.js | line 35 | handleRedirect | pageLocation.pathname',
-      pageLocation.pathname
-    );
     history.push(
       createResourceLocatorString(
         `New${listingType === 'listing' ? 'Advert' : 'Listing'}Page`,
@@ -68,7 +61,7 @@ const CreateListingModal = props => {
       containerClassName={classes}
       contentClassName={css.modalContent}
       isOpen={isOpen}
-      onClose={_ => null}
+      onClose={() => null}
       onManageDisableScrolling={onManageDisableScrolling}
       usePortal
       closeButtonMessage={closeButtonMessage}

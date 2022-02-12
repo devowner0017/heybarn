@@ -405,7 +405,6 @@ export const queryOwnListings = queryParams => (dispatch, getState, sdk) => {
   return sdk.ownListings
     .query(params)
     .then(response => {
-      console.log('🚀 | file: ManageListingsPage.duck.js | line 361 | response', response);
       const filteredResults = response.data.data.filter(r => {
         const responseListingType = r.attributes.publicData.listingType;
         const notDeleted = r.attributes.publicData.notDeleted;
@@ -516,24 +515,11 @@ export const deleteListing = (listingId, listingType) => (dispatch, getState, sd
 };
 
 export const hideListing = (listingId, listingType, hide) => (dispatch, getState, sdk) => {
-  console.log(
-    '🚀 | file: ManageListingsPage.duck.js | line 518 | hideListing | listingType',
-    listingType
-  );
-  console.log(
-    '🚀 | file: ManageListingsPage.duck.js | line 518 | hideListing | listingId',
-    listingId
-  );
-  console.log('🚀 | file: ManageListingsPage.duck.js | line 541 | hideListing | hide', hide);
   dispatch(hideListingRequest(listingId));
 
   return sdk.ownListings
     .update({ id: listingId, publicData: { notHidden: !!hide } }, { expand: true })
     .then(response => {
-      console.log(
-        '🚀 | file: ManageListingsPage.duck.js | line 532 | hideListing | response',
-        response
-      );
       dispatch(hideListingSuccess(response));
       dispatch(
         queryOwnListings({
@@ -548,7 +534,6 @@ export const hideListing = (listingId, listingType, hide) => (dispatch, getState
       return response;
     })
     .catch(e => {
-      console.log('🚀 | file: ManageListingsPage.duck.js | line 547 | hideListing | e', e);
       dispatch(hideListingError(storableError(e)));
     });
 };
@@ -568,7 +553,6 @@ export const openListing = listingId => (dispatch, getState, sdk) => {
 };
 
 export const loadListingData = (props = {}) => {
-  console.log('🚀 | file: ManageListingsPage.duck.js | line 467 | loadListingData | props', props);
   const { params, search } = props;
   const queryParams = parse(search);
   const page = queryParams.page || 1;

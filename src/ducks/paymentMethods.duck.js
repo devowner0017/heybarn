@@ -178,7 +178,7 @@ export const deletePaymentMethod = () => (dispatch, getState, sdk) => {
     });
 };
 
-export const updatePaymentMethod = stripePaymentMethodId => (dispatch, getState, sdk) => {
+export const updatePaymentMethod = stripePaymentMethodId => (dispatch) => {
   return dispatch(deletePaymentMethod())
     .then(() => {
       return dispatch(addPaymentMethod(stripePaymentMethodId));
@@ -192,7 +192,6 @@ export const updatePaymentMethod = stripePaymentMethodId => (dispatch, getState,
 export const savePaymentMethod = (stripeCustomer, stripePaymentMethodId) => (
   dispatch,
   getState,
-  sdk
 ) => {
   const hasAlreadyDefaultPaymentMethod =
     stripeCustomer && stripeCustomer.defaultPaymentMethod && stripeCustomer.defaultPaymentMethod.id;
@@ -220,7 +219,7 @@ export const savePaymentMethod = (stripeCustomer, stripePaymentMethodId) => (
       }
       return response;
     })
-    .catch(e => {
+    .catch(() => {
       // errors are already catched in other thunk functions.
     });
 };

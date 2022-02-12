@@ -14,7 +14,6 @@ module.exports = (req, res) => {
     .then(listingResponse => {
       const listing = listingResponse.data.data;
       lineItems = transactionLineItems(listing, bookingData, newPrice);
-      console.log("🚀 | file: transition-privileged.js | line 17 | lineItems", lineItems);
 
       return getTrustedSdk(req);
     })

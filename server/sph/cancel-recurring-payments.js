@@ -14,23 +14,14 @@ const UUID = flexIntegrationSdk.types.UUID;
   const { actor, subscription, txId } = req.body;
 
   const oldCancelDate = subscription?.current_period_end;
-  console.log(
-    '🚀 | file: cancel-recurring-payments.js | line 19 | module.exports= | oldCancelDate',
-    oldCancelDate
-  );
 
   // ADD TWO WEEKS
   const newCancelDate = oldCancelDate + 1209600;
-  console.log(
-    '🚀 | file: cancel-recurring-payments.js | line 22 | module.exports= | newCancelDate',
-    newCancelDate
-  );
   // return null;
   return stripe.subscriptions
     .update(subscription.id, { cancel_at: newCancelDate })
     .then(apiResponse => {
       const serialRes = serialize(apiResponse);
-      console.log("🚀 | file: cancel-recurring-payments.js | line 30 | module.exports= | apiResponse",  new Date(newCancelDate * 1000));
 
       const metaParams = {
         id: new UUID(subscription.metadata.transactionId),
@@ -51,10 +42,6 @@ const UUID = flexIntegrationSdk.types.UUID;
           expand: true,
         })
         .then(metaResponse => {
-          console.log(
-            '🚀 | file: extend-recurring-payments.js | line 42 | module.exports= | metaResponse',
-            metaResponse
-          );
           return res
             .status(200)
             .set('Content-Type', 'application/transit+json')
@@ -63,7 +50,6 @@ const UUID = flexIntegrationSdk.types.UUID;
         });
     })
     .catch(e => {
-    console.log("🚀 | file: cancel-recurring-payments.js | line 64 | module.exports= | e", e);
       const serialErr = serialize(e);
       return res
         .status(500)

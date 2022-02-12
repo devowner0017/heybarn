@@ -4,7 +4,7 @@
   /* Layout */
   display: flex;
   flex-direction: column;
-text-decoration: none;
+  text-decoration: none;
   /* Remove link's hover effect */
   &:hover {
     text-decoration: none;
@@ -48,25 +48,37 @@ text-decoration: none;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 8px 0 2px 0;
+  padding: 10px 0 2px 0;
   position: relative;
   width: 100%;
-
+  @media (--viewportMedium) {
+    padding: 8px 0 2px 0;
+  }
 }
 
 .avatar {
   position: absolute;
-  bottom: -20px;
+  bottom: -10px;
   right: 20px;
-  z-index: 2;
+  z-index: 0;
+  @media (--viewportMedium) {
+    bottom: -20px;
+  }
 }
 .price {
   /* Layout */
+  align-items: flex-start;
+
   display: flex;
   flex-direction: row;
-  align-items: flex-end;
   flex-shrink: 0;
   margin-right: 18px;
+  @media (--viewportMedium) {
+    align-items: center;
+    padding-top: 2px;
+    margin-bottom: auto;
+
+  }
 }
 .smallPrice {
   display: flex;
@@ -77,14 +89,14 @@ text-decoration: none;
 }
 .priceValue {
   @apply --marketplaceH2FontStyles;
-  font-size: 36px;
   /* Remove default margins from font */
   margin-top: 0;
   margin-bottom: 0;
-  padding-right: 0.5rem;
+  padding-right: 0.1rem;
   @media (--viewportMedium) {
     margin-top: 0;
     margin-bottom: 0;
+    padding-right: 0.5rem;
   }
 }
 .smallPriceValue {
@@ -108,13 +120,22 @@ text-decoration: none;
   /* Remove default margins from font */
   margin-top: 0;
   margin-bottom: 0;
-
+  display: none;
   @media (--viewportMedium) {
+    display: block;
     margin-top: 0;
     margin-bottom: 0;
   }
 }
 
+.perUnitMobile {
+  composes: perUnit;
+
+  display: block;
+  @media (--viewportMedium) {
+    display: none;
+  }
+}
 .mainInfo {
   display: flex;
   flex-direction: column;
@@ -125,11 +146,11 @@ text-decoration: none;
   /* Font */
   @apply --marketplaceH3FontStyles;
   color: var(--matterColor);
-
+  padding-right: 0.2rem;
   /* Remove default margins from font */
   margin-top: 0;
   margin-bottom: 0;
-text-decoration: none;
+  text-decoration: none;
   @media (--viewportMedium) {
     margin-top: 0;
     margin-bottom: 0;
@@ -138,14 +159,11 @@ text-decoration: none;
 
 .authorInfo {
   /* Font */
-  @apply --marketplaceTinyFontStyles;
-  color: var(--matterColor);
-  text-decoration: none;
-  /* Remove default margins from font */
-  margin-top: 0;
-  margin-bottom: 0;
-
   @media (--viewportMedium) {
+    @apply --marketplaceTinyFontStyles;
+    color: var(--matterColor);
+    text-decoration: none;
+    /* Remove default margins from font */
     margin-top: 0;
     margin-bottom: 0;
   }

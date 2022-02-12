@@ -73,7 +73,6 @@ const LineItemBookingPeriod = props => {
   // Read more: https://www.sharetribe.com/api-reference/marketplace.html#bookings
   const { start, end, displayStart, displayEnd } = booking.attributes;
   const { ongoingContract } = tx.attributes.protectedData;
-  console.log('🚀 | file: LineItemBookingPeriod.js | line 68 | ongoingContract', ongoingContract);
   const localStartDate = dateFromAPIToLocalNoon(displayStart || start);
   const localEndDateRaw = dateFromAPIToLocalNoon(displayEnd || end);
 

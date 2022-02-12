@@ -153,10 +153,6 @@ export class TransactionInitPanelComponent extends Component {
       host,
       contactingAs,
     } = this.props;
-    console.log(
-      '🚀 | file: TransactionInitPanel.js | line 151 | TransactionInitPanelComponent | render | location',
-      pageLocation
-    );
 
     const currentProvider = ensureUser(currentListing.author);
     const currentCustomer = ensureUser(currentUser);
@@ -193,12 +189,7 @@ export class TransactionInitPanelComponent extends Component {
     };
     const stateData = stateDataFn(currentListing);
     const handleRedirect = () => {
-      console.log(1111111111111);
       const routes = routeConfiguration();
-      console.log(
-        '🚀 | file: CreateListingModal.js | line 35 | handleRedirect | pageLocation.pathname',
-        pageLocation.pathname
-      );
       history.push(
         createResourceLocatorString(
           `New${listingType === 'listing' ? 'Advert' : 'Listing'}Page`,

@@ -14,7 +14,7 @@ import {
   FieldCheckboxGroup,
   FieldRadioButton,
 } from '../../components';
-import { findConfigForSelectFilter, findOptionsForSelectFilter } from '../../util/search';
+import { findOptionsForSelectFilter } from '../../util/search';
 import config from '../../config';
 import css from './EditListingPoliciesForm.module.css';
 
@@ -36,12 +36,9 @@ export const EditListingPoliciesFormComponent = props => (
         updateInProgress,
         fetchErrors,
         filterConfig,
-        initialValues,
         values,
         listingType,
       } = formRenderProps;
-      console.log('🚀 | file: EditListingPoliciesForm.js | line 43 | values', values);
-      console.log('🚀 | file: EditListingPoliciesForm.js | line 43 | initialValues', initialValues);
 
       const rulesLabelMessage = intl.formatMessage({
         id: 'EditListingPoliciesForm.rulesLabel',
@@ -69,11 +66,6 @@ export const EditListingPoliciesFormComponent = props => (
 
       const options = findOptionsForSelectFilter(`${listingType}AccessFrequency`, filterConfig);
       const groundRulesOptions = findOptionsForSelectFilter(`groundRules`, filterConfig);
-      console.log(
-        '🚀 | file: EditListingPoliciesForm.js | line 62 | groundRulesOptions',
-        groundRulesOptions
-      );
-      console.log('🚀 | file: EditListingPoliciesForm.js | line 98 | options', values);
 
       return (
         <Form className={classes} onSubmit={handleSubmit}>
@@ -86,6 +78,7 @@ export const EditListingPoliciesFormComponent = props => (
             {options.map(o => {
               return (
                 <FieldRadioButton
+                  key={o.key}
                   id={o.key}
                   name="accessFrequency"
                   label={o.label}

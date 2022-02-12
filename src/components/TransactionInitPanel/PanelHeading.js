@@ -99,18 +99,12 @@ const PanelHeading = props => {
     isCustomerBanned,
     listingType,
   } = props;
-  console.log('🚀 | file: PanelHeading.js | line 101 | listingDeleted', listingDeleted);
-  console.log('🚀 | file: PanelHeading.js | line 97 | listingType', listingType);
-  console.log('🚀 | file: PanelHeading.js | line 96 | customerName', customerName);
-  console.log('🚀 | file: PanelHeading.js | line 96 | providerName', providerName);
-  console.log(props);
   const isCustomer = props.transactionRole === 'customer';
 
   const defaultRootClassName = css.heading;
   const titleClasses = classNames(rootClassName || defaultRootClassName, className);
   const listingLink = createListingLink(listingId, listingTitle, listingDeleted);
 
-  console.log('🚀 | file: PanelHeading.js | line 123 | panelHeadingState', panelHeadingState);
   const messageValues = {
     otherName: otherUserDisplayName,
     providerName,

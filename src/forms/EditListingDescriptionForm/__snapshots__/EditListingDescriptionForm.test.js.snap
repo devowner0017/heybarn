@@ -13,7 +13,7 @@ exports[`EditListingDescriptionForm matches snapshot 1`] = `
     <label
       htmlFor="title"
     >
-      EditListingDescriptionForm.title
+      EditListingDescriptionForm.undefined_title
     </label>
     <input
       autoFocus={true}
@@ -24,18 +24,362 @@ exports[`EditListingDescriptionForm matches snapshot 1`] = `
       onBlur={[Function]}
       onChange={[Function]}
       onFocus={[Function]}
-      placeholder="EditListingDescriptionForm.titlePlaceholder"
+      placeholder="EditListingDescriptionForm.undefined_titlePlaceholder"
       type="text"
       value=""
     />
   </div>
+  <fieldset
+    className="root title"
+  >
+    <ul
+      className="list"
+    >
+      <li
+        className="item"
+        key="amenities.weatherproof"
+      >
+        <span
+          className="root"
+        >
+          <input
+            checked={false}
+            className="input"
+            id="amenities.weatherproof"
+            name="amenities"
+            onBlur={[Function]}
+            onChange={[Function]}
+            onFocus={[Function]}
+            type="checkbox"
+            value="weatherproof"
+          />
+          <label
+            className="label"
+            htmlFor="amenities.weatherproof"
+          >
+            <span
+              className="checkboxWrapper"
+            >
+              Array [
+                "",
+                <svg
+                  aria-hidden={true}
+                  className="MuiSvgIcon-root MuiSvgIcon-fontSizeLarge unCheckedCustomIcon css-tzssek-MuiSvgIcon-root"
+                  data-testid="BeachAccessOutlinedIcon"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="m21 19.57-1.427 1.428-6.442-6.442 1.43-1.428zM13.12 3c-2.58 0-5.16.98-7.14 2.95l-.01.01c-3.95 3.95-3.95 10.36 0 14.31l14.3-14.31C18.3 3.99 15.71 3 13.12 3zM6.14 17.27C5.4 16.03 5 14.61 5 13.12c0-.93.16-1.82.46-2.67.19 1.91.89 3.79 2.07 5.44l-1.39 1.38zm2.84-2.84C7.63 12.38 7.12 9.93 7.6 7.6c.58-.12 1.16-.18 1.75-.18 1.8 0 3.55.55 5.08 1.56l-5.45 5.45zm1.47-8.97c.85-.3 1.74-.46 2.67-.46 1.49 0 2.91.4 4.15 1.14l-1.39 1.39c-1.65-1.18-3.52-1.88-5.43-2.07z"
+                  />
+                </svg>,
+              ]
+            </span>
+            <span
+              className="text textRoot"
+            >
+              Weatherproof
+            </span>
+          </label>
+        </span>
+      </li>
+      <li
+        className="item"
+        key="amenities.secure"
+      >
+        <span
+          className="root"
+        >
+          <input
+            checked={false}
+            className="input"
+            id="amenities.secure"
+            name="amenities"
+            onBlur={[Function]}
+            onChange={[Function]}
+            onFocus={[Function]}
+            type="checkbox"
+            value="secure"
+          />
+          <label
+            className="label"
+            htmlFor="amenities.secure"
+          >
+            <span
+              className="checkboxWrapper"
+            >
+              Array [
+                "",
+                <svg
+                  aria-hidden={true}
+                  className="MuiSvgIcon-root MuiSvgIcon-fontSizeLarge unCheckedCustomIcon css-tzssek-MuiSvgIcon-root"
+                  data-testid="LockOutlinedIcon"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"
+                  />
+                </svg>,
+              ]
+            </span>
+            <span
+              className="text textRoot"
+            >
+              Secure
+            </span>
+          </label>
+        </span>
+      </li>
+      <li
+        className="item"
+        key="amenities.mainsPower"
+      >
+        <span
+          className="root"
+        >
+          <input
+            checked={false}
+            className="input"
+            id="amenities.mainsPower"
+            name="amenities"
+            onBlur={[Function]}
+            onChange={[Function]}
+            onFocus={[Function]}
+            type="checkbox"
+            value="mainsPower"
+          />
+          <label
+            className="label"
+            htmlFor="amenities.mainsPower"
+          >
+            <span
+              className="checkboxWrapper"
+            >
+              Array [
+                "",
+                <svg
+                  aria-hidden={true}
+                  className="MuiSvgIcon-root MuiSvgIcon-fontSizeLarge unCheckedCustomIcon css-tzssek-MuiSvgIcon-root"
+                  data-testid="PowerOutlinedIcon"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M16 9v4.66l-3.5 3.51V19h-1v-1.83L8 13.65V9h8m0-6h-2v4h-4V3H8v4h-.01C6.9 6.99 6 7.89 6 8.98v5.52L9.5 18v3h5v-3l3.5-3.51V9c0-1.1-.9-2-2-2V3z"
+                  />
+                </svg>,
+              ]
+            </span>
+            <span
+              className="text textRoot"
+            >
+              Mains power
+            </span>
+          </label>
+        </span>
+      </li>
+      <li
+        className="item"
+        key="amenities.waterSupply"
+      >
+        <span
+          className="root"
+        >
+          <input
+            checked={false}
+            className="input"
+            id="amenities.waterSupply"
+            name="amenities"
+            onBlur={[Function]}
+            onChange={[Function]}
+            onFocus={[Function]}
+            type="checkbox"
+            value="waterSupply"
+          />
+          <label
+            className="label"
+            htmlFor="amenities.waterSupply"
+          >
+            <span
+              className="checkboxWrapper"
+            >
+              Array [
+                "",
+                <svg
+                  aria-hidden={true}
+                  className="MuiSvgIcon-root MuiSvgIcon-fontSizeLarge unCheckedCustomIcon css-tzssek-MuiSvgIcon-root"
+                  data-testid="WaterDamageOutlinedIcon"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M12 3 2 12h3v8h14v-8h3L12 3zM7 18v-7.81l5-4.5 5 4.5V18H7zm7-4c0 1.1-.9 2-2 2s-2-.9-2-2 2-4 2-4 2 2.9 2 4z"
+                  />
+                </svg>,
+              ]
+            </span>
+            <span
+              className="text textRoot"
+            >
+              Water supply
+            </span>
+          </label>
+        </span>
+      </li>
+      <li
+        className="item"
+        key="amenities.internet"
+      >
+        <span
+          className="root"
+        >
+          <input
+            checked={false}
+            className="input"
+            id="amenities.internet"
+            name="amenities"
+            onBlur={[Function]}
+            onChange={[Function]}
+            onFocus={[Function]}
+            type="checkbox"
+            value="internet"
+          />
+          <label
+            className="label"
+            htmlFor="amenities.internet"
+          >
+            <span
+              className="checkboxWrapper"
+            >
+              Array [
+                "",
+                <svg
+                  aria-hidden={true}
+                  className="MuiSvgIcon-root MuiSvgIcon-fontSizeLarge unCheckedCustomIcon css-tzssek-MuiSvgIcon-root"
+                  data-testid="SignalWifiStatusbarNullOutlinedIcon"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4zM2.92 9.07C5.51 7.08 8.67 6 12 6s6.49 1.08 9.08 3.07L12 18.17l-9.08-9.1z"
+                  />
+                </svg>,
+              ]
+            </span>
+            <span
+              className="text textRoot"
+            >
+              Internet
+            </span>
+          </label>
+        </span>
+      </li>
+      <li
+        className="item"
+        key="amenities.wc"
+      >
+        <span
+          className="root"
+        >
+          <input
+            checked={false}
+            className="input"
+            id="amenities.wc"
+            name="amenities"
+            onBlur={[Function]}
+            onChange={[Function]}
+            onFocus={[Function]}
+            type="checkbox"
+            value="wc"
+          />
+          <label
+            className="label"
+            htmlFor="amenities.wc"
+          >
+            <span
+              className="checkboxWrapper"
+            >
+              Array [
+                "",
+                <svg
+                  aria-hidden={true}
+                  className="MuiSvgIcon-root MuiSvgIcon-fontSizeLarge unCheckedCustomIcon css-tzssek-MuiSvgIcon-root"
+                  data-testid="WcIcon"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M5.5 22v-7.5H4V9c0-1.1.9-2 2-2h3c1.1 0 2 .9 2 2v5.5H9.5V22h-4zM18 22v-6h3l-2.54-7.63C18.18 7.55 17.42 7 16.56 7h-.12c-.86 0-1.63.55-1.9 1.37L12 16h3v6h3zM7.5 6c1.11 0 2-.89 2-2s-.89-2-2-2-2 .89-2 2 .89 2 2 2zm9 0c1.11 0 2-.89 2-2s-.89-2-2-2-2 .89-2 2 .89 2 2 2z"
+                  />
+                </svg>,
+              ]
+            </span>
+            <span
+              className="text textRoot"
+            >
+              Toilet
+            </span>
+          </label>
+        </span>
+      </li>
+      <li
+        className="item"
+        key="amenities.parking"
+      >
+        <span
+          className="root"
+        >
+          <input
+            checked={false}
+            className="input"
+            id="amenities.parking"
+            name="amenities"
+            onBlur={[Function]}
+            onChange={[Function]}
+            onFocus={[Function]}
+            type="checkbox"
+            value="parking"
+          />
+          <label
+            className="label"
+            htmlFor="amenities.parking"
+          >
+            <span
+              className="checkboxWrapper"
+            >
+              Array [
+                "",
+                <svg
+                  aria-hidden={true}
+                  className="MuiSvgIcon-root MuiSvgIcon-fontSizeLarge unCheckedCustomIcon css-tzssek-MuiSvgIcon-root"
+                  data-testid="LocalParkingIcon"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M13 3H6v18h4v-6h3c3.31 0 6-2.69 6-6s-2.69-6-6-6zm.2 8H10V7h3.2c1.1 0 2 .9 2 2s-.9 2-2 2z"
+                  />
+                </svg>,
+              ]
+            </span>
+            <span
+              className="text textRoot"
+            >
+              Parking
+            </span>
+          </label>
+        </span>
+      </li>
+    </ul>
+  </fieldset>
   <div
     className="root description"
   >
     <label
       htmlFor="description"
     >
-      EditListingDescriptionForm.description
+      EditListingDescriptionForm.undefined_description
     </label>
     <textarea
       className="input textarea"
@@ -45,18 +389,18 @@ exports[`EditListingDescriptionForm matches snapshot 1`] = `
       onBlur={[Function]}
       onChange={[Function]}
       onFocus={[Function]}
-      placeholder="EditListingDescriptionForm.descriptionPlaceholder"
+      placeholder="EditListingDescriptionForm.undefined_descriptionPlaceholder"
       rows={1}
       value=""
     />
   </div>
   <div
-    className="root description"
+    className="root idealUses"
   >
     <label
       htmlFor="preferredUse"
     >
-      EditListingDescriptionForm.preferredUseLabel
+      EditListingDescriptionForm.undefined_preferredUseLabel
     </label>
     Array [
       "",
@@ -199,6 +543,18 @@ exports[`EditListingDescriptionForm matches snapshot 1`] = `
         />
       </div>,
     ]
+  </div>
+  <div
+    className="useText"
+  >
+    These ideal uses are helpful for hosts and renters to understand what frequency of access can be expected. Storage space suggests infrequent visits; Creative space suggests more infrequent and irregular visits, Work space suggests more frequent and regular visits and Event space suggests a short period of use.
+  </div>
+  <div
+    className="moreInfoText"
+  >
+    <span>
+      EditListingDescriptionForm.moreInfo
+    </span>
   </div>
   <button
     className="root submitButton"

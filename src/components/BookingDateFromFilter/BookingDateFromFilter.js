@@ -97,7 +97,6 @@ export class BookingDateFromFilterComponent extends Component {
       : intl.formatMessage({ id: 'BookingDateFromFilter.labelPopup' });
 
     const handleSubmit = values => {
-    console.log("🚀 | file: BookingDateFromFilter.js | line 100 | BookingDateFromFilterComponent | render | values", values);
       onSubmit(formatValue(values, datesQueryParamName));
     };
 

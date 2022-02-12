@@ -326,7 +326,6 @@ class EditListingWizard extends Component {
       .slice(0, currentTabIndex)
       .reverse()
       .find(t => tabsStatus[t]);
-    console.log("🚀 | file: EditListingWizard.js | line 329 | EditListingWizard | render | nearestActiveTab", nearestActiveTab);
     // If selectedTab is not active, redirect to the beginning of wizard
     if (!tabsStatus[selectedTab]) {
       return (
@@ -338,6 +337,7 @@ class EditListingWizard extends Component {
     }
     const backButton = nearestActiveTab && (
       <NamedLink
+      className={css.backButton}
         name={isAdvert ? 'EditAdvertPage' : 'EditListingPage'}
         params={{ ...params, tab: nearestActiveTab }}
       >

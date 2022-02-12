@@ -100,6 +100,34 @@ exports[`ManageListingCard matches snapshot 1`] = `
                 />
               </InlineTextButton>
             </MenuItem>
+            <MenuItem
+              className={null}
+              key="hide-listing"
+              rootClassName=""
+            >
+              <InlineTextButton
+                onClick={[Function]}
+                rootClassName="menuItem"
+              >
+                <MemoizedFormattedMessage
+                  id="ManageListingCard.hide"
+                />
+              </InlineTextButton>
+            </MenuItem>
+            <MenuItem
+              className={null}
+              key="delete-listing"
+              rootClassName=""
+            >
+              <InlineTextButton
+                onClick={[Function]}
+                rootClassName="menuItem"
+              >
+                <MemoizedFormattedMessage
+                  id="ManageListingCard.delete"
+                />
+              </InlineTextButton>
+            </MenuItem>
           </MenuContent>
         </Menu>
       </div>
@@ -152,23 +180,6 @@ exports[`ManageListingCard matches snapshot 1`] = `
           id="ManageListingCard.editundefined"
         />
       </NamedLink>
-      <div
-        className="price"
-      >
-        <div
-          className="priceValue"
-          title={55}
-        >
-          55
-        </div>
-        <div
-          className="perUnit"
-        >
-          <MemoizedFormattedMessage
-            id="ManageListingCard.perWeek"
-          />
-        </div>
-      </div>
     </div>
   </div>
 </div>

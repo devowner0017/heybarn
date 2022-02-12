@@ -64,12 +64,22 @@ exports[`TransactionPage - Order matches snapshot 1`] = `
             }
           }
           initialMessageFailed={false}
+          location={
+            Object {
+              "hash": "",
+              "pathname": "/order/tx-order-1/details",
+              "search": "",
+            }
+          }
           messages={Array []}
           oldestMessagePageFetched={0}
+          onCancelStripeAgreement={[Function]}
+          onExtendStripeAgreement={[Function]}
           onInitializeCardPaymentData={[Function]}
           onSendMessage={[Function]}
           onShowMoreMessages={[Function]}
           onSubmitBookingRequest={[Function]}
+          onUpdateSubscriptionPaymentMethod={[Function]}
           savePaymentMethodFailed={false}
           sendMessageError={null}
           sendMessageInProgress={false}
@@ -298,12 +308,22 @@ exports[`TransactionPage - Sale matches snapshot 1`] = `
             }
           }
           initialMessageFailed={false}
+          location={
+            Object {
+              "hash": "",
+              "pathname": "/sale/tx-sale-1/details",
+              "search": "",
+            }
+          }
           messages={Array []}
           oldestMessagePageFetched={0}
+          onCancelStripeAgreement={[Function]}
+          onExtendStripeAgreement={[Function]}
           onInitializeCardPaymentData={[Function]}
           onSendMessage={[Function]}
           onShowMoreMessages={[Function]}
           onSubmitBookingRequest={[Function]}
+          onUpdateSubscriptionPaymentMethod={[Function]}
           savePaymentMethodFailed={false}
           sendMessageError={null}
           sendMessageInProgress={false}
@@ -312,7 +332,7 @@ exports[`TransactionPage - Sale matches snapshot 1`] = `
             Object {
               "attributes": Object {
                 "createdAt": 2017-05-01T00:00:00.000Z,
-                "lastTransition": "transition/confirm-payment",
+                "lastTransition": "transition/host-fee-paid",
                 "lastTransitionedAt": 2017-06-01T00:00:00.000Z,
                 "lineItems": Array [
                   Object {

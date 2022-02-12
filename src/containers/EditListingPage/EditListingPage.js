@@ -95,7 +95,6 @@ export const EditListingPageComponent = props => {
   } = props;
   const [locationState] = useState(location.state);
 
-  console.log('🚀 | file: EditListingPage.js | line 96 | props', props);
   const isAdvert = location?.pathname?.startsWith('/a/');
   const { id, type, returnURLType } = params;
   const isNewURI = type === LISTING_PAGE_PARAM_TYPE_NEW;
@@ -117,7 +116,6 @@ export const EditListingPageComponent = props => {
   const hasStripeOnboardingDataIfNeeded = returnURLType ? !!(currentUser && currentUser.id) : true;
   const showForm = hasStripeOnboardingDataIfNeeded && (isNewURI || currentListing.id);
 
-  console.log('🚀 | file: EditListingPage.js | line 122 | fromPage', location.state);
   if (shouldRedirect) {
     const isPendingApproval =
       currentListing && currentListingState === LISTING_STATE_PENDING_APPROVAL;

@@ -11,7 +11,6 @@ import { formatMoney } from '../../util/currency';
 import { types as sdkTypes } from '../../util/sdkLoader';
 import { Button, Form, FieldCurrencyInput } from '../../components';
 import css from './EditListingPricingForm.module.css';
-import { Grow, Collapse } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -117,7 +116,7 @@ export const EditListingPricingFormComponent = props => (
               </TableRow>
               {northIsland.map(r => {
                 return (
-                  <TableRow key={r.region}>
+                  <TableRow key={`${r.region}_north`}>
                     <TableCell component="th" scope="row">
                       {r.region}
                     </TableCell>

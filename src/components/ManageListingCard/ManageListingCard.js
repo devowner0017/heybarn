@@ -147,7 +147,6 @@ export const ManageListingCardComponent = props => {
     onToggleMenu,
     renderSizes,
   } = props;
-  console.log('🚀 | file: ManageListingCard.js | line 149 | props', props);
 
   const currentListing = ensureOwnListing(listing);
   const id = currentListing.id.uuid;
@@ -155,7 +154,6 @@ export const ManageListingCardComponent = props => {
   if (!publicData) return null;
   const { listingState, listingType, transactionId, notHidden } = publicData;
   const isHidden = notHidden === false
-  console.log("🚀 | file: ManageListingCard.js | line 157 | publicData", publicData);
   const slug = createSlug(title);
   const isPendingApproval = state === LISTING_STATE_PENDING_APPROVAL;
   const isClosed = state === LISTING_STATE_CLOSED;

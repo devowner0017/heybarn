@@ -5,7 +5,6 @@ This variable is set in a hidden file: .env
 To make Stripe connection work, you also need to set Stripe's private key in the Flex Console.
 */
 
-export const stripePublishableKey = process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY;
 
 /**
  * Default merchant category code (MCC)

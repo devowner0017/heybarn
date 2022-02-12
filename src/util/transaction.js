@@ -267,6 +267,7 @@ const stateDescription = {
     [STATE_PREAUTHORIZED]: {
       on: {
         [TRANSITION_COMPLETE]: STATE_DELIVERED,
+        [TRANSITION_HOST_CANCELS_AFTER_CONTRACT_START]: STATE_DELIVERED
       },
     },
 

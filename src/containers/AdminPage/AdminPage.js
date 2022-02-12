@@ -11,12 +11,12 @@ const StyleguidePage = props => {
         <h2>Actions:</h2>
         <div>
           Reset all listings:
-          <button onClick={_ => updateAllListings()}>RESET</button>
+          <button onClick={() => updateAllListings()}>RESET</button>
         </div>
         <div>
           Send Admin Email
           <button
-            onClick={_ =>
+            onClick={() =>
               sendAdminEmail({
                 message: {
                   subject: 'NEW RENTAL AGREEMENT REQUESTED',

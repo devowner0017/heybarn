@@ -288,7 +288,7 @@ class StripePaymentForm extends Component {
       this.finalFormAPI.change('postal', postalCode);
     }
 
-    this.setState(prevState => {
+    this.setState(() => {
       return {
         error: error ? stripeErrorTranslation(intl, error) : null,
         cardValueValid: complete,
@@ -519,6 +519,7 @@ class StripePaymentForm extends Component {
   }
 
   render() {
+    // eslint-disable-next-line no-unused-vars
     const { onSubmit, ...rest } = this.props;
     return <FinalForm onSubmit={this.handleSubmit} {...rest} render={this.paymentForm} />;
   }

@@ -82,10 +82,6 @@ class EditListingLocationPanel extends Component {
           className={css.form}
           initialValues={this.state.initialValues}
           onSubmit={values => {
-            console.log(
-              '🚀 | file: EditListingLocationPanel.js | line 105 | EditListingLocationPanel | render | values',
-              values
-            );
             const { location, locRegion, locIsland, locDistrict } = values;
             const {
               selectedPlace: { address, origin },

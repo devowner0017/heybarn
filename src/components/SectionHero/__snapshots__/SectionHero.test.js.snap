@@ -10,9 +10,11 @@ exports[`SectionHero matches snapshot 1`] = `
     <h1
       className="heroMainTitle"
     >
+      Rent your space 
       <span>
-        SectionHero.title
+        |
       </span>
+       Find your space
     </h1>
     <h2
       className="heroSubTitle"
@@ -26,7 +28,7 @@ exports[`SectionHero matches snapshot 1`] = `
     >
       <a
         className="heroButton"
-        href="/s?pub_listingType=listing"
+        href="/s?pub_listingType=listing&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618"
         onClick={[Function]}
         onMouseOver={[Function]}
         onTouchStart={[Function]}
@@ -39,7 +41,7 @@ exports[`SectionHero matches snapshot 1`] = `
       </a>
       <a
         className="heroButton"
-        href="/s?pub_listingType=advert"
+        href="/s?pub_listingType=advert&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618"
         onClick={[Function]}
         onMouseOver={[Function]}
         onTouchStart={[Function]}

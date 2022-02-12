@@ -10,7 +10,6 @@ module.exports = (req, res) => {
     clientSecret: process.env.SHARETRIBE_INTEGRATION_CLIENT_SECRET,
   });
   return integrationSdk.listings.query({}).then(res => {
-    console.log('🚀 | file: update-all-listings.js | line 16 | res', res);
     const listings = res.data.data;
     // res.data contains the response data
     return Promise.all(
@@ -18,7 +17,6 @@ module.exports = (req, res) => {
         return integrationSdk.listings
           .update({ id: listing.id, publicData: { listingState: 'live' } }, { expand: true })
           .then(listingResponse => {
-          console.log("🚀 | file: update-all-listings.js | line 21 | returnintegrationSdk.listings.query | listingResponse", listingResponse);
             return "good"
           })
           .catch(e => {

@@ -136,6 +136,8 @@ describe('TransactionPanel - Sale', () => {
     onFetchTransactionLineItems: noop,
     fetchLineItemsInProgress: false,
     intl: fakeIntl,
+    ensuredRelated: createListing('ensuredRelated'),
+    location: {pathname: ''}
   };
 
   it('enquired matches snapshot', () => {
@@ -338,6 +340,8 @@ describe('TransactionPanel - Order', () => {
     onSubmitBookingRequest: noop,
     onFetchTransactionLineItems: noop,
     fetchLineItemsInProgress: false,
+    ensuredRelated: createListing('ensuredRelated'),
+    location: {pathname: ''}
   };
 
   it('enquired matches snapshot', () => {

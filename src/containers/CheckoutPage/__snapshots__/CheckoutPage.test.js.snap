@@ -103,6 +103,8 @@ exports[`CheckoutPage matches snapshot 1`] = `
           className="paymentForm"
           confirmPaymentError={null}
           defaultPaymentMethod={null}
+          forceSaveCard={true}
+          forceSaveCardDetails={true}
           formId="CheckoutPagePaymentForm"
           hasHandledCardPayment={null}
           inProgress={false}
@@ -117,7 +119,7 @@ exports[`CheckoutPage matches snapshot 1`] = `
           onSubmit={[Function]}
           paymentInfo="CheckoutPage.paymentInfo"
           paymentIntent={null}
-          showInitialMessageInput={true}
+          showInitialMessageInput={false}
         />
       </section>
     </div>

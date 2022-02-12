@@ -294,7 +294,7 @@ class ManageAvailabilityCalendar extends Component {
         // NOTE: currently, API does not support update (only deleting and creating)
         this.props.availability
           .onDeleteAvailabilityException({ id, currentException: exception, seats: seatsFromPlan })
-          .then(r => {
+          .then(()=> {
             const params = { listingId, start, end, seats, currentException: exception };
             this.props.availability.onCreateAvailabilityException(params);
           });
@@ -307,7 +307,6 @@ class ManageAvailabilityCalendar extends Component {
   }
 
   onDateChange(date) {
-    console.log("🚀 | file: ManageAvailabilityCalendar.js | line 310 | ManageAvailabilityCalendar | onDateChange | date", date);
     this.setState({ date });
 
     const { availabilityPlan, availability } = this.props;
@@ -369,10 +368,8 @@ class ManageAvailabilityCalendar extends Component {
     const {
       className,
       rootClassName,
-      listingId,
       availability,
       availabilityPlan,
-      onMonthChanged,
       monthFormat,
       ...rest
     } = this.props;

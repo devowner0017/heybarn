@@ -69,8 +69,6 @@ export class ProfilePageComponent extends Component {
       viewport,
       intl,
     } = this.props;
-      console.log("🚀 | file: ProfilePage.js | line 72 | ProfilePageComponent | render | listings", listings);
-      console.log("🚀 | file: ProfilePage.js | line 72 | ProfilePageComponent | render | adverts", adverts);
     const ensuredCurrentUser = ensureCurrentUser(currentUser);
     const profileUser = ensureUser(user);
     const isCurrentUser =

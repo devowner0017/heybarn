@@ -57,9 +57,6 @@ const UpdatePaymentMethodsPanelComponent = props => {
     subscription,
     transaction,
   } = props;
-  console.log('🚀 | file: UpdatePaymentMethodsPanel.js | line 56 | transaction', transaction);
-  console.log('🚀 | file: UpdatePaymentMethodsPanel.js | line 56 | subscription', subscription);
-  console.log('🚀 | file: UpdatePaymentMethodsPanel.js | line 49 | props', props);
 
   useEffect(() => {
     fetchStripeCustomer();
@@ -100,13 +97,11 @@ const UpdatePaymentMethodsPanelComponent = props => {
   };
 
   const createNewSubscription = data => {
-    console.log('🚀 | file: UpdatePaymentMethodsPanel.js | line 101 | data', data);
     const {
       listing,
       provider,
       booking: { attributes: bookingDates },
     } = transaction;
-    console.log('🚀 | file: UpdatePaymentMethodsPanel.js | line 109 | currentUser', currentUser);
     const createRecurringParams = {
       weeklyAmount: listing?.attributes?.price?.amount,
       listingId: listing?.id?.uuid,
@@ -127,14 +122,9 @@ const UpdatePaymentMethodsPanelComponent = props => {
 
     return onCreateRecurring({ ...createRecurringParams, paymentMethod: data })
       .then(recurringResponse => {
-        console.log(
-          '🚀 | file: CheckoutPage.js | line 281 | CheckoutPageComponent | onCreateRecurring | recurringResponse',
-          recurringResponse
-        );
         return { ...rest, protectedData: { recurringResponse } };
       })
       .catch(e => {
-        console.log(e);
       });
   };
   const handleSubmit = params => {
@@ -156,15 +146,10 @@ const UpdatePaymentMethodsPanelComponent = props => {
       })
       .then(result => {
         const newPaymentMethod = result.setupIntent.payment_method;
-        console.log(
-          '🚀 | file: UpdatePaymentMethodsPanel.js | line 112 | newPaymentMethod',
-          newPaymentMethod
-        );
         // Note: stripe.handleCardSetup might return an error inside successful call (200), but those are rejected in thunk functions.
         return onSavePaymentMethod(stripeCustomer, newPaymentMethod).then(r => {
           if (!subscription) {
             return createNewSubscription(newPaymentMethod).then((subResponse) => {
-              console.log("🚀 | file: UpdatePaymentMethodsPanel.js | line 167 | returncreateNewSubscription | subResponse", subResponse);
               return {...newPaymentMethod, subResponse};
             });
           } else {
@@ -173,7 +158,6 @@ const UpdatePaymentMethodsPanelComponent = props => {
         });
       })
       .then(r => {
-        console.log('🚀 | file: UpdatePaymentMethodsPanel.js | line 118 | .then | r', r);
         // Update currentUser entity and its sub entities: stripeCustomer and defaultPaymentMethod
         fetchStripeCustomer();
         setIsSubmitting(false);

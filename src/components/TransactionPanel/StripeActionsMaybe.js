@@ -23,7 +23,6 @@ const StripeActionsMaybe = props => {
     extendSubscriptionError,
     onManageDisableScrolling,
   } = props;
-  console.log('🚀 | file: StripeActionsMaybe.js | line 27 | props', props);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [showExtendModal, setShowExtendModal] = useState(false);
   const buttonsDisabled = extendSubscriptionInProgress || cancelSubscriptionInProgress;
@@ -52,7 +51,7 @@ const StripeActionsMaybe = props => {
           <SecondaryButton
             inProgress={cancelSubscriptionInProgress}
             disabled={buttonsDisabled}
-            onClick={_ => setShowCancelModal(true)}
+            onClick={() => setShowCancelModal(true)}
           >
             {<FormattedMessage id="TransactionPanel.stripeCancelButton" />}
           </SecondaryButton>
@@ -61,7 +60,7 @@ const StripeActionsMaybe = props => {
           <PrimaryButton
             inProgress={extendSubscriptionInProgress}
             disabled={buttonsDisabled}
-            onClick={_ => setShowExtendModal(true)}
+            onClick={() => setShowExtendModal(true)}
           >
             {<FormattedMessage id="TransactionPanel.stripeExtendButton" />}
           </PrimaryButton>

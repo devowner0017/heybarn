@@ -84,7 +84,6 @@ import PanelHeading, {
   HEADING_RENT_PAYMENT_METHOD_MISSING,
 } from './PanelHeading';
 
-import css from './TransactionPanel.module.css';
 import { cancelDuringRad } from '../../containers/TransactionPage/TransactionPage.duck';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 import RentalAgreementModal from '../RentalAgreementModal/RentalAgreementModal';
@@ -92,6 +91,8 @@ import NamedRedirect from '../NamedRedirect/NamedRedirect';
 import { getPropByName } from '../../util/devHelpers';
 import SubscriptionBreakdown from '../SubscriptionBreakdown/SubscriptionBreakdown';
 import StripeActionsMaybe from './StripeActionsMaybe';
+import css from './TransactionPanel.module.css';
+import Button from '../Button/Button';
 
 // Helper function to get display names for different roles
 const displayNames = (currentUser, currentProvider, currentCustomer, intl) => {
@@ -152,7 +153,6 @@ export class TransactionPanelComponent extends Component {
   onOpenReviewModal() {
     this.setState({ isReviewModalOpen: true });
   }
-  setShowConfirmationModal;
   onSubmitReview(values) {
     const { onSendReview, transaction, transactionRole } = this.props;
     const currentTransaction = ensureTransaction(transaction);
@@ -226,8 +226,6 @@ export class TransactionPanelComponent extends Component {
       fetchMessagesError,
       sendMessageInProgress,
       sendMessageError,
-      sendReviewInProgress,
-      sendReviewError,
       onManageDisableScrolling,
       onShowMoreMessages,
       transactionRole,
@@ -247,12 +245,7 @@ export class TransactionPanelComponent extends Component {
       sendRentalAgreementError,
       cancelDuringRadInProgress,
       cancelDuringRadError,
-      signRentalAgreementInProgress,
-      signRentalAgreementError,
-      onSignRentalAgreement,
-
       ensuredRelated,
-      onCompleteSale,
       cancelAfterAgreementSentInProgress,
       cancelAfterAgreementSentError,
       onCancelAfterAgreementSent,
@@ -268,10 +261,21 @@ export class TransactionPanelComponent extends Component {
 
     const subscriptionHasDefaultPaymentMethod = !!subscription?.default_payment_method;
 
-
     const currentTransaction = ensureTransaction(transaction);
 
     const currentListing = ensureListing(currentTransaction.listing);
+
+    const deletedListingTitle = intl.formatMessage({
+      id: 'TransactionPanel.deletedListingTitle',
+    });
+
+    const listingTitle = currentListing.attributes.deleted
+      ? deletedListingTitle
+      : currentListing.attributes.title;
+    const firstImage =
+      currentListing.images && currentListing.images.length > 0 ? currentListing.images[0] : null;
+
+    const currentListingSlug = createSlug(listingTitle);
 
     const showOtherListing = currentListing?.author?.id?.uuid === currentUser?.id?.uuid;
     const otherListing = showOtherListing ? ensuredRelated : currentListing;
@@ -279,6 +283,11 @@ export class TransactionPanelComponent extends Component {
     const relatedTitle = ensuredRelated.attributes.title;
     const relatedFirstImage =
       ensuredRelated.images && ensuredRelated.images.length > 0 ? ensuredRelated.images[0] : null;
+    const relatedListingSlug = createSlug(relatedTitle || '');
+
+    const otherListingTitle = showOtherListing ? relatedTitle : listingTitle;
+    const otherListingImage = showOtherListing ? relatedFirstImage : firstImage;
+    const otherListingSlug = showOtherListing ? relatedListingSlug : currentListingSlug;
 
     const currentProvider = ensureUser(currentTransaction.provider);
     const currentCustomer = ensureUser(currentTransaction.customer);
@@ -310,8 +319,9 @@ export class TransactionPanelComponent extends Component {
           showDetailCardHeadings: true,
           showAcceptCommunicationButtons:
             isProvider && !isCustomerBanned && hasCorrectNextTransition,
+          showRelatedLink:  otherListing?.id?.uuid,
           confirmationModalProps: {
-            negativeAction: _ =>
+            negativeAction: () =>
               onDeclineCommunication({
                 txId: tx.id,
                 isRenterEnquired: true,
@@ -341,8 +351,9 @@ export class TransactionPanelComponent extends Component {
           showDetailCardHeadings: true,
           showAcceptCommunicationButtons:
             isProvider && !isCustomerBanned && hasCorrectNextTransition,
+            showRelatedLink:  otherListing?.id?.uuid,
           confirmationModalProps: {
-            negativeAction: _ =>
+            negativeAction: () =>
               onDeclineCommunication({
                 txId: tx.id,
                 isRenterEnquired: false,
@@ -381,9 +392,10 @@ export class TransactionPanelComponent extends Component {
           relatedTxId,
           showDetailCardHeadings: true,
           showRentalAgreementButtons: true,
-          allowMessages: true,
+            showRelatedLink: otherListing?.id?.uuid,
+            allowMessages: true,
           confirmationModalProps: {
-            negativeAction: _ =>
+            negativeAction: () =>
               onCancelDuringRad({
                 txId: tx.id,
                 actor: isCustomer ? 'customer' : 'provider',
@@ -419,7 +431,7 @@ export class TransactionPanelComponent extends Component {
               });
               this.handleOpenRentalAgreementModal(false);
             },
-            negativeAction: _ =>
+            negativeAction: () =>
               onCancelDuringRad({
                 txId: tx.id,
                 actor: isCustomer ? 'customer' : 'provider',
@@ -446,9 +458,10 @@ export class TransactionPanelComponent extends Component {
           showRentalAgreementButtons: true,
           allowMessages: true,
           hideAffirmative: isCustomer,
-          wasRequested: true,
+            showRelatedLink: showOtherListing && otherListing?.id?.uuid,
+            wasRequested: true,
           confirmationModalProps: {
-            negativeAction: _ =>
+            negativeAction: () =>
               onCancelDuringRad({
                 txId: tx.id,
                 actor: isCustomer ? 'customer' : 'provider',
@@ -483,11 +496,10 @@ export class TransactionPanelComponent extends Component {
                 txId: currentTransaction.id,
                 listingId: currentListing.id,
                 wasRequested: true,
-
               });
               this.handleOpenRentalAgreementModal(false);
             },
-            negativeAction: _ =>
+            negativeAction: () =>
               onCancelDuringRad({
                 txId: tx.id,
                 actor: isCustomer ? 'customer' : 'provider',
@@ -532,9 +544,10 @@ export class TransactionPanelComponent extends Component {
           headingState: HEADING_RENTAL_AGREEMENT_SENT,
           showDetailCardHeadings: true,
           showBreakdowns: isCustomer,
-          allowMessages: false,
+            showRelatedLink: showOtherListing && otherListing?.id?.uuid,
+            allowMessages: true,
           confirmationModalProps: {
-            negativeAction: _ =>
+            negativeAction: () =>
               onCancelAfterAgreementSent({
                 txId: tx.id,
                 actor: isCustomer ? 'customer' : 'provider',
@@ -566,7 +579,8 @@ export class TransactionPanelComponent extends Component {
         return {
           headingState: HEADING_RENTAL_AGREEMENT_FINALIZED,
           showBreakdowns: true,
-          showPaymentFormButtons: isCustomer && !isProviderBanned,
+            showRelatedLink: showOtherListing && otherListing?.id?.uuid,
+            showPaymentFormButtons: isCustomer && !isProviderBanned,
           allowMessages: true,
         };
       } else if (txIsPaid(tx) && !wasCancelled(tx) && !subscriptionHasDefaultPaymentMethod) {
@@ -597,7 +611,7 @@ export class TransactionPanelComponent extends Component {
           showAddress: isCustomer,
           allowMessages: true,
           stripeActionProps: {
-            cancelAgreement: _ =>
+            cancelAgreement: () =>
               onCancelStripeAgreement({
                 txId: tx.id,
                 actor: isCustomer ? 'customer' : 'provider',
@@ -619,13 +633,13 @@ export class TransactionPanelComponent extends Component {
           showAddress: isCustomer,
           allowMessages: true,
           stripeActionProps: {
-            cancelAgreement: _ =>
+            cancelAgreement: () =>
               onCancelStripeAgreement({
                 txId: tx.id,
                 actor: isCustomer ? 'customer' : 'provider',
                 subscription,
               }),
-            extendAgreement: _ => {
+            extendAgreement: () => {
               return onExtendStripeAgreement({
                 txId: tx.id,
                 actor: isCustomer ? 'customer' : 'provider',
@@ -666,52 +680,62 @@ export class TransactionPanelComponent extends Component {
     };
     const stateData = stateDataFn(currentTransaction) || {};
 
-    const handlePaymentRedirect = values => {
-      const {
-        history,
-        params,
-        listing,
-        callSetInitialValues,
-        onInitializeCardPaymentData,
-        currentUser,
-        transaction,
-      } = this.props;
-      const typeOfLIsting = listing?.attributes?.publicData.listingType;
-      const contactingAs = typeOfLIsting === 'listing' ? 'renter' : 'host';
-      const { booking } = transaction;
-      const initialValues = {
-        contactingAs,
-        host: ensuredRelated.author,
-        guest: currentUser,
-        listing: currentListing,
-        relatedListing: ensuredRelated,
-        transaction,
-        confirmPaymentError: null,
-        bookingDates: {
-          bookingStart: booking.attributes.start,
-          bookingEnd: booking.attributes.end,
-        },
+    const relatedLink = (
+        <NamedLink
+          className={css.viewButton}
+          name={'ListingPage'}
+          params={{
+            id: otherListing?.id?.uuid,
+            slug: otherListingSlug,
+          }}
+          to={{ state: { fromPage: this.props.location.pathname } }}
+        >
+          Check them out!
+        </NamedLink>
+      ),
+
+      handlePaymentRedirect = values => {
+        const {
+          history,
+          params,
+          listing,
+          callSetInitialValues,
+          onInitializeCardPaymentData,
+          currentUser,
+          transaction,
+        } = this.props;
+        const typeOfLIsting = listing?.attributes?.publicData.listingType;
+        const contactingAs = typeOfLIsting === 'listing' ? 'renter' : 'host';
+        const { booking } = transaction;
+        const initialValues = {
+          contactingAs,
+          host: ensuredRelated.author,
+          guest: currentUser,
+          listing: currentListing,
+          relatedListing: ensuredRelated,
+          transaction,
+          confirmPaymentError: null,
+          bookingDates: {
+            bookingStart: booking.attributes.start,
+            bookingEnd: booking.attributes.end,
+          },
+        };
+
+        const saveToSessionStorage = true;
+        const routes = routeConfiguration();
+        // Customize checkout page state with current listing and selected bookingDates
+        const { setInitialValues } = findRouteByRouteName(`CheckoutPage`, routes);
+
+        callSetInitialValues(setInitialValues, initialValues, saveToSessionStorage);
+
+        // Clear previous Stripe errors from store if there is any
+        onInitializeCardPaymentData();
+
+        // Redirect to CheckoutPage
+        history.push(
+          createResourceLocatorString(`CheckoutPage`, routes, { id: transaction.id.uuid }, {})
+        );
       };
-
-      const saveToSessionStorage = true;
-      const routes = routeConfiguration();
-      // Customize checkout page state with current listing and selected bookingDates
-      const { setInitialValues } = findRouteByRouteName(`CheckoutPage`, routes);
-
-      callSetInitialValues(setInitialValues, initialValues, saveToSessionStorage);
-
-      // Clear previous Stripe errors from store if there is any
-      onInitializeCardPaymentData();
-
-      // Redirect to CheckoutPage
-      history.push(
-        createResourceLocatorString(`CheckoutPage`, routes, { id: transaction.id.uuid }, {})
-      );
-    };
-
-    const deletedListingTitle = intl.formatMessage({
-      id: 'TransactionPanel.deletedListingTitle',
-    });
 
     const {
       authorDisplayName,
@@ -723,12 +747,6 @@ export class TransactionPanelComponent extends Component {
     const { publicData, geolocation } = currentListing.attributes;
     const location = publicData && publicData.location ? publicData.location : {};
     const listingType = publicData && publicData.listingType;
-    const listingTitle = currentListing.attributes.deleted
-      ? deletedListingTitle
-      : currentListing.attributes.title;
-
-    const currentListingSlug = createSlug(listingTitle);
-    const relatedListingSlug = createSlug(relatedTitle || '');
 
     const unitType = config.bookingUnitType;
     const isNightly = unitType === LINE_ITEM_NIGHT;
@@ -754,13 +772,6 @@ export class TransactionPanelComponent extends Component {
       listingType === 'advert' && relatedPrice
         ? `${formatMoney(intl, price)} ${intl.formatMessage({ id: unitTranslationKey })}`
         : '';
-
-    const firstImage =
-      currentListing.images && currentListing.images.length > 0 ? currentListing.images[0] : null;
-
-    const otherListingTitle = showOtherListing ? relatedTitle : listingTitle;
-    const otherListingImage = showOtherListing ? relatedFirstImage : firstImage;
-    const otherListingSlug = showOtherListing ? relatedListingSlug : currentListingSlug;
 
     const acceptCommunicationButtons = (
       <ActionButtonsMaybe
@@ -885,6 +896,8 @@ export class TransactionPanelComponent extends Component {
               listingTitle={listingTitle}
               listingDeleted={listingDeleted}
               listingType={listingType}
+              showRelatedLink={stateData.showRelatedLink}
+              relatedLink={relatedLink}
             />
             <div className={css.bookingDetailsMobile}>
               <AddressLinkMaybe

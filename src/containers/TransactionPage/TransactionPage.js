@@ -67,7 +67,8 @@ export const TransactionPageComponent = props => {
     history,
     intl,
     messages,
-    onManageDisableScrolling,
+location,
+onManageDisableScrolling,
     onSendMessage,
     onSendReview,
     onShowMoreMessages,
@@ -89,7 +90,6 @@ export const TransactionPageComponent = props => {
     declineCommunicationInProgress,
     acceptCommunicationError,
     declineCommunicationError,
-
     onSendRentalAgreement,
     onRequestRentalAgreement,
 
@@ -127,7 +127,7 @@ export const TransactionPageComponent = props => {
   const isProviderRole = transactionRole === PROVIDER;
   const isCustomerRole = transactionRole === CUSTOMER;
 
-  const redirectToCheckoutPageWithInitialValues = (initialValues, listing) => {
+  const redirectToCheckoutPageWithInitialValues = (initialValues) => {
     const routes = routeConfiguration();
     // Customize checkout page state with current listing and selected bookingDates
     const { setInitialValues } = findRouteByRouteName('CheckoutPage', routes);
@@ -169,7 +169,7 @@ export const TransactionPageComponent = props => {
       },
     };
 
-    redirectToCheckoutPageWithInitialValues(initialValues, currentListing);
+    redirectToCheckoutPageWithInitialValues(initialValues);
   }
 
   // Customer can create a booking, if the tx is in "enquiry" state.
@@ -188,22 +188,21 @@ export const TransactionPageComponent = props => {
       confirmPaymentError: null,
     };
 
-    redirectToCheckoutPageWithInitialValues(initialValues, currentListing);
+    redirectToCheckoutPageWithInitialValues(initialValues);
   };
 
   const handleCancelStripeAgreement = data => {
-    onCancelStripeAgreement(data).then(r => {
+    onCancelStripeAgreement(data).then(() => {
       onFetchTransaction(currentTransaction.id, transactionRole);
     });
   };
   const handleExtendStripeAgreement = data => {
-    onExtendStripeAgreement(data).then(_ => {
+    onExtendStripeAgreement(data).then(() => {
       onFetchTransaction(currentTransaction.id, transactionRole);
     });
   };
   const handleUpdateSubscriptionPaymentMethod = pm => {
-    onUpdateSubscriptionPaymentMethod({subscription, pm, actor: 'customer'}).then(_ => {
-      console.log("🚀 | file: TransactionPage.js | line 206 | onUpdateSubscriptionPaymentMethod | _", _);
+    onUpdateSubscriptionPaymentMethod({subscription, pm, actor: 'customer'}).then(() => {
       onFetchTransaction(currentTransaction.id, transactionRole).then(() => {
         onFetchTransaction(currentTransaction.id, transactionRole)
       })
@@ -275,6 +274,7 @@ export const TransactionPageComponent = props => {
   const panel = isDataAvailable ? (
     <TransactionPanel
       history={history}
+      location={location}
       className={detailsClassName}
       currentUser={currentUser}
       transaction={currentTransaction}
@@ -380,8 +380,6 @@ TransactionPageComponent.propTypes = {
   declineSaleError: propTypes.error,
   acceptInProgress: bool.isRequired,
   declineInProgress: bool.isRequired,
-  onAcceptSale: func.isRequired,
-  onDeclineSale: func.isRequired,
   scrollingDisabled: bool.isRequired,
   transaction: propTypes.transaction,
   fetchMessagesError: propTypes.error,
@@ -538,8 +536,6 @@ const mapDispatchToProps = dispatch => {
     onUpdateSubscriptionPaymentMethod: data => dispatch(updateSubscriptionPaymentMethod(data)),
 
     onCompleteSale: transactionId => dispatch(completeSale(transactionId)),
-    onAcceptSale: transactionId => dispatch(acceptSale(transactionId)),
-    onDeclineSale: transactionId => dispatch(declineSale(transactionId)),
     onShowMoreMessages: txId => dispatch(fetchMoreMessages(txId)),
     onSendMessage: (txId, message) => dispatch(sendMessage(txId, message)),
     onManageDisableScrolling: (componentId, disableScrolling) =>

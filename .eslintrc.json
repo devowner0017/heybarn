@@ -1,0 +1,21 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": ["eslint:recommended", "plugin:react/recommended"],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": ["react"],
+  "ignorePatterns": ["*.test.js", "**/util"],
+  "rules": {
+    "react/prop-types": "off",
+    "no-extra-boolean-cast": "off",
+    "react/display-name": "off"
+  }
+}

@@ -108,12 +108,10 @@ export const getInbox = (params, search) => (dispatch, getState, sdk) => {
     page,
     per_page: INBOX_PAGE_SIZE,
   };
-  console.log("🚀 | file: InboxPage.duck.js | line 116 | loadData | apiQueryParams", apiQueryParams);
 
   return sdk.transactions
     .query(apiQueryParams)
     .then(response => {
-    console.log("🚀 | file: InboxPage.duck.js | line 120 | loadData | response", response);
       dispatch(addMarketplaceEntities(response));
       dispatch(fetchOrdersOrSalesSuccess(response));
       return response;
@@ -125,8 +123,6 @@ export const getInbox = (params, search) => (dispatch, getState, sdk) => {
 };
 
 export const loadData = (params, search) => (dispatch, getState, sdk) => {
-console.log("🚀 | file: InboxPage.duck.js | line 127 | loadData | search", search);
-console.log("🚀 | file: InboxPage.duck.js | line 127 | loadData | params", params);
   const { tab } = params;
 
   const onlyFilterValues = {
@@ -170,12 +166,10 @@ console.log("🚀 | file: InboxPage.duck.js | line 127 | loadData | params", par
     page,
     per_page: INBOX_PAGE_SIZE,
   };
-  console.log("🚀 | file: InboxPage.duck.js | line 116 | loadData | apiQueryParams", apiQueryParams);
 
   return sdk.transactions
     .query(apiQueryParams)
     .then(response => {
-    console.log("🚀 | file: InboxPage.duck.js | line 120 | loadData | response", response);
       dispatch(addMarketplaceEntities(response));
       dispatch(fetchOrdersOrSalesSuccess(response));
       return response;

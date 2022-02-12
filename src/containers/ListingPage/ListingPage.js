@@ -262,11 +262,6 @@ export class ListingPageComponent extends Component {
       isPendingApprovalVariant || isDraftVariant
         ? ensureOwnListing(getOwnListing(listingId))
         : ensureListing(getListing(listingId));
-    console.log(getListing(listingId));
-    console.log(
-      '🚀 | file: ListingPage.js | line 255 | ListingPageComponent | render | currentListing',
-      currentListing
-    );
 
     const listingSlug = rawParams.slug || createSlug(currentListing.attributes.title || '');
     const params = { slug: listingSlug, ...rawParams };
@@ -498,6 +493,7 @@ export class ListingPageComponent extends Component {
                 handleViewPhotosClick={handleViewPhotosClick}
                 onManageDisableScrolling={onManageDisableScrolling}
                 typeOfListing={typeOfListing}
+                fromPage={location?.state?.fromPage}
               />
               <div className={css.contentContainer}>
                 <SectionAvatar user={currentAuthor} params={params} />
@@ -568,6 +564,7 @@ export class ListingPageComponent extends Component {
                     type: listingType,
                     tab: listingTab,
                   }}
+                  fromPage={location?.state?.fromPage}
                 />
               </div>
             </div>
@@ -655,7 +652,6 @@ const mapStateToProps = state => {
     enquiryModalOpenForListingId,
     currentUserInTransaction,
   } = state.ListingPage;
-  console.log("🚀 | file: ListingPage.js | line 657 | currentUserInTransaction", currentUserInTransaction);
   const { currentUser } = state.user;
   const {
     hidingListing,
@@ -664,7 +660,6 @@ const mapStateToProps = state => {
     deletingListingError,
   } = state.ListingPage;
   const getListing = id => {
-    console.log('🚀 | file: ListingPage.js | line 651 | id', id);
     const ref = { id, type: 'listing' };
     const listings = getMarketplaceEntities(state, [ref]);
     return listings.length === 1 ? listings[0] : null;

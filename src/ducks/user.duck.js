@@ -1,6 +1,5 @@
 import { denormalisedResponseEntities, ensureOwnListing } from '../util/data';
 import { storableError } from '../util/errors';
-import { transitionsToRequested } from '../util/transaction';
 import { LISTING_STATE_DRAFT } from '../util/types';
 import * as log from '../util/log';
 import { authInfo } from './Auth.duck';
@@ -53,6 +52,7 @@ export const SEND_VERIFICATION_EMAIL_ERROR = 'app/user/SEND_VERIFICATION_EMAIL_E
 // ================ Reducer ================ //
 
 const mergeCurrentUser = (oldCurrentUser, newCurrentUser) => {
+  // eslint-disable-next-line no-unused-vars
   const { id: oId, type: oType, attributes: oAttr, ...oldRelationships } = oldCurrentUser || {};
   const { id, type, attributes, ...relationships } = newCurrentUser || {};
 

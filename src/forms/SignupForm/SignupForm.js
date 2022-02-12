@@ -247,7 +247,7 @@ const SignupFormComponent = props => (
                 </PrimaryButton>
                 <div
                   className={css.backButton}
-                  onClick={e => {
+                  onClick={() => {
                     setSignupStage(1);
                   }}
                 >

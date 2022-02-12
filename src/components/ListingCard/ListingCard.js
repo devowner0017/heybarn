@@ -1,4 +1,4 @@
-import React, { Component, useCallback } from 'react';
+import React, { Component, useCallback, useState } from 'react';
 import { string, func } from 'prop-types';
 import { FormattedMessage, intlShape, injectIntl } from '../../util/reactIntl';
 import classNames from 'classnames';
@@ -11,6 +11,8 @@ import { createSlug } from '../../util/urlHelpers';
 import config from '../../config';
 import { NamedLink, ResponsiveImage, Avatar } from '../../components';
 import Overlay from './Overlay';
+import Truncate from 'react-truncate';
+import ReactTooltip from 'react-tooltip';
 
 import css from './ListingCard.module.css';
 import { capitalize } from 'lodash';
@@ -54,12 +56,12 @@ export const ListingCardComponent = props => {
     minInfo,
     showAvatar,
   } = props;
+  const [tooltipActive, setTooltipActive] = useState(false);
   const classes = classNames(rootClassName || css.root, className, { [css.minInfo]: minInfo });
   const currentListing = ensureListing(listing);
   const id = currentListing.id.uuid;
   const { title = '', price, publicData } = currentListing.attributes;
   const { listingType, locRegion: region, preferredUse: need, listingState } = publicData || {};
-  console.log('🚀 | file: ListingCard.js | line 62 | publicData', publicData);
   const slug = createSlug(title);
   const author = ensureUser(listing.author);
   const authorName = author.attributes.profile.displayName;
@@ -81,14 +83,13 @@ export const ListingCardComponent = props => {
     : 'ListingCard.perUnit';
   const listingUnderEnquiry = listingState === LISTING_UNDER_ENQUIRY;
   const useLink = !minInfo && !listingUnderEnquiry;
-  console.log('🚀 | file: ListingCard.js | line 83 | useLink', useLink);
   const ConditionalWrapper = useCallback(
     ({ condition, wrapper, defaultWrapper, children }) => {
       return condition ? wrapper(children) : !!defaultWrapper ? defaultWrapper(children) : children;
     },
     [listingUnderEnquiry]
   );
-  console.log('🚀 | file: ListingCard.js | line 128 | listing', listing);
+
   return (
     <ConditionalWrapper
       condition={useLink}
@@ -145,35 +146,45 @@ export const ListingCardComponent = props => {
             }}
             defaultWrapper={children => <div className={css.title}>{children}</div>}
           >
-            <div className={css.title}>
-              {richText(title, {
-                longWordMinLength: MIN_LENGTH_FOR_LONG_WORDS,
-                longWordClass: css.longWord,
-              })}
+            <div className={css.title} data-tip-disable={!tooltipActive} data-tip={title} id={listing.id.uuid} data-for={listing.id.uuid}>
+              <Truncate
+                lines={2}
+                ellipsis={<span>...</span>}
+                onTruncate={val => setTooltipActive(val)}
+              >
+                {richText(title, {
+                  longWordMinLength: MIN_LENGTH_FOR_LONG_WORDS,
+                  longWordClass: css.longWord,
+                })}
+              </Truncate>
             </div>
+            <ReactTooltip delayShow={500}   id={listing.id.uuid}/>
           </ConditionalWrapper>
           <div className={css.authorInfo}>
-              <FormattedMessage
-                id={`ListingCard.${listingType}By`}
-                values={{
-                  need: `${capitalize(need)} space`,
-                  region: (region && capitalize(region)) || 'NZ',
-                  authorName,
-                }}
-              />
+            <FormattedMessage
+              id={`ListingCard.${listingType}By`}
+              values={{
+                need: `${capitalize(need)} space`,
+                region: (region && capitalize(region)) || 'NZ',
+                authorName,
+              }}
+            />
           </div>
         </div>
 
         {listingType === 'listing' && (
           <>
             <div className={minInfo ? css.smallPrice : css.price}>
-              <div className={minInfo ?  css.smallPriceValue : css.priceValue} title={priceTitle}>
+              <div className={minInfo ? css.smallPriceValue : css.priceValue} title={priceTitle}>
                 {formattedPrice}
               </div>
               {!minInfo && (
-                <div className={css.perUnit}>
-                  <FormattedMessage id={unitTranslationKey} />
-                </div>
+                <>
+                  <div className={css.perUnit}>
+                    <FormattedMessage id={unitTranslationKey} />
+                  </div>
+                  <div className={css.perUnitMobile}>/wk</div>
+                </>
               )}
             </div>
           </>

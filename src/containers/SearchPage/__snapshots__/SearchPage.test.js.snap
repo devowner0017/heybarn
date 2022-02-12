@@ -30,18 +30,31 @@ exports[`SearchPageComponent matches snapshot 1`] = `
       filterConfig={
         Array [
           Object {
-            "config": Object {},
+            "config": Object {
+              "options": Array [
+                Object {
+                  "key": "northIsland",
+                  "label": "North Island",
+                },
+                Object {
+                  "key": "southIsland",
+                  "label": "South Island",
+                },
+              ],
+            },
             "group": "primary",
-            "id": "dates",
-            "label": "Dates",
+            "id": "locIsland",
+            "label": "Location",
             "listingType": Array [
               "listing",
               "advert",
             ],
             "queryParamNames": Array [
-              "dates",
+              "pub_locIsland",
+              "pub_locRegion",
+              "pub_locDistrict",
             ],
-            "type": "BookingDateRangeFilter",
+            "type": "SelectRegionFilter",
           },
           Object {
             "config": Object {
@@ -54,7 +67,6 @@ exports[`SearchPageComponent matches snapshot 1`] = `
             "label": "Price",
             "listingType": Array [
               "listing",
-              "advert",
             ],
             "queryParamNames": Array [
               "price",
@@ -64,41 +76,16 @@ exports[`SearchPageComponent matches snapshot 1`] = `
           Object {
             "config": Object {},
             "group": "primary",
-            "id": "keyword",
-            "label": "Keyword",
+            "id": "dates",
+            "label": "Dates",
             "listingType": Array [
               "listing",
               "advert",
             ],
             "queryParamNames": Array [
-              "keywords",
+              "dates",
             ],
-            "type": "KeywordFilter",
-          },
-          Object {
-            "config": Object {
-              "options": Array [
-                Object {
-                  "key": "advert",
-                  "label": "Advert",
-                },
-                Object {
-                  "key": "listing",
-                  "label": "Listing",
-                },
-              ],
-            },
-            "group": "primary",
-            "id": "listingType",
-            "label": "Type",
-            "listingType": Array [
-              "listing",
-              "advert",
-            ],
-            "queryParamNames": Array [
-              "pub_listingType",
-            ],
-            "type": "SelectSingleFilter",
+            "type": "BookingDateRangeFilter",
           },
           Object {
             "config": Object {
@@ -134,35 +121,38 @@ exports[`SearchPageComponent matches snapshot 1`] = `
             "type": "SelectMultipleFilter",
           },
           Object {
-            "config": Object {
-              "options": Array [
-                Object {
-                  "key": "smoke",
-                  "label": "Smoke",
-                },
-                Object {
-                  "key": "electric",
-                  "label": "Electric",
-                },
-                Object {
-                  "key": "wood",
-                  "label": "Wood",
-                },
-                Object {
-                  "key": "other",
-                  "label": "Other",
-                },
-              ],
-            },
+            "config": Object {},
             "group": "primary",
-            "id": "category",
-            "label": "Category",
+            "id": "keyword",
+            "label": "Keyword",
             "listingType": Array [
               "listing",
               "advert",
             ],
             "queryParamNames": Array [
-              "pub_category",
+              "keywords",
+            ],
+            "type": "KeywordFilter",
+          },
+          Object {
+            "config": Object {
+              "options": Array [
+                Object {
+                  "key": "advert",
+                  "label": "Advert",
+                },
+                Object {
+                  "key": "listing",
+                  "label": "Listing",
+                },
+              ],
+            },
+            "group": "primary",
+            "id": "listingType",
+            "label": "Type",
+            "listingType": Array [],
+            "queryParamNames": Array [
+              "pub_listingType",
             ],
             "type": "SelectSingleFilter",
           },
@@ -170,105 +160,119 @@ exports[`SearchPageComponent matches snapshot 1`] = `
             "config": Object {
               "options": Array [
                 Object {
-                  "key": "northIsland",
-                  "label": "North Island",
+                  "key": "live",
+                  "label": "Available Now Only",
                 },
                 Object {
-                  "key": "southIsland",
-                  "label": "South Island",
+                  "key": null,
+                  "label": "All",
                 },
               ],
             },
             "group": "primary",
-            "id": "locIsland",
-            "label": "Island",
+            "id": "listingStatus",
+            "label": "Status",
             "listingType": Array [
               "listing",
               "advert",
             ],
             "queryParamNames": Array [
-              "pub_locIsland",
-              "pub_locRegion",
-              "pub_locDistrict",
+              "pub_listingState",
             ],
-            "type": "SelectRegionFilter",
+            "type": "SelectSingleFilter",
+          },
+          Object {
+            "config": Object {
+              "customFormat": "m2",
+              "max": 1000,
+              "min": 1,
+              "step": 1,
+            },
+            "group": "primary",
+            "id": "sizeOfSpace",
+            "label": "Size",
+            "listingType": Array [
+              "listing",
+            ],
+            "queryParamNames": Array [
+              "pub_sizeOfSpace",
+            ],
+            "type": "SelectRangeFilter",
+          },
+          Object {
+            "config": Object {
+              "customFormat": "years",
+              "max": 100,
+              "min": 1,
+              "step": 1,
+            },
+            "group": "primary",
+            "id": "ageOfSpace",
+            "label": "Age",
+            "listingType": Array [
+              "listing",
+            ],
+            "queryParamNames": Array [
+              "pub_ageOfSpace",
+            ],
+            "type": "SelectRangeFilter",
           },
           Object {
             "config": Object {
               "options": Array [
                 Object {
-                  "key": "bayOfPlenty",
+                  "key": "BayPlenty",
                   "label": "Bay of Plenty Region",
                   "parent": "northIsland",
                 },
                 Object {
-                  "key": "hawkesBay",
+                  "key": "HawkesBay",
                   "label": "Hawke's Bay Region",
                   "parent": "northIsland",
                 },
                 Object {
-                  "key": "manawatu",
+                  "key": "Manawatu",
                   "label": "Manawatū-Whanganui Region",
                   "parent": "northIsland",
                 },
                 Object {
-                  "key": "northland",
+                  "key": "Northland",
                   "label": "Northland Region",
                   "parent": "northIsland",
                 },
                 Object {
-                  "key": "taranaki",
+                  "key": "Taranaki",
                   "label": "Taranaki Region",
                   "parent": "northIsland",
                 },
                 Object {
-                  "key": "waikato",
+                  "key": "Waikato",
                   "label": "Waikato Region",
                   "parent": "northIsland",
                 },
                 Object {
-                  "key": "wellington",
+                  "key": "Wellington",
                   "label": "Wellington Region",
                   "parent": "northIsland",
                 },
                 Object {
-                  "key": "mixed",
-                  "label": "Mixed",
-                  "parent": "northIsland",
-                },
-                Object {
-                  "key": "unitaryAuthority",
-                  "label": "Unitary Authority",
-                  "parent": "northIsland",
-                },
-                Object {
-                  "key": "canterbury",
+                  "key": "Canterbury",
                   "label": "Canterbury Region",
                   "parent": "southIsland",
                 },
                 Object {
-                  "key": "otago",
+                  "key": "Otago",
                   "label": "Otago Region",
                   "parent": "southIsland",
                 },
                 Object {
-                  "key": "southland",
+                  "key": "Southland",
                   "label": "Southland Region",
                   "parent": "southIsland",
                 },
                 Object {
-                  "key": "westCoast",
+                  "key": "WestCoast",
                   "label": "West Coast Region",
-                  "parent": "southIsland",
-                },
-                Object {
-                  "key": "mixed",
-                  "label": "Mixed",
-                  "parent": "southIsland",
-                },
-                Object {
-                  "key": "unitaryAuthority",
-                  "label": "Unitary Authority",
                   "parent": "southIsland",
                 },
               ],
@@ -291,267 +295,217 @@ exports[`SearchPageComponent matches snapshot 1`] = `
                 Object {
                   "key": "kawerau",
                   "label": "Kawerau District",
-                  "parent": "bayOfPlenty",
+                  "parent": "BayPlenty",
                 },
                 Object {
                   "key": "opotiki",
                   "label": "Ōpōtiki District",
-                  "parent": "bayOfPlenty",
+                  "parent": "BayPlenty",
                 },
                 Object {
                   "key": "westernBayOfPlenty",
                   "label": "Western Bay of Plenty District",
-                  "parent": "bayOfPlenty",
+                  "parent": "BayPlenty",
                 },
                 Object {
                   "key": "whakatane",
                   "label": "Whakatane District",
-                  "parent": "bayOfPlenty",
+                  "parent": "BayPlenty",
                 },
                 Object {
                   "key": "centralHawkesBay",
                   "label": "Central Hawke's Bay District",
-                  "parent": "bayOfPlenty",
+                  "parent": "BayPlenty",
                 },
                 Object {
                   "key": "hastings",
                   "label": "Hastings District",
-                  "parent": "hawkesBay",
+                  "parent": "HawkesBay",
                 },
                 Object {
                   "key": "wairoa",
                   "label": "Wairoa District",
-                  "parent": "hawkesBay",
+                  "parent": "HawkesBay",
                 },
                 Object {
                   "key": "horowhenua",
                   "label": "Horowhenua District",
-                  "parent": "manawatu",
+                  "parent": "Manawatu",
                 },
                 Object {
                   "key": "manawatu",
                   "label": "Manawatu District",
-                  "parent": "manawatu",
+                  "parent": "Manawatu",
                 },
                 Object {
                   "key": "ruapehu",
                   "label": "Ruapehu District",
-                  "parent": "manawatu",
+                  "parent": "Manawatu",
                 },
                 Object {
                   "key": "whanganui",
                   "label": "Whanganui District",
-                  "parent": "manawatu",
+                  "parent": "Manawatu",
                 },
                 Object {
                   "key": "farNorth",
                   "label": "Far North District",
-                  "parent": "northland",
+                  "parent": "Northland",
                 },
                 Object {
                   "key": "kaipara",
                   "label": "Kaipara District",
-                  "parent": "northland",
+                  "parent": "Northland",
                 },
                 Object {
                   "key": "whangarei",
                   "label": "Whangarei District",
-                  "parent": "northland",
+                  "parent": "Northland",
                 },
                 Object {
                   "key": "newPlymouth",
                   "label": "New Plymouth District",
-                  "parent": "taranaki",
+                  "parent": "Taranaki",
                 },
                 Object {
                   "key": "southTaranaki",
                   "label": "South Taranaki District",
-                  "parent": "taranaki",
+                  "parent": "Taranaki",
                 },
                 Object {
                   "key": "hauraki",
                   "label": "Hauraki District",
-                  "parent": "waikato",
+                  "parent": "Waikato",
                 },
                 Object {
                   "key": "matamataPiako",
                   "label": "Matamata-Piako District",
-                  "parent": "waikato",
+                  "parent": "Waikato",
                 },
                 Object {
                   "key": "otorohanga",
                   "label": "Otorohanga District",
-                  "parent": "waikato",
+                  "parent": "Waikato",
                 },
                 Object {
                   "key": "southWaikato",
                   "label": "South Waikato District",
-                  "parent": "waikato",
+                  "parent": "Waikato",
                 },
                 Object {
                   "key": "thamesCoromandel",
                   "label": "Thames-Coromandel District",
-                  "parent": "waikato",
+                  "parent": "Waikato",
                 },
                 Object {
                   "key": "waikato",
                   "label": "Waikato District",
-                  "parent": "waikato",
+                  "parent": "Waikato",
                 },
                 Object {
                   "key": "waipa",
                   "label": "Waipa District",
-                  "parent": "waikato",
+                  "parent": "Waikato",
                 },
                 Object {
                   "key": "carterton",
                   "label": "Carterton District",
-                  "parent": "wellington",
+                  "parent": "Wellington",
                 },
                 Object {
                   "key": "kapitiCoast",
                   "label": "Kapiti Coast District",
-                  "parent": "wellington",
+                  "parent": "Wellington",
                 },
                 Object {
                   "key": "masterton",
                   "label": "Masterton District",
-                  "parent": "wellington",
+                  "parent": "Wellington",
                 },
                 Object {
                   "key": "southWairarapa",
                   "label": "South Wairarapa District",
-                  "parent": "wellington",
-                },
-                Object {
-                  "key": "rangitikei",
-                  "label": "Rangitikei District (Manawatū-Whanganui: 86.37%; Hawke's Bay: 13.63%)",
-                  "parent": "mixed",
-                },
-                Object {
-                  "key": "rotoruaLakes",
-                  "label": "Rotorua Lakes (Bay of Plenty: 61.52%; Waikato: 38.48%)",
-                  "parent": "mixed",
-                },
-                Object {
-                  "key": "stratford",
-                  "label": "Stratford District (Taranaki: 68.13%; Manawatū-Whanganui: 31.87%)",
-                  "parent": "mixed",
-                },
-                Object {
-                  "key": "tararua",
-                  "label": "Tararua District (Manawatū-Whanganui: 98.42%; Wellington: 1.58%)",
-                  "parent": "mixed",
-                },
-                Object {
-                  "key": "taupo",
-                  "label": "Taupo District (Waikato: 73.74%; Bay of Plenty: 14.31%; Hawke's Bay: 11.26%; Manawatū-Whanganui: 0.69%)",
-                  "parent": "mixed",
-                },
-                Object {
-                  "key": "waitomo",
-                  "label": "Waitomo District (Waikato: 94.87%; Manawatū-Whanganui: 5.13%)",
-                  "parent": "mixed",
-                },
-                Object {
-                  "key": "gisborne",
-                  "label": "Gisborne District",
-                  "parent": "unitaryAuthority",
+                  "parent": "Wellington",
                 },
                 Object {
                   "key": "ashburton",
                   "label": "Ashburton District",
-                  "parent": "canterbury",
+                  "parent": "Canterbury",
                 },
                 Object {
                   "key": "hurunui",
                   "label": "Hurunui District",
-                  "parent": "canterbury",
+                  "parent": "Canterbury",
                 },
                 Object {
                   "key": "kaikoura",
                   "label": "Kaikoura District",
-                  "parent": "canterbury",
+                  "parent": "Canterbury",
                 },
                 Object {
                   "key": "mackenzie",
                   "label": "Mackenzie District",
-                  "parent": "canterbury",
+                  "parent": "Canterbury",
                 },
                 Object {
                   "key": "selwyn",
                   "label": "Selwyn District",
-                  "parent": "canterbury",
+                  "parent": "Canterbury",
                 },
                 Object {
                   "key": "timaru",
                   "label": "Timaru District",
-                  "parent": "canterbury",
+                  "parent": "Canterbury",
                 },
                 Object {
                   "key": "waimakariri",
                   "label": "Waimakariri District",
-                  "parent": "canterbury",
+                  "parent": "Canterbury",
                 },
                 Object {
                   "key": "waimate",
                   "label": "Waimate District",
-                  "parent": "canterbury",
+                  "parent": "Canterbury",
                 },
                 Object {
                   "key": "centralOtago",
                   "label": "Central Otago District",
-                  "parent": "otago",
+                  "parent": "Otago",
                 },
                 Object {
                   "key": "clutha",
                   "label": "Clutha District",
-                  "parent": "otago",
+                  "parent": "Otago",
                 },
                 Object {
                   "key": "queenstownLakes",
                   "label": "Queenstown-Lakes District",
-                  "parent": "otago",
+                  "parent": "Otago",
                 },
                 Object {
                   "key": "gore",
                   "label": "Gore District",
-                  "parent": "southland",
+                  "parent": "Southland",
                 },
                 Object {
                   "key": "southland",
                   "label": "Southland District",
-                  "parent": "southland",
+                  "parent": "Southland",
                 },
                 Object {
                   "key": "buller",
                   "label": "Buller District",
-                  "parent": "westCoast",
+                  "parent": "WestCoast",
                 },
                 Object {
                   "key": "grey",
                   "label": "Grey District",
-                  "parent": "westCoast",
+                  "parent": "WestCoast",
                 },
                 Object {
                   "key": "westland",
                   "label": "Westland District",
-                  "parent": "westCoast",
-                },
-                Object {
-                  "key": "waitaki",
-                  "label": "Waitaki District (Canterbury: 59.61%; Otago: 40.39%)",
-                  "parent": "mixed",
-                },
-                Object {
-                  "key": "marlborough",
-                  "label": "Marlborough District",
-                  "parent": "unitaryAuthority",
-                },
-                Object {
-                  "key": "tasman",
-                  "label": "Tasman District",
-                  "parent": "unitaryAuthority",
+                  "parent": "WestCoast",
                 },
               ],
             },
@@ -571,51 +525,175 @@ exports[`SearchPageComponent matches snapshot 1`] = `
             "config": Object {
               "options": Array [
                 Object {
-                  "key": "towels",
-                  "label": "Towels",
+                  "checkedIcon": "beachAccess",
+                  "key": "weatherproof",
+                  "label": "Weatherproof",
+                  "unCheckedIcon": "beachAccessOutlined",
                 },
                 Object {
-                  "key": "bathroom",
-                  "label": "Bathroom",
+                  "checkedIcon": "lock",
+                  "key": "secure",
+                  "label": "Secure",
+                  "unCheckedIcon": "lockOutlined",
                 },
                 Object {
-                  "key": "swimming_pool",
-                  "label": "Swimming pool",
+                  "checkedIcon": "power",
+                  "key": "mainsPower",
+                  "label": "Mains power",
+                  "unCheckedIcon": "powerOutlined",
                 },
                 Object {
-                  "key": "own_drinks",
-                  "label": "Own drinks allowed",
+                  "checkedIcon": "water",
+                  "key": "waterSupply",
+                  "label": "Water supply",
+                  "unCheckedIcon": "waterOutlined",
                 },
                 Object {
-                  "key": "jacuzzi",
-                  "label": "Jacuzzi",
+                  "checkedIcon": "internet",
+                  "key": "internet",
+                  "label": "Internet",
+                  "unCheckedIcon": "internetOutlined",
                 },
                 Object {
-                  "key": "audiovisual_entertainment",
-                  "label": "Audiovisual entertainment",
+                  "checkedIcon": "wc",
+                  "key": "wc",
+                  "label": "Toilet",
+                  "unCheckedIcon": "wcOutlined",
                 },
                 Object {
-                  "key": "barbeque",
-                  "label": "Barbeque",
-                },
-                Object {
-                  "key": "own_food_allowed",
-                  "label": "Own food allowed",
+                  "checkedIcon": "parking",
+                  "key": "parking",
+                  "label": "Parking",
+                  "unCheckedIcon": "parkingOutlined",
                 },
               ],
               "searchMode": "has_all",
             },
             "group": "secondary",
             "id": "amenities",
-            "label": "Amenities",
+            "label": "Features",
             "listingType": Array [
               "listing",
-              "advert",
             ],
             "queryParamNames": Array [
               "pub_amenities",
             ],
             "type": "SelectMultipleFilter",
+          },
+          Object {
+            "config": Object {
+              "options": Array [
+                Object {
+                  "key": "anytimeUnrestricted",
+                  "label": "Anytime, access is not restricted",
+                },
+                Object {
+                  "key": "anytimeArranged",
+                  "label": "Anytime, but by arrangement",
+                },
+                Object {
+                  "key": "weekendsOnly",
+                  "label": "Prefer only weekends",
+                },
+                Object {
+                  "key": "weekdaysOnly",
+                  "label": "Prefer only office hours",
+                },
+                Object {
+                  "key": "negotiable",
+                  "label": "Negotiable",
+                },
+              ],
+              "searchMode": "has_any",
+            },
+            "group": "secondary",
+            "id": "listingAccessFrequency",
+            "label": "How much access would you permit?",
+            "listingType": Array [
+              "listing",
+            ],
+            "queryParamNames": Array [
+              "pub_accessFrequency",
+            ],
+            "type": "none",
+          },
+          Object {
+            "config": Object {
+              "options": Array [
+                Object {
+                  "key": "anytimeUnrestricted",
+                  "label": "All the time",
+                },
+                Object {
+                  "key": "anytimeArranged",
+                  "label": "Anytime, but I'll let you know",
+                },
+                Object {
+                  "key": "weekdaysOnly",
+                  "label": "Typically only weekdays",
+                },
+                Object {
+                  "key": "weekendsOnly",
+                  "label": "Typically only weekends",
+                },
+                Object {
+                  "key": "infrequently",
+                  "label": "Pretty infrequently",
+                },
+                Object {
+                  "key": "dropAndCollect",
+                  "label": "Once to drop off, once to collect",
+                },
+                Object {
+                  "key": "negotiable",
+                  "label": "Negotiable",
+                },
+              ],
+              "searchMode": "has_any",
+            },
+            "group": "secondary",
+            "id": "advertAccessFrequency",
+            "label": "Access Frequency",
+            "listingType": Array [
+              "advert",
+            ],
+            "queryParamNames": Array [
+              "pub_accessFrequency",
+            ],
+            "type": "none",
+          },
+          Object {
+            "config": Object {
+              "options": Array [
+                Object {
+                  "key": "noSmoking",
+                  "label": "No smoking",
+                },
+                Object {
+                  "key": "noPets",
+                  "label": "No pets",
+                },
+                Object {
+                  "key": "noGuests",
+                  "label": "No guests",
+                },
+                Object {
+                  "key": "noSignage",
+                  "label": "No signage",
+                },
+              ],
+              "searchMode": "has_any",
+            },
+            "group": "secondary",
+            "id": "groundRules",
+            "label": "Ground rules",
+            "listingType": Array [
+              "listing",
+            ],
+            "queryParamNames": Array [
+              "pub_accessFrequency",
+            ],
+            "type": "none",
           },
         ]
       }
@@ -663,6 +741,7 @@ exports[`SearchPageComponent matches snapshot 1`] = `
       searchListingsError={null}
       searchParamsAreInSync={true}
       searchParamsForPagination={Object {}}
+      searchType="listing"
       showAsModalMaxWidth={768}
       sortConfig={
         Object {

@@ -16,9 +16,7 @@ const DetailCardHeadingsMaybe = props => {
     listing,
     showPrice
   } = props;
-  console.log('🚀 | file: DetailCardHeadingsMaybe.js | line 18 | listing', listing);
   const publicData = getPropByName(listing, 'publicData');
-  console.log('🚀 | file: DetailCardHeadingsMaybe.js | line 19 | publicData', publicData);
   const { sizeOfSpace } = publicData || {};
   return showDetailCardHeadings ? (
     <div className={css.detailCardHeadings}>

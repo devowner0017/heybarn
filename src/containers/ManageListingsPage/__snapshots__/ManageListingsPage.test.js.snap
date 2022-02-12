@@ -3,10 +3,11 @@
 exports[`ContactDetailsPage matches snapshot 1`] = `
 <Page
   scrollingDisabled={false}
-  title="ManageListingsPage.title"
+  title="ManageListingsPage.titlelisting"
 >
-  <LayoutSingleColumn
+  <LayoutSideNavigation
     className={null}
+    containerClassName={null}
     rootClassName={null}
   >
     <LayoutWrapperTopbar
@@ -22,6 +23,24 @@ exports[`ContactDetailsPage matches snapshot 1`] = `
         selectedPageName="ManageListingsPage"
       />
     </LayoutWrapperTopbar>
+    <withViewport(LayoutWrapperManageListingsSideNavComponent)
+      currentTab="ListingsTab"
+      extraTabs={
+        Array [
+          Object {
+            "linkProps": Object {
+              "name": "InboxPage",
+            },
+            "selected": false,
+            "text": <span>
+              <Memo(MemoizedFormattedMessage)
+                id="InboxPage.salesTabTitle"
+              />
+            </span>,
+          },
+        ]
+      }
+    />
     <LayoutWrapperMain
       className={null}
       rootClassName={null}
@@ -33,6 +52,27 @@ exports[`ContactDetailsPage matches snapshot 1`] = `
           className="listingCards"
         />
       </div>
+      <injectIntl(ConfirmationModal)
+        affirmativeButtonText="Cancel"
+        affirmativeError={null}
+        affirmativeInProgress={null}
+        contentText={
+          <Memo(MemoizedFormattedMessage)
+            id="ManageListingspage.deleteConfirmationSubTitle"
+          />
+        }
+        id="ConfirmationModal"
+        isOpen={false}
+        negativeAction={[Function]}
+        negativeButtonText="Delete this listing"
+        onCloseModal={[Function]}
+        onManageDisableScrolling={[Function]}
+        titleText={
+          <Memo(MemoizedFormattedMessage)
+            id="ManageListingspage.deleteConfirmationTitle"
+          />
+        }
+      />
     </LayoutWrapperMain>
     <LayoutWrapperFooter
       className={null}
@@ -40,6 +80,6 @@ exports[`ContactDetailsPage matches snapshot 1`] = `
     >
       <injectIntl(Footer) />
     </LayoutWrapperFooter>
-  </LayoutSingleColumn>
+  </LayoutSideNavigation>
 </Page>
 `;

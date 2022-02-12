@@ -316,16 +316,6 @@
   }
 }
 
-.priceValue {
-  /* Font */
-  @apply --marketplaceBodyTitleStyles;
-  color: var(--marketplaceColor);
-
-  margin-top: 0;
-  @media (--viewportMedium) {
-    margin-bottom: 1px;
-  }
-}
 
 .perUnit {
   /* Font */
@@ -596,4 +586,21 @@
   /* use break-word if available */
   word-break: break-word;
   hyphens: auto;
+}
+.infoWrapper {
+  display: flex;
+  flex-direction: column;
+
+  @media (--viewportMedium) {
+    flex-direction: row;
+    align-items: center;
+
+  }
+}
+.divider{
+  display: none;
+  @media (--viewportMedium) {
+ display: inline-block;
+ margin: 0 .2rem;
+  }
 }

@@ -275,7 +275,7 @@ class StripePaymentFormPlatformFee extends Component {
       this.finalFormAPI.change('postal', postalCode);
     }
 
-    this.setState(prevState => {
+    this.setState(() => {
       return {
         error: error ? stripeErrorTranslation(intl, error) : null,
         cardValueValid: complete,
@@ -283,10 +283,6 @@ class StripePaymentFormPlatformFee extends Component {
     });
   }
   handleSubmit(values) {
-    console.log(
-      '🚀 | file: StripePaymentFormPlatformFee.js | line 286 | StripePaymentFormPlatformFee | handleSubmit | values',
-      values
-    );
     const {
       onSubmit,
       inProgress,
@@ -294,10 +290,6 @@ class StripePaymentFormPlatformFee extends Component {
       hasHandledCardPayment,
       defaultPaymentMethod,
     } = this.props;
-    console.log(
-      '🚀 | file: StripePaymentFormPlatformFee.js | line 297 | StripePaymentFormPlatformFee | handleSubmit | this.props',
-      this.props
-    );
     const { initialMessage } = values;
     const { cardValueValid, paymentMethod } = this.state;
     const billingDetailsKnown = hasHandledCardPayment || defaultPaymentMethod;
@@ -515,6 +507,7 @@ class StripePaymentFormPlatformFee extends Component {
   }
 
   render() {
+    // eslint-disable-next-line no-unused-vars
     const { onSubmit, ...rest } = this.props;
     return <FinalForm onSubmit={this.handleSubmit} {...rest} render={this.paymentForm} />;
   }

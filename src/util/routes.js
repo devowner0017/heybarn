@@ -13,7 +13,7 @@ const toPathByRouteName = (nameToFind, routes) => {
   const route = findRouteByName(nameToFind, routes);
   if (!route) {
     // console.error(`Path "${nameToFind}" was not found.`);
-    // return _ => '#';
+    // return () => '#';
     throw new Error(`Path "${nameToFind}" was not found.`);
   }
   return compile(route.path);
@@ -28,7 +28,7 @@ export const pathByRouteName = (nameToFind, routes, params = {}) => {
   // try {
     // console.error(`Path "${nameToFind}" was not found.`);
   // } catch {
-  //   return _ => '#';
+  //   return () => '#';
   // }
   return toPathByRouteName(nameToFind, routes)(pathParams);
 };
@@ -96,7 +96,7 @@ export const findRouteByRouteName = (nameToFind, routes) => {
   const route = findRouteByName(nameToFind, routes);
   if (!route) {
     console.error(`Path "${nameToFind}" was not found.`);
-    //  return _ => null;
+    //  return () => null;
     throw new Error(`Component "${nameToFind}" was not found.`);
   }
   return route;

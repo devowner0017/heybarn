@@ -5,7 +5,7 @@ import { FormSpy, Form as FinalForm } from 'react-final-form';
 import { intlShape, injectIntl, FormattedMessage } from '../../util/reactIntl';
 import classNames from 'classnames';
 import { propTypes } from '../../util/types';
-import { Form, Button, FieldDateInput, FieldCheckbox, FieldDate } from '../../components';
+import { Form, Button,  FieldCheckbox, FieldDate } from '../../components';
 import { TransitionGroup } from 'react-transition-group';
 
 // import ManageAvailabilityCalendar from './ManageAvailabilityCalendar';
@@ -13,7 +13,6 @@ import css from './EditListingAvailabilityForm.module.css';
 import { Collapse } from '@mui/material';
 import moment from 'moment'
 import { required } from '../../util/validators'
-const identity = v => v;
 
 export class EditListingAvailabilityFormComponent extends Component {
   render() {
@@ -28,17 +27,12 @@ export class EditListingAvailabilityFormComponent extends Component {
             disabled,
             ready,
             handleSubmit,
-            //intl,
             invalid,
             pristine,
             saveActionMsg,
             updated,
             updateError,
             updateInProgress,
-            availability,
-            availabilityPlan,
-            listingId,
-            initialValues,
             values,
           } = formRenderProps;
 
@@ -66,6 +60,7 @@ export class EditListingAvailabilityFormComponent extends Component {
                   }
                 }}
               />
+                  <div>
               <div className={css.calendarWrapper}>
                 <div className={css.fieldWrapper}>
                   <FieldDate
@@ -100,6 +95,7 @@ export class EditListingAvailabilityFormComponent extends Component {
                 label={'Ongoing rental (no specific end date)?'}
                 value={true}
               />
+              </div>
               <Button
                 className={css.submitButton}
                 type="submit"

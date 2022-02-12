@@ -152,20 +152,17 @@ export const stripeCustomerError = e => ({
 /* ================ Thunks ================ */
 
 export const initiateOrder = orderParams => (dispatch, getState, sdk) => {
-  console.log('🚀 | file: PlatformFee.duck.js | line 155 | orderParams', orderParams);
   dispatch(initiateOrderRequest());
 
   // If we already have a transaction ID, we should transition, not
   // initiate.
 
   const handleSuccess = response => {
-    console.log('🚀 | file: PlatformFee.duck.js | line 161 | response', response);
     dispatch(initiateOrderSuccess(response));
     return response;
   };
 
   const handleError = e => {
-    console.log('🚀 | file: PlatformFee.duck.js | line 167 | initiateOrder | e', e);
     dispatch(initiateOrderError(storableError(e)));
     throw e;
   };
@@ -176,7 +173,6 @@ export const initiateOrder = orderParams => (dispatch, getState, sdk) => {
 };
 
 export const confirmPayment = orderParams => (dispatch, getState, sdk) => {
-  console.log('🚀 | file: PlatformFee.duck.js | line 179 | orderParams', orderParams);
   dispatch(confirmPaymentRequest());
   const { stripe, payment_method, paymentIntent } = orderParams;
   const { client_secret } = paymentIntent;
@@ -184,7 +180,6 @@ export const confirmPayment = orderParams => (dispatch, getState, sdk) => {
   return stripe
     .confirmCardPayment(client_secret, { payment_method: payment_method })
     .then(response => {
-      console.log('🚀 | file: PlatformFee.duck.js | line 186 | response', response);
       dispatch(confirmPaymentSuccess(response));
       return response;
     })

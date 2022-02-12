@@ -71,8 +71,8 @@ const ContactPanel = props => {
     onHideListing,
     onDeleteListing,
     requestShowListing,
+    fromPage
   } = props;
-  console.log('🚀 | file: ContactPanel.js | line 78 | props', props);
   const [showConfirmActionModal, setShowConfirmActionModal] = useState(false);
   const [confirmProps, setConfirmProps] = useState(false);
   const price = listing.attributes.price;
@@ -84,31 +84,13 @@ const ContactPanel = props => {
   const isBook = !!parse(location.search).book;
   const listingType = getPropByName(listing, 'listingType');
   const publicData = getPropByName(listing, 'publicData');
-  console.log('🚀 | file: ContactPanel.js | line 100 | publicData', publicData);
   const isHidden = publicData.notHidden === false;
-  console.log('🚀 | file: ContactPanel.js | line 99 | listing', listing);
-  console.log(
-    "🚀 | file: ContactPanel.js | line 99 | getPropByName(listing, 'notHidden')",
-    getPropByName(publicData, 'notHidden')
-  );
-  console.log('🚀 | file: ContactPanel.js | line 99 | isHidden', isHidden);
   const subTitleText = !!subTitle
     ? subTitle
     : showClosedListingHelpText
     ? intl.formatMessage({ id: 'ContactPanel.subTitleClosedListing' })
     : null;
 
-  const isNightly = unitType === LINE_ITEM_NIGHT;
-  const isDaily = unitType === LINE_ITEM_DAY;
-  const isWeekly = true;
-
-  const unitTranslationKey = isWeekly
-    ? 'ContactPanel.perWeek'
-    : isNightly
-    ? 'ContactPanel.perNight'
-    : isDaily
-    ? 'ContactPanel.perDay'
-    : 'ContactPanel.perUnit';
   const classes = classNames(rootClassName || css.root, className);
   const titleClasses = classNames(titleClassName || css.bookingTitle);
   const handleTogglePrivate = func => {
@@ -118,8 +100,8 @@ const ContactPanel = props => {
   };
   const handleMakePrivate = () => {
     setConfirmProps({
-      negativeAction: _ =>
-        handleTogglePrivate(async _ => await onHideListing(listing.id, listingType, false)),
+      negativeAction: () =>
+        handleTogglePrivate(async () => await onHideListing(listing.id, listingType, false)),
       affirmativeButtonText: 'Cancel',
       negativeButtonText: `Hide this ${listingType}`,
       affirmativeInProgress: null,
@@ -143,8 +125,8 @@ const ContactPanel = props => {
   };
   const handleMakePublic = () => {
     setConfirmProps({
-      affirmativeAction: _ =>
-        handleTogglePrivate(async _ => await onHideListing(listing.id, listingType, true)),
+      affirmativeAction: () =>
+        handleTogglePrivate(async () => await onHideListing(listing.id, listingType, true)),
       affirmativeButtonText: `Open this ${listingType}`,
       negativeButtonText: 'Cancel',
       affirmativeInProgress: hidingListing,
@@ -168,7 +150,7 @@ const ContactPanel = props => {
   };
   const handleDeleteListing = () => {
     setConfirmProps({
-      negativeAction: _ => {
+      negativeAction: () => {
         onDeleteListing(listing.id.uuid);
         history.push('/listings');
       },
@@ -209,7 +191,13 @@ const ContactPanel = props => {
               <h1 className={css.title}>What would you like to do?</h1>
               <div className={css.author}></div>
             </>
-          ) : (
+          ) :fromPage ?
+          (
+            <>
+            <h1 className={css.title}>You're already talking with {authorDisplayName}</h1>
+          </>
+          ):
+          (
             <>
               <h1 className={css.title}>{title}</h1>
               <div className={css.author}>
@@ -237,6 +225,15 @@ const ContactPanel = props => {
             >
               Delete {listingType}?
             </SecondaryButton>
+          </>
+        ) : fromPage ? (
+          <>
+            <div className={css.bookingHeading}>
+              <h2 className={titleClasses}>You're already in talks with {authorDisplayName}</h2>
+            </div>
+            <Button className={css.bookButton} onClick={() => history.push(fromPage)}>
+              <Button rootClassName={css.bookButton}>Return to your decision</Button>
+            </Button>
           </>
         ) : !!currentUserInTransaction ? (
           <>

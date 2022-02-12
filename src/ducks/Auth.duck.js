@@ -220,10 +220,10 @@ export const signup = params => (dispatch, getState, sdk) => {
     });
 };
 
-export const signupWithIdp = params => (dispatch, getState, sdk) => {
+export const signupWithIdp = params => (dispatch) => {
   dispatch(confirmRequest());
   return createUserWithIdp(params)
-    .then(res => {
+    .then(() => {
       return dispatch(confirmSuccess());
     })
     .then(() => dispatch(fetchCurrentUser()))

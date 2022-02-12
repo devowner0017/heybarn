@@ -30,7 +30,6 @@ export const EditListingLocationFormComponent = props => (
         form,
         handleSubmit,
         intl,
-        initialValues,
         invalid,
         pristine,
         saveActionMsg,
@@ -71,26 +70,18 @@ export const EditListingLocationFormComponent = props => (
       const submitInProgress = updateInProgress;
       const submitDisabled = invalid || disabled || submitInProgress;
       const filterConfig = config.custom.filters;
-      const islandConfig = filterConfig.find(f => f.id === 'locIsland');
-      const islands = islandConfig?.config.options;
       const regionConfig = filterConfig.find(f => f.id === 'locRegion');
       const regions = regionConfig?.config.options;
       const districtConfig = filterConfig.find(f => f.id === 'locDistrict');
       const districts = districtConfig.config.options;
-      const filteredRegions = regions?.filter(r => r.parent === values?.locIsland);
       const filteredDistricts = districts?.filter(r => r.parent === values?.locRegion);
 
       useEffect(() => {
         const regionValue = regions.find(r => r.key === region);
-        console.log(
-          '🚀 | file: EditListingLocationForm.js | line 85 | useEffect | regionValue',
-          regionValue
-        );
         if (!!regionValue) {
           form.change('locIsland', regionValue.parent);
         }
       }, [region]);
-      console.log('🚀 | file: EditListingLocationForm.js | line 90 | region', region);
       useEffect(() => {
         const regionValue = regions.find(r => r.key === region);
         if (!!regionValue) {

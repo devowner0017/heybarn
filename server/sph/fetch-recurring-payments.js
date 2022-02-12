@@ -10,18 +10,12 @@ module.exports = async (req, res) => {
     clientSecret: process.env.SHARETRIBE_INTEGRATION_CLIENT_SECRET,
   });
   const { subId } = req.body;
-  console.log('🚀 | file: fetch-recurring-payments.js | line 10 | req.body;', req.body);
 
   // TODO: UPDATE ERROR HANDLING
   return stripe.subscriptions
     .retrieve(subId)
     .then(apiResponse => {
-      console.log('🚀 | file: fetch-recurring-payments.js | line 21 | apiResponse', apiResponse);
       const serialRes = serialize(apiResponse);
-      console.log(
-        '🚀 | file: fetch-recurring-payments.js | line 74 | module.exports= | serialRes',
-        serialRes
-      );
       return res
         .status(200)
         .set('Content-Type', 'application/transit+json')
@@ -29,7 +23,6 @@ module.exports = async (req, res) => {
         .end();
     })
     .catch(e => {
-      console.log('🚀 | file: fetch-recurring-payments.js | line 91 | module.exports= | e', e);
       const serialErr = serialize(e);
       return res
         .status(500)

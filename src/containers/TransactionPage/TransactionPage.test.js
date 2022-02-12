@@ -8,7 +8,7 @@ import {
   fakeIntl,
 } from '../../util/test-data';
 import { renderShallow } from '../../util/test-helpers';
-import { TRANSITION_CONFIRM_PAYMENT } from '../../util/transaction';
+import { TRANSITION_CONFIRM_PAYMENT, TRANSITION_HOST_FEE_PAID } from '../../util/transaction';
 import { TransactionPageComponent } from './TransactionPage';
 
 const noop = () => null;
@@ -20,7 +20,7 @@ describe('TransactionPage - Sale', () => {
     const end = new Date(Date.UTC(2017, 5, 13));
     const transaction = createTransaction({
       id: txId,
-      lastTransition: TRANSITION_CONFIRM_PAYMENT,
+      lastTransition: TRANSITION_HOST_FEE_PAID,
       booking: createBooking('booking1', {
         start,
         end,

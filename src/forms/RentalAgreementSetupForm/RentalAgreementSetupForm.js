@@ -26,11 +26,8 @@ import { Collapse } from '@mui/material';
 
 import css from './RentalAgreementSetupForm.module.css';
 import moment from 'moment';
-import { dateFromLocalToAPI } from '../../util/dates';
 import { formatMoney } from '../../util/currency';
-import { getPropByName } from '../../util/devHelpers';
 import { findOptionsForSelectFilter } from '../../util/search';
-const identity = v => v;
 const { Money } = sdkTypes;
 
 const RentalAgreementSetupFormComponent = props => (
@@ -45,7 +42,6 @@ const RentalAgreementSetupFormComponent = props => (
         handleSubmit,
         intl,
         form,
-        formId,
         invalid,
         values,
         listing,
@@ -55,18 +51,11 @@ const RentalAgreementSetupFormComponent = props => (
       const {
         startDate,
         endDate,
-        lengthOfContract,
         ongoingContract: [ongoingContract] = [],
       } = values;
-      const [focusedInput, setFocusedInput] = useState();
       const [confirmAgreementOpen, setConfirmAgreementOpen] = useState(false);
-      // Function that can be passed to nested components
-      // so that they can notify this component when the
-      // focused input changes.
-      const onFocusedInputChange = focusedInput => {
-        setFocusedInput(focusedInput);
-      };
-      const errorArea = false ? errorMessage : <p className={css.errorPlaceholder} />;
+
+      // const errorArea = false ? errorMessage : <p className={css.errorPlaceholder} />;
 
       const unitType = config.bookingUnitType;
       const isNightly = unitType === LINE_ITEM_NIGHT;
@@ -227,14 +216,16 @@ const RentalAgreementSetupFormComponent = props => (
               className={css.field}
               id="rentersFirstName"
               name="rentersFirstName"
+              autoComplete={'none'}
               type="text"
               label={'First name*'}
               required
-            />{' '}
+            />
             <FieldTextInput
               className={css.field}
               id="rentersLastName"
               name="rentersLastName"
+              autoComplete={'none'}
               type="text"
               label={'Last name*'}
               required
@@ -245,7 +236,7 @@ const RentalAgreementSetupFormComponent = props => (
             className={css.field}
             id={'email'}
             name="rentersEmail"
-            autoComplete="email"
+            autoComplete={'none'}
             label={'Email*'}
             validate={validators.composeValidators(emailRequired, emailValid)}
             required
@@ -269,7 +260,7 @@ const RentalAgreementSetupFormComponent = props => (
                 min: 1,
                 max: 102,
               }}
-              validate={!ongoingContract ? required('Required') : _ => null}
+              validate={!ongoingContract ? required('Required') : () => null}
             />
           )}
           <FormSpy
@@ -306,7 +297,7 @@ const RentalAgreementSetupFormComponent = props => (
             name="additionalInformation"
             type="textarea"
           />
-          {errorArea}
+          {/* {errorArea} */}
           <TransitionGroup>
             {!confirmAgreementOpen && (
               <Collapse id={'breakdown'} timeout={1000}>
@@ -317,7 +308,7 @@ const RentalAgreementSetupFormComponent = props => (
           <TransitionGroup>
             {confirmAgreementOpen && (
               <Collapse timeout={1000} id={'confirm'}>
-                <OutsideClickHandler onOutsideClick={_ => toggleConfirmAgreement(false)}>
+                <OutsideClickHandler onOutsideClick={() => toggleConfirmAgreement(false)}>
                   <h2>Please confirm the details</h2>
                   <p>
                     Before sending the agreement, please confirm that the price and dates are all
@@ -330,7 +321,6 @@ const RentalAgreementSetupFormComponent = props => (
                     inProgress={submitInProgress}
                     disabled={submitDisabled}
                   >
-                    FINAL CONFIRM
                     {submitMessage}
                   </PrimaryButton>
                 </OutsideClickHandler>
@@ -345,7 +335,6 @@ const RentalAgreementSetupFormComponent = props => (
               disabled={submitDisabled}
               onClick={toggleConfirmAgreement}
             >
-              INIT
               {submitMessage}
             </PrimaryButton>
           )}
@@ -361,7 +350,7 @@ RentalAgreementSetupFormComponent.defaultProps = {
   filterConfig: config.custom.filters,
 };
 
-const { bool, func, string } = PropTypes;
+const {  func, string } = PropTypes;
 
 RentalAgreementSetupFormComponent.propTypes = {
   className: string,

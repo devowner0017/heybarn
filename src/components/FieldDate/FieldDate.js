@@ -61,7 +61,6 @@ class FieldDateComponent extends Component {
       onFocus: input.onFocus,
       useMobileMargins,
       id,
-      readOnly: typeof window !== 'undefined' && window.innerWidth < MAX_MOBILE_SCREEN_WIDTH,
       ...restOfInput,
       ...rest,
     };
@@ -75,7 +74,7 @@ class FieldDateComponent extends Component {
             {label}
           </label>
         ) : null}
-        <DatePicker
+        <MobileDatePicker
           inputFormat="DD/MM/yyyy"
           renderInput={params => <TextField {...params} className={classNames(pickerClassname , css.rootPicker)} />}
           {...inputProps}

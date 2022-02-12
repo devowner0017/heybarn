@@ -268,7 +268,7 @@ BookingInfoMaybe.propTypes = {
 export const InboxItem = props => {
   const { unitType, type, tx, intl, stateData, currentUser } = props;
   const { customer, provider, listing } = tx;
-  const isOrder = provider.id.uuid !== currentUser.id.uuid;
+  const isOrder = provider.id.uuid !== currentUser?.id?.uuid;
   const listingTitle = listing?.attributes?.title;
   const otherUser = isOrder ? provider : customer;
   const otherUserDisplayName = <UserDisplayName user={otherUser} intl={intl} />;
@@ -345,10 +345,8 @@ export const InboxPageComponent = props => {
     transactions,
     fetchInbox,
   } = props;
-  console.log('🚀 | file: InboxPage.js | line 347 | props', props);
   const { tab } = params;
   const { state } = parse(location.search);
-  console.log('🚀 | file: InboxPage.js | line 351 | state', state);
   const [filter, setFilter] = useState(null);
   const ensuredCurrentUser = ensureCurrentUser(currentUser);
 
@@ -364,7 +362,7 @@ export const InboxPageComponent = props => {
     const stateData = txState(intl, tx, type);
     // Render InboxItem only if the latest transition of the transaction is handled in the `txState` function.
     return stateData ? (
-      <li key={tx.id.uuid} className={css.listItem}>
+      <li key={tx?.id?.uuid} className={css.listItem}>
         <InboxItem
           unitType={unitType}
           type={type}

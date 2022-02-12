@@ -28,7 +28,6 @@ const PROVIDER_COMMISSION_PERCENTAGE = -3;
  * @returns {Array} lineItems
  */
 exports.transactionLineItems = (listing, bookingData, newPrice) => {
-  console.log('🚀 | file: lineItems.js | line 32 | newPrice', newPrice);
   const unitPrice =
     (newPrice && new Money(newPrice, listing.attributes.price.currency)) ||
     listing.attributes.price;
@@ -58,10 +57,6 @@ exports.transactionLineItems = (listing, bookingData, newPrice) => {
     // quantity: calculateQuantityFromDates(startDate, endDate, bookingUnitType),
     includeFor: ['customer', 'provider'],
   };
-  console.log(
-    '🚀 | file: lineItems.js | line 62 | calculateTotalFromLineItems([first, last])',
-    calculateTotalFromLineItems([first, last])
-  );
   const providerCommission = {
     code: 'line-item/provider-commission',
     unitPrice: calculateTotalFromLineItems([first, last]),

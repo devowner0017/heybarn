@@ -18,9 +18,9 @@ const SectionImages = props => {
     onImageCarouselClose,
     onManageDisableScrolling,
     currentUserInTransaction,
-    typeOfListing
+    typeOfListing,
+    fromPage,
   } = props;
-    console.log("🚀 | file: SectionImages.js | line 24 | typeOfListing", typeOfListing);
   const history = useHistory();
 
   const hasImages = listing.images && listing.images.length > 0;
@@ -30,7 +30,7 @@ const SectionImages = props => {
   // to the parent that would otherwise open the image carousel
   const actionBar = listing.id ? (
     <div onClick={e => e.stopPropagation()}>
-      <ActionBarMaybe isOwnListing={isOwnListing} listing={listing}  typeOfListing={typeOfListing}/>
+      <ActionBarMaybe isOwnListing={isOwnListing} listing={listing} typeOfListing={typeOfListing} />
     </div>
   ) : null;
   const listingStateBar = listing.id ? (
@@ -59,10 +59,14 @@ const SectionImages = props => {
         className={css.backButton}
         onClick={e => {
           e.preventDefault();
-          history.goBack();
+          if (fromPage) {
+            history.push(fromPage);
+          } else {
+            history.goBack();
+          }
         }}
       >
-        Back to search
+        Back{!fromPage && ' to search'}
       </InlineTextButton>
 
       <div className={css.threeToTwoWrapper}>

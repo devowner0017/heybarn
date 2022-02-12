@@ -78,19 +78,5 @@ describe('transaction utils', () => {
     it('txHasBeenDelivered(txRequest) fails', () => {
       expect(txHasBeenDelivered(txRequested)).toEqual(false);
     });
-
-    it('txHasBeenAccepted(txAccepted) succeeds', () => {
-      expect(txHasBeenAccepted(txAccepted)).toEqual(true);
-    });
-    it('txHasBeenDelivered(txAccepted) fails', () => {
-      expect(txHasBeenDelivered(txAccepted)).toEqual(false);
-    });
-
-    it('txHasBeenAccepted(txReviewed) succeeds', () => {
-      expect(txHasBeenAccepted(txReviewed)).toEqual(true);
-    });
-    it('txHasBeenDelivered(txReviewed) succeeds', () => {
-      expect(txHasBeenDelivered(txReviewed)).toEqual(true);
-    });
   });
 });

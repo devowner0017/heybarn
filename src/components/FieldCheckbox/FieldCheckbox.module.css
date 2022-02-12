@@ -84,7 +84,10 @@
 }
 
 .textRoot {
-  @apply --marketplaceListingAttributeFontStyles;
+  /* @apply --marketplaceListingAttributeFontStyles; */
+  font-family: var(--fontFamilySecondary);
+  font-weight: var(--fontWeightRegular);
+
   color: var(--matterColor);
   margin-top: -1px;
   margin-bottom: 1px;

@@ -492,7 +492,7 @@
 .buttonLink {
   width: 100%;
   display: flex;
-  margin: 20px 0 ;
+  margin: 20px 0;
   justify-content: center;
 }
 .roundButton {
@@ -501,4 +501,14 @@
   padding: 0 20px;
   min-height: 40px;
   justify-self: center;
+}
+.viewButton {
+  @apply --marketplaceButtonStyles;
+  max-width: 200px;
+  margin-top: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+  @media (--viewportMedium) {
+    display: none;
+  }
 }

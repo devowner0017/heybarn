@@ -1,4 +1,4 @@
-import React, { createRef, useEffect } from 'react';
+import React from 'react';
 import { bool, func, node, object } from 'prop-types';
 import classNames from 'classnames';
 import { Form as FinalForm, FormSpy } from 'react-final-form';
@@ -7,6 +7,7 @@ import { injectIntl, intlShape } from '../../util/reactIntl';
 
 import { Form } from '../../components';
 import css from './FilterForm.module.css';
+import { isEqual } from 'lodash'
 
 const FilterFormComponent = props => {
   const {
@@ -57,7 +58,7 @@ const FilterFormComponent = props => {
           children,
         } = formRenderProps;
         if (!!setFormValues) {
-          if (!_.isEqual(values, prevValues)) {
+          if (!isEqual(values, prevValues)) {
             setFormValues(values);
           }
         }

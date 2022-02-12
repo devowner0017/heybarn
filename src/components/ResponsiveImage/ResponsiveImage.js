@@ -44,7 +44,6 @@ import css from './ResponsiveImage.module.css';
 
 const ResponsiveImage = props => {
   const { className, rootClassName, alt, noImageMessage, image, variants, ...rest } = props;
-  console.log("🚀 | file: ResponsiveImage.js | line 47 | image", image);
   const classes = classNames(rootClassName || css.root, className);
 
   if (image == null || variants.length === 0) {
@@ -81,7 +80,6 @@ const ResponsiveImage = props => {
     srcSet,
     ...rest,
   };
-  console.log("🚀 | file: ResponsiveImage.js | line 84 | imgProps", imgProps);
 
   return <img alt={alt} {...imgProps} />;
 };

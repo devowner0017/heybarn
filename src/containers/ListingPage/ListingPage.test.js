@@ -211,9 +211,8 @@ describe('ListingPage', () => {
       });
       const actionBar = shallow(<ActionBarMaybe isOwnListing listing={listing} editParams={{}} />);
       const formattedMessages = actionBar.find(FormattedMessage);
-      expect(formattedMessages.length).toEqual(2);
+      expect(formattedMessages.length).toEqual(1);
       expect(formattedMessages.at(0).props().id).toEqual('ListingPage.ownListing');
-      expect(formattedMessages.at(1).props().id).toEqual('ListingPage.editListing');
     });
     it('shows users own pending listing status', () => {
       const listing = createListing('listing-published', {
@@ -221,9 +220,8 @@ describe('ListingPage', () => {
       });
       const actionBar = shallow(<ActionBarMaybe isOwnListing listing={listing} editParams={{}} />);
       const formattedMessages = actionBar.find(FormattedMessage);
-      expect(formattedMessages.length).toEqual(2);
+      expect(formattedMessages.length).toEqual(1);
       expect(formattedMessages.at(0).props().id).toEqual('ListingPage.ownListingPendingApproval');
-      expect(formattedMessages.at(1).props().id).toEqual('ListingPage.editListing');
     });
     it('shows users own closed listing status', () => {
       const listing = createListing('listing-closed', {
@@ -231,9 +229,7 @@ describe('ListingPage', () => {
       });
       const actionBar = shallow(<ActionBarMaybe isOwnListing listing={listing} editParams={{}} />);
       const formattedMessages = actionBar.find(FormattedMessage);
-      expect(formattedMessages.length).toEqual(2);
       expect(formattedMessages.at(0).props().id).toEqual('ListingPage.ownClosedListing');
-      expect(formattedMessages.at(1).props().id).toEqual('ListingPage.editListing');
     });
     it('shows closed listing status', () => {
       const listing = createListing('listing-closed', {

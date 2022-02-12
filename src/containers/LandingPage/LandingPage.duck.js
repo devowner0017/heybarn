@@ -117,7 +117,7 @@ export const retrieveRecommendedAdvertsError = e => ({
   payload: e,
 });
 
-export const retrieveRecommendedListings = _ => (dispatch, getState, sdk) => {
+export const retrieveRecommendedListings = () => (dispatch, getState, sdk) => {
   dispatch(retrieveRecommendedListingsRequest());
   const params = {
     pub_listingType: 'listing',
@@ -148,7 +148,7 @@ export const retrieveRecommendedListings = _ => (dispatch, getState, sdk) => {
       throw e;
     });
 };
-export const retrieveRecommendedAdverts = _ => (dispatch, getState, sdk) => {
+export const retrieveRecommendedAdverts = () => (dispatch, getState, sdk) => {
   dispatch(retrieveRecommendedAdvertsRequest());
   const params = {
     pub_listingType: 'advert',

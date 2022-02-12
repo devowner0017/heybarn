@@ -125,11 +125,14 @@
   flex-grow: 1;
 }
 .mapSwitch {
-  padding: 1rem;
-  position: absolute;
-  top: 0;
-  right: 10px;
-  z-index: 1;
+  display: none;
+  @media (--viewportMedium) {
+    padding: 1rem;
+    position: absolute;
+    top: 0;
+    right: 10px;
+    z-index: 1;
+  }
 }
 .mapPanel {
   @media (--viewportMedium) {

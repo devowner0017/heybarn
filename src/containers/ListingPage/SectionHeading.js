@@ -18,8 +18,6 @@ const SectionHeading = props => {
     priceTitle,
     formattedPrice,
   } = props;
-  console.log('🚀 | file: SectionHeading.js | line 23 | formattedPrice', formattedPrice);
-  console.log('🚀 | file: SectionHeading.js | line 23 | priceTitle', priceTitle);
   return (
     <div className={css.sectionHeading}>
       <div className={css.heading}>
@@ -32,18 +30,25 @@ const SectionHeading = props => {
               </div>
             </div>
           )}
-          <div>
-            <FormattedMessage
-              id={`ListingPage.${listingType}By`}
-              values={{ name: hostLink, region: (region && capitalize(region)) || 'NZ' }}
-            />
+          <div className={css.infoWrapper}>
+            <div>
+              <FormattedMessage
+                id={`ListingPage.${listingType}By`}
+                values={{ name: hostLink, region: (region && capitalize(region)) || 'NZ' }}
+              />
+            </div>
+            <span className={css.divider}> | </span>
+            <div>
+              <FormattedMessage
+                id={`ListingPage.${listingType}In`}
+                values={{ name: hostLink, region: (region && capitalize(region)) || 'NZ' }}
+              />
+            </div>
           </div>
-          <div>
-            <FormattedMessage
-              id={`ListingPage.${listingType}IdealFor`}
-              values={{ uses: ensureArray(preferredUse)?.join(' | ') }}
-            />
-          </div>
+          <FormattedMessage
+            id={`ListingPage.${listingType}IdealFor`}
+            values={{ uses: ensureArray(preferredUse)?.join(' | ') }}
+          />
         </div>
       </div>
     </div>

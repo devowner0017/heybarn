@@ -28,18 +28,58 @@ exports[`InboxPage matches snapshot 1`] = `
     </LayoutWrapperTopbar>
     <withViewport(LayoutWrapperManageListingsSideNavComponent)
       currentTab="InboxTab"
+      extraTabs={
+        Array [
+          Object {
+            "linkProps": Object {
+              "name": "InboxPage",
+            },
+            "selected": true,
+            "text": <span>
+              <Memo(MemoizedFormattedMessage)
+                id="InboxPage.salesTabTitle"
+              />
+            </span>,
+          },
+        ]
+      }
     />
     <LayoutWrapperMain
       className="inboxPageWrapper"
       rootClassName={null}
     >
-      <h1
-        className="title"
+      <div
+        className="titleWrapper"
       >
-        <MemoizedFormattedMessage
-          id="InboxPage.title"
-        />
-      </h1>
+        <h1
+          className="title"
+        >
+          <MemoizedFormattedMessage
+            id="InboxPage.title"
+          />
+        </h1>
+        <div
+          className="inboxFilters"
+        >
+          <NamedLink
+            className="filterLink activeFilterLink"
+            name="InboxPage"
+          >
+            All
+          </NamedLink>
+          <NamedLink
+            className="filterLink"
+            name="InboxPage"
+            to={
+              Object {
+                "search": "state=active",
+              }
+            }
+          >
+            Active
+          </NamedLink>
+        </div>
+      </div>
       <ul
         className="itemList"
       >
@@ -48,6 +88,28 @@ exports[`InboxPage matches snapshot 1`] = `
           key="order-1"
         >
           <InboxItem
+            currentUser={
+              Object {
+                "attributes": Object {
+                  "banned": false,
+                  "deleted": false,
+                  "email": "provider-user-id@example.com",
+                  "emailVerified": true,
+                  "profile": Object {
+                    "abbreviatedName": "provider-user-id abbreviated name",
+                    "displayName": "provider-user-id display name",
+                    "firstName": "provider-user-id first name",
+                    "lastName": "provider-user-id last name",
+                  },
+                },
+                "id": UUID {
+                  "_sdkType": "UUID",
+                  "uuid": "provider-user-id",
+                },
+                "profileImage": Object {},
+                "type": "currentUser",
+              }
+            }
             intl={
               Object {
                 "formatDate": [Function],
@@ -201,6 +263,28 @@ exports[`InboxPage matches snapshot 1`] = `
           key="order-2"
         >
           <InboxItem
+            currentUser={
+              Object {
+                "attributes": Object {
+                  "banned": false,
+                  "deleted": false,
+                  "email": "provider-user-id@example.com",
+                  "emailVerified": true,
+                  "profile": Object {
+                    "abbreviatedName": "provider-user-id abbreviated name",
+                    "displayName": "provider-user-id display name",
+                    "firstName": "provider-user-id first name",
+                    "lastName": "provider-user-id last name",
+                  },
+                },
+                "id": UUID {
+                  "_sdkType": "UUID",
+                  "uuid": "provider-user-id",
+                },
+                "profileImage": Object {},
+                "type": "currentUser",
+              }
+            }
             intl={
               Object {
                 "formatDate": [Function],
@@ -434,7 +518,7 @@ exports[`InboxPage matches snapshot 2`] = `
 exports[`InboxPage matches snapshot 3`] = `
 <Page
   scrollingDisabled={false}
-  title="InboxPage.salesTitle"
+  title="InboxPage.ordersTitle"
 >
   <LayoutSideNavigation
     className={null}
@@ -459,18 +543,58 @@ exports[`InboxPage matches snapshot 3`] = `
     </LayoutWrapperTopbar>
     <withViewport(LayoutWrapperManageListingsSideNavComponent)
       currentTab="InboxTab"
+      extraTabs={
+        Array [
+          Object {
+            "linkProps": Object {
+              "name": "InboxPage",
+            },
+            "selected": true,
+            "text": <span>
+              <Memo(MemoizedFormattedMessage)
+                id="InboxPage.salesTabTitle"
+              />
+            </span>,
+          },
+        ]
+      }
     />
     <LayoutWrapperMain
       className="inboxPageWrapper"
       rootClassName={null}
     >
-      <h1
-        className="title"
+      <div
+        className="titleWrapper"
       >
-        <MemoizedFormattedMessage
-          id="InboxPage.title"
-        />
-      </h1>
+        <h1
+          className="title"
+        >
+          <MemoizedFormattedMessage
+            id="InboxPage.title"
+          />
+        </h1>
+        <div
+          className="inboxFilters"
+        >
+          <NamedLink
+            className="filterLink activeFilterLink"
+            name="InboxPage"
+          >
+            All
+          </NamedLink>
+          <NamedLink
+            className="filterLink"
+            name="InboxPage"
+            to={
+              Object {
+                "search": "state=active",
+              }
+            }
+          >
+            Active
+          </NamedLink>
+        </div>
+      </div>
       <ul
         className="itemList"
       >
@@ -479,6 +603,28 @@ exports[`InboxPage matches snapshot 3`] = `
           key="sale-1"
         >
           <InboxItem
+            currentUser={
+              Object {
+                "attributes": Object {
+                  "banned": false,
+                  "deleted": false,
+                  "email": "customer-user-id@example.com",
+                  "emailVerified": true,
+                  "profile": Object {
+                    "abbreviatedName": "customer-user-id abbreviated name",
+                    "displayName": "customer-user-id display name",
+                    "firstName": "customer-user-id first name",
+                    "lastName": "customer-user-id last name",
+                  },
+                },
+                "id": UUID {
+                  "_sdkType": "UUID",
+                  "uuid": "customer-user-id",
+                },
+                "profileImage": Object {},
+                "type": "currentUser",
+              }
+            }
             intl={
               Object {
                 "formatDate": [Function],
@@ -632,6 +778,28 @@ exports[`InboxPage matches snapshot 3`] = `
           key="sale-2"
         >
           <InboxItem
+            currentUser={
+              Object {
+                "attributes": Object {
+                  "banned": false,
+                  "deleted": false,
+                  "email": "customer-user-id@example.com",
+                  "emailVerified": true,
+                  "profile": Object {
+                    "abbreviatedName": "customer-user-id abbreviated name",
+                    "displayName": "customer-user-id display name",
+                    "firstName": "customer-user-id first name",
+                    "lastName": "customer-user-id last name",
+                  },
+                },
+                "id": UUID {
+                  "_sdkType": "UUID",
+                  "uuid": "customer-user-id",
+                },
+                "profileImage": Object {},
+                "type": "currentUser",
+              }
+            }
             intl={
               Object {
                 "formatDate": [Function],
@@ -801,12 +969,12 @@ exports[`InboxPage matches snapshot 4`] = `
   >
     <a
       className="mediumAvatar"
-      href="/u/customer-user-id"
+      href="/u/provider-user-id"
       onClick={[Function]}
       onMouseOver={[Function]}
       onTouchStart={[Function]}
       style={Object {}}
-      title="customer-user-id display name"
+      title="provider-user-id display name"
     >
       <span
         className="initials"
@@ -817,7 +985,7 @@ exports[`InboxPage matches snapshot 4`] = `
   </div>
   <a
     className="itemLink"
-    href="/sale/sale-1/details"
+    href="/order/sale-1/details"
     onClick={[Function]}
     onMouseOver={[Function]}
     onTouchStart={[Function]}
@@ -826,11 +994,7 @@ exports[`InboxPage matches snapshot 4`] = `
   >
     <div
       className="rowNotificationDot"
-    >
-      <div
-        className="notificationDot"
-      />
-    </div>
+    />
     <div
       className="itemInfo"
     >
@@ -840,7 +1004,7 @@ exports[`InboxPage matches snapshot 4`] = `
         <span
           className=""
         >
-          customer-user-id display name
+          provider-user-id display name
         </span>
       </div>
       <div

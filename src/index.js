@@ -67,6 +67,7 @@ const setupAnalyticsHandlers = () => {
   }
 
   // Add Google Analytics handler if tracker ID is found
+// eslint-disable-next-line no-undef
   if (process.env.REACT_APP_GOOGLE_ANALYTICS_ID) {
     if (window?.ga) {
       handlers.push(new GoogleAnalyticsHandler(window.ga));
@@ -101,6 +102,7 @@ if (typeof window !== 'undefined') {
   const analyticsHandlers = setupAnalyticsHandlers();
   const store = configureStore(initialState, sdk, analyticsHandlers);
 
+// eslint-disable-next-line no-undef
   require('./util/polyfills');
   render(store, !!window.__PRELOADED_STATE__);
 
@@ -118,9 +120,11 @@ if (typeof window !== 'undefined') {
 }
 
 // Show warning if CSP is not enabled
+// eslint-disable-next-line no-undef
 const CSP = process.env.REACT_APP_CSP;
 const cspEnabled = CSP === 'block' || CSP === 'report';
 
+// eslint-disable-next-line no-undef
 if (CSP === 'report' && process.env.REACT_APP_ENV === 'production') {
   console.warn(
     'Your production environment should use CSP with "block" mode. Read more from: https://www.sharetribe.com/docs/ftw-security/how-to-set-up-csp-for-ftw/'

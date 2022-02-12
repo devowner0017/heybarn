@@ -452,8 +452,11 @@
   "ListingPage.openConfirmationTitle": "Are you sure you want to open it?",
   "ListingPage.openConfirmationSubTitle": "This {listingType} will be visible on the marketplace. Users will be able to see it in the search results.",
 
-  "ListingPage.listingBy": "Located in {region} | Hosted by {name}",
-  "ListingPage.advertBy": "Posted by {name} | Needs a space in {region}",
+  "ListingPage.listingBy": "Hosted by {name}",
+  "ListingPage.advertBy": "Posted by {name}",
+
+  "ListingPage.listingIn": "Located in {region}",
+  "ListingPage.advertIn": "Needs a space in {region}",
   "ListingPage.listingIdealFor": "Ideal for {uses}",
   "ListingPage.advertIdealFor": "Needed for {uses}",
   "ListingPage.bookingTitle": "Find out more about {title}",

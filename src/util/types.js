@@ -417,7 +417,7 @@ propTypes.filterConfig = arrayOf(
   shape({
     id: string.isRequired,
     label: node,
-    type: string.isRequired,
+    type: string,
     group: oneOf(['primary', 'secondary']).isRequired,
     queryParamNames: arrayOf(string).isRequired,
     config: object,

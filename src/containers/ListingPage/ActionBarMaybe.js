@@ -22,10 +22,6 @@ export const ActionBarMaybe = props => {
     currentUserInTransaction,
     typeOfListing,
   } = props;
-  console.log(
-    '🚀 | file: ActionBarMaybe.js | line 24 | currentUserInTransaction',
-    currentUserInTransaction
-  );
   const state = listing.attributes.state;
   const isPendingApproval = state === LISTING_STATE_PENDING_APPROVAL;
   const isClosed = state === LISTING_STATE_CLOSED;
@@ -50,7 +46,6 @@ export const ActionBarMaybe = props => {
     const ownListingTextClasses = classNames(css.ownListingText, {
       [css.ownListingTextPendingApproval]: isPendingApproval,
     });
-    console.log(capitalize(typeOfListing));
     return (
       <div className={css.actionBar}>
         <p className={ownListingTextClasses}>

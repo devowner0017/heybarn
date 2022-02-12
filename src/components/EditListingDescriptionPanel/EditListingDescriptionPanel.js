@@ -35,7 +35,6 @@ const EditListingDescriptionPanel = props => {
     errors,
     backButton
   } = props;
-  console.log("🚀 | file: EditListingDescriptionPanel.js | line 38 | props", props);
   const classes = classNames(rootClassName || css.root, className);
   const currentListing = ensureOwnListing(listing);
 
@@ -75,7 +74,6 @@ const EditListingDescriptionPanel = props => {
     ageOfSpace,
     amenities,
   });
-  console.log('🚀 | file: EditListingDescriptionPanel.js | line 68 | initValues', initValues);
   return (
     <div className={classes}>
       <h1 className={css.title}>{panelTitle}</h1>

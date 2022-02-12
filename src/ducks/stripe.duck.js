@@ -3,6 +3,7 @@ import {
   cancelRentalPayments,
   extendRentalPayments,
   updateSubscriptionPM,
+  transitionPrivilegedSimple,
 } from '../util/api';
 import { storableError } from '../util/errors';
 import * as log from '../util/log';
@@ -399,12 +400,10 @@ export const retrievePaymentIntent = params => dispatch => {
 };
 
 export const fetchSubscription = params => dispatch => {
-  console.log('🚀 | file: stripe.duck.js | line 361 | params', params);
   dispatch(fetchSubscriptionRequest());
 
   return fetchRentalPayments(params)
     .then(response => {
-      console.log('🚀 | file: stripe.duck.js | line 287 | response', response);
       if (response.error) {
         return Promise.reject(response);
       } else {
@@ -422,12 +421,11 @@ export const fetchSubscription = params => dispatch => {
     });
 };
 
-export const cancelSubscription = params => (dispatch, _, sdk) => {
+export const cancelSubscription = params => (dispatch ) => {
   dispatch(cancelSubscriptionRequest());
 const  { id,  actor, } = params
   return cancelRentalPayments(params)
     .then(response => {
-      console.log('🚀 | file: stripe.duck.js | line 287 | response', response);
 
       const bodyParams = {
         id,
@@ -435,7 +433,7 @@ const  { id,  actor, } = params
         params: {},
       };
       const queryParams = { expand: true };
-      return transitionPrivilegedSimple({ bodyParams, queryParams }).then(r => {
+      return transitionPrivilegedSimple({ bodyParams, queryParams }).then(() => {
         if (response.error) {
           return Promise.reject(response);
         } else {
@@ -455,10 +453,8 @@ const  { id,  actor, } = params
 
 export const extendSubscription = params => dispatch => {
   dispatch(extendSubscriptionRequest());
-  console.log('🚀 | file: stripe.duck.js | line 411 | params', params);
   return extendRentalPayments(params)
     .then(response => {
-      console.log('🚀 | file: stripe.duck.js | line 287 | response', response);
       if (response.error) {
         return Promise.reject(response);
       } else {
@@ -478,10 +474,8 @@ export const extendSubscription = params => dispatch => {
 
 export const updateSubscriptionPaymentMethod = params => dispatch => {
   dispatch(updateSubscriptionPaymentMethodRequest());
-  console.log('🚀 | file: stripe.duck.js | line 411 | params', params);
   return updateSubscriptionPM(params)
     .then(response => {
-      console.log('🚀 | file: stripe.duck.js | line 287 | response', response);
       if (response.error) {
         return Promise.reject(response);
       } else {
@@ -500,7 +494,6 @@ export const updateSubscriptionPaymentMethod = params => dispatch => {
 };
 
 export const confirmCardPayment = params => dispatch => {
-  console.log('🚀 | file: stripe.duck.js | line 244 | params', params);
   // It's required to use the same instance of Stripe as where the card has been created
   // so that's why Stripe needs to be passed here and we can't create a new instance.
   const { stripe, paymentParams, stripePaymentIntentClientSecret } = params;
@@ -517,7 +510,6 @@ export const confirmCardPayment = params => dispatch => {
   return stripe
     .confirmCardPayment(...args)
     .then(response => {
-      console.log('🚀 | file: stripe.duck.js | line 261 | response', response);
       if (response.error) {
         return Promise.reject(response);
       } else {

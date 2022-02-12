@@ -23,7 +23,6 @@ import {
   CustomSelect,
   FieldCheckboxGroup,
   FieldNumberInput,
-  InlineTextButton,
 } from '../../components';
 import css from './EditListingDescriptionForm.module.css';
 
@@ -131,7 +130,7 @@ const EditListingDescriptionFormComponent = props => (
             maxLength={TITLE_MAX_LENGTH}
             validate={
               submitInProgress
-                ? _ => null
+                ? () => null
                 : composeValidators(required(titleRequiredMessage), maxLength60Message)
             }
             autoFocus
@@ -146,7 +145,7 @@ const EditListingDescriptionFormComponent = props => (
                 placeholder={'m2'}
                 name={'sizeOfSpace'}
                 config={sizeOptions}
-                validate={submitInProgress ? _ => null : required('Required')}
+                validate={submitInProgress ? () => null : required('Required')}
               />
               <FieldNumberInput
                 className={css.title}
@@ -155,7 +154,7 @@ const EditListingDescriptionFormComponent = props => (
                 id={'ageOfSpace'}
                 name={'ageOfSpace'}
                 config={ageOptions}
-                validate={submitInProgress ? _ => null : required('Required')}
+                validate={submitInProgress ? () => null : required('Required')}
               />
             </>
           )}
@@ -175,7 +174,7 @@ const EditListingDescriptionFormComponent = props => (
             label={descriptionMessage}
             placeholder={descriptionPlaceholderMessage}
             validate={
-              submitInProgress ? _ => null : composeValidators(required(descriptionRequiredMessage))
+              submitInProgress ? () => null : composeValidators(required(descriptionRequiredMessage))
             }
           />
 
@@ -188,7 +187,7 @@ const EditListingDescriptionFormComponent = props => (
             isMulti={listingType === 'listing'}
             validate={
               submitInProgress
-                ? _ => null
+                ? () => null
                 : listingType === 'listing'
                 ? nonEmptyArray(preferredUseRequiredMessage)
                 : requiredObject(preferredUseRequiredMessage)

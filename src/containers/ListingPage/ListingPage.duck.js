@@ -211,7 +211,6 @@ export const showListing = (listingId, isOwn = false) => (dispatch, getState, sd
 
   return show
     .then(data => {
-      console.log('🚀 | file: ListingPage.duck.js | line 214 | showListing | data', data);
       dispatch(addMarketplaceEntities(data));
       return data;
     })
@@ -221,7 +220,6 @@ export const showListing = (listingId, isOwn = false) => (dispatch, getState, sd
 };
 
 const currentTransactions = listingId => (dispatch, getState, sdk) => {
-console.log("🚀 | file: ListingPage.duck.js | line 224 | listingId", listingId);
   dispatch(getCurrentTransactionsRequest());
   const show = sdk.listings.show({ id: listingId, include: ['author'] });
 
@@ -238,13 +236,10 @@ console.log("🚀 | file: ListingPage.duck.js | line 224 | listingId", listingId
           providerId: isOwn ? currentUser.id.uuid : authorId,
         })
           .then(response => {
-          console.log("🚀 | file: ListingPage.duck.js | line 241 | returndispatch | response", response);
             const transactions = denormalisedResponseEntities(response);
             const activeTransaction = transactions.find(t => {
-              console.log('🚀 | file: ListingPage.duck.js | line 244 | returndispatch | t', t);
             return  ACTIVE_TRANSITIONS.includes(t.attributes.lastTransition);
             });
-            console.log("🚀 | file: ListingPage.duck.js | line 246 | returndispatch | activeTransaction", activeTransaction);
             dispatch(getCurrentTransactionsSuccess(activeTransaction));
           })
           .catch(e => {

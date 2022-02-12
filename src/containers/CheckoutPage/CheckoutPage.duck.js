@@ -123,7 +123,6 @@ export default function checkoutPageReducer(state = initialState, action = {}) {
 // ================ Action creators ================ //
 
 export const setInitialValues = initialValues => {
-  console.log('🚀 | file: CheckoutPage.duck.js | line 111 |  initialValues', initialValues);
 
   return {
     type: SET_INITIAL_VALUES,
@@ -193,14 +192,6 @@ export const stripeCustomerError = e => ({
 /* ================ Thunks ================ */
 
 export const initiateOrder = (orderParams, transactionId) => (dispatch, getState, sdk) => {
-  console.log(
-    '🚀 | file: CheckoutPage.duck.js | line 169 | initiateOrder | transactionId',
-    transactionId
-  );
-  console.log(
-    '🚀 | file: CheckoutPage.duck.js | line 169 | initiateOrder | orderParams',
-    orderParams
-  );
 
   dispatch(initiateOrderRequest());
 
@@ -277,7 +268,6 @@ export const initiateOrder = (orderParams, transactionId) => (dispatch, getState
 };
 
 export const confirmPayment = orderParams => (dispatch, getState, sdk) => {
-  console.log('🚀 | file: CheckoutPage.duck.js | line 246 | orderParams', orderParams);
   dispatch(confirmPaymentRequest());
 
   const bodyParams = {
@@ -324,15 +314,10 @@ export const confirmPayment = orderParams => (dispatch, getState, sdk) => {
 };
 
 export const createRecurring = orderParams => (dispatch, getState, sdk) => {
-  console.log('🚀 | file: CheckoutPage.duck.js | line 246 | orderParams', orderParams);
   dispatch(createRecurringRequest());
 
   return createRentalPayments(orderParams)
     .then(recurringResponse => {
-      console.log(
-        '🚀 | file: CheckoutPage.duck.js | line 290 | returncreateRentalPayment | recurringResponse',
-        recurringResponse
-      );
       updateTransactionMetadata({transactionId: orderParams.transactionId,recurringResponse})
       createRecurringSuccess(recurringResponse);
       return recurringResponse;

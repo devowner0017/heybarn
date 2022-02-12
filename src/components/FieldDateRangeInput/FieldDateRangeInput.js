@@ -132,14 +132,6 @@ class FieldDateRangeInputComponent extends Component {
       endDateId,
       disabled: "endDate"
     };
-    console.log(
-      '🚀 | file: FieldDateRangeInput.js | line 130 | FieldDateRangeInputComponent | render | rest',
-      rest
-    );
-    console.log(
-      '🚀 | file: FieldDateRangeInput.js | line 134 | FieldDateRangeInputComponent | render | restOfInput',
-      restOfInput
-    );
     const classes = classNames(rootClassName || css.fieldRoot, className);
     const errorClasses = classNames({ [css.mobileMargins]: useMobileMargins });
 

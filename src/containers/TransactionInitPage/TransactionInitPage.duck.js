@@ -151,7 +151,6 @@ export const getOwnListingsById = (state, listingIds) => {
 
 // ================ Action creators ================ //
 export const setInitialValues = initialValues => {
-console.log("🚀 | file: TransactionInitPage.duck.js | line 154 | initialValues", initialValues);
   return {
     type: SET_INITIAL_VALUES,
     payload: pick(initialValues, Object.keys(initialState)),
@@ -267,10 +266,8 @@ export const createTransaction = orderParams => (dispatch, getState, sdk) => {
   };
 
   const handleSucces = response => {
-  console.log("🚀 | file: TransactionInitPage.duck.js | line 270 | response", response);
     const entities = denormalisedResponseEntities(response);
     const order = entities[0];
-    console.log("🚀 | file: TransactionInitPage.duck.js | line 272 | order", order);
     dispatch(initiateOrderSuccess(order));
     dispatch(fetchCurrentUserHasOrdersSuccess(true));
 
@@ -358,7 +355,6 @@ export const fetchOwnListings = listingType => (dispatch, getState, sdk) => {
           publicData: { listingType: responseListingType, listingState },
           state,
         } = r.attributes;
-        console.log("🚀 | file: TransactionInitPage.duck.js | line 367 | r", r);
         return (
           responseListingType === listingType &&
           listingState === LISTING_LIVE &&
@@ -366,7 +362,6 @@ export const fetchOwnListings = listingType => (dispatch, getState, sdk) => {
         );
       });
       let alteredResponse = ownListingsResponse;
-      console.log("🚀 | file: TransactionInitPage.duck.js | line 369 | alteredResponse", alteredResponse);
       alteredResponse.data.data = filteredResults;
       alteredResponse.data.meta.totalItems = filteredResults.length;
       dispatch(addOwnEntities(alteredResponse));

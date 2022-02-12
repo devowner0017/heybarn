@@ -8,6 +8,7 @@ import {
   TRANSITION_REQUEST_PAYMENT,
   TX_TRANSITION_ACTOR_CUSTOMER,
   DATE_TYPE_DATE,
+  TRANSITION_HOST_CANCELS_AFTER_CONTRACT_START,
 } from '../../util/transaction';
 import { LINE_ITEM_NIGHT } from '../../util/types';
 import { BookingBreakdownComponent } from './BookingBreakdown';
@@ -30,6 +31,10 @@ const exampleTransaction = params => {
           transition: TRANSITION_REQUEST_PAYMENT,
         },
       ],
+      protectedData: {
+        ongoingContract: true,
+         lengthOfContract: true
+      },
 
       // payinTotal, payoutTotal, and lineItems required in params
       ...params,
@@ -141,7 +146,7 @@ describe('BookingBreakdown', () => {
         unitType={LINE_ITEM_NIGHT}
         dateType={DATE_TYPE_DATE}
         transaction={exampleTransaction({
-          lastTransition: TRANSITION_CANCEL,
+          lastTransition: TRANSITION_HOST_CANCELS_AFTER_CONTRACT_START,
           payinTotal: new Money(0, 'USD'),
           payoutTotal: new Money(0, 'USD'),
           lineItems: [

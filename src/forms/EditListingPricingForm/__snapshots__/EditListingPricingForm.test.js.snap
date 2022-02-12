@@ -19,6 +19,7 @@ exports[`EditListingPricingForm matches snapshot 1`] = `
       autoFocus={true}
       className="input"
       id="price"
+      max={500000}
       onBlur={[Function]}
       onChange={[Function]}
       onFocus={[Function]}
@@ -27,6 +28,425 @@ exports[`EditListingPricingForm matches snapshot 1`] = `
       value=""
     />
   </div>
+  <p>
+    To help you select an appropriate rental rate, this table gives the average weekly rates being charged for purpose-built, self storage bays (6m x 3m) in February 2022. Multiply this by the number of available bays you wish to rent and adjust it to reflect the quality of the space you think you are offering:
+  </p>
+  Array [
+    "",
+    Array [
+      "",
+      <div
+        className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiTableContainer-root css-1pmjivb-MuiPaper-root-MuiTableContainer-root"
+      >
+        Array [
+          "",
+          <table
+            aria-label="simple table"
+            className="MuiTable-root css-rqglhn-MuiTable-root"
+            role={null}
+          >
+            Array [
+              "",
+              <thead
+                className="MuiTableHead-root css-15wwp11-MuiTableHead-root"
+                role={null}
+              >
+                Array [
+                  "",
+                  <tr
+                    className="MuiTableRow-root MuiTableRow-head css-xa3vgo-MuiTableRow-root"
+                    role={null}
+                  >
+                    Array [
+                      "",
+                      <th
+                        aria-sort={null}
+                        className="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-13n5ack-MuiTableCell-root"
+                        scope="col"
+                      >
+                        Region
+                      </th>,
+                    ]
+                    Array [
+                      "",
+                      <th
+                        aria-sort={null}
+                        className="MuiTableCell-root MuiTableCell-head MuiTableCell-alignCenter MuiTableCell-sizeSmall css-k458y0-MuiTableCell-root"
+                        scope="col"
+                      >
+                        $ per week per bay of space
+                      </th>,
+                    ]
+                  </tr>,
+                ]
+              </thead>,
+            ]
+            Array [
+              "",
+              <tbody
+                className="MuiTableBody-root css-apqrd9-MuiTableBody-root"
+                role={null}
+              >
+                Array [
+                  "",
+                  <tr
+                    className="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    role={null}
+                  >
+                    Array [
+                      "",
+                      <th
+                        aria-sort={null}
+                        className="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeSmall css-t84i0y-MuiTableCell-root"
+                        colSpan={2}
+                        scope="row"
+                      >
+                        NORTH ISLAND
+                      </th>,
+                    ]
+                  </tr>,
+                ]
+                Array [
+                  "",
+                  <tr
+                    className="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    role={null}
+                  >
+                    Array [
+                      "",
+                      <th
+                        aria-sort={null}
+                        className="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeSmall css-dsuxgy-MuiTableCell-root"
+                        scope="row"
+                      >
+                        Auckland
+                      </th>,
+                    ]
+                    Array [
+                      "",
+                      <td
+                        aria-sort={null}
+                        className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignCenter MuiTableCell-sizeSmall css-vtdehq-MuiTableCell-root"
+                      >
+                        $
+                        79
+                      </td>,
+                    ]
+                  </tr>,
+                ]
+                Array [
+                  "",
+                  <tr
+                    className="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    role={null}
+                  >
+                    Array [
+                      "",
+                      <th
+                        aria-sort={null}
+                        className="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeSmall css-dsuxgy-MuiTableCell-root"
+                        scope="row"
+                      >
+                        Auckland
+                      </th>,
+                    ]
+                    Array [
+                      "",
+                      <td
+                        aria-sort={null}
+                        className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignCenter MuiTableCell-sizeSmall css-vtdehq-MuiTableCell-root"
+                      >
+                        $
+                        79
+                      </td>,
+                    ]
+                  </tr>,
+                ]
+                Array [
+                  "",
+                  <tr
+                    className="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    role={null}
+                  >
+                    Array [
+                      "",
+                      <th
+                        aria-sort={null}
+                        className="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeSmall css-dsuxgy-MuiTableCell-root"
+                        scope="row"
+                      >
+                        Hamilton
+                      </th>,
+                    ]
+                    Array [
+                      "",
+                      <td
+                        aria-sort={null}
+                        className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignCenter MuiTableCell-sizeSmall css-vtdehq-MuiTableCell-root"
+                      >
+                        $
+                        62
+                      </td>,
+                    ]
+                  </tr>,
+                ]
+                Array [
+                  "",
+                  <tr
+                    className="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    role={null}
+                  >
+                    Array [
+                      "",
+                      <th
+                        aria-sort={null}
+                        className="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeSmall css-dsuxgy-MuiTableCell-root"
+                        scope="row"
+                      >
+                        Manawatu-Wanganui
+                      </th>,
+                    ]
+                    Array [
+                      "",
+                      <td
+                        aria-sort={null}
+                        className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignCenter MuiTableCell-sizeSmall css-vtdehq-MuiTableCell-root"
+                      >
+                        $
+                        54
+                      </td>,
+                    ]
+                  </tr>,
+                ]
+                Array [
+                  "",
+                  <tr
+                    className="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    role={null}
+                  >
+                    Array [
+                      "",
+                      <th
+                        aria-sort={null}
+                        className="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeSmall css-dsuxgy-MuiTableCell-root"
+                        scope="row"
+                      >
+                        Taranaki
+                      </th>,
+                    ]
+                    Array [
+                      "",
+                      <td
+                        aria-sort={null}
+                        className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignCenter MuiTableCell-sizeSmall css-vtdehq-MuiTableCell-root"
+                      >
+                        $
+                        38
+                      </td>,
+                    ]
+                  </tr>,
+                ]
+                Array [
+                  "",
+                  <tr
+                    className="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    role={null}
+                  >
+                    Array [
+                      "",
+                      <th
+                        aria-sort={null}
+                        className="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeSmall css-dsuxgy-MuiTableCell-root"
+                        scope="row"
+                      >
+                        Taupo
+                      </th>,
+                    ]
+                    Array [
+                      "",
+                      <td
+                        aria-sort={null}
+                        className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignCenter MuiTableCell-sizeSmall css-vtdehq-MuiTableCell-root"
+                      >
+                        $
+                        42
+                      </td>,
+                    ]
+                  </tr>,
+                ]
+                Array [
+                  "",
+                  <tr
+                    className="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    role={null}
+                  >
+                    Array [
+                      "",
+                      <th
+                        aria-sort={null}
+                        className="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeSmall css-dsuxgy-MuiTableCell-root"
+                        scope="row"
+                      >
+                        Tauranga
+                      </th>,
+                    ]
+                    Array [
+                      "",
+                      <td
+                        aria-sort={null}
+                        className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignCenter MuiTableCell-sizeSmall css-vtdehq-MuiTableCell-root"
+                      >
+                        $
+                        55
+                      </td>,
+                    ]
+                  </tr>,
+                ]
+                Array [
+                  "",
+                  <tr
+                    className="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    role={null}
+                  >
+                    Array [
+                      "",
+                      <th
+                        aria-sort={null}
+                        className="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeSmall css-dsuxgy-MuiTableCell-root"
+                        scope="row"
+                      >
+                        Waikato
+                      </th>,
+                    ]
+                    Array [
+                      "",
+                      <td
+                        aria-sort={null}
+                        className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignCenter MuiTableCell-sizeSmall css-vtdehq-MuiTableCell-root"
+                      >
+                        $
+                        66
+                      </td>,
+                    ]
+                  </tr>,
+                ]
+                Array [
+                  "",
+                  <tr
+                    className="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    role={null}
+                  >
+                    Array [
+                      "",
+                      <th
+                        aria-sort={null}
+                        className="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeSmall css-dsuxgy-MuiTableCell-root"
+                        scope="row"
+                      >
+                        Wellington
+                      </th>,
+                    ]
+                    Array [
+                      "",
+                      <td
+                        aria-sort={null}
+                        className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignCenter MuiTableCell-sizeSmall css-vtdehq-MuiTableCell-root"
+                      >
+                        $
+                        60
+                      </td>,
+                    ]
+                  </tr>,
+                ]
+                Array [
+                  "",
+                  <tr
+                    className="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    role={null}
+                  />,
+                ]
+                Array [
+                  "",
+                  <tr
+                    className="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    role={null}
+                  >
+                    Array [
+                      "",
+                      <th
+                        aria-sort={null}
+                        className="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeSmall css-t84i0y-MuiTableCell-root"
+                        colSpan={2}
+                        scope="row"
+                      >
+                        SOUTH ISLAND
+                      </th>,
+                    ]
+                  </tr>,
+                ]
+                Array [
+                  "",
+                  <tr
+                    className="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    role={null}
+                  >
+                    Array [
+                      "",
+                      <th
+                        aria-sort={null}
+                        className="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeSmall css-dsuxgy-MuiTableCell-root"
+                        scope="row"
+                      >
+                        Canterbury
+                      </th>,
+                    ]
+                    Array [
+                      "",
+                      <td
+                        aria-sort={null}
+                        className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignCenter MuiTableCell-sizeSmall css-vtdehq-MuiTableCell-root"
+                      >
+                        $
+                        60
+                      </td>,
+                    ]
+                  </tr>,
+                ]
+                Array [
+                  "",
+                  <tr
+                    className="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    role={null}
+                  >
+                    Array [
+                      "",
+                      <th
+                        aria-sort={null}
+                        className="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeSmall css-dsuxgy-MuiTableCell-root"
+                        scope="row"
+                      >
+                        Otago
+                      </th>,
+                    ]
+                    Array [
+                      "",
+                      <td
+                        aria-sort={null}
+                        className="MuiTableCell-root MuiTableCell-body MuiTableCell-alignCenter MuiTableCell-sizeSmall css-vtdehq-MuiTableCell-root"
+                      >
+                        $
+                        45
+                      </td>,
+                    ]
+                  </tr>,
+                ]
+              </tbody>,
+            ]
+          </table>,
+        ]
+      </div>,
+    ],
+  ]
   <button
     className="root submitButton"
     disabled={true}

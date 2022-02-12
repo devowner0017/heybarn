@@ -21,7 +21,7 @@ export const subUnitDivisors = {
 
 // Currency formatting options.
 // See: https://github.com/yahoo/react-intl/wiki/API#formatnumber
-export const currencyConfiguration = currency => {
+export const currencyConfiguration = (currency = 'NZD') => {
   if (!subUnitDivisors[currency]) {
     const currencies = Object.keys(subUnitDivisors);
     throw new Error(

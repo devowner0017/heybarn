@@ -173,7 +173,6 @@ class MainPanel extends Component {
       isMapOpen,
       searchType,
     } = this.props;
-    console.log('🚀 | file: MainPanel.js | line 176 | MainPanel | render | this.props', this.props);
 
     const primaryFilters = filterConfig.filter(f => f.group === 'primary');
     const secondaryFilters = filterConfig.filter(f => f.group !== 'primary');
@@ -185,10 +184,6 @@ class MainPanel extends Component {
 
     // Selected aka active filters
     const selectedFilters = validFilterParams(urlQueryParams, filterConfig);
-    console.log(
-      '🚀 | file: MainPanel.js | line 186 | MainPanel | render | selectedFilters',
-      selectedFilters
-    );
     const selectedFiltersCount = Object.keys(selectedFilters).length;
 
     // Selected aka active secondary filters
@@ -239,7 +234,7 @@ class MainPanel extends Component {
     const typeButton = (
       <Button
         className={css.typeButton}
-        onClick={_ =>
+        onClick={() =>
           this.getHandleChangedValueFn(true)({
             pub_listingType: searchType === 'advert' ? 'listing' : 'advert',
           })

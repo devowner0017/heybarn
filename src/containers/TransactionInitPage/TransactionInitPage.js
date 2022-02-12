@@ -111,14 +111,14 @@ export const TransactionInitPageComponent = props => {
   const [savedPaymentIntents, setSavedPaymentIntents] = useState(null);
   const [stripeFunction, setStripeFunction] = useState(null);
   const [submittingPlatformFee, setSubmittingPlatformFee] = useState(null);
-  useEffect(_ => {
+  useEffect(() => {
     if (window) {
       loadInitialData();
     }
   }, []);
 
   useEffect(
-    _ => {
+    () => {
       if (couponCode === 'TEST') {
         setValidCouponCode(true);
       }

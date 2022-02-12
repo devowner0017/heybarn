@@ -49,16 +49,7 @@ exports[`BookingBreakdown customer transaction data matches snapshot 1`] = `
           <div
             className="dayInfo"
           >
-            <span>
-              Sat 12:00 PM
-            </span>
-          </div>
-          <div
-            className="itemLabel"
-          >
-            <span>
-              Jun 10
-            </span>
+            Ongoing
           </div>
         </div>
       </div>
@@ -156,16 +147,7 @@ exports[`BookingBreakdown pretransaction data matches snapshot 1`] = `
           <div
             className="dayInfo"
           >
-            <span>
-              Sat 12:00 PM
-            </span>
-          </div>
-          <div
-            className="itemLabel"
-          >
-            <span>
-              Jun 10
-            </span>
+            Ongoing
           </div>
         </div>
       </div>
@@ -263,16 +245,7 @@ exports[`BookingBreakdown provider canceled transaction data matches snapshot 1`
           <div
             className="dayInfo"
           >
-            <span>
-              Sat 12:00 PM
-            </span>
-          </div>
-          <div
-            className="itemLabel"
-          >
-            <span>
-              Jun 10
-            </span>
+            Ongoing
           </div>
         </div>
       </div>
@@ -377,7 +350,7 @@ exports[`BookingBreakdown provider canceled transaction data matches snapshot 1`
         className="totalLabel"
       >
         <span>
-          BookingBreakdown.providerTotalDefault
+          BookingBreakdown.providerTotalDelivered
         </span>
       </div>
       <div
@@ -446,16 +419,7 @@ exports[`BookingBreakdown provider transaction data matches snapshot 1`] = `
           <div
             className="dayInfo"
           >
-            <span>
-              Sat 12:00 PM
-            </span>
-          </div>
-          <div
-            className="itemLabel"
-          >
-            <span>
-              Jun 10
-            </span>
+            Ongoing
           </div>
         </div>
       </div>

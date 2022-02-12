@@ -17,10 +17,6 @@ module.exports = async (req, res) => {
   return stripe.subscriptions
     .update(subscription.id, { cancel_at: '' })
     .then(apiResponse => {
-      console.log(
-        '🚀 | file: extend-recurring-payments.js | line 20 | module.exports= | apiResponse',
-        apiResponse
-      );
       const serialRes = serialize(apiResponse);
 
       const metaParams = {
@@ -42,10 +38,6 @@ module.exports = async (req, res) => {
           expand: true,
         })
         .then(metaResponse => {
-          console.log(
-            '🚀 | file: extend-recurring-payments.js | line 42 | module.exports= | metaResponse',
-            metaResponse
-          );
           return res
             .status(200)
             .set('Content-Type', 'application/transit+json')

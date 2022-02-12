@@ -9,24 +9,13 @@ import { findConfigForSelectFilter } from '../../util/search';
 
 const SectionRulesMaybe = props => {
   const { className, rootClassName, publicData, listingType, filterConfig } = props;
-  console.log('🚀 | file: SectionRulesMaybe.js | line 12 | listingType', listingType);
-  console.log('🚀 | file: SectionRulesMaybe.js | line 12 | publicData', publicData);
-  console.log('🚀 | file: SectionRulesMaybe.js | line 12 | filterConfig', filterConfig);
   const advertAccessFrequencyOption = findConfigForSelectFilter(
     'advertAccessFrequency',
     filterConfig
   );
-  console.log(
-    '🚀 | file: SectionRulesMaybe.js | line 14 | advertAccessFrequencyOption',
-    advertAccessFrequencyOption
-  );
   const listingAccessFrequencyOption = findConfigForSelectFilter(
     'listingAccessFrequency',
     filterConfig
-  );
-  console.log(
-    '🚀 | file: SectionRulesMaybe.js | line 16 | listingAccessFrequencyOption',
-    listingAccessFrequencyOption
   );
 
   const classes = classNames(rootClassName || css.root, className);
@@ -43,8 +32,6 @@ const SectionRulesMaybe = props => {
                 {listingType === 'advert'
                   ? advertAccessFrequencyOption?.options?.find(o => o.key === access)?.label
                   : listingAccessFrequencyOption?.options?.find(o => {
-                      console.log(o);
-                      console.log('🚀 | file: SectionRulesMaybe.js | line 49 | access', access);
                       return o.key === access;
                     })?.label}
               </li>

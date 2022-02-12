@@ -160,7 +160,6 @@ export class SearchPageComponent extends Component {
     // urlQueryParams doesn't contain page specific url params
     // like mapSearch, page or origin (origin depends on config.sortSearchByDistance)
     const urlQueryParams = pickSearchParamsOnly(searchInURL, filterConfig, sortConfig);
-    console.log("🚀 | file: SearchPage.js | line 163 | SearchPageComponent | render | searchInURL", searchInURL);
 
     // Page transition might initially use values from previous search
     const urlQueryString = stringify(urlQueryParams);
@@ -194,13 +193,13 @@ export class SearchPageComponent extends Component {
     // For some reason, stickyness doesn't work on Safari, if the element is <button>
     const label = { inputProps: { 'aria-label': 'Show map' } };
 
-    const mapSwitch = (
+    const mapSwitch = isMobileLayout ? null : (
       <FormControlLabel
         className={css.mapSwitch}
         control={
           <Switch
             checked={this.state.isMapOpen}
-            onChange={_ => {
+            onChange={() => {
               this.onOpenMap();
             }}
             inputProps={{ 'aria-label': 'Show map' }}
@@ -212,7 +211,6 @@ export class SearchPageComponent extends Component {
       />
     );
 
-    console.log("🚀 | file: SearchPage.js | line 231 | SearchPageComponent | render | listings", listings);
     return (
       <Page
         scrollingDisabled={scrollingDisabled}
@@ -243,7 +241,7 @@ export class SearchPageComponent extends Component {
             history={history}
             mapSwitch={mapSwitch}
             isMapOpen={isMapOpen}
-            searchType={pub_listingType || "listing"}
+            searchType={pub_listingType || 'listing'}
           />
           <ModalInMobile
             className={css.mapPanel}

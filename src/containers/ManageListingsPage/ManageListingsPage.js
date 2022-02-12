@@ -30,6 +30,7 @@ import {
 } from './ManageListingsPage.duck';
 import css from './ManageListingsPage.module.css';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
+import { capitalize } from 'lodash'
 
 export class ManageListingsPageComponent extends Component {
   constructor(props) {
@@ -70,10 +71,6 @@ export class ManageListingsPageComponent extends Component {
       onManageDisableScrolling,
       intl,
     } = this.props;
-    console.log(
-      '🚀 | file: ManageListingsPage.js | line 69 | ManageListingsPageComponent | render | this.props',
-      this.props
-    );
     const listingType = location.pathname.startsWith('/adverts') ? 'advert' : 'listing';
     const hasPaginationInfo = !!pagination && pagination.totalItems != null;
     const listingsAreLoaded = !queryInProgress && hasPaginationInfo;
@@ -163,11 +160,11 @@ export class ManageListingsPageComponent extends Component {
       <Page title={title} scrollingDisabled={scrollingDisabled}>
         <LayoutSideNavigation>
           <LayoutWrapperTopbar>
-            <TopbarContainer currentPage={`Manage${_.capitalize(listingType)}sPage`} />
-            <UserNav selectedPageName={`Manage${_.capitalize(listingType)}sPage`} />
+            <TopbarContainer currentPage={`Manage${capitalize(listingType)}sPage`} />
+            <UserNav selectedPageName={`Manage${capitalize(listingType)}sPage`} />
           </LayoutWrapperTopbar>
           <LayoutWrapperManageListingsSideNav
-            currentTab={`${_.capitalize(listingType)}sTab`}
+            currentTab={`${capitalize(listingType)}sTab`}
             extraTabs={tabs}
           />
           <LayoutWrapperMain>
@@ -207,7 +204,7 @@ export class ManageListingsPageComponent extends Component {
               isOpen={this.state.showConfirmDeleteModal}
               onCloseModal={() => this.setState({ showConfirmDeleteModal: false })}
               onManageDisableScrolling={onManageDisableScrolling}
-              negativeAction={_ => onDeleteListing(this.state.deleteListingId, listingType)}
+              negativeAction={() => onDeleteListing(this.state.deleteListingId, listingType)}
               affirmativeButtonText={'Cancel'}
               negativeButtonText={`Delete this ${listingType}`}
               affirmativeInProgress={null}

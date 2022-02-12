@@ -1,4 +1,3 @@
-import { flatMap } from 'lodash';
 import { nestedRegions } from './nzRegions';
 
 /*

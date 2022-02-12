@@ -7,7 +7,6 @@ module.exports = (req, res) => {
 
   const REACT_APP_LISTING_FEE_CENTS = process.env.REACT_APP_LISTING_FEE_CENTS || 2000;
   const { listingId, paymentMethod, stripeCustomerId } = req.body;
-  console.log('🚀 | file: create-reservation-charge.js | line 11 | req.body', req.body);
   const createParams = {
     amount: REACT_APP_LISTING_FEE_CENTS,
     currency: 'nzd',
@@ -35,7 +34,6 @@ module.exports = (req, res) => {
         .end();
     })
     .catch(e => {
-      console.log(e);
       return e;
       // handleError(res, e);
     });

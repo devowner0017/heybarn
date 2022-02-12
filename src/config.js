@@ -1,10 +1,11 @@
 import * as custom from './marketplace-custom-config.js';
 import defaultLocationSearches from './default-location-searches';
-import { defaultMCC, stripePublishableKey, stripeCountryDetails } from './stripe-config';
+import { defaultMCC,  stripeCountryDetails } from './stripe-config';
 import { currencyConfiguration } from './currency-config';
 
 const env = process.env.REACT_APP_ENV;
 const dev = process.env.REACT_APP_ENV === 'development';
+const stripePublishableKey = process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY;
 
 // If you want to change the language, remember to also change the
 // locale data and the messages in the app.js file.
@@ -68,7 +69,7 @@ const sdkTransitVerbose = process.env.REACT_APP_SHARETRIBE_SDK_TRANSIT_VERBOSE =
 // Marketplace currency.
 // It should match one of the currencies listed in currency-config.js
 const currencyConf = process.env.REACT_APP_SHARETRIBE_MARKETPLACE_CURRENCY;
-const currency = currencyConf ? currencyConf.toUpperCase() : currencyConf;
+const currency = currencyConf ? currencyConf.toUpperCase() : currencyConf || "NZD";
 
 // Currency formatting options.
 // See: https://github.com/yahoo/react-intl/wiki/API#formatnumber

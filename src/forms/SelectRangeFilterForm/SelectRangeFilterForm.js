@@ -9,27 +9,27 @@ import css from './SelectRangeFilterForm.module.css';
 
 const DEBOUNCE_WAIT_TIME = 400;
 const CustomInput = props => {
-  
-  const { input, focusedInput, setFocusedInput, ...rest } = props;
+
+  const { input, setFocusedInput, ...rest } = props;
   return (
     <input
       {...input}
       className={''}
       {...rest}
-      onBlur={e => {
+      onBlur={() => {
         setFocusedInput(0);
       }}
       onFocus={e => {
         e.target.select();
       }}
-      autofocus
+      autoFocus
     />
   );
 };
 
 // Helper function to parse value for min handle
 // Value needs to be between slider's minimum value and current maximum value
-const parseValue = (min, max, currentMin, currentMax) => value => {
+const parseValue = (min, max) => value => {
   const parsedValue = Number.parseInt(value, 10);
   if (isNaN(parsedValue)) {
     return '';
@@ -71,7 +71,7 @@ const SelectRangeFilterFormComponent = props => {
 
   const handleSubmit = values => {
     const { minNumber, maxNumber, ...restValues } = values;
-    
+
     return onSubmit({
       minNumber: minNumber === '' ? rest.min : minNumber > maxNumber ? maxNumber : minNumber,
       maxNumber: maxNumber === '' ? rest.max : minNumber > maxNumber ? minNumber : maxNumber,
@@ -174,7 +174,7 @@ const SelectRangeFilterFormComponent = props => {
                         <input
                           className={focusedInput === 1 ? css.hidden : 'css.hidden'}
                           value={shortenNumber(minNumber)}
-                          onClick={_ => {
+                          onClick={() => {
                             setFocusedInput(1);
                           }}
                           readOnly
@@ -216,7 +216,7 @@ const SelectRangeFilterFormComponent = props => {
                         <input
                           className={focusedInput === 2 ? css.hidden : 'css.hidden'}
                           value={shortenNumber(maxNumber)}
-                          onClick={_ => {
+                          onClick={() => {
                             setFocusedInput(2);
                           }}
                           readOnly

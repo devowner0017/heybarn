@@ -10,8 +10,6 @@ module.exports = (req, res) => {
     clientSecret: process.env.SHARETRIBE_INTEGRATION_CLIENT_SECRET,
   });
   const { listingId, listingState , transactionId} = req.body;
-  console.log("🚀 | file: update-listing-state.js | line 13 | transactionId", transactionId);
-  console.log("🚀 | file: update-listing-state.js | line 13 | listingState", listingState);
   return integrationSdk.listings
     .update({ id: new UUID(listingId), publicData: { listingState, transactionId } }, { expand: true })
     .then(listingResponse => {
@@ -27,7 +25,6 @@ module.exports = (req, res) => {
         .end();
     })
     .catch(e => {
-    console.log("🚀 | file: update-listing-state.js | line 28 | e", e);
       handleError(res, e);
     });
 };

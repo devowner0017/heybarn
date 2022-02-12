@@ -168,11 +168,9 @@ export const searchListings = searchParams => (dispatch, getState, sdk) => {
     per_page: perPage,
   };
 
-  console.log('🚀 | file: SearchPage.duck.js | line 173 | params', params);
   return sdk.listings
     .query(params)
     .then(response => {
-      console.log('🚀 | file: SearchPage.duck.js | line 175 | response', response);
       dispatch(addMarketplaceEntities(response));
       dispatch(searchListingsSuccess(response));
       return response;
@@ -189,7 +187,6 @@ export const setActiveListing = listingId => ({
 });
 
 export const searchMapListings = searchParams => (dispatch, getState, sdk) => {
-console.log("🚀 | file: SearchPage.duck.js | line 192 | searchParams", searchParams);
   dispatch(searchMapListingsRequest(searchParams));
 
   const { perPage, ...rest } = searchParams;

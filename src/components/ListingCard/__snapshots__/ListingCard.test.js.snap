@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ListingCard matches snapshot 1`] = `
-<ConditionalWrapper
-  condition={false}
+<Component
+  condition={true}
   defaultWrapper={[Function]}
   wrapper={[Function]}
 >
@@ -35,13 +35,42 @@ exports[`ListingCard matches snapshot 1`] = `
     <div
       className="mainInfo"
     >
-      <div
-        className="title"
+      <Component
+        defaultWrapper={[Function]}
+        wrapper={[Function]}
       >
-        listing1
-         
-        title
-      </div>
+        <div
+          className="title"
+          data-for="listing1"
+          data-tip="listing1 title"
+          data-tip-disable={true}
+          id="listing1"
+        >
+          <Truncate
+            ellipsis={
+              <span>
+                ...
+              </span>
+            }
+            lines={2}
+            onTruncate={[Function]}
+            trimWhitespace={false}
+            width={0}
+          >
+            listing1
+             
+            title
+          </Truncate>
+        </div>
+        <ReactTooltip
+          clickable={false}
+          delayShow={500}
+          id="listing1"
+          insecure={true}
+          resizeHide={true}
+          wrapper="div"
+        />
+      </Component>
       <div
         className="authorInfo"
       >
@@ -50,13 +79,13 @@ exports[`ListingCard matches snapshot 1`] = `
           values={
             Object {
               "authorName": "user1 display name",
-              "need": "",
-              "region": "",
+              "need": " space",
+              "region": "NZ",
             }
           }
         />
       </div>
     </div>
   </div>
-</ConditionalWrapper>
+</Component>
 `;

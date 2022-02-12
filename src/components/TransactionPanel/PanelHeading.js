@@ -145,9 +145,9 @@ const PanelHeading = props => {
     otherUserDisplayName,
     listingType,
     relatedTxId,
+    showRelatedLink,
+    relatedLink,
   } = props;
-  console.log('🚀 | file: PanelHeading.js | line 141 | providerName', providerName);
-  console.log('🚀 | file: PanelHeading.js | line 141 | customerName', customerName);
 
   const isCustomer = props.transactionRole === 'customer';
 
@@ -159,17 +159,16 @@ const PanelHeading = props => {
       className={css.buttonLink}
       name={'SearchPage'}
       to={{
-        search: `?pub_listingType=${listingType === "listing" && isCustomer ? "listing" : 'advert'}`,
+        search: `?pub_listingType=${
+          listingType === 'listing' && isCustomer ? 'listing' : 'advert'
+        }`,
       }}
     >
       <Button className={css.roundButton}>Browse</Button>
     </NamedLink>
   );
   const accountSettingsLink = (
-    <NamedLink
-      className={css.buttonLink}
-      name={'AccountSettingsPage'}
-    >
+    <NamedLink className={css.buttonLink} name={'AccountSettingsPage'}>
       <Button className={css.roundButton}>Account Settings</Button>
     </NamedLink>
   );
@@ -185,7 +184,6 @@ const PanelHeading = props => {
     browseLink,
     accountSettingsLink,
     faqLink: <NamedLink name={'FAQPage'}>FAQs</NamedLink>,
-
   };
   switch (panelHeadingState) {
     case HEADING_HOST_ENQUIRED:
@@ -193,7 +191,6 @@ const PanelHeading = props => {
         <HeadingWithSubtitle
           className={titleClasses}
           id={`TransactionPanel.${isCustomer ? 'c' : 'p'}_hostEnquiredTitle`}
-          // subId={`TransactionPanel.${isCustomer ? 'c' : 'p'}_hostEnquiredSubTitle`}
           values={messageValues}
           listingDeleted={listingDeleted}
           isProvider={!isCustomer}
@@ -207,6 +204,8 @@ const PanelHeading = props => {
               />
             </p>
           ) : null}
+          {showRelatedLink && relatedLink}
+
         </HeadingWithSubtitle>
       );
     case HEADING_RENTER_ENQUIRED:
@@ -224,6 +223,7 @@ const PanelHeading = props => {
               />
             </p>
           ) : null}
+          {showRelatedLink && relatedLink}
         </HeadingWithSubtitle>
       );
 
@@ -246,6 +246,8 @@ const PanelHeading = props => {
               />
             </p>
           ) : null}
+          {showRelatedLink && relatedLink}
+
         </HeadingWithSubtitle>
       );
     case HEADING_RENTER_DECLINED_COMMUNICATION:
@@ -267,6 +269,8 @@ const PanelHeading = props => {
               />
             </p>
           ) : null}
+          {showRelatedLink && relatedLink}
+
         </HeadingWithSubtitle>
       );
     case HEADING_RENTAL_AGREEMENT_DISCUSSION:
@@ -288,6 +292,8 @@ const PanelHeading = props => {
               />
             </p>
           ) : null}
+          {showRelatedLink && relatedLink}
+
         </HeadingWithSubtitle>
       );
     case HEADING_WAS_APPROVED_BY_RENTER:
@@ -305,6 +311,8 @@ const PanelHeading = props => {
               />
             </p>
           ) : null}
+          {showRelatedLink && relatedLink}
+
         </HeadingWithSubtitle>
       );
     case HEADING_REVERSED_TRANSACTION_FLOW:
@@ -342,7 +350,6 @@ const PanelHeading = props => {
         </HeadingWithSubtitle>
       );
     case HEADING_RENTAL_AGREEMENT_REQUESTED:
-      console.log('🚀 | file: PanelHeading.js | line 298 | customerName', customerName);
       return (
         <HeadingWithSubtitle
           className={titleClasses}
@@ -357,6 +364,8 @@ const PanelHeading = props => {
               />
             </p>
           ) : null}
+          {showRelatedLink && relatedLink}
+
         </HeadingWithSubtitle>
       );
     case HEADING_RENTAL_AGREEMENT_SENT:
@@ -374,6 +383,8 @@ const PanelHeading = props => {
               />
             </p>
           ) : null}
+          {showRelatedLink && relatedLink}
+
         </HeadingWithSubtitle>
       );
     case HEADING_CANCELLED_AFTER_AGREEENT_SENT:
@@ -393,6 +404,7 @@ const PanelHeading = props => {
               />
             </p>
           ) : null}
+
         </HeadingWithSubtitle>
       );
     case HEADING_RENTAL_AGREEMENT_FINALIZED:
@@ -410,6 +422,8 @@ const PanelHeading = props => {
               />
             </p>
           ) : null}
+          {showRelatedLink && relatedLink}
+
         </HeadingWithSubtitle>
       );
     case HEADING_RENT_PAID:
@@ -427,6 +441,8 @@ const PanelHeading = props => {
               />
             </p>
           ) : null}
+          {showRelatedLink && relatedLink}
+
         </HeadingWithSubtitle>
       );
     case HEADING_RENT_CANCELLED:

@@ -116,3 +116,7 @@
 .modalMessage {
   @apply --marketplaceModalParagraphStyles;
 }
+
+.backButton{
+  margin-bottom: 1rem;
+}

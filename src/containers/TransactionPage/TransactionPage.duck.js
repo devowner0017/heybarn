@@ -25,6 +25,7 @@ import {
   TRANSITION_HOST_SENDS_AGREEMENT_AFTER_REQUEST,
   TRANSITION_HOST_CANCELS_AFTER_AGREEMENT_SENT,
   TRANSITION_RENTER_CANCELS_AFTER_AGREEMENT_SENT,
+  TRANSITION_HOST_CANCELS_AFTER_REQUEST,
 } from '../../util/transaction';
 import {
   transactionLineItems,
@@ -410,14 +411,6 @@ const fetchTransitionsSuccess = response => ({
 });
 const fetchTransitionsError = e => ({ type: FETCH_TRANSITIONS_ERROR, error: true, payload: e });
 
-const acceptSaleRequest = () => ({ type: ACCEPT_SALE_REQUEST });
-const acceptSaleSuccess = () => ({ type: ACCEPT_SALE_SUCCESS });
-const acceptSaleError = e => ({ type: ACCEPT_SALE_ERROR, error: true, payload: e });
-
-const declineSaleRequest = () => ({ type: DECLINE_SALE_REQUEST });
-const declineSaleSuccess = () => ({ type: DECLINE_SALE_SUCCESS });
-const declineSaleError = e => ({ type: DECLINE_SALE_ERROR, error: true, payload: e });
-
 const acceptCommunicationRequest = () => ({ type: ACCEPT_COMMUNICATION_REQUEST });
 const acceptCommunicationSuccess = () => ({ type: ACCEPT_COMMUNICATION_SUCCESS });
 const acceptCommunicationError = e => ({
@@ -483,7 +476,6 @@ const fetchMessagesError = e => ({ type: FETCH_MESSAGES_ERROR, error: true, payl
 
 const sendMessageRequest = () => ({ type: SEND_MESSAGE_REQUEST });
 const sendMessageSuccess = () => ({ type: SEND_MESSAGE_SUCCESS });
-const sendMessageError = e => ({ type: SEND_MESSAGE_ERROR, error: true, payload: e });
 
 const sendReviewRequest = () => ({ type: SEND_REVIEW_REQUEST });
 const sendReviewSuccess = () => ({ type: SEND_REVIEW_SUCCESS });
@@ -513,15 +505,6 @@ export const fetchLineItemsError = error => ({
 
 // ================ Thunks ================ //
 
-const updateListingStateRequest = (listingId, listingState, transactionId) => {
-  updateListingState({
-    id,
-    listingState: state,
-    transactionId,
-  })
-    .then(r => {})
-    .catch(e => {});
-};
 const listingRelationship = txResponse => {
   return txResponse.data.data.relationships.listing.data;
 };
@@ -616,60 +599,24 @@ export const completeSale = data => (dispatch, getState, sdk) => {
   if (acceptOrDeclineInProgress(getState())) {
     return Promise.reject(new Error('Accept or decline already in progress'));
   }
-  dispatch(acceptSaleRequest());
+  dispatch(completeSaleRequest());
 
   return sdk.transactions
     .transition({ id: txId, transition: TRANSITION_COMPLETE, params: {} }, { expand: true })
     .then(response => {
       dispatch(addMarketplaceEntities(response));
-      dispatch(acceptSaleSuccess());
+      dispatch(completeSaleSuccess());
       dispatch(fetchCurrentUserNotifications());
       return response;
     })
     .catch(e => {
-      dispatch(acceptSaleError(storableError(e)));
-      log.error(e, 'accept-sale-failed', {
+      dispatch(completeSaleError(storableError(e)));
+      log.error(e, 'complete-sale-failed', {
         txId,
         transition: TRANSITION_COMPLETE,
       });
       throw e;
     });
-};
-export const createTransaction = orderParams => (dispatch, getState, sdk) => {
-  dispatch(initiateOrderRequest());
-
-  const transition = TRANSITION_HOST_APPROVED_BY_RENTER;
-
-  const bodyParams = {
-    processAlias: config.bookingProcessAlias,
-    transition,
-    params: orderParams,
-  };
-  const queryParams = {
-    include: ['booking', 'provider'],
-    expand: true,
-  };
-
-  const handleSucces = response => {
-    const entities = denormalisedResponseEntities(response);
-    const order = entities[0];
-    dispatch(initiateOrderSuccess(order));
-    dispatch(fetchCurrentUserHasOrdersSuccess(true));
-    return order;
-  };
-
-  const handleError = e => {
-    dispatch(initiateOrderError(storableError(e)));
-    log.error(e, 'initiate-order-failed', {
-      listingId: orderParams.listingId.uuid,
-    });
-    throw e;
-  };
-
-  return sdk.transactions
-    .initiate(bodyParams, queryParams)
-    .then(handleSucces)
-    .catch(handleError);
 };
 
 export const reverseTransactionFlowAndAcceptCommunication = data => (dispatch, getState, sdk) => {
@@ -759,7 +706,7 @@ export const acceptCommunication = data => (dispatch, getState, sdk) => {
     .catch(e => {
       dispatch(acceptCommunicationError(storableError(e)));
       log.error(e, 'accept-communication-failed', {
-        txId: id,
+        txId,
         transition: isRenterEnquired
           ? TRANSITION_HOST_ACCEPTS_COMMUNICATION
           : TRANSITION_RENTER_ACCEPTS_COMMUNICATION,
@@ -769,7 +716,6 @@ export const acceptCommunication = data => (dispatch, getState, sdk) => {
 };
 
 export const declineCommunication = data => (dispatch, getState, sdk) => {
-  console.log('🚀 | file: TransactionPage.duck.js | line 776 | data', data);
   if (acceptOrDeclineInProgress(getState())) {
     return Promise.reject(new Error('Accept or decline already in progress'));
   }
@@ -790,7 +736,6 @@ export const declineCommunication = data => (dispatch, getState, sdk) => {
     .then(response => {
       const transaction = denormalisedResponseEntities(response)?.[0];
       const listing = getPropByName(transaction, 'listing');
-      console.log('🚀 | file: TransactionPage.duck.js | line 797 | listing', listing);
       updateListingState({
         listingId: listing.id.uuid,
         listingState: LISTING_LIVE,
@@ -813,7 +758,7 @@ export const declineCommunication = data => (dispatch, getState, sdk) => {
     });
 };
 
-export const cancelDuringRad = data => (dispatch, getState, sdk) => {
+export const cancelDuringRad = data => (dispatch, _, sdk) => {
   const { txId, actor, wasRequested } = data;
   dispatch(cancelDuringRadRequest());
   const transition = wasRequested
@@ -855,7 +800,7 @@ export const cancelDuringRad = data => (dispatch, getState, sdk) => {
     });
 };
 
-export const sendRentalAgreement = data => (dispatch, getState, sdk) => {
+export const sendRentalAgreement = data => (dispatch) => {
   // TODO: Add booking data to params here
   const { txId, listingId, wasRequested, contractLines, bookingDates } = data;
 
@@ -924,7 +869,6 @@ export const sendRentalAgreement = data => (dispatch, getState, sdk) => {
         transactionId: '',
       });
     } catch (e) {
-      console.log("🚀 | file: TransactionPage.duck.js | line 932 | e", e);
       console.error(e);
     }
     dispatch(addMarketplaceEntities(response));
@@ -957,7 +901,7 @@ export const sendRentalAgreement = data => (dispatch, getState, sdk) => {
     .catch(handleError);
 };
 
-export const requestRentalAgreement = data => (dispatch, getState, sdk) => {
+export const requestRentalAgreement = data => (dispatch) => {
   // TODO: Add booking data to params here
   const { txId, listingId } = data;
 
@@ -1062,17 +1006,9 @@ export const cancelAfterAgreementSent = data => (dispatch, getState, sdk) => {
 
 export const signRentalAgreement = data => (dispatch, getState, sdk) => {
   // TODO: Add booking data to params here
-  const { txId, listingId } = data;
+  const { txId } = data;
 
   dispatch(signRentalAgreementRequest());
-  const bookingData = {
-    startDate: moment()
-      .add(1, 'days')
-      .toISOString(),
-    endDate: moment()
-      .add(30, 'days')
-      .toISOString(),
-  };
   const bodyParams = {
     id: txId.uuid,
     transition: TRANSITION_RENTER_SIGNS_RENTAL_AGREEMENT,
@@ -1138,7 +1074,7 @@ const fetchMessages = (txId, page) => (dispatch, getState, sdk) => {
     });
 };
 
-export const fetchMoreMessages = txId => (dispatch, getState, sdk) => {
+export const fetchMoreMessages = txId => (dispatch, getState) => {
   const state = getState();
   const { oldestMessagePageFetched, totalMessagePages } = state.TransactionPage;
   const hasMoreOldMessages = totalMessagePages > oldestMessagePageFetched;
@@ -1265,7 +1201,7 @@ const timeSlotsRequest = params => (dispatch, getState, sdk) => {
   });
 };
 
-const fetchTimeSlots = listingId => (dispatch, getState, sdk) => {
+const fetchTimeSlots = listingId => (dispatch) => {
   dispatch(fetchTimeSlotsRequest);
 
   // Time slots can be fetched for 90 days at a time,

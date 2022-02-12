@@ -82,7 +82,7 @@ const SelectRegionFilter = props => {
   const handleSubmit = values => {
     onSubmit(format(values, searchMode));
   };
-  const handleClear = _ => {
+  const handleClear = () => {
     const blankForm = {
       pub_locIsland: null,
       pub_locRegion: null,
