@@ -20,7 +20,7 @@ exports[`LandingPage matches snapshot 1`] = `
       "@type": "WebPage",
       "description": "LandingPage.schemaDescription",
       "image": Array [
-        "undefinedtest-file-stub",
+        "http://localhost:3000test-file-stub",
       ],
       "name": "LandingPage.schemaTitle",
     }
@@ -31,7 +31,7 @@ exports[`LandingPage matches snapshot 1`] = `
     Array [
       Object {
         "height": 314,
-        "url": "undefinedtest-file-stub",
+        "url": "http://localhost:3000test-file-stub",
         "width": 600,
       },
     ]

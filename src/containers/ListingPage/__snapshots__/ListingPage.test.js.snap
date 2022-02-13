@@ -117,7 +117,7 @@ exports[`ListingPage matches snapshot 1`] = `
             className="mainContent"
           >
             <SectionHeading
-              formattedPrice="(USD)"
+              formattedPrice={55}
               hostLink={
                 <NamedLink
                   className="authorNameLink"
@@ -137,7 +137,7 @@ exports[`ListingPage matches snapshot 1`] = `
                   user-1 display name
                 </NamedLink>
               }
-              priceTitle="Unsupported currency (USD)"
+              priceTitle={55}
               richTitle={
                 <React.Fragment>
                   
