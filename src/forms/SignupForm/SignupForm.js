@@ -1,4 +1,4 @@
-import React from 'react';
+import React , {useState} from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { FormattedMessage, injectIntl, intlShape } from '../../util/reactIntl';
@@ -8,9 +8,10 @@ import * as validators from '../../util/validators';
 import { Form, PrimaryButton, FieldTextInput, FieldSelect } from '../../components';
 import config from '../../config';
 import css from './SignupForm.module.css';
+import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
 
 const KEY_CODE_ENTER = 13;
-
+const SUPPORTED_REGIONS = ['Manawatu', 'Otago', 'Southland'];
 const SignupFormComponent = props => (
   <FinalForm
     {...props}
@@ -25,9 +26,10 @@ const SignupFormComponent = props => (
         intl,
         onOpenTermsOfService,
         stage,
+        values,
         setSignupStage,
       } = fieldRenderProps;
-
+      const [isRegionPopupOpen, setIsRegionPopupOpen] = useState(false);
       // email
       const emailLabel = intl.formatMessage({
         id: 'SignupForm.emailLabel',
@@ -242,6 +244,14 @@ const SignupFormComponent = props => (
                   type="submit"
                   inProgress={submitInProgress}
                   disabled={submitDisabled}
+                  onClick={e => {
+                    e.preventDefault();
+                    if (!SUPPORTED_REGIONS.includes(values.locDistrict)) {
+                      setIsRegionPopupOpen(true);
+                    } else {
+                      handleSubmit(values);
+                    }
+                  }}
                 >
                   <FormattedMessage id="SignupForm.signUp" />
                 </PrimaryButton>
@@ -265,6 +275,18 @@ const SignupFormComponent = props => (
                 <FormattedMessage id="SignupForm.next" />
               </PrimaryButton>
             )}
+            <ConfirmationModal
+              isOpen={isRegionPopupOpen}
+              onCloseModal={() => setIsRegionPopupOpen(false)}
+              titleText={"heybarn has big plans but we're starting small!"}
+              contentText={
+                "We are keeping our focus on a few areas for the launch of heybarn; Manawatu, Otago, and Southland. That doesn't mean we aren't coming to your area! There just may not be as much to browse. "
+              }
+              onManageDisableScrolling={_ => null}
+              hideNegative
+              affirmativeButtonText={'I understand'}
+              affirmativeAction={() => handleSubmit(values)}
+            />
           </div>
         </Form>
       );

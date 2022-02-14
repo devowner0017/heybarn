@@ -72,6 +72,7 @@ export const LandingPageComponent = props => {
               <div className={css.bannerContent}>
                 <SectionBanner
                   header={'heybarn has big plans but we’re starting small!'}
+                  onManageDisableScrolling={() => null}
                 />
               </div>
             </li>
