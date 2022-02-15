@@ -119,6 +119,15 @@ exports.render = function(requestUrl, context, preloadedState, renderApp, webExt
   // See: https://developers.google.com/analytics/devguides/collection/analyticsjs/#alternative_async_tracking_snippet
   const googleAnalyticsScript = process.env.REACT_APP_GOOGLE_ANALYTICS_ID
     ? `
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=${process.env.REACT_APP_GOOGLE_ANALYTICS_ID}"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', '${process.env.REACT_APP_GOOGLE_ANALYTICS_ID}');
+        </script>
         <script>
           window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
           ga('create', '${process.env.REACT_APP_GOOGLE_ANALYTICS_ID}', 'auto');
