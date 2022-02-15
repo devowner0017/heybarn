@@ -222,9 +222,9 @@ const SignupFormComponent = props => (
               />
             */}
               <p className={css.bioExplanationWrapper}>
-                <span className={css.termsText}>
+                {/* <span className={css.termsText}>
                   <FormattedMessage id="SignupForm.bioExplanation" />
-                </span>
+                </span> */}
               </p>
             </div>
           )}
