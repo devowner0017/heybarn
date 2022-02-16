@@ -12,6 +12,7 @@ import config from '../../config'
 
 const SectionRecommendation = props => {
   const { rootClassName, listings, heading, linkName, linkText, reversed } = props;
+  if(listings.length < 4) return <></>
   const classes = classNames(rootClassName || css.root);
 
   // Panel width relative to the viewport
