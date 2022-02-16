@@ -344,12 +344,15 @@ export const InboxPageComponent = props => {
     scrollingDisabled,
     transactions,
     fetchInbox,
+    type
   } = props;
+  console.log("🚀 | file: InboxPage.js | line 349 | props", props);
   const { tab } = params;
   const { state } = parse(location.search);
   const [filter, setFilter] = useState(null);
   const ensuredCurrentUser = ensureCurrentUser(currentUser);
 
+  const isOrder = type === 'order';
   const title = intl.formatMessage({ id: 'InboxPage.ordersTitle' });
 
   useEffect(() => {
