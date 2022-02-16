@@ -384,7 +384,7 @@ export const InboxPageComponent = props => {
   const noResults =
     !fetchInProgress && transactions.length === 0 && !fetchOrdersOrSalesError ? (
       <li key="noResults" className={css.noResults}>
-        <FormattedMessage id={isOrders ? 'InboxPage.noOrdersFound' : 'InboxPage.noSalesFound'} />
+        <FormattedMessage id={isOrder ? 'InboxPage.noOrdersFound' : 'InboxPage.noSalesFound'} />
       </li>
     ) : null;
 
