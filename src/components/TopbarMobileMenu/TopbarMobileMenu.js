@@ -92,6 +92,21 @@ const TopbarMobileMenu = props => {
           <FormattedMessage id="TopbarMobileMenu.inboxLink" />
           {notificationCountBadge}
         </NamedLink>
+
+
+        <NamedLink
+          className={classNames(css.navigationLink, currentPageClass('NewListingPage'))}
+          name="NewListingPage"
+        >
+          <FormattedMessage id="TopbarMobileMenu.createListingLink" />
+        </NamedLink>
+        <NamedLink
+          className={classNames(css.navigationLink, currentPageClass('NewAdvertPage'))}
+          name="NewAdvertPage"
+        >
+          <FormattedMessage id="TopbarMobileMenu.createAdvertLink" />
+        </NamedLink>
+
         <NamedLink
           className={classNames(css.navigationLink, currentPageClass('ManageListingsPage'))}
           name="ManageListingsPage"
