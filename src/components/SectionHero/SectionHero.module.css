@@ -83,6 +83,8 @@
       transform: none;
     }
   }
+  font-size: 9.2vw;
+
   @media (--viewportMedium) {
     font-size: 4vw;
     max-width: var(--SectionHero_desktopTitleMaxWidth);

@@ -72,6 +72,13 @@ export const nestedRegions = [
           { key: 'southWairarapa', label: 'South Wairarapa District' },
         ],
       },
+      {
+        key: 'Gisborne',
+        label: 'Gisborne',
+        subdivs: [
+          { key: 'gisborne', label: 'Gisborne District' },
+        ],
+      },
       // {
       //   key: 'mixed',
       //   label: 'Mixed',

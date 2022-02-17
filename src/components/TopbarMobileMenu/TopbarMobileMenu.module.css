@@ -52,7 +52,13 @@
   margin: 4px 0 6px 0;
   padding: 0;
 }
-
+.search {
+  @apply --marketplaceH2FontStyles;
+  color: var(--marketplaceColor);
+  position: relative;
+    margin-top: 2rem;
+    margin-bottom: 1px;
+}
 .inbox {
   /* Font */
   @apply --marketplaceH2FontStyles;
