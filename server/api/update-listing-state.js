@@ -12,7 +12,6 @@ module.exports = (req, res) => {
   console.log('🚀 | file: update-listing-state.js | line 13 | transactionId', transactionId);
   console.log('🚀 | file: update-listing-state.js | line 13 | listingId', listingId);
   console.log('🚀 | file: update-listing-state.js | line 13 | listingState', listingState);
-  console.log('🚀 | file: update-listing-state.js | line 16 | listingResponse', listingResponse);
   return integrationSdk.listings
     .update(
       { id: new UUID(listingId), publicData: { listingState, transactionId } },
