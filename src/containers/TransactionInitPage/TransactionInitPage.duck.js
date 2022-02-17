@@ -272,7 +272,7 @@ export const createTransaction = orderParams => (dispatch, getState, sdk) => {
     dispatch(fetchCurrentUserHasOrdersSuccess(true));
 
     updateListingState({
-      id: orderParams.listingId,
+      listingId: orderParams.listingId,
       listingState: LISTING_UNDER_ENQUIRY,
       transactionId: order.id.uuid,
     })
