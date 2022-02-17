@@ -9,16 +9,12 @@ module.exports = (req, res) => {
     clientSecret: process.env.SHARETRIBE_INTEGRATION_CLIENT_SECRET,
   });
   const { listingId, listingState, transactionId } = req.body;
-  console.log('🚀 | file: update-listing-state.js | line 13 | transactionId', transactionId);
-  console.log('🚀 | file: update-listing-state.js | line 13 | listingId', listingId);
-  console.log('🚀 | file: update-listing-state.js | line 13 | listingState', listingState);
   return integrationSdk.listings
     .update(
-      { id: new UUID(listingId), publicData: { listingState, transactionId } },
+      { id: listingId, publicData: { listingState, transactionId } },
       { expand: true }
     )
     .then(listingResponse => {
-    console.log("🚀 | file: update-listing-state.js | line 22 | listingResponse", listingResponse);
       res
         .status(200)
         .set('Content-Type', 'application/transit+json')

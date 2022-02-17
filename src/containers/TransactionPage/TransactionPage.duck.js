@@ -932,12 +932,12 @@ export const requestRentalAgreement = data => (dispatch) => {
     const relatedListingId = getPropByName(order, 'relatedListingId');
 
     updateListingState({
-      id: listing.id.uuid,
+      listingId: listing.id.uuid,
       listingState: LISTING_UNDER_OFFER,
       transactionId: order.id.uuid,
     });
     updateListingState({
-      id: relatedListingId,
+      listingId: relatedListingId,
       listingState: LISTING_UNDER_OFFER,
       transactionId: order.id.uuid,
     });
