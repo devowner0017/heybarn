@@ -27,7 +27,6 @@ module.exports = (req, res) => {
         .end();
     })
     .catch(e => {
-    console.log("🚀 | file: update-listing-state.js | line 35 | e", e);
       handleError(res, e);
     });
 };

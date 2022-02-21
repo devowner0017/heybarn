@@ -41,8 +41,6 @@ export const ActionBarMaybe = props => {
       ownListingAdditionalText = 'ListingPage.hiddenListing';
     }
 
-    const message = isDraft ? 'ListingPage.finishListing' : 'ListingPage.editListing';
-
     const ownListingTextClasses = classNames(css.ownListingText, {
       [css.ownListingTextPendingApproval]: isPendingApproval,
     });

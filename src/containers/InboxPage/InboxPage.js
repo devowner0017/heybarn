@@ -346,7 +346,6 @@ export const InboxPageComponent = props => {
     fetchInbox,
     type
   } = props;
-  console.log("🚀 | file: InboxPage.js | line 349 | props", props);
   const { tab } = params;
   const { state } = parse(location.search);
   const [filter, setFilter] = useState(null);

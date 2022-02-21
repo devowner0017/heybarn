@@ -316,7 +316,7 @@ export class ListingPageComponent extends Component {
           }}
         />
       );
-    const listingUnderEnquiry = listingState !== LISTING_LIVE;
+    const listingUnderEnquiry = listingState === LISTING_UNDER_ENQUIRY;
 
     const richTitle = (
       <>
