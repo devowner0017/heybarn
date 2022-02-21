@@ -770,7 +770,7 @@ export class TransactionPanelComponent extends Component {
     const relatedPrice = ensuredRelated.attributes.price;
     const relatedBookingSubTitle =
       listingType === 'advert' && relatedPrice
-        ? `${formatMoney(intl, price)} ${intl.formatMessage({ id: unitTranslationKey })}`
+        ? `${formatMoney(intl, relatedPrice)} ${intl.formatMessage({ id: unitTranslationKey })}`
         : '';
 
     const acceptCommunicationButtons = (
