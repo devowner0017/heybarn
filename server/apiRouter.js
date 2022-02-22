@@ -34,6 +34,7 @@ const fetchListingTransactions = require('./api/fetch-listing-transactions');
 const updateTransactionMetadata = require('./api/update-transaction-metadata');
 const closeAcceptedListing = require('./api/close-accepted-listing');
 const sendAdminEmail = require('./api/send-admin-email.js');
+const sendContactEmail = require('./api/send-contact-email.js');
 
 //ADMIN / DEVELOPMENT ONLY
 const updateAllListings = require('./api/update-all-listings');
@@ -110,6 +111,7 @@ router.post('/close-accepted-listing', closeAcceptedListing);
 router.post('/update-listing-state', updateListingState);
 router.post('/update-transaction-metadata', updateTransactionMetadata);
 router.post('/send-admin-email', sendAdminEmail);
+router.post('/send-contact-email', sendContactEmail);
 router.post('/fetch-listing-transactions', fetchListingTransactions);
 
 // ADMIN

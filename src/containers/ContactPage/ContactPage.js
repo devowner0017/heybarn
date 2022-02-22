@@ -11,7 +11,7 @@ import {
   ExternalLink,
   Button,
 } from '../../components';
-import { sendAdminEmail } from '../../util/api';
+import { sendAdminEmail, sendContactEmail } from '../../util/api';
 import css from './ContactPage.module.css';
 
 const initialState = {
@@ -40,7 +40,6 @@ const ContactPage = () => {
     setState(prevState => ({ ...prevState, messageSubmitting: true }));
 
 const data ={
-  to: "shane@shattered.dev",
       message: {
         subject: 'HEYBARN - NEW CONTACT FROM CONTACT PAGE',
         body:
@@ -52,7 +51,7 @@ const data ={
         message,
       },
     }
-  sendAdminEmail(data).then(() => {
+  sendContactEmail(data).then(() => {
     clearState()
     setState(prevState => ({ ...prevState, messageSubmitted: true }));
   }).finally(()=> {
