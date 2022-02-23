@@ -22,9 +22,9 @@ const SectionBanner = props => {
           sign up and create an account
         </NamedLink>
         , we'll let you know as soon as we are in your area. For more information about our plans,{' '}
-        <span style={{ cursor: "pointer" }} onClick={() => setLearnMoreOpen(true)}>
+        <a style={{ cursor: "pointer", color: '#fff' }} onClick={() => setLearnMoreOpen(true)}>
           read more here
-        </span>
+        </a>
         .
       </p>
       <ConfirmationModal

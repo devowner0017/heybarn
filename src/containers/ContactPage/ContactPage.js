@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import config from '../../config';
 import { twitterPageURL } from '../../util/urlHelpers';
 import { StaticPage, TopbarContainer } from '..';
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import {
   LayoutSingleColumn,
   LayoutWrapperTopbar,
@@ -19,7 +20,7 @@ const initialState = {
   email: '',
   message: '',
   messageSubmitted: false,
-  messageSubmitting: false
+  messageSubmitting: false,
 };
 const ContactPage = () => {
   const [{ name, email, message, messageSubmitting, messageSubmitted }, setState] = useState(
@@ -58,7 +59,6 @@ const data ={
     setState(prevState => ({ ...prevState, messageSubmitting:  false }));
   })
 }
-
 
   return (
     <StaticPage
@@ -135,6 +135,10 @@ const data ={
                   Thanks for reaching out! We'll be in touch within 48 hours.
                 </div>
               )}
+              <div className={css.contactInfoWrapper}>
+                <a href="tel:0800 4392276" className={css.contactInfo}><LocalPhoneIcon fontSize='small' /> 0800 4392276</a>
+                <p className={css.contactInfo}>PO Box 2103 South Dunedin</p>
+              </div>
             </div>
           </div>
         </LayoutWrapperMain>
