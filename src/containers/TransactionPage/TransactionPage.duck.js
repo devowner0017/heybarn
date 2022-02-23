@@ -804,8 +804,7 @@ export const sendRentalAgreement = data => (dispatch) => {
   // TODO: Add booking data to params here
   const { txId, listingId, wasRequested, contractLines, bookingDates } = data;
 
-  const { startDate } = bookingDates;
-  const endDate = bookingDates.endDate || new moment().add(1, 'years');
+  const { startDate, endDate =  new moment().add(1, 'years')} = bookingDates;
   dispatch(sendRentalAgreementRequest());
   const bookingData = {
     startDate: startDate.toISOString(),

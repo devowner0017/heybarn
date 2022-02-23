@@ -413,7 +413,7 @@ export class TransactionPanelComponent extends Component {
             listing: currentListing,
             affirmativeAction: values => {
               const {
-                startDate: { date: startDate },
+                startDate,
                 endDate,
                 ongoingContract: [ongoingContract] = [],
                 price,
@@ -480,7 +480,7 @@ export class TransactionPanelComponent extends Component {
             listing: currentListing,
             affirmativeAction: values => {
               const {
-                startDate: { date: startDate },
+                startDate,
                 endDate,
                 ongoingContract: [ongoingContract] = [],
                 price,

@@ -123,7 +123,7 @@ const RentalAgreementSetupFormComponent = props => (
           return null;
         }
 
-        const endDateMaybe = moment(startDate?.date).add(lengthOfContract, 'weeks');
+        const endDateMaybe = moment(startDate).add(lengthOfContract, 'weeks');
         if (startDate && lengthOfContract && !moment(endDateMaybe).isSame(moment(endDate))) {
           form.change(`endDate`, endDateMaybe);
         }
@@ -158,11 +158,11 @@ const RentalAgreementSetupFormComponent = props => (
             <>
               <div className={css.detailRow}>
                 <p>Start Date</p>
-                <p>{moment(startDate.date).format('ddd, DD MMM YYYY')}</p>
+                <p>{startDate.format('ddd, DD MMM YYYY')}</p>
               </div>
               <div className={css.detailRow}>
                 <p>End Date</p>
-                <p>{endDate ? moment(endDate).format('ddd, DD MMM YYYY') : 'Ongoing'}</p>
+                <p>{endDate ? endDate.format('ddd, DD MMM YYYY') : 'Ongoing'}</p>
               </div>
             </>
           )}
