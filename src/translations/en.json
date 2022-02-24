@@ -448,6 +448,7 @@
   "ListingCard.unsupportedPrice": "({currency})",
   "ListingCard.unsupportedPriceTitle": "Unsupported currency ({currency})",
 
+  "ListingPage.publishedListingTitle": "Great! You have successfully published your {listingType}!",
   "ListingPage.hideConfirmationTitle": "Are you sure you want to hide it?",
   "ListingPage.hideConfirmationSubTitle": "This {listingType} will no longer be visible on the marketplace. Though users can still view it if you send them the link.",
 
@@ -547,7 +548,7 @@
   "ManageListingCard.openadvert": "List",
 
   "ManageListingCard.hiddenlisting": "This listing is hidden.",
-  "ManageListingCard.hiddenadvert":  "This listing is hidden.",
+  "ManageListingCard.hiddenadvert": "This listing is hidden.",
 
   "ManageListingCard.unhidelisting": "Make public",
   "ManageListingCard.unhideadvert": "Make public",
@@ -1207,7 +1208,7 @@
   "TopbarMobileMenu.yourListingsLink": "Your listings",
   "TopbarMobileMenu.yourAdvertsLink": "Your adverts",
   "TopbarMobileMenu.createListingLink": "Create a listing",
-"TopbarMobileMenu.createAdvertLink": "Create an advert",
+  "TopbarMobileMenu.createAdvertLink": "Create an advert",
   "TopbarSearchForm.placeholder": "Search…",
   "TopbarSearchForm.searchHelp": "Tip: You can also search by zip code",
   "TransactionPage.deletedListing": "deleted listing",

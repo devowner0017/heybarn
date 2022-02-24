@@ -117,6 +117,12 @@
   @apply --marketplaceModalParagraphStyles;
 }
 
-.backButton{
+.backButton {
   margin-bottom: 1rem;
+}
+.skipStripeLink {
+  text-decoration: underline;
+  color: var(--marketplaceColor);
+  font-weight: bold;
+  cursor: pointer;
 }

@@ -162,7 +162,7 @@ export const EditListingPageComponent = props => {
           },
         };
 
-    return <NamedRedirect {...redirectProps} />;
+    return <NamedRedirect {...redirectProps}  state={{published: true}}/>;
   } else if (shouldRedirectToDifferentListingType) {
     const advertPage = '/a' + location.pathname.slice(2);
     return <Redirect to={{ pathname: advertPage }} push={true} />;
@@ -349,6 +349,7 @@ const mapStateToProps = state => {
   } = state.stripeConnectAccount;
 
   const { currentUser } = state.user;
+  console.log("🚀 | file: EditListingPage.js | line 352 | currentUser", currentUser);
 
   const fetchInProgress = createStripeAccountInProgress;
 

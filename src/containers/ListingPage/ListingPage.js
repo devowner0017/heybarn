@@ -44,7 +44,8 @@ import {
   LayoutWrapperFooter,
   Footer,
   ContactPanel,
-  // BookingPanel,
+  Modal,
+  Button,
 } from '../../components';
 import { TopbarContainer, NotFoundPage } from '../../containers';
 
@@ -59,12 +60,10 @@ import SectionAvatar from './SectionAvatar';
 import SectionHeading from './SectionHeading';
 import SectionDescriptionMaybe from './SectionDescriptionMaybe';
 import SectionFeaturesMaybe from './SectionFeaturesMaybe';
-import SectionReviews from './SectionReviews';
 import SectionHostMaybe from './SectionHostMaybe';
 import SectionRulesMaybe from './SectionRulesMaybe';
 import SectionMapMaybe from './SectionMapMaybe';
 import css from './ListingPage.module.css';
-import { capitalizeFirstLetter } from '../../util/devHelpers';
 import { capitalize } from 'lodash';
 import { deleteListing, hideListing } from '../ManageListingsPage/ManageListingsPage.duck';
 
@@ -93,12 +92,33 @@ export class ListingPageComponent extends Component {
       pageClassNames: [],
       imageCarouselOpen: false,
       enquiryModalOpen: enquiryModalOpenForListingId === params.id,
+      showPublishedListingModal: false,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.submitContactUser = this.submitContactUser.bind(this);
     this.onContactUser = this.onContactUser.bind(this);
     this.onSubmitEnquiry = this.onSubmitEnquiry.bind(this);
+    this.setShowPublishedListingModal = this.setShowPublishedListingModal.bind(this);
+
+  }
+
+  componentDidMount() {
+    const { location } = this.props;
+    const { showPublishedListingModal } = this.state;
+    const { published } = location?.state ? location.state : {};
+    if (published && !showPublishedListingModal) {
+      this.setState({ showPublishedListingModal: true });
+    }
+  }
+
+  setShowPublishedListingModal(val) {
+    const { location, history } = this.props;
+    this.setState({
+      showPublishedListingModal: val,
+    });
+    // Need to replace the state to prevent pop up from repeating
+    if (!val) history.replace({ pathname: location.pathname, state: {} });
   }
 
   submitContactUser(values) {
@@ -568,6 +588,26 @@ export class ListingPageComponent extends Component {
                 />
               </div>
             </div>
+            <Modal
+              id={`ListingPage.publishedListingModal`}
+              isOpen={this.state.showPublishedListingModal}
+              onClose={_ => this.setShowPublishedListingModal(false)}
+              onManageDisableScrolling={onManageDisableScrolling}
+            >
+              <div>
+                <h1 className={css.modalTitle}>
+                  <FormattedMessage
+                    id="ListingPage.publishedListingTitle"
+                    values={{ listingType: typeOfListing }}
+                  />
+                </h1>
+                <div className={css.publishedListingButtonWrapper}>
+                  <Button onClick={() => this.setShowPublishedListingModal(false)}>
+                    Lets see it!
+                  </Button>
+                </div>
+              </div>
+            </Modal>
           </LayoutWrapperMain>
           <LayoutWrapperFooter>
             <Footer />

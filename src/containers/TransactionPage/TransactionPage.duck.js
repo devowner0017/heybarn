@@ -42,7 +42,7 @@ import {
   denormalisedResponseEntities,
 } from '../../util/data';
 import { addMarketplaceEntities } from '../../ducks/marketplaceData.duck';
-import { fetchCurrentUserNotifications } from '../../ducks/user.duck';
+import { fetchCurrentUser, fetchCurrentUserNotifications } from '../../ducks/user.duck';
 import { getPropByName } from '../../util/devHelpers';
 import { fetchSubscription } from '../../ducks/stripe.duck';
 import { LISTING_LIVE, LISTING_UNDER_OFFER } from '../../util/types';
@@ -804,11 +804,11 @@ export const sendRentalAgreement = data => (dispatch) => {
   // TODO: Add booking data to params here
   const { txId, listingId, wasRequested, contractLines, bookingDates } = data;
 
-  const { startDate, endDate =  new moment().add(1, 'years')} = bookingDates;
+  const { startDate, endDate } = bookingDates;
   dispatch(sendRentalAgreementRequest());
   const bookingData = {
     startDate: startDate.toISOString(),
-    endDate: endDate.toISOString(),
+    endDate: endDate?.toISOString() ||  new moment().add(1, 'years').toISOString(),
   };
   const transition = wasRequested
     ? TRANSITION_HOST_SENDS_AGREEMENT_AFTER_REQUEST
@@ -1279,6 +1279,19 @@ export const fetchTransactionLineItems = ({ bookingData, listingId, isOwnListing
     });
 };
 
+export const stripeCustomer = () => (dispatch, getState, sdk) => {
+  // dispatch(stripeCustomerRequest());
+
+  return dispatch(fetchCurrentUser({ include: ['stripeCustomer'] }))
+    .then(response => {
+      // dispatch(stripeCustomerSuccess());
+    })
+    .catch(e => {
+      const error = storableError(e);
+      log.error(error, 'fetch-stripe-customer-failed');
+      // dispatch(stripeCustomerError(error));
+    });
+};
 // loadData is a collection of async calls that need to be made
 // before page has all the info it needs to render itself
 export const loadData = params => (dispatch, getState) => {
@@ -1298,5 +1311,6 @@ export const loadData = params => (dispatch, getState) => {
     dispatch(fetchTransaction(txId, txRole)),
     dispatch(fetchMessages(txId, 1)),
     dispatch(fetchNextTransitions(txId)),
+    dispatch(stripeCustomer())
   ]);
 };

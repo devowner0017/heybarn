@@ -512,3 +512,7 @@
     display: none;
   }
 }
+.finishStripeText{
+  padding:10px;
+  text-align: center;
+}

@@ -15,6 +15,7 @@ const ActionButtonsMaybe = props => {
     affirmativeInProgress,
     negativeInProgress,
     affirmativeError,
+    affirmativeDisabled,
     negativeError,
     affirmativeAction,
     negativeAction,
@@ -22,7 +23,7 @@ const ActionButtonsMaybe = props => {
     hideNegative,
     affirmativeText,
     negativeText,
-    title
+    title,
   } = props;
 
   const buttonsDisabled = affirmativeInProgress || negativeInProgress;
@@ -60,7 +61,7 @@ const ActionButtonsMaybe = props => {
         {!hideAffirmative && (
           <PrimaryButton
             inProgress={affirmativeInProgress}
-            disabled={buttonsDisabled}
+            disabled={affirmativeDisabled || buttonsDisabled}
             onClick={affirmativeAction}
           >
             {affirmativeText || <FormattedMessage id="TransactionPanel.acceptButton" />}

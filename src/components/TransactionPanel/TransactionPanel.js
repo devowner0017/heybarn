@@ -40,6 +40,7 @@ import { createSlug } from '../../util/urlHelpers';
 import { LINE_ITEM_NIGHT, LINE_ITEM_DAY, propTypes } from '../../util/types';
 import {
   ensureListing,
+  ensureStripeCustomer,
   ensureTransaction,
   ensureUser,
   userDisplayNameAsString,
@@ -319,7 +320,8 @@ export class TransactionPanelComponent extends Component {
           showDetailCardHeadings: true,
           showAcceptCommunicationButtons:
             isProvider && !isCustomerBanned && hasCorrectNextTransition,
-          showRelatedLink:  otherListing?.id?.uuid,
+          showRelatedLink: otherListing?.id?.uuid,
+          stripeIdRequired: !isCustomer,
           confirmationModalProps: {
             negativeAction: () =>
               onDeclineCommunication({
@@ -351,7 +353,7 @@ export class TransactionPanelComponent extends Component {
           showDetailCardHeadings: true,
           showAcceptCommunicationButtons:
             isProvider && !isCustomerBanned && hasCorrectNextTransition,
-            showRelatedLink:  otherListing?.id?.uuid,
+          showRelatedLink: otherListing?.id?.uuid,
           confirmationModalProps: {
             negativeAction: () =>
               onDeclineCommunication({
@@ -392,8 +394,9 @@ export class TransactionPanelComponent extends Component {
           relatedTxId,
           showDetailCardHeadings: true,
           showRentalAgreementButtons: true,
-            showRelatedLink: otherListing?.id?.uuid,
-            allowMessages: true,
+          stripeIdRequired:!isCustomer,
+          showRelatedLink: otherListing?.id?.uuid,
+          allowMessages: true,
           confirmationModalProps: {
             negativeAction: () =>
               onCancelDuringRad({
@@ -458,8 +461,8 @@ export class TransactionPanelComponent extends Component {
           showRentalAgreementButtons: true,
           allowMessages: true,
           hideAffirmative: isCustomer,
-            showRelatedLink: showOtherListing && otherListing?.id?.uuid,
-            wasRequested: true,
+          showRelatedLink: showOtherListing && otherListing?.id?.uuid,
+          wasRequested: true,
           confirmationModalProps: {
             negativeAction: () =>
               onCancelDuringRad({
@@ -544,8 +547,8 @@ export class TransactionPanelComponent extends Component {
           headingState: HEADING_RENTAL_AGREEMENT_SENT,
           showDetailCardHeadings: true,
           showBreakdowns: isCustomer,
-            showRelatedLink: showOtherListing && otherListing?.id?.uuid,
-            allowMessages: true,
+          showRelatedLink: showOtherListing && otherListing?.id?.uuid,
+          allowMessages: true,
           confirmationModalProps: {
             negativeAction: () =>
               onCancelAfterAgreementSent({
@@ -579,8 +582,8 @@ export class TransactionPanelComponent extends Component {
         return {
           headingState: HEADING_RENTAL_AGREEMENT_FINALIZED,
           showBreakdowns: true,
-            showRelatedLink: showOtherListing && otherListing?.id?.uuid,
-            showPaymentFormButtons: isCustomer && !isProviderBanned,
+          showRelatedLink: showOtherListing && otherListing?.id?.uuid,
+          showPaymentFormButtons: isCustomer && !isProviderBanned,
           allowMessages: true,
         };
       } else if (txIsPaid(tx) && !wasCancelled(tx) && !subscriptionHasDefaultPaymentMethod) {
@@ -693,7 +696,6 @@ export class TransactionPanelComponent extends Component {
           Check them out!
         </NamedLink>
       ),
-
       handlePaymentRedirect = values => {
         const {
           history,
@@ -716,8 +718,8 @@ export class TransactionPanelComponent extends Component {
           transaction,
           confirmPaymentError: null,
           bookingDates: {
-            bookingStart: booking.attributes.start,
-            bookingEnd: booking.attributes.end,
+            bookingStart: booking?.attributes?.start,
+            bookingEnd: booking?.attributes?.end,
           },
         };
 
@@ -805,6 +807,8 @@ export class TransactionPanelComponent extends Component {
         negativeText={'Decline'}
       />
     );
+    const ensuredStripeCustomer = ensureStripeCustomer(currentUser.stripeAccount);
+    const missingStripeId = stateData.stripeIdRequired  && !ensuredStripeCustomer?.attributes?.stripeAccountId ;
     const rentalAgreementButtons = (
       <ActionButtonsMaybe
         showButtons={stateData.showRentalAgreementButtons}
@@ -812,6 +816,7 @@ export class TransactionPanelComponent extends Component {
         negativeInProgress={cancelDuringRadInProgress}
         affirmativeError={sendRentalAgreementError}
         negativeError={cancelDuringRadError}
+        affirmativeDisabled={missingStripeId}
         affirmativeAction={() => {
           if (isCustomer) {
             onRequestRentalAgreement({
@@ -958,10 +963,26 @@ export class TransactionPanelComponent extends Component {
               </>
             ) : null}
             {stateData.showAcceptCommunicationButtons ? (
-              <div className={css.mobileActionButtons}>{acceptCommunicationButtons}</div>
+              <div className={css.mobileActionButtons}>
+                {acceptCommunicationButtons}
+                {missingStripeId && (
+                  <div className={css.finishStripeText}>
+                    You need to <NamedLink name={'StripePayoutPage'}>finish verifying</NamedLink>{' '}
+                    your stripe account before you can create a rental agreement.
+                  </div>
+                )}
+              </div>
             ) : null}
             {stateData.showRentalAgreementButtons ? (
-              <div className={css.mobileActionButtons}>{rentalAgreementButtons}</div>
+              <div className={css.mobileActionButtons}>
+                {rentalAgreementButtons}
+                {missingStripeId && (
+                  <div className={css.finishStripeText}>
+                    You need to <NamedLink name={'StripePayoutPage'}>finish verifying</NamedLink>f
+                    your stripe account before you can create a rental agreement.
+                  </div>
+                )}
+              </div>
             ) : null}
             {stateData.showPaymentFormButtons ? (
               <div className={css.mobileActionButtons}>{paymentFormButtons}</div>
@@ -1010,10 +1031,26 @@ export class TransactionPanelComponent extends Component {
                 <div className={css.desktopSubscriptionBreakdown}>{subscriptionBreakdown}</div>
               )}
               {stateData.showAcceptCommunicationButtons ? (
-                <div className={css.desktopActionButtons}>{acceptCommunicationButtons}</div>
+                <div className={css.desktopActionButtons}>
+                  {acceptCommunicationButtons}
+                  {missingStripeId && (
+                    <div className={css.finishStripeText}>
+                      You need to <NamedLink name={'StripePayoutPage'}>finish verifying</NamedLink>{' '}
+                      your stripe account before you can create a rental agreement.
+                    </div>
+                  )}
+                </div>
               ) : null}
               {stateData.showRentalAgreementButtons ? (
-                <div className={css.desktopActionButtons}>{rentalAgreementButtons}</div>
+                <div className={css.desktopActionButtons}>
+                  {rentalAgreementButtons}
+                  {missingStripeId && (
+                    <div className={css.finishStripeText}>
+                      You need to <NamedLink name={'StripePayoutPage'}>finish verifying</NamedLink>{' '}
+                      your stripe account before you can create a rental agreement.
+                    </div>
+                  )}
+                </div>
               ) : null}
               {stateData.showPaymentFormButtons ? (
                 <div className={css.desktopActionButtons}>{paymentFormButtons}</div>

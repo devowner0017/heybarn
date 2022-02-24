@@ -16,7 +16,13 @@ import {
 import { LISTING_STATE_DRAFT } from '../../util/types';
 import { ensureCurrentUser, ensureListing } from '../../util/data';
 
-import { Modal, NamedRedirect, Tabs, StripeConnectAccountStatusBox ,NamedLink} from '../../components';
+import {
+  Modal,
+  NamedRedirect,
+  Tabs,
+  StripeConnectAccountStatusBox,
+  NamedLink,
+} from '../../components';
 import { StripeConnectAccountForm } from '../../forms';
 
 import EditListingWizardTab, {
@@ -220,7 +226,7 @@ class EditListingWizard extends Component {
 
     this.state = {
       draftId: null,
-      showPayoutDetails: false,
+      showPayoutDetails: true,
     };
     this.handleCreateFlowTabScrolling = this.handleCreateFlowTabScrolling.bind(this);
     this.handlePublishListing = this.handlePublishListing.bind(this);
@@ -253,6 +259,7 @@ class EditListingWizard extends Component {
       (hasRequirements(stripeAccountData, 'past_due') ||
         hasRequirements(stripeAccountData, 'currently_due'));
 
+    // setting to true for now, so listings don't need a stripe account to be published
     if ((stripeConnected && !requirementsMissing) || isAdvert) {
       onPublishListingDraft(id);
     } else {
@@ -261,6 +268,11 @@ class EditListingWizard extends Component {
         showPayoutDetails: true,
       });
     }
+  }
+  handleSkipStripe(id) {
+    const { onPublishListingDraft } = this.props;
+
+    onPublishListingDraft(id);
   }
 
   handlePayoutModalClose() {
@@ -337,7 +349,7 @@ class EditListingWizard extends Component {
     }
     const backButton = nearestActiveTab && (
       <NamedLink
-      className={css.backButton}
+        className={css.backButton}
         name={isAdvert ? 'EditAdvertPage' : 'EditListingPage'}
         params={{ ...params, tab: nearestActiveTab }}
       >
@@ -512,6 +524,12 @@ class EditListingWizard extends Component {
                 </StripeConnectAccountForm>
               </>
             )}
+            <div className={css.skipStripeWrapper}>
+            <p className={css.modalMessage}>
+                 If you would like to skip this step for now, you can publish you listing for people to look at, but you will not be able to accept any payment or communication from people until you finalize these details.
+                </p>
+                <div className={css.skipStripeLink} onClick={() => this.handleSkipStripe(currentListing.id)}>Finish it later</div>
+            </div>
           </div>
         </Modal>
       </div>

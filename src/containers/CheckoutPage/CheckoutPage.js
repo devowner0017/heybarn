@@ -395,8 +395,8 @@ export class CheckoutPageComponent extends Component {
 
     const orderParams = {
       listingId: listing.id,
-      bookingStart: tx.booking.attributes.start,
-      bookingEnd: tx.booking.attributes.end,
+      // bookingStart: tx.booking.attributes.start,
+      // bookingEnd: tx.booking.attributes.end,
       ...optionalPaymentParams,
     };
 
@@ -606,12 +606,13 @@ export class CheckoutPageComponent extends Component {
       currentAuthor.id.uuid === currentUser.id.uuid;
 
     const hasListingAndAuthor = !!(currentListing.id && currentAuthor.id);
-    const hasBookingDates = !!(
-      bookingDates &&
-      bookingDates.bookingStart &&
-      bookingDates.bookingEnd
-    );
-    const hasRequiredData = hasListingAndAuthor && hasBookingDates;
+    // const hasBookingDates = !!(
+    //   bookingDates &&
+    //   bookingDates.bookingStart &&
+    //   bookingDates.bookingEnd
+    // );
+    const hasRequiredData = hasListingAndAuthor
+    // && hasBookingDates;
     const canShowPage = hasRequiredData && !isOwnListing;
     const shouldRedirect = !isLoading && !canShowPage;
 
