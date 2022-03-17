@@ -349,7 +349,6 @@ const mapStateToProps = state => {
   } = state.stripeConnectAccount;
 
   const { currentUser } = state.user;
-  console.log("🚀 | file: EditListingPage.js | line 352 | currentUser", currentUser);
 
   const fetchInProgress = createStripeAccountInProgress;
 

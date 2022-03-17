@@ -226,7 +226,7 @@ class EditListingWizard extends Component {
 
     this.state = {
       draftId: null,
-      showPayoutDetails: true,
+      showPayoutDetails: false,
     };
     this.handleCreateFlowTabScrolling = this.handleCreateFlowTabScrolling.bind(this);
     this.handlePublishListing = this.handlePublishListing.bind(this);

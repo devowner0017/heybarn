@@ -114,6 +114,7 @@ class EditListingLocationPanel extends Component {
           fetchErrors={errors}
           locRegionOptions={locRegionOptions}
           backButton={backButton}
+          listingType={listingType}
         />
       </div>
     );

@@ -113,10 +113,16 @@ export const EditListingLocationFormComponent = props => (
             <p>
               To help {listingType === 'advert' ? 'hosts' : 'renters'} search for local{' '}
               {listingType}s, please select a region and district in which{' '}
-              {listingType === 'advert' ? 'you are seeking space' : 'your space is located'}. To
-              help the maps work to locate the area the{' '}
-              {listingType === 'advert' ? 'hosts' : 'renters'} is in, please provide an address. For
+              {listingType === 'advert' ? 'you are seeking space' : 'your space is located'}.
+              {listingType === 'advert'
+                ? ` To
+                help the maps work to locate the area you need space in, please provide the nearest town in the address field.`
+                : `
+               To
+              help the maps work to locate the area space
+              is in, please provide an address. For
               those with security concerns, only enter a suburb or the nearest town.
+              `}
             </p>
             <FieldSelect
               className={css.category}
