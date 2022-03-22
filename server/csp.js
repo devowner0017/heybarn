@@ -98,12 +98,14 @@ module.exports = (reportUri, enforceSsl, reportOnly) => {
     connectSrc = [self],
     fontSrc = [self],
     styleSrc = [self],
+    imgSrc = [self],
   } = defaultDirectives;
-  const newScriptSrc = scriptSrc.concat('*.tawk.to', '*.hotjar.*');
+  const newScriptSrc = scriptSrc.concat('*.tawk.to', '*.hotjar.com', '*.googletagmanager.com');
   const newFontSrc = fontSrc.concat('*.cloudflare.com');
-  const newFrameSrc = frameSrc.concat('*.tawk.to', '*.hotjar.*');
-  const newConnectSrc = connectSrc.concat('*.tawk.to', '*.hotjar.*');
+  const newFrameSrc = frameSrc.concat('*.tawk.to', '*.hotjar.com');
+  const newConnectSrc = connectSrc.concat('*.tawk.to', '*.hotjar.com');
   const newStyleSrc = styleSrc.concat('*.cloudflare.com');
+  const newImgSrc = imgSrc.concat('*.cloudflare.com', '*.googletagmanager.com');
   const customDirectives = {
     // Example: Add custom directive override
     // imgSrc: exampleImgSrc,
@@ -112,6 +114,7 @@ module.exports = (reportUri, enforceSsl, reportOnly) => {
     frameSrc: newFrameSrc,
     connectSrc: newConnectSrc,
     styleSrc: newStyleSrc,
+    imgSrc: newImgSrc
   };
 
   // ================ END CUSTOM CSP URLs ================ //
