@@ -68,14 +68,14 @@ export const LandingPageComponent = props => {
             <SectionHero className={css.hero} history={history} location={location} />
           </div>
           <ul className={css.sections}>
-            <li className={css.section}>
+            {/* <li className={css.section}>
               <div className={css.bannerContent}>
                 <SectionBanner
                   header={'heybarn has big plans but we’re starting small!'}
                   onManageDisableScrolling={() => null}
                 />
               </div>
-            </li>
+            </li> */}
             {!!pageListings?.length && (
               <li className={css.section}>
                 <div className={css.sectionContent}>

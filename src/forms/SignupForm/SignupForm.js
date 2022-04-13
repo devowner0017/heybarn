@@ -246,11 +246,11 @@ const SignupFormComponent = props => (
                   disabled={submitDisabled}
                   onClick={e => {
                     e.preventDefault();
-                    if (!SUPPORTED_REGIONS.includes(values.locDistrict)) {
-                      setIsRegionPopupOpen(true);
-                    } else {
+                    // if (!SUPPORTED_REGIONS.includes(values.locDistrict)) {
+                    //   setIsRegionPopupOpen(true);
+                    // } else {
                       handleSubmit(values);
-                    }
+                    // }
                   }}
                 >
                   <FormattedMessage id="SignupForm.signUp" />
@@ -275,7 +275,7 @@ const SignupFormComponent = props => (
                 <FormattedMessage id="SignupForm.next" />
               </PrimaryButton>
             )}
-            <ConfirmationModal
+            {/* <ConfirmationModal
               isOpen={isRegionPopupOpen}
               onCloseModal={() => setIsRegionPopupOpen(false)}
               titleText={"heybarn has big plans but we're starting small!"}
@@ -286,7 +286,7 @@ const SignupFormComponent = props => (
               hideNegative
               affirmativeButtonText={'I understand'}
               affirmativeAction={() => handleSubmit(values)}
-            />
+            /> */}
           </div>
         </Form>
       );
