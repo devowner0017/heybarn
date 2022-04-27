@@ -115,6 +115,9 @@
 
 .modalMessage {
   @apply --marketplaceModalParagraphStyles;
+  &:last-child {
+    margin-top: 0.5rem;
+  }
 }
 
 .backButton {
@@ -125,4 +128,5 @@
   color: var(--marketplaceColor);
   font-weight: bold;
   cursor: pointer;
+  margin-top: 0.5rem;
 }
