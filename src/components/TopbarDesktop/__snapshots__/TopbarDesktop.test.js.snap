@@ -182,97 +182,69 @@ exports[`TopbarDesktop data matches snapshot 1`] = `
       </g>
     </svg>
   </a>
-  <form
-    action="/"
-    className="searchLink"
-    method="post"
-    onMouseOver={[Function]}
-    onSubmit={[Function]}
-    onTouchStart={[Function]}
+  <div
+    className="dropdownContainer"
   >
     <div
-      className="root topbarSearchWithLeftPadding"
+      className="root dropdown"
     >
       <div
-        className="desktopIcon"
+        className="root"
       >
-        <svg
-          className="iconSvg"
-          height="22"
-          viewBox="0 0 21 22"
-          width="21"
-          xmlns="http://www.w3.org/2000/svg"
+        <button
+          className="button"
+          onClick={[Function]}
+          type="button"
         >
-          <g
-            className="iconSvgGroup"
-            fill="none"
-            fillRule="evenodd"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            transform="matrix(-1 0 0 1 20 1)"
+          Space Owners
+           
+          <span
+            className="caret"
           >
-            <path
-              d="M13 14l5.241 5.241"
-            />
-            <circle
-              cx="7.5"
-              cy="7.5"
-              r="7.5"
-            />
-          </g>
-        </svg>
+            ▼
+          </span>
+        </button>
       </div>
-      <input
-        autoComplete="off"
-        autoFocus={false}
-        className="desktopInput"
-        disabled={false}
-        name="location"
-        onBlur={[Function]}
-        onChange={[Function]}
-        onFocus={[Function]}
-        onKeyDown={[Function]}
-        placeholder="TopbarSearchForm.placeholder"
-        type="search"
-        value=""
-      />
     </div>
-  </form>
-  <a
-    className="createListingLink"
-    href="/l/new"
-    onClick={[Function]}
-    onMouseOver={[Function]}
-    onTouchStart={[Function]}
-    style={Object {}}
-    title={null}
+    <div
+      className="root dropdown"
+    >
+      <div
+        className="root"
+      >
+        <button
+          className="button"
+          onClick={[Function]}
+          type="button"
+        >
+          Renters
+           
+          <span
+            className="caret"
+          >
+            ▼
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div
+    className="buttonRecomendWrapper"
   >
-    <span
-      className="createListing"
+    <a
+      className="buttonRecomend NamedLink_active"
+      href="/"
+      onClick={[Function]}
+      onMouseOver={[Function]}
+      onTouchStart={[Function]}
+      style={Object {}}
+      title={null}
     >
       <span>
-        TopbarDesktop.createListing
+        TopbarDesktop.recommend
       </span>
-    </span>
-  </a>
-  <a
-    className="createListingLink"
-    href="/a/new"
-    onClick={[Function]}
-    onMouseOver={[Function]}
-    onTouchStart={[Function]}
-    style={Object {}}
-    title={null}
-  >
-    <span
-      className="createListing"
-    >
-      <span>
-        TopbarDesktop.createAdvert
-      </span>
-    </span>
-  </a>
+    </a>
+  </div>
   <a
     className="inboxLink"
     href="/inbox"
@@ -389,5 +361,10 @@ exports[`TopbarDesktop data matches snapshot 1`] = `
       </ul>
     </div>
   </div>
+  <span
+    className="separator"
+  >
+    |
+  </span>
 </nav>
 `;

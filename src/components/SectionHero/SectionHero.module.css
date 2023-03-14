@@ -29,8 +29,12 @@
 
 .root {
   @apply --backgroundImage;
+  padding-top: var(--topbarHeightDesktop);
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
 
   width: 100%;
   height: 100%;
@@ -44,7 +48,8 @@
   justify-content: center;
   align-items: center;
 
-  margin: 0 24px 0 24px;
+  /* margin: 0 24px 0 24px; */
+  margin: auto;
 
   @media (--viewportMedium) {
     margin: 0 7.5vw 0 7.5vw;
@@ -66,6 +71,7 @@
 
 .heroMainTitle {
   @apply --marketplaceHeroTitleFontStyles;
+  display: none;
   font-size: 50px;
   white-space: nowrap;
   word-break: keep-all;
@@ -86,29 +92,43 @@
   font-size: 9.2vw;
 
   @media (--viewportMedium) {
+    display: block;
     font-size: 4vw;
-    max-width: var(--SectionHero_desktopTitleMaxWidth);
   }
   @media (--viewportLarge) {
-    font-size: 50px;
+    font-size: 65px;
   }
 }
+
 .heroMainTitle > span {
   padding: 0 1.2rem;
 }
+
+.heroMobileTitle {
+  composes: heroMainTitle;
+  display: block;
+  white-space: normal;
+  font: normal normal bold 40px/40px var(--fontFamilyHeading);
+
+  @media (--viewportMedium) {
+    display: none;
+  }
+}
+
 .heroSubTitle {
   @apply --marketplaceH2FontStyles;
+  font-family: var(--fontFamilyHeading);
+  font-size: 35px;
   letter-spacing: 0.3px;
   text-align: center;
   color: var(--matterColorLight);
-  margin: 0 0 32px 0;
 
   composes: animation;
   animation-delay: 0.65s;
+  display: none;
 
   @media (--viewportMedium) {
-    max-width: var(--SectionHero_desktopTitleMaxWidth);
-    margin: 0 0 47px 0;
+    display: block;
   }
 }
 
@@ -131,5 +151,17 @@
   @media (--viewportMedium) {
     display: block;
     width: 260px;
+  }
+}
+
+.heroCtaText {
+  font: normal normal bold 28px/28px var(--fontFamilyHeading);
+  letter-spacing: 0px;
+  color: #ffffff;
+  text-align: center;
+
+  @media (--viewportMedium) {
+    font: normal normal bold 50px/55px var(--fontFamilyHeading);
+    color: #ffffff;
   }
 }

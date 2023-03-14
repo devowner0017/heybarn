@@ -102,6 +102,22 @@
           font-weight: normal;
           font-style: normal;
       } */
+
+      @font-face {
+        font-family: 'Dia Bold';
+        src: url('../src/fonts/Dia-Bold.woff2') format('woff2'),
+          url('../src/fonts/Dia-Bold.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: 'Dia Black';
+        src: url('../src/fonts/Dia-Black.woff2') format('woff2'),
+          url('../src/fonts/Dia-Black.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+      }
     </style>
     <!-- Hotjar Tracking Code for https://www.heybarn.co.nz/ -->
     <script>
@@ -191,6 +207,8 @@
         var poppinsMedium = new FontFaceObserver('poppins', { weight: 500 });
         var poppinsSemibold = new FontFaceObserver('poppins', { weight: 600 });
         var poppinsBold = new FontFaceObserver('poppins', { weight: 700 });
+        var diaBold = new FontFaceObserver('Dia Bold', { weight: 700 });
+        var diaBlack = new FontFaceObserver('Dia Black', { weight: 900 });
 
         var fontLoadingTimeout = 5000;
 
@@ -198,7 +216,9 @@
           poppinsRegular.load(null, fontLoadingTimeout),
           poppinsMedium.load(null, fontLoadingTimeout),
           poppinsSemibold.load(null, fontLoadingTimeout),
-          poppinsBold.load(null, fontLoadingTimeout)
+          poppinsBold.load(null, fontLoadingTimeout),
+          diaBold.load(null, fontLoadingTimeout),
+          diaBlack.load(null, fontLoadingTimeout),
         ])
           .then(function () {
             document.documentElement.classList.add("fontsLoaded");

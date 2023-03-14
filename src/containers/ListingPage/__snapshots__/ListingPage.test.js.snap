@@ -80,7 +80,7 @@ exports[`ListingPage matches snapshot 1`] = `
               "type": "listing",
             }
           }
-          listingUnderEnquiry={true}
+          listingUnderEnquiry={false}
           onImageCarouselClose={[Function]}
           onManageDisableScrolling={[Function]}
           title="listing1 title"
@@ -366,28 +366,13 @@ exports[`ListingPage matches snapshot 1`] = `
                     "config": Object {
                       "options": Array [
                         Object {
-                          "key": "BayPlenty",
-                          "label": "Bay of Plenty Region",
-                          "parent": "northIsland",
-                        },
-                        Object {
-                          "key": "HawkesBay",
-                          "label": "Hawke's Bay Region",
-                          "parent": "northIsland",
-                        },
-                        Object {
-                          "key": "Manawatu",
-                          "label": "Manawatū-Whanganui Region",
-                          "parent": "northIsland",
-                        },
-                        Object {
                           "key": "Northland",
                           "label": "Northland Region",
                           "parent": "northIsland",
                         },
                         Object {
-                          "key": "Taranaki",
-                          "label": "Taranaki Region",
+                          "key": "Auckland",
+                          "label": "Auckland Region",
                           "parent": "northIsland",
                         },
                         Object {
@@ -396,13 +381,68 @@ exports[`ListingPage matches snapshot 1`] = `
                           "parent": "northIsland",
                         },
                         Object {
+                          "key": "BayPlenty",
+                          "label": "Bay of Plenty Region",
+                          "parent": "northIsland",
+                        },
+                        Object {
+                          "key": "Gisborne",
+                          "label": "Gisborne",
+                          "parent": "northIsland",
+                        },
+                        Object {
+                          "key": "HawkesBay",
+                          "label": "Hawke's Bay District",
+                          "parent": "northIsland",
+                        },
+                        Object {
+                          "key": "Taranaki",
+                          "label": "Taranaki Region",
+                          "parent": "northIsland",
+                        },
+                        Object {
+                          "key": "Whanganui",
+                          "label": "Whanganui Region",
+                          "parent": "northIsland",
+                        },
+                        Object {
+                          "key": "Manawatu",
+                          "label": "Manawatū-Whanganui Region",
+                          "parent": "northIsland",
+                        },
+                        Object {
+                          "key": "Wairarapa",
+                          "label": "Wairarapa Region",
+                          "parent": "northIsland",
+                        },
+                        Object {
                           "key": "Wellington",
                           "label": "Wellington Region",
                           "parent": "northIsland",
                         },
                         Object {
+                          "key": "NelsonBays",
+                          "label": "Nelson Bays Region",
+                          "parent": "southIsland",
+                        },
+                        Object {
+                          "key": "Marlborough",
+                          "label": "Marlborough Region",
+                          "parent": "southIsland",
+                        },
+                        Object {
+                          "key": "WestCoast",
+                          "label": "West Coast Region",
+                          "parent": "southIsland",
+                        },
+                        Object {
                           "key": "Canterbury",
                           "label": "Canterbury Region",
+                          "parent": "southIsland",
+                        },
+                        Object {
+                          "key": "TimaruOtago",
+                          "label": "Timaru-Otago Region",
                           "parent": "southIsland",
                         },
                         Object {
@@ -413,11 +453,6 @@ exports[`ListingPage matches snapshot 1`] = `
                         Object {
                           "key": "Southland",
                           "label": "Southland Region",
-                          "parent": "southIsland",
-                        },
-                        Object {
-                          "key": "WestCoast",
-                          "label": "West Coast Region",
                           "parent": "southIsland",
                         },
                       ],
@@ -438,219 +473,769 @@ exports[`ListingPage matches snapshot 1`] = `
                     "config": Object {
                       "options": Array [
                         Object {
-                          "key": "kawerau",
-                          "label": "Kawerau District",
+                          "key": "Dargaville",
+                          "label": "Dargaville",
+                          "parent": "Northland",
+                        },
+                        Object {
+                          "key": "Kaikohe",
+                          "label": "Kaikohe",
+                          "parent": "Northland",
+                        },
+                        Object {
+                          "key": "Kaitaia",
+                          "label": "Kaitaia",
+                          "parent": "Northland",
+                        },
+                        Object {
+                          "key": "Kawakawa",
+                          "label": "Kawakawa",
+                          "parent": "Northland",
+                        },
+                        Object {
+                          "key": "Kerikeri",
+                          "label": "Kerikeri",
+                          "parent": "Northland",
+                        },
+                        Object {
+                          "key": "Mangawhai",
+                          "label": "Mangawhai",
+                          "parent": "Northland",
+                        },
+                        Object {
+                          "key": "Maungaturoto",
+                          "label": "Maungaturoto",
+                          "parent": "Northland",
+                        },
+                        Object {
+                          "key": "Paihia",
+                          "label": "Paihia",
+                          "parent": "Northland",
+                        },
+                        Object {
+                          "key": "Whangarei",
+                          "label": "Whangarei",
+                          "parent": "Northland",
+                        },
+                        Object {
+                          "key": "Albany",
+                          "label": "Albany",
+                          "parent": "Auckland",
+                        },
+                        Object {
+                          "key": "AucklandCity",
+                          "label": "Auckland city",
+                          "parent": "Auckland",
+                        },
+                        Object {
+                          "key": "BotabyDowns",
+                          "label": "Botaby Downs",
+                          "parent": "Auckland",
+                        },
+                        Object {
+                          "key": "Clevedon",
+                          "label": "Clevedon",
+                          "parent": "Auckland",
+                        },
+                        Object {
+                          "key": "Franklin",
+                          "label": "Franklin",
+                          "parent": "Auckland",
+                        },
+                        Object {
+                          "key": "GreatBarrierIsland",
+                          "label": "Great Barrier Island",
+                          "parent": "Auckland",
+                        },
+                        Object {
+                          "key": "Helensville",
+                          "label": "Helensville",
+                          "parent": "Auckland",
+                        },
+                        Object {
+                          "key": "Henderson",
+                          "label": "Henderson",
+                          "parent": "Auckland",
+                        },
+                        Object {
+                          "key": "HibiscusCoast",
+                          "label": "Hibiscus Coast",
+                          "parent": "Auckland",
+                        },
+                        Object {
+                          "key": "Kumeu",
+                          "label": "Kumeu",
+                          "parent": "Auckland",
+                        },
+                        Object {
+                          "key": "Mangere",
+                          "label": "Mangere",
+                          "parent": "Auckland",
+                        },
+                        Object {
+                          "key": "Manukau",
+                          "label": "Manukau",
+                          "parent": "Auckland",
+                        },
+                        Object {
+                          "key": "NewLynn",
+                          "label": "New Lynn",
+                          "parent": "Auckland",
+                        },
+                        Object {
+                          "key": "NorthShore",
+                          "label": "North Shore",
+                          "parent": "Auckland",
+                        },
+                        Object {
+                          "key": "Onehunga",
+                          "label": "Onehunga",
+                          "parent": "Auckland",
+                        },
+                        Object {
+                          "key": "Papakura",
+                          "label": "Papakura",
+                          "parent": "Auckland",
+                        },
+                        Object {
+                          "key": "Pukekohe",
+                          "label": "Pukekohe",
+                          "parent": "Auckland",
+                        },
+                        Object {
+                          "key": "Remuera",
+                          "label": "Remuera",
+                          "parent": "Auckland",
+                        },
+                        Object {
+                          "key": "WaihekeIsland",
+                          "label": "Waiheke Island",
+                          "parent": "Auckland",
+                        },
+                        Object {
+                          "key": "Waitakere",
+                          "label": "Waitakere",
+                          "parent": "Auckland",
+                        },
+                        Object {
+                          "key": "Waiuku",
+                          "label": "Waiuku",
+                          "parent": "Auckland",
+                        },
+                        Object {
+                          "key": "Warkworth",
+                          "label": "Warkworth",
+                          "parent": "Auckland",
+                        },
+                        Object {
+                          "key": "Wellsford",
+                          "label": "Wellsford",
+                          "parent": "Auckland",
+                        },
+                        Object {
+                          "key": "Cambridge",
+                          "label": "Cambridge",
+                          "parent": "Waikato",
+                        },
+                        Object {
+                          "key": "Coromandel",
+                          "label": "Coromandel",
+                          "parent": "Waikato",
+                        },
+                        Object {
+                          "key": "Hamilton",
+                          "label": "Hamilton",
+                          "parent": "Waikato",
+                        },
+                        Object {
+                          "key": "Huntly",
+                          "label": "Huntly",
+                          "parent": "Waikato",
+                        },
+                        Object {
+                          "key": "Matamata",
+                          "label": "Matamata",
+                          "parent": "Waikato",
+                        },
+                        Object {
+                          "key": "Morrinsville",
+                          "label": "Morrinsville",
+                          "parent": "Waikato",
+                        },
+                        Object {
+                          "key": "Ngaruawahia",
+                          "label": "Ngaruawahia",
+                          "parent": "Waikato",
+                        },
+                        Object {
+                          "key": "Ngatea",
+                          "label": "Ngatea",
+                          "parent": "Waikato",
+                        },
+                        Object {
+                          "key": "Otorohanga",
+                          "label": "Otorohanga",
+                          "parent": "Waikato",
+                        },
+                        Object {
+                          "key": "Paeroa",
+                          "label": "Paeroa",
+                          "parent": "Waikato",
+                        },
+                        Object {
+                          "key": "Raglan",
+                          "label": "Raglan",
+                          "parent": "Waikato",
+                        },
+                        Object {
+                          "key": "Taumaranui",
+                          "label": "Taumaranui",
+                          "parent": "Waikato",
+                        },
+                        Object {
+                          "key": "Taupo",
+                          "label": "Taupo",
+                          "parent": "Waikato",
+                        },
+                        Object {
+                          "key": "TeAwamutu",
+                          "label": "Te Awamutu",
+                          "parent": "Waikato",
+                        },
+                        Object {
+                          "key": "TeKuiti",
+                          "label": "Te Kuiti",
+                          "parent": "Waikato",
+                        },
+                        Object {
+                          "key": "Thames",
+                          "label": "Thames",
+                          "parent": "Waikato",
+                        },
+                        Object {
+                          "key": "TokoroaPutaruru",
+                          "label": "Tokoroa/Putaruru",
+                          "parent": "Waikato",
+                        },
+                        Object {
+                          "key": "Turangi",
+                          "label": "Turangi",
+                          "parent": "Waikato",
+                        },
+                        Object {
+                          "key": "Waihi",
+                          "label": "Waihi",
+                          "parent": "Waikato",
+                        },
+                        Object {
+                          "key": "Whangamata",
+                          "label": "Whangamata",
+                          "parent": "Waikato",
+                        },
+                        Object {
+                          "key": "Whitianga",
+                          "label": "Whitianga",
+                          "parent": "Waikato",
+                        },
+                        Object {
+                          "key": "Katikati",
+                          "label": "Katikati",
                           "parent": "BayPlenty",
                         },
                         Object {
-                          "key": "opotiki",
-                          "label": "Ōpōtiki District",
+                          "key": "Kawerau",
+                          "label": "Kawerau",
                           "parent": "BayPlenty",
                         },
                         Object {
-                          "key": "westernBayOfPlenty",
-                          "label": "Western Bay of Plenty District",
+                          "key": "MtMaunganui",
+                          "label": "Mt Maunganui",
                           "parent": "BayPlenty",
                         },
                         Object {
-                          "key": "whakatane",
-                          "label": "Whakatane District",
+                          "key": "Opotiki",
+                          "label": "Opotiki",
                           "parent": "BayPlenty",
                         },
                         Object {
-                          "key": "centralHawkesBay",
-                          "label": "Central Hawke's Bay District",
+                          "key": "Papamoa",
+                          "label": "Papamoa",
                           "parent": "BayPlenty",
                         },
                         Object {
-                          "key": "hastings",
-                          "label": "Hastings District",
+                          "key": "Rotorua",
+                          "label": "Rotorua",
+                          "parent": "BayPlenty",
+                        },
+                        Object {
+                          "key": "Tauranga",
+                          "label": "Tauranga",
+                          "parent": "BayPlenty",
+                        },
+                        Object {
+                          "key": "TePuke",
+                          "label": "Te Puke",
+                          "parent": "BayPlenty",
+                        },
+                        Object {
+                          "key": "WaihiBeach",
+                          "label": "Waihi Beach",
+                          "parent": "BayPlenty",
+                        },
+                        Object {
+                          "key": "Whakatane",
+                          "label": "Whakatane",
+                          "parent": "BayPlenty",
+                        },
+                        Object {
+                          "key": "Gisborne",
+                          "label": "Gisborne",
+                          "parent": "Gisborne",
+                        },
+                        Object {
+                          "key": "Ruatoria",
+                          "label": "Ruatoria",
+                          "parent": "Gisborne",
+                        },
+                        Object {
+                          "key": "Hastings",
+                          "label": "Hastings",
                           "parent": "HawkesBay",
                         },
                         Object {
-                          "key": "wairoa",
-                          "label": "Wairoa District",
+                          "key": "Napier",
+                          "label": "Napier",
                           "parent": "HawkesBay",
                         },
                         Object {
-                          "key": "horowhenua",
-                          "label": "Horowhenua District",
-                          "parent": "Manawatu",
+                          "key": "Waipukurau",
+                          "label": "Waipukurau",
+                          "parent": "HawkesBay",
                         },
                         Object {
-                          "key": "manawatu",
-                          "label": "Manawatu District",
-                          "parent": "Manawatu",
+                          "key": "Wairoa",
+                          "label": "Wairoa",
+                          "parent": "HawkesBay",
                         },
                         Object {
-                          "key": "ruapehu",
-                          "label": "Ruapehu District",
-                          "parent": "Manawatu",
-                        },
-                        Object {
-                          "key": "whanganui",
-                          "label": "Whanganui District",
-                          "parent": "Manawatu",
-                        },
-                        Object {
-                          "key": "farNorth",
-                          "label": "Far North District",
-                          "parent": "Northland",
-                        },
-                        Object {
-                          "key": "kaipara",
-                          "label": "Kaipara District",
-                          "parent": "Northland",
-                        },
-                        Object {
-                          "key": "whangarei",
-                          "label": "Whangarei District",
-                          "parent": "Northland",
-                        },
-                        Object {
-                          "key": "newPlymouth",
-                          "label": "New Plymouth District",
+                          "key": "Hawera",
+                          "label": "Hawera",
                           "parent": "Taranaki",
                         },
                         Object {
-                          "key": "southTaranaki",
-                          "label": "South Taranaki District",
+                          "key": "Mokau",
+                          "label": "Mokau",
                           "parent": "Taranaki",
                         },
                         Object {
-                          "key": "hauraki",
-                          "label": "Hauraki District",
-                          "parent": "Waikato",
+                          "key": "NewPlymouth",
+                          "label": "New Plymouth",
+                          "parent": "Taranaki",
                         },
                         Object {
-                          "key": "matamataPiako",
-                          "label": "Matamata-Piako District",
-                          "parent": "Waikato",
+                          "key": "Opunake",
+                          "label": "Opunake",
+                          "parent": "Taranaki",
                         },
                         Object {
-                          "key": "otorohanga",
-                          "label": "Otorohanga District",
-                          "parent": "Waikato",
+                          "key": "Stratford",
+                          "label": "Stratford",
+                          "parent": "Taranaki",
                         },
                         Object {
-                          "key": "southWaikato",
-                          "label": "South Waikato District",
-                          "parent": "Waikato",
+                          "key": "Ohakune",
+                          "label": "Ohakune",
+                          "parent": "Whanganui",
                         },
                         Object {
-                          "key": "thamesCoromandel",
-                          "label": "Thames-Coromandel District",
-                          "parent": "Waikato",
+                          "key": "Taihape",
+                          "label": "Taihape",
+                          "parent": "Whanganui",
                         },
                         Object {
-                          "key": "waikato",
-                          "label": "Waikato District",
-                          "parent": "Waikato",
+                          "key": "Waiouru",
+                          "label": "Waiouru",
+                          "parent": "Whanganui",
                         },
                         Object {
-                          "key": "waipa",
-                          "label": "Waipa District",
-                          "parent": "Waikato",
+                          "key": "Whanganui",
+                          "label": "Whanganui",
+                          "parent": "Whanganui",
                         },
                         Object {
-                          "key": "carterton",
-                          "label": "Carterton District",
+                          "key": "Bulls",
+                          "label": "Bulls",
+                          "parent": "Manawatu",
+                        },
+                        Object {
+                          "key": "Dannevirke",
+                          "label": "Dannevirke",
+                          "parent": "Manawatu",
+                        },
+                        Object {
+                          "key": "Feilding",
+                          "label": "Feilding",
+                          "parent": "Manawatu",
+                        },
+                        Object {
+                          "key": "Levin",
+                          "label": "Levin",
+                          "parent": "Manawatu",
+                        },
+                        Object {
+                          "key": "Manawatu",
+                          "label": "Manawatu",
+                          "parent": "Manawatu",
+                        },
+                        Object {
+                          "key": "Marton",
+                          "label": "Marton",
+                          "parent": "Manawatu",
+                        },
+                        Object {
+                          "key": "Pahiatua",
+                          "label": "Pahiatua",
+                          "parent": "Manawatu",
+                        },
+                        Object {
+                          "key": "Palmerston North",
+                          "label": "Palmerston North",
+                          "parent": "Manawatu",
+                        },
+                        Object {
+                          "key": "Woodville",
+                          "label": "Woodville",
+                          "parent": "Manawatu",
+                        },
+                        Object {
+                          "key": "Carterton",
+                          "label": "Carterton",
+                          "parent": "Wairarapa",
+                        },
+                        Object {
+                          "key": "Featherston",
+                          "label": "Featherston",
+                          "parent": "Wairarapa",
+                        },
+                        Object {
+                          "key": "Greytown",
+                          "label": "Greytown",
+                          "parent": "Wairarapa",
+                        },
+                        Object {
+                          "key": "Martinborough",
+                          "label": "Martinborough",
+                          "parent": "Wairarapa",
+                        },
+                        Object {
+                          "key": "Masterton",
+                          "label": "Masterton",
+                          "parent": "Wairarapa",
+                        },
+                        Object {
+                          "key": "Kapiti",
+                          "label": "Kapiti",
                           "parent": "Wellington",
                         },
                         Object {
-                          "key": "kapitiCoast",
-                          "label": "Kapiti Coast District",
+                          "key": "LowerHuttCity",
+                          "label": "Lower Hutt City",
                           "parent": "Wellington",
                         },
                         Object {
-                          "key": "masterton",
-                          "label": "Masterton District",
+                          "key": "Porirua",
+                          "label": "Porirua",
                           "parent": "Wellington",
                         },
                         Object {
-                          "key": "southWairarapa",
-                          "label": "South Wairarapa District",
+                          "key": "UpperHuttCity",
+                          "label": "Upper Hutt City",
                           "parent": "Wellington",
                         },
                         Object {
-                          "key": "ashburton",
-                          "label": "Ashburton District",
+                          "key": "WellingtonCity",
+                          "label": "Wellington City",
+                          "parent": "Wellington",
+                        },
+                        Object {
+                          "key": "GoldenBay",
+                          "label": "Golden Bay",
+                          "parent": "NelsonBays",
+                        },
+                        Object {
+                          "key": "Motueka",
+                          "label": "Motueka",
+                          "parent": "NelsonBays",
+                        },
+                        Object {
+                          "key": "Murchison",
+                          "label": "Murchison",
+                          "parent": "NelsonBays",
+                        },
+                        Object {
+                          "key": "Nelson",
+                          "label": "Nelson",
+                          "parent": "NelsonBays",
+                        },
+                        Object {
+                          "key": "Blenheim",
+                          "label": "Blenheim",
+                          "parent": "Marlborough",
+                        },
+                        Object {
+                          "key": "MalboroughSounds",
+                          "label": "Malborough Sounds",
+                          "parent": "Marlborough",
+                        },
+                        Object {
+                          "key": "Picton",
+                          "label": "Picton",
+                          "parent": "Marlborough",
+                        },
+                        Object {
+                          "key": "Greymouth",
+                          "label": "Greymouth",
+                          "parent": "WestCoast",
+                        },
+                        Object {
+                          "key": "Hokitika",
+                          "label": "Hokitika",
+                          "parent": "WestCoast",
+                        },
+                        Object {
+                          "key": "Westport",
+                          "label": "Westport",
+                          "parent": "WestCoast",
+                        },
+                        Object {
+                          "key": "Amberley",
+                          "label": "Amberley",
                           "parent": "Canterbury",
                         },
                         Object {
-                          "key": "hurunui",
-                          "label": "Hurunui District",
+                          "key": "Ashburton",
+                          "label": "Ashburton",
                           "parent": "Canterbury",
                         },
                         Object {
-                          "key": "kaikoura",
-                          "label": "Kaikoura District",
+                          "key": "Belfast",
+                          "label": "Belfast",
                           "parent": "Canterbury",
                         },
                         Object {
-                          "key": "mackenzie",
-                          "label": "Mackenzie District",
+                          "key": "Cheviot",
+                          "label": "Cheviot",
                           "parent": "Canterbury",
                         },
                         Object {
-                          "key": "selwyn",
-                          "label": "Selwyn District",
+                          "key": "ChristchurchCity",
+                          "label": "Christchurch City",
                           "parent": "Canterbury",
                         },
                         Object {
-                          "key": "timaru",
-                          "label": "Timaru District",
+                          "key": "Darfield",
+                          "label": "Darfield",
                           "parent": "Canterbury",
                         },
                         Object {
-                          "key": "waimakariri",
-                          "label": "Waimakariri District",
+                          "key": "Fairlie",
+                          "label": "Fairlie",
                           "parent": "Canterbury",
                         },
                         Object {
-                          "key": "waimate",
-                          "label": "Waimate District",
+                          "key": "Ferrymead",
+                          "label": "Ferrymead",
                           "parent": "Canterbury",
                         },
                         Object {
-                          "key": "centralOtago",
-                          "label": "Central Otago District",
+                          "key": "Geraldine",
+                          "label": "Geraldine",
+                          "parent": "Canterbury",
+                        },
+                        Object {
+                          "key": "Halswell",
+                          "label": "Halswell",
+                          "parent": "Canterbury",
+                        },
+                        Object {
+                          "key": "HanmerSprings",
+                          "label": "Hanmer Springs",
+                          "parent": "Canterbury",
+                        },
+                        Object {
+                          "key": "Kaiapoi",
+                          "label": "Kaiapoi",
+                          "parent": "Canterbury",
+                        },
+                        Object {
+                          "key": "Kaikoura",
+                          "label": "Kaikoura",
+                          "parent": "Canterbury",
+                        },
+                        Object {
+                          "key": "Lyttelton",
+                          "label": "Lyttelton",
+                          "parent": "Canterbury",
+                        },
+                        Object {
+                          "key": "MtCook",
+                          "label": "Mt Cook",
+                          "parent": "Canterbury",
+                        },
+                        Object {
+                          "key": "Rangiora",
+                          "label": "Rangiora",
+                          "parent": "Canterbury",
+                        },
+                        Object {
+                          "key": "Rolleston",
+                          "label": "Rolleston",
+                          "parent": "Canterbury",
+                        },
+                        Object {
+                          "key": "Selwyn",
+                          "label": "Selwyn",
+                          "parent": "Canterbury",
+                        },
+                        Object {
+                          "key": "Kurow",
+                          "label": "Kurow",
+                          "parent": "TimaruOtago",
+                        },
+                        Object {
+                          "key": "Oamaru",
+                          "label": "Oamaru",
+                          "parent": "TimaruOtago",
+                        },
+                        Object {
+                          "key": "Timaru",
+                          "label": "Timaru",
+                          "parent": "TimaruOtago",
+                        },
+                        Object {
+                          "key": "Twizel",
+                          "label": "Twizel",
+                          "parent": "TimaruOtago",
+                        },
+                        Object {
+                          "key": "Waimate",
+                          "label": "Waimate",
+                          "parent": "TimaruOtago",
+                        },
+                        Object {
+                          "key": "Alexandra",
+                          "label": "Alexandra",
                           "parent": "Otago",
                         },
                         Object {
-                          "key": "clutha",
-                          "label": "Clutha District",
+                          "key": "Balclutha",
+                          "label": "Balclutha",
                           "parent": "Otago",
                         },
                         Object {
-                          "key": "queenstownLakes",
-                          "label": "Queenstown-Lakes District",
+                          "key": "Cromwell",
+                          "label": "Cromwell",
                           "parent": "Otago",
                         },
                         Object {
-                          "key": "gore",
-                          "label": "Gore District",
+                          "key": "Dunedin",
+                          "label": "Dunedin",
+                          "parent": "Otago",
+                        },
+                        Object {
+                          "key": "Lawrence",
+                          "label": "Lawrence",
+                          "parent": "Otago",
+                        },
+                        Object {
+                          "key": "Milton",
+                          "label": "Milton",
+                          "parent": "Otago",
+                        },
+                        Object {
+                          "key": "Palmerston",
+                          "label": "Palmerston",
+                          "parent": "Otago",
+                        },
+                        Object {
+                          "key": "Queenstown",
+                          "label": "Queenstown",
+                          "parent": "Otago",
+                        },
+                        Object {
+                          "key": "Ranfurly",
+                          "label": "Ranfurly",
+                          "parent": "Otago",
+                        },
+                        Object {
+                          "key": "Roxburgh",
+                          "label": "Roxburgh",
+                          "parent": "Otago",
+                        },
+                        Object {
+                          "key": "Tapanui",
+                          "label": "Tapanui",
+                          "parent": "Otago",
+                        },
+                        Object {
+                          "key": "Wanaka",
+                          "label": "Wanaka",
+                          "parent": "Otago",
+                        },
+                        Object {
+                          "key": "Bluff",
+                          "label": "Bluff",
                           "parent": "Southland",
                         },
                         Object {
-                          "key": "southland",
-                          "label": "Southland District",
+                          "key": "Edendale",
+                          "label": "Edendale",
                           "parent": "Southland",
                         },
                         Object {
-                          "key": "buller",
-                          "label": "Buller District",
-                          "parent": "WestCoast",
+                          "key": "Gore",
+                          "label": "Gore",
+                          "parent": "Southland",
                         },
                         Object {
-                          "key": "grey",
-                          "label": "Grey District",
-                          "parent": "WestCoast",
+                          "key": "Invercargill",
+                          "label": "Invercargill",
+                          "parent": "Southland",
                         },
                         Object {
-                          "key": "westland",
-                          "label": "Westland District",
-                          "parent": "WestCoast",
+                          "key": "Lumsden",
+                          "label": "Lumsden",
+                          "parent": "Southland",
+                        },
+                        Object {
+                          "key": "Otautau",
+                          "label": "Otautau",
+                          "parent": "Southland",
+                        },
+                        Object {
+                          "key": "Riverton",
+                          "label": "Riverton",
+                          "parent": "Southland",
+                        },
+                        Object {
+                          "key": "StewartIsland",
+                          "label": "Stewart Island",
+                          "parent": "Southland",
+                        },
+                        Object {
+                          "key": "TeAnau",
+                          "label": "Te Anau",
+                          "parent": "Southland",
+                        },
+                        Object {
+                          "key": "Tokanui",
+                          "label": "Tokanui",
+                          "parent": "Southland",
+                        },
+                        Object {
+                          "key": "Winton",
+                          "label": "Winton",
+                          "parent": "Southland",
                         },
                       ],
                     },
@@ -990,7 +1575,7 @@ exports[`ListingPage matches snapshot 1`] = `
                 "type": "listing",
               }
             }
-            listingUnderEnquiry={true}
+            listingUnderEnquiry={false}
             onFetchTransactionLineItems={[Function]}
             onManageDisableScrolling={[Function]}
             onSubmit={[Function]}
@@ -1015,6 +1600,44 @@ exports[`ListingPage matches snapshot 1`] = `
           />
         </div>
       </div>
+      <injectIntl(ModalComponent)
+        id="ListingPage.publishedListingModal"
+        isOpen={false}
+        onClose={[Function]}
+        onManageDisableScrolling={[Function]}
+      >
+        <div>
+          <h1
+            className="modalTitle"
+          >
+            <MemoizedFormattedMessage
+              id="ListingPage.publishedListingTitle"
+              values={
+                Object {
+                  "listingType": undefined,
+                }
+              }
+            />
+          </h1>
+          <div
+            className="publishedListingButtonWrapper"
+          >
+            <Button
+              checkmarkClassName={null}
+              className={null}
+              disabled={false}
+              enforcePagePreloadFor={null}
+              inProgress={false}
+              onClick={[Function]}
+              ready={false}
+              rootClassName={null}
+              spinnerClassName={null}
+            >
+              Lets see it!
+            </Button>
+          </div>
+        </div>
+      </injectIntl(ModalComponent)>
     </LayoutWrapperMain>
     <LayoutWrapperFooter
       className={null}

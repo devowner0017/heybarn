@@ -23,7 +23,12 @@
   --backgroundImage: {
     /* Gradient direction and overlaying the black color on top of the image for better readability */
     background: linear-gradient(-45deg, rgba(140, 20, 20, 0.2), rgba(140, 22, 22, 0.2)),
-      url('../../assets/background-red_cabins.webp');
+      url('../../assets/background-mobile.png');
+
+    @media (--viewportMedium) {
+      background: linear-gradient(-45deg, rgba(140, 20, 20, 0.2), rgba(140, 22, 22, 0.2)),
+        url('../../assets/background.png');
+    }
 
     /* Add loading color for the div */
     background-color: var(--matterColor);
@@ -34,10 +39,10 @@
     /* Align the image within the container */
     background-position: bottom center;
 
-    @media (--viewportLarge) {
+    /* @media (--viewportLarge) {
       border-radius: 40px;
       border: solid 36px var(--matterColorBright);
-    }
+    } */
   }
 
   /**
@@ -67,7 +72,6 @@
   /* ================ Body font ================ */
 
   --marketplaceBodyFontStyles: {
-    font-family: var(--fontFamilySecondary);
     font-weight: var(--fontWeightMedium);
     font-size: 14px;
     line-height: 24px;
@@ -88,6 +92,7 @@
   /* ================ Hero title ================ */
 
   --marketplaceHeroTitleFontStyles: {
+    font-family: var(--fontFamilyHeading);
     font-weight: var(--fontWeightBold);
     font-size: 30px;
     line-height: 30px;
@@ -498,6 +503,21 @@
     }
   }
 
+  --marketplaceRoundedButtonStyles: {
+    @apply --marketplaceButtonStylesSecondary;
+  
+    padding: 14px;
+    font-size: 16px;
+    line-height: 18px;
+    min-height: unset;
+    text-transform: uppercase;
+    border-radius: 24px;
+
+    @media (--viewportMedium) {
+      padding: 16px 69px;
+    }
+  }
+
   /* ================ Inputs ================ */
 
   --marketplaceInputStyles: {
@@ -614,7 +634,7 @@
       flex-grow: 0;
       /* min-height: 568px; */
       padding: var(--modalPaddingMedium);
-      margin-top: 12.5vh;
+      margin-top: calc(12.5vh + var(--topbarHeight));;
       margin-bottom: 12.5vh;
       border-bottom: 8px solid var(--marketplaceColor);
     }

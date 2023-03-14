@@ -7,52 +7,38 @@ exports[`SectionHero matches snapshot 1`] = `
   <div
     className="heroContent"
   >
-    <h1
-      className="heroMainTitle"
-    >
-      Rent your space 
-      <span>
-        |
-      </span>
-       Find your space
-    </h1>
-    <h2
-      className="heroSubTitle"
-    >
-      <span>
-        SectionHero.subTitle
-      </span>
-    </h2>
-    <div
-      className="heroButtonWrapper"
-    >
-      <a
-        className="heroButton"
-        href="/s?pub_listingType=listing&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618"
-        onClick={[Function]}
-        onMouseOver={[Function]}
-        onTouchStart={[Function]}
-        style={Object {}}
-        title={null}
+    <div>
+      <h1
+        className="heroMainTitle"
+      >
+        Rent your space 
+        <span>
+          |
+        </span>
+         Find your space
+      </h1>
+      <h2
+        className="heroSubTitle"
       >
         <span>
-          SectionHero.browselisting
+          SectionHero.subTitle
         </span>
-      </a>
-      <a
-        className="heroButton"
-        href="/s?pub_listingType=advert&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618"
-        onClick={[Function]}
-        onMouseOver={[Function]}
-        onTouchStart={[Function]}
-        style={Object {}}
-        title={null}
+      </h2>
+      <h1
+        className="heroMobileTitle"
       >
-        <span>
-          SectionHero.browseadvert
-        </span>
-      </a>
+        Find and advertise space on Kiwi properties
+      </h1>
     </div>
+  </div>
+  <div>
+    <h3
+      className="heroCtaText"
+    >
+      <span>
+        SectionHero.ctaText
+      </span>
+    </h3>
   </div>
 </div>
 `;

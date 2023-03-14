@@ -10,9 +10,11 @@
     text-decoration: none;
   }
 }
+
 .minInfo {
   padding: 0.3rem;
 }
+
 .threeToTwoWrapper {
   /* Layout */
   display: block;
@@ -30,6 +32,8 @@
 .aspectWrapper {
   padding-bottom: 66.6667%; /* 3:2 Aspect Ratio */
   background: var(--matterColorNegative); /* Loading BG color */
+  border-radius: var(--borderRadius);
+  overflow: hidden;
 }
 
 .rootForImage {
@@ -77,9 +81,9 @@
     align-items: center;
     padding-top: 2px;
     margin-bottom: auto;
-
   }
 }
+
 .smallPrice {
   display: flex;
   flex-direction: row;
@@ -87,6 +91,7 @@
   flex-shrink: 0;
   margin-right: 18px;
 }
+
 .priceValue {
   @apply --marketplaceH2FontStyles;
   /* Remove default margins from font */
@@ -99,6 +104,7 @@
     padding-right: 0.5rem;
   }
 }
+
 .smallPriceValue {
   /* Font */
   @apply --marketplaceH5FontStyles;

@@ -1,0 +1,58 @@
+@import '../../../styles/propertySets.css';
+
+.root {}
+
+.container {
+  background-color: #fff;
+  padding: 22px;
+
+  @media (--viewportMedium) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 112px 158px;
+  }
+}
+
+.featuredIn {
+  @media (--viewportMedium) {
+    width: 344px;
+    text-align: left;
+  }
+}
+
+.featuredInTitle {
+  text-align: center;
+  font: normal normal bold 30px/35px var(--fontFamilyHeading);
+  letter-spacing: -0.3px;
+  color: #222222;
+
+  @media (--viewportMedium) {
+    text-align: left;
+  }
+}
+
+.slider {
+  padding: 0 22px;
+  width: 100%;
+  min-width: 0;
+
+  @media (--viewportMedium) {
+    padding: 0;
+  }
+}
+
+.slideWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.imageWrapper {
+  height: 100px;
+  width: 400px;
+  display: flex;
+  align-items: center;
+  background-repeat: no-repeat;
+  background-position: center;
+  mix-blend-mode: luminosity;
+}

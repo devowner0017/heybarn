@@ -14,34 +14,24 @@ const SectionHero = props => {
   return (
     <div className={classes}>
       <div className={css.heroContent}>
-        <h1 className={css.heroMainTitle}>
-        Rent your space <span>|</span> Find your space
-        </h1>
-        <h2 className={css.heroSubTitle}>
-          <FormattedMessage id="SectionHero.subTitle" />
-        </h2>
-        <div className={css.heroButtonWrapper}>
-          <NamedLink
-            name="SearchPage"
-            to={{
-              search: 'pub_listingType=listing&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618',
-            }}
-            className={css.heroButton}
-          >
-            <FormattedMessage id="SectionHero.browselisting" />
-          </NamedLink>
-
-          <NamedLink
-            name="SearchPage"
-            to={{
-              search: 'pub_listingType=advert&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618',
-            }}
-            className={css.heroButton}
-          >
-            <FormattedMessage id="SectionHero.browseadvert" />
-          </NamedLink>
+        <div>
+          <h1 className={css.heroMainTitle}>
+            Rent your space <span>|</span> Find your space
+          </h1>
+          <h2 className={css.heroSubTitle}>
+            <FormattedMessage id="SectionHero.subTitle" />
+          </h2>
+          <h1 className={css.heroMobileTitle}>
+            Find and advertise space on Kiwi properties
+          </h1>
         </div>
+
       </div>
+        <div>
+          <h3 className={css.heroCtaText}>
+            <FormattedMessage id="SectionHero.ctaText" />
+          </h3>
+        </div>
     </div>
   );
 };

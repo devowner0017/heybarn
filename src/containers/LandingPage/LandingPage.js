@@ -28,6 +28,11 @@ import { TopbarContainer } from '../../containers';
 import facebookImage from '../../assets/saunatimeFacebook-1200x630.jpg';
 import twitterImage from '../../assets/saunatimeTwitter-600x314.jpg';
 import css from './LandingPage.module.css';
+import SectionRent from './SectionRent/SectionRent';
+import SectionGuarantee from './SectionGuarantee/SectionGuarantee';
+import { SectionStory } from './SctionStory/SectionStory';
+import SectionHelpUs from './SectionHelpUs/SectionHelpUs';
+import SectionTestimonials from './SectionTestimonials/SectionTestimonials';
 
 export const LandingPageComponent = props => {
   const { history, intl, location, scrollingDisabled, pageListings, pageAdverts } = props;
@@ -64,9 +69,11 @@ export const LandingPageComponent = props => {
         </LayoutWrapperTopbar>
         <LayoutWrapperMain>
           <div className={css.heroContainer}>
-
             <SectionHero className={css.hero} history={history} location={location} />
           </div>
+
+          <SectionRent />
+
           <ul className={css.sections}>
             {/* <li className={css.section}>
               <div className={css.bannerContent}>
@@ -81,9 +88,7 @@ export const LandingPageComponent = props => {
                 <div className={css.sectionContent}>
                   <SectionRecommendation
                     listings={pageListings}
-                    heading={'Find unique spaces near you'}
                     linkName={'NewListingPage'}
-                    linkText={'List your space'}
                   />
                 </div>
               </li>
@@ -104,6 +109,26 @@ export const LandingPageComponent = props => {
             <li className={css.section}>
               <div className={css.sectionContent}>
                 <SectionHowItWorks />
+              </div>
+            </li>
+            <li className={css.section}>
+              <div className={css.sectionContent}>
+                <SectionGuarantee />
+              </div>
+            </li>
+            <li className={css.section}>
+              <div className={css.sectionContent}>
+                <SectionStory />
+              </div>
+            </li>
+            <li className={css.section}>
+              <div className={css.sectionContent}>
+                <SectionHelpUs />
+              </div>
+            </li>
+            <li className={css.section}>
+              <div className={css.sectionContent}>
+                <SectionTestimonials />
               </div>
             </li>
           </ul>

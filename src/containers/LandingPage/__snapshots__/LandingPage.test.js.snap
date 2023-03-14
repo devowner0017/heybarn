@@ -69,22 +69,10 @@ exports[`LandingPage matches snapshot 1`] = `
           rootClassName={null}
         />
       </div>
+      <SectionRent />
       <ul
         className="sections"
       >
-        <li
-          className="section"
-        >
-          <div
-            className="bannerContent"
-          >
-            <SectionBanner
-              className={null}
-              header="heybarn has big plans but we’re starting small!"
-              rootClassName={null}
-            />
-          </div>
-        </li>
         <li
           className="section"
         >
@@ -95,6 +83,42 @@ exports[`LandingPage matches snapshot 1`] = `
               className={null}
               rootClassName={null}
             />
+          </div>
+        </li>
+        <li
+          className="section"
+        >
+          <div
+            className="sectionContent"
+          >
+            <SectionGuarantee />
+          </div>
+        </li>
+        <li
+          className="section"
+        >
+          <div
+            className="sectionContent"
+          >
+            <SectionStory />
+          </div>
+        </li>
+        <li
+          className="section"
+        >
+          <div
+            className="sectionContent"
+          >
+            <SectionHelpUs />
+          </div>
+        </li>
+        <li
+          className="section"
+        >
+          <div
+            className="sectionContent"
+          >
+            <SectionTestimonials />
           </div>
         </li>
       </ul>

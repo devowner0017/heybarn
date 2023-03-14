@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Slider from 'react-slick';
@@ -12,7 +12,7 @@ import config from '../../config'
 
 const SectionRecommendation = props => {
   const { rootClassName, listings, heading, linkName, linkText, reversed } = props;
-  if(listings.length < 4) return <></>
+  if (listings.length < 4) return <></>
   const classes = classNames(rootClassName || css.root);
 
   // Panel width relative to the viewport
@@ -75,26 +75,23 @@ const SectionRecommendation = props => {
   };
   return (
     <div className={classes}>
-      <div className={classNames(css.title, { [css.reversedTitle]: reversed })}>
-        {heading}
-        {link}
-      </div>
       <div className={css.sliderWrapper}>
         <Slider {...sliderSettings}>
           {listings?.map((l, index) => {
             return (
               <Link
-              className={css.recoLink}
+                key={index}
+                className={css.recoLink}
                 onMouseMove={() => setMouseMoved(true)}
                 onMouseDown={() => setMouseMoved(false)}
                 onMouseUp={() => handleClick(l.id.uuid)}
-                sx={{ textDecoration: 'none', cursor: 'pointer', color: "#4a4a4a"}}
+                sx={{ textDecoration: 'none', cursor: 'pointer', color: "#4a4a4a" }}
               >
                 <ListingCard
                   key={l.id.uuid}
                   listing={l}
                   renderSizes={cardRenderSizes}
-                  className={classNames({ [css.reversedListingCard]: reversed })}
+                  className={classNames(css.listingCard, { [css.reversedListingCard]: reversed })}
                   minInfo
                 />
               </Link>

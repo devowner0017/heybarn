@@ -1,0 +1,145 @@
+@import '../../../styles/propertySets.css';
+
+.section {
+  margin-top: 130px;
+}
+
+.heading {
+  padding: 0 22px;
+  text-align: center;
+  font: normal normal bold 35px/35px var(--fontFamilyHeading);
+  letter-spacing: -0.35px;
+  color: #000000;
+  margin-bottom: 80px;
+
+  @media (--viewportMedium) {
+    text-align: center;
+    font: normal normal bold 60px/62px var(--fontFamilyHeading);
+    letter-spacing: -0.6px;
+    color: #000000;
+    opacity: 1;
+    width: 100%;
+    max-width: 1211px;
+    margin: 0 auto;
+  }
+}
+
+.columns {
+  margin-top: 50px;
+
+  @media (--viewportMedium) {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.column {
+  max-width: 100%;
+
+  &:nth-child(2) {
+    flex-grow: 1;
+    max-width: 100%;
+  }
+
+  @media (--viewportMedium) {
+    flex-basis: 100%;
+    max-width: none;
+    margin-bottom: 20px;
+    max-width: 520px;
+  }
+}
+
+.columnWrapper1 {
+  background: #6D692B 0% 0% no-repeat padding-box;
+  padding: 80px 22px;
+  margin: 0 auto;
+  max-width: 100%;
+
+  @media (--viewportMedium) {
+    padding: 90px 90px 50px;
+    max-width: 520px;
+    height: 454px;
+  }
+}
+
+.columnTitle1 {
+  text-align: center;
+  font: normal normal bold 40px/62px var(--fontFamilyHeading);
+  letter-spacing: -0.4px;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+.columnContent1 {
+  text-align: center;
+  font: normal normal medium 17px/25px Montserrat;
+  letter-spacing: 0px;
+  color: #FFFFFF;
+  margin: 20px 0 20px;
+}
+
+.columnWrapper2 {
+  background: #F7F7F7 0% 0% no-repeat padding-box;
+  padding: 80px 22px;
+  flex-grow: 1;
+  max-width: 100%;
+
+  @media (--viewportMedium) {
+    padding: 122px 79px 98px;
+    max-width: 100%;
+    flex-basis: 100%;
+    height: 521px;
+  }
+}
+
+.columnTitle2 {
+  text-align: center;
+  font: normal normal bold 40px/62px var(--fontFamilyHeading);
+  letter-spacing: -0.4px;
+  color: #000000;
+  margin: 0;
+}
+
+.columnContent2 {
+  text-align: center;
+  font: normal normal normal 22px/35px Montserrat;
+  letter-spacing: 0px;
+  color: #222222;
+  margin: 20px 0;
+}
+
+.columnWrapper3 {
+  composes: columnWrapper1;
+  background: #C35827 0% 0% no-repeat padding-box;
+}
+
+.columnTitle3 {
+  composes: columnTitle1
+}
+
+.columnContent3 {
+  composes: columnContent1;
+}
+
+.button {
+  @apply --marketplaceRoundedButtonStyles;
+  padding: 14px;
+}
+
+.rentButton {
+  color: var(--marketplaceColorOrange);
+  margin-bottom: 20px;
+}
+
+.downloadButton {
+  color: white;
+  background-color: var(--marketplaceColorOrange);
+  border-color: var(--marketplaceColorOrange);
+
+  &:hover {
+    background-color: var(--marketplaceColorOrange);
+    border-color: var(--marketplaceColorOrange);
+  }
+}

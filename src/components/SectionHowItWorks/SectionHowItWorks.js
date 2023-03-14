@@ -7,6 +7,9 @@ import { IconCamera, IconComputer, IconHandshake, NamedLink } from '../../compon
 
 import css from './SectionHowItWorks.module.css';
 
+import img1 from './img-1.png';
+import img2 from './img-2.png';
+
 const SectionHowItWorks = props => {
   const { rootClassName, className } = props;
 
@@ -35,42 +38,58 @@ const SectionHowItWorks = props => {
   );
   return (
     <div className={classes}>
-      <div className={css.title}>
-        <FormattedMessage id="SectionHowItWorks.titleLineOne" />
-      </div>
-
       <div className={css.steps}>
+
         <div className={css.step}>
-          <h2 className={css.stepTitle}>
-            <IconCamera />
-            {/* <FormattedMessage id="SectionHowItWorks.part1Title" /> */}
-          </h2>
-          <p className={css.stepText}>
-            <FormattedMessage id="SectionHowItWorks.part1Text" />
-          </p>
+          <div className={css.card}>
+            <img className={css.cardImage} src={img1} />
+            <div className={css.cardFooter}>
+              <h3 className={css.cardText}>
+                <FormattedMessage id="SectionHowItWorks.part1Title" />
+              </h3>
+              <a className={css.readMore}>
+                {"Read more >"}
+              </a>
+            </div>
+          </div>
         </div>
 
         <div className={css.step}>
-          <h2 className={css.stepTitle}>
-            <IconComputer />
-            {/* <FormattedMessage id="SectionHowItWorks.part2Title" /> */}
-          </h2>
-          <p className={css.stepText}>
-            <FormattedMessage id="SectionHowItWorks.part2Text" />
-          </p>
+          <div className={css.card}>
+            <img className={css.cardImage} src={img2} />
+            <div className={css.cardFooter}>
+              <h3 className={css.cardText}>
+                <FormattedMessage id="SectionHowItWorks.part2Title" />
+              </h3>
+              <a className={css.readMore}>
+                {"Read more >"}
+              </a>
+            </div>
+          </div>
         </div>
 
         <div className={css.step}>
-          <h2 className={css.stepTitle}>
-            <IconHandshake />
-            {/* <FormattedMessage id="SectionHowItWorks.part3Title" /> */}
-          </h2>
-          <p className={css.stepText}>
-            <FormattedMessage
-              id="SectionHowItWorks.part3Text"
-              values={{ listingsLink: listingLink, advertsLink: advertLink }}
-            />
-          </p>
+          <div className={css.part3}>
+            <h3 className={css.part3Title}>
+              Doing it safely
+            </h3>
+
+            <p className={css.part3Text}>
+              Heybarn provides an innovative place specifically designed to market spaces available for rent on New Zealand properties.
+            </p>
+
+            <p className={css.part3Text}>
+              Learn more about how you can use heybarn to advertise your space or to find the affordable space you need.
+            </p>
+
+            <a href="" className={css.part3Link}>
+              {"Learn more about heybarn >"}
+            </a>
+
+            <a href="" className={css.part3Link}>
+              {"FAQs >"}
+            </a>
+          </div>
         </div>
       </div>
     </div>

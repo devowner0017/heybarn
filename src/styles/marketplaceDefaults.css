@@ -33,6 +33,22 @@
   font-weight: normal;
   font-style: normal;
 }
+
+@font-face {
+  font-family: 'Dia Bold';
+  src: url('../fonts/Dia-Bold.woff2') format('woff2'),
+    url('../fonts/Dia-Bold.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Dia Black';
+  src: url('../fonts/Dia-Black.woff2') format('woff2'),
+    url('../fonts/Dia-Black.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
 /* ================ Custom Properties aka CSS variables ================ */
 
 /**
@@ -82,6 +98,7 @@
   /* ================ Font ================ */
   --fontFamily: 'apex_serifbook', 'Zilla Slab', serif;
   --fontFamilySecondary: 'montserratregular', 'Montserrat', Helvetica, Arial, sans-serif;
+  --fontFamilyHeading: 'Dia Bold', 'Montserrat', Helvetica, Arial, sans-serif;
 
   --fontWeightRegular: 400;
   --fontWeightMedium: 500;
@@ -123,7 +140,7 @@
 
   /* ================ Border radius ================ */
 
-  --borderRadius: 2px;
+  --borderRadius: 8px;
   --borderRadiusMobileSearch: 3px;
 
   /* ================ Transition styles ================ */

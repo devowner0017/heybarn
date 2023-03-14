@@ -1,5 +1,14 @@
 @import '../../styles/propertySets.css';
 
+.root {
+  background-color: black;
+  padding: 92px 22px;
+
+  @media (--viewportMedium) {
+    padding: 121px 0 85px 0
+  }
+}
+
 .title {
   @apply --marketplaceH1FontStyles;
   margin-top: 0;
@@ -9,7 +18,7 @@
 .steps {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: center;
 
   @media (--viewportMedium) {
     flex-direction: row;
@@ -17,12 +26,12 @@
 }
 
 .step {
-  color: #c35827;
   font-size: 18px;
-  @media (--viewportMedium) {
-    width: 324px;
-    margin-right: 40px;
+  margin-bottom: 27px;
 
+  @media (--viewportMedium) {
+    margin-right: 25px;
+    margin-bottom: 0;
   }
 }
 
@@ -31,15 +40,18 @@
     margin-right: 0;
   }
 }
-.stepText{
+
+.stepText {
   font-size: 19px;
 }
+
 .stepTitle {
   margin-top: 18px;
   margin-bottom: 18px;
   display: flex;
   justify-content: center;
   align-items: center;
+
   @media (--viewportMedium) {
     margin-top: 21px;
     margin-bottom: 18px;
@@ -52,4 +64,68 @@
   @media (--viewportMedium) {
     margin-top: 24px;
   }
+}
+
+.card {
+  background: #222222 0% 0% no-repeat padding-box;
+  border-radius: 10px;
+  overflow: hidden;
+
+  @media (--viewportMedium) {
+    width: 406px;
+  }
+}
+
+.cardImage {
+  width: 100%;
+}
+
+.cardFooter {
+  padding: 24px 30px 20px;
+}
+
+.cardText {
+  font: normal normal medium 18px/25px Montserrat;
+  letter-spacing: 0px;
+  color: #FFFFFF;
+  opacity: 1;
+}
+
+.readMore {
+  font: normal normal 600 16px/19px Montserrat;
+  letter-spacing: 0px;
+  color: #FFFFFF;
+  opacity: 1;
+}
+
+.part3 {
+  @media (--viewportMedium) {
+    max-width: 425px;
+  }
+}
+
+.part3Title {
+  text-align: left;
+  font: normal normal bold 30px/35px var(--fontFamilyHeading);
+  letter-spacing: -0.3px;
+  color: #FFFFFF;
+  margin-top: 0;
+}
+
+.part3Text {
+  text-align: left;
+  font: normal normal medium 17px/25px Montserrat;
+  letter-spacing: 0px;
+  color: #FFFFFF;
+}
+
+.part3Link {
+  display: block;
+  text-align: left;
+  text-decoration: underline;
+  font: normal normal 600 16px/19px Montserrat;
+  letter-spacing: 0px;
+  color: #FFFFFF;
+  text-decoration: underline;
+  margin-bottom: 17px;
 }

@@ -1,0 +1,113 @@
+@import '../../../styles/propertySets.css';
+
+.root {
+
+}
+
+.container {
+  padding: 20px 0;
+  background-color: #fff;
+
+  @media (--viewportMedium) {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding-top: 168px;
+    padding-bottom: 90px;
+  }
+}
+
+.content {
+  padding: 0 22px;
+  margin-bottom: 44px;
+
+  @media (--viewportMedium) {
+    padding: 0 31px;
+    max-width: 775px;
+    margin-bottom: 0;
+  }
+}
+
+.title {
+  text-align: left;
+  font: normal normal bold 50px/55px var(--fontFamilyHeading);
+  letter-spacing: 0px;
+  color: #222222;
+  opacity: 1;
+  max-width: 525px;
+}
+
+.text {
+  text-align: left;
+  font: normal normal normal 22px/35px Montserrat;
+  letter-spacing: 0px;
+  color: #222222;
+  opacity: 1;
+}
+
+.rightImage {
+  width: 100%;
+  text-align: center;
+  padding: 0 22px;
+
+  @media (--viewportMedium) {
+    padding: 0 31px;
+  }
+
+  & img {
+    width: 100%;
+    max-width: 306px;
+  }
+}
+
+.leftImage {
+  width: 100%;
+  text-align: center;
+  padding: 0 22px;
+
+  @media (--viewportMedium) {
+    padding: 0 31px;
+  }
+
+  & img {
+    width: 100%;
+    max-width: 531px;
+  }
+}
+
+.followUsWrapper {
+  display: none;
+
+  @media (--viewportMedium) {
+    display: block;
+  }
+}
+
+.followUsWrapperMobile {
+  text-align: left;
+
+  @media (--viewportMedium) {
+    display: none;
+  }
+}
+
+.followUs {
+  text-align: left;
+  font: normal normal bold 25px/35px var(--fontFamilyHeading);
+  letter-spacing: -0.25px;
+  color: #000000;
+  opacity: 1;
+}
+
+.followUsLink {
+  text-align: left;
+  text-decoration: underline;
+  font: normal normal 600 16px/19px Montserrat;
+  letter-spacing: 0px;
+  color: #222222;
+  opacity: 1;
+}
+
+.socialIcons {
+  margin-bottom: 37px;
+}

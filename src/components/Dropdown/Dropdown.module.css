@@ -1,0 +1,68 @@
+@import '../../styles/propertySets.css';
+
+.root {}
+
+.button {
+  @apply --marketplaceRoundedButtonStyles;
+  width: initial;
+  background: transparent 0% 0% no-repeat padding-box;
+  border: 1px solid #222222;
+  border-radius: 26px;
+  text-align: center;
+  letter-spacing: 0px;
+  color: #FFFFFF;
+  border-color: #FFFFFF;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  padding: 16px 27px;
+  position: relative;
+  z-index: 2;
+  min-width: 215px;
+
+  &:hover, &:focus, &:active {
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border-color: #171717;
+    color: #171717;
+  }
+}
+
+.buttonActive {
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  color: #171717;
+  border-color: #171717;
+}
+
+.list {
+  position: absolute;
+  bottom: 30px;
+  margin: 0;
+  padding-top: 30px;
+  list-style-type: none;
+  background: #FFFFFFC4 0% 0% no-repeat padding-box;
+  border: 1px solid #000000;
+  border-radius: 16px;
+  color: #171717;
+
+  &[data-popper-placement='top'] {
+    padding-bottom: 30px;
+    padding-top: 0;
+  }
+}
+
+.listItem {
+  padding: 8px 27px;
+  font: normal normal medium 16px/22px Montserrat;
+  letter-spacing: 0px;
+  cursor: pointer;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid #000000;
+  }
+}
+
+.caret {
+  font-size: 7px;
+  vertical-align: middle;
+  display: inline-block;
+  margin-left: 10px;
+}

@@ -14,7 +14,7 @@
   padding: 0 12px 0 0;
 
   /* fill */
-  background-color: var(--marketplaceColorTan);
+  /* background-color: var(--marketplaceColorTan); */
 
   /* shadows */
   box-shadow: var(--boxShadowLight);
@@ -33,6 +33,7 @@
   align-items: center;
   padding: 21px 24px 21px 24px;
   height: 100%;
+  color: #fff;
 
   @media (--viewportLarge) {
     padding: 0 24px;
@@ -203,10 +204,10 @@
   height: 100%;
   padding: 0 12px 0 12px;
 
-  color: var(--matterColor);
+  color: #fff;
 
   &:hover {
-    color: var(--matterColorDark);
+    color: var(--marketplaceColor);
   }
 }
 
@@ -216,10 +217,10 @@
   height: 100%;
   padding: 0 12px 0 12px;
 
-  color: var(--matterColor);
+  color: #fff;
 
   &:hover {
-    color: var(--matterColorDark);
+    color: var(--marketplaceColor);
   }
 }
 
@@ -251,12 +252,12 @@
   padding: 4px 24px;
 
   /* Layout details */
-  color: var(--matterColor);
+  color: #fff;
   text-align: left;
   transition: var(--transitionStyleButton);
 
   &:hover {
-    color: var(--matterColorDark);
+    color: var(--marketplaceColor);
     text-decoration: none;
 
     & .menuItemBorder {
@@ -293,7 +294,7 @@
   border-top-color: var(--matterColorNegative);
 
   &:hover {
-    color: var(--matterColorDark);
+    color: var(--marketplaceColor);
     text-decoration: none;
 
     & .menuItemBorder {
@@ -338,4 +339,44 @@
 }
 .profileLink {
   text-decoration: underline;
+}
+
+.dropdownContainer {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.dropdown {
+  margin: 0 20px;
+}
+
+.buttonRecomendWrapper {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.buttonRecomend {
+  @apply --marketplaceRoundedButtonStyles;
+  max-height: 48px;
+  text-transform: initial;
+  width: initial;
+  padding: 14px;
+  font: normal normal medium 13px/16px Montserrat;
+  letter-spacing: 0px;
+  color: #000000;
+  vertical-align: middle;
+  margin: 0 15px
+}
+
+.separator {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  color: #fff;
+  font-size: 23px;
 }
