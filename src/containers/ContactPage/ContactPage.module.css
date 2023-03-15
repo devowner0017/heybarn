@@ -63,16 +63,16 @@
 }
 .field {
   padding: 5px;
-    margin: 5px;
+  margin: 5px;
 }
-.contactInfoWrapper{
+.contactInfoWrapper {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 1rem
+  margin-top: 1rem;
 }
-.contactInfo{
+.contactInfo {
   @apply --marketplaceSmallFontStyles;
   text-decoration: none;
   color: var(--matterColor);

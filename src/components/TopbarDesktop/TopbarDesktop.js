@@ -69,8 +69,7 @@ const TopbarDesktop = props => {
     },
   ];
 
-  const notificationDot =
-    notificationCount > 0 ? <div className={css.notificationDot} /> : null;
+  const notificationDot = notificationCount > 0 ? <div className={css.notificationDot} /> : null;
 
   const inboxLink = authenticatedOnClientSide ? (
     <NamedLink
@@ -87,30 +86,20 @@ const TopbarDesktop = props => {
 
   const currentPageClass = page => {
     const isAccountSettingsPage =
-      page === 'AccountSettingsPage' &&
-      ACCOUNT_SETTINGS_PAGES.includes(currentPage);
-    return currentPage === page || isAccountSettingsPage
-      ? css.currentPage
-      : null;
+      page === 'AccountSettingsPage' && ACCOUNT_SETTINGS_PAGES.includes(currentPage);
+    return currentPage === page || isAccountSettingsPage ? css.currentPage : null;
   };
 
   const profileMenu = authenticatedOnClientSide ? (
     <Menu>
-      <MenuLabel
-        className={css.profileMenuLabel}
-        isOpenClassName={css.profileMenuIsOpen}
-      >
+      <MenuLabel className={css.profileMenuLabel} isOpenClassName={css.profileMenuIsOpen}>
         <Avatar className={css.avatar} user={currentUser} disableProfileLink />
       </MenuLabel>
       <MenuContent className={css.profileMenuContent}>
         <MenuItem key="Profile">
           <div className={css.profileMenuWrapper}>
             <div className={css.menuAvatar}>
-              <AvatarMedium
-                className={css.bigAvatar}
-                user={currentUser}
-                disableProfileLink
-              />
+              <AvatarMedium className={css.bigAvatar} user={currentUser} disableProfileLink />
             </div>
             <div className={css.profileInfoWrapper}>
               <div className={css.nameWrapper}>
@@ -159,16 +148,8 @@ const TopbarDesktop = props => {
         />
       </NamedLink>
       <div className={css.dropdownContainer}>
-        <DropdownButton
-          className={css.dropdown}
-          buttonText="Space Owners"
-          options={optionsArr}
-        />
-        <DropdownButton
-          className={css.dropdown}
-          buttonText="Renters"
-          options={optionsArr}
-        />
+        <DropdownButton className={css.dropdown} buttonText="Space Owners" options={optionsArr} />
+        <DropdownButton className={css.dropdown} buttonText="Renters" options={optionsArr} />
       </div>
       <div className={css.buttonRecomendWrapper}>
         <NamedLink className={css.buttonRecomend} name="LandingPage">
@@ -176,11 +157,7 @@ const TopbarDesktop = props => {
             id="TopbarDesktop.recommend"
             values={{
               icon: (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width={16}
-                  height={18}
-                >
+                <svg xmlns="http://www.w3.org/2000/svg" width={16} height={18}>
                   <path
                     data-name="Icon awesome-thumbs-up"
                     d="M3.232 6.961H.746A.746.746 0 0 0 0 7.707v7.458a.746.746 0 0 0 .746.746h2.486a.746.746 0 0 0 .746-.746V7.707a.746.746 0 0 0-.746-.746Zm-1.243 7.707a.746.746 0 1 1 .746-.746.746.746 0 0 1-.746.746Zm9.944-12.137c0 1.318-.807 2.057-1.034 2.938h3.161a1.857 1.857 0 0 1 1.851 1.805 2.25 2.25 0 0 1-.6 1.529 2.6 2.6 0 0 1-.289 2.47 2.457 2.457 0 0 1-.509 2.323 1.65 1.65 0 0 1-.191 1.387c-.634.911-2.206.924-3.536.924h-.096a8.921 8.921 0 0 1-3.715-.986 4.891 4.891 0 0 0-1.636-.5.373.373 0 0 1-.366-.373V7.406a.372.372 0 0 1 .111-.265c1.231-1.216 1.76-2.5 2.769-3.515A3.764 3.764 0 0 0 8.641 1.8C8.779 1.221 9.069 0 9.7 0c.742 0 2.233.249 2.233 2.531Z"
@@ -204,9 +181,9 @@ const TopbarDesktop = props => {
       {inboxLink}
       {profileMenu}
       {/* <div style={{ height: '100%' }}> */}
-        {signupLink}
-        <span className={css.separator}>|</span>
-        {loginLink}
+      {signupLink}
+      <span className={css.separator}>|</span>
+      {loginLink}
       {/* </div> */}
     </nav>
   );

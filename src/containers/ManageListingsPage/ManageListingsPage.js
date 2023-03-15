@@ -30,7 +30,7 @@ import {
 } from './ManageListingsPage.duck';
 import css from './ManageListingsPage.module.css';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
-import { capitalize } from 'lodash'
+import { capitalize } from 'lodash';
 
 export class ManageListingsPageComponent extends Component {
   constructor(props) {

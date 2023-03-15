@@ -162,7 +162,7 @@ export const EditListingPageComponent = props => {
           },
         };
 
-    return <NamedRedirect {...redirectProps}  state={{published: true}}/>;
+    return <NamedRedirect {...redirectProps} state={{ published: true }} />;
   } else if (shouldRedirectToDifferentListingType) {
     const advertPage = '/a' + location.pathname.slice(2);
     return <Redirect to={{ pathname: advertPage }} push={true} />;

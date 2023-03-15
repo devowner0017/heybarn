@@ -174,7 +174,9 @@ const EditListingDescriptionFormComponent = props => (
             label={descriptionMessage}
             placeholder={descriptionPlaceholderMessage}
             validate={
-              submitInProgress ? () => null : composeValidators(required(descriptionRequiredMessage))
+              submitInProgress
+                ? () => null
+                : composeValidators(required(descriptionRequiredMessage))
             }
           />
 

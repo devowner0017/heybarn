@@ -1,4 +1,4 @@
-import React , {useState} from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { FormattedMessage, injectIntl, intlShape } from '../../util/reactIntl';
@@ -249,7 +249,7 @@ const SignupFormComponent = props => (
                     // if (!SUPPORTED_REGIONS.includes(values.locDistrict)) {
                     //   setIsRegionPopupOpen(true);
                     // } else {
-                      handleSubmit(values);
+                    handleSubmit(values);
                     // }
                   }}
                 >

@@ -8,7 +8,7 @@ import { ListingLink } from '../../components';
 import { EditListingPoliciesForm } from '../../forms';
 
 import css from './EditListingPoliciesPanel.module.css';
-import { ensureArray } from '../../util/devHelpers'
+import { ensureArray } from '../../util/devHelpers';
 
 const EditListingPoliciesPanel = props => {
   const {
@@ -24,7 +24,7 @@ const EditListingPoliciesPanel = props => {
     updateInProgress,
     errors,
     listingType,
-    backButton
+    backButton,
   } = props;
 
   const classes = classNames(rootClassName || css.root, className);
@@ -42,11 +42,7 @@ const EditListingPoliciesPanel = props => {
         publicData={publicData}
         initialValues={{ rules, groundRules, accessFrequency }}
         onSubmit={values => {
-          const {
-            rules = '',
-            groundRules,
-            accessFrequency,
-          } = values;
+          const { rules = '', groundRules, accessFrequency } = values;
           const updateValues = {
             publicData: {
               rules,

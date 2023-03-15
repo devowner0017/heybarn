@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Slider from 'react-slick';
-import { useHistory } from "react-router-dom";
+import { useHistory } from 'react-router-dom';
 
 import { NamedLink, ListingCard } from '..';
 
 import css from './SectionRecommendation.module.css';
 import { Link } from '@mui/material';
-import config from '../../config'
+import config from '../../config';
 
 const SectionRecommendation = props => {
   const { rootClassName, listings, heading, linkName, linkText, reversed } = props;
-  if (listings.length < 4) return <></>
+  if (listings.length < 4) return <></>;
   const classes = classNames(rootClassName || css.root);
 
   // Panel width relative to the viewport
@@ -68,7 +68,7 @@ const SectionRecommendation = props => {
   };
   const history = useHistory();
   const [mouseMoved, setMouseMoved] = useState(false);
-  const handleClick = (id) => {
+  const handleClick = id => {
     if (!mouseMoved) {
       history.push(`/l/${id}`);
     }
@@ -85,7 +85,7 @@ const SectionRecommendation = props => {
                 onMouseMove={() => setMouseMoved(true)}
                 onMouseDown={() => setMouseMoved(false)}
                 onMouseUp={() => handleClick(l.id.uuid)}
-                sx={{ textDecoration: 'none', cursor: 'pointer', color: "#4a4a4a" }}
+                sx={{ textDecoration: 'none', cursor: 'pointer', color: '#4a4a4a' }}
               >
                 <ListingCard
                   key={l.id.uuid}

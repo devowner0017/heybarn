@@ -31,8 +31,10 @@ export const TRANSITION_HOST_CANCELS_AFTER_REQUEST = 'transition/host-cancels-af
 export const TRANSITION_RENTER_CANCELS_AFTER_REQUEST = 'transition/renter-cancels-after-request';
 export const TRANSITION_OPERATOR_CANCELS_DURING_RAD = 'transition/operator-cancels-during-rad';
 export const TRANSITION_OPERATOR_CANCELS_AFTER_REQUEST = 'transition/operator-cancels-during-rad';
-export const TRANSITION_HOST_CANCELS_AFTER_CONTRACT_START = 'transition/host-cancels-after-contract-start';
-export const TRANSITION_RENTER_CANCELS_AFTER_CONTRACT_START = 'transition/renter-cancels-after-contract-start';
+export const TRANSITION_HOST_CANCELS_AFTER_CONTRACT_START =
+  'transition/host-cancels-after-contract-start';
+export const TRANSITION_RENTER_CANCELS_AFTER_CONTRACT_START =
+  'transition/renter-cancels-after-contract-start';
 
 export const TRANSITION_RENTER_SIGNS_RENTAL_AGREEMENT = 'transition/renter-signs-rental-agreement';
 export const TRANSITION_HOST_CANCELS_AFTER_AGREEMENT_SENT =
@@ -41,7 +43,8 @@ export const TRANSITION_RENTER_CANCELS_AFTER_AGREEMENT_SENT =
   'transition/renter-cancels-after-agreement-sent';
 export const TRANSITION_OPERATOR_CANCELS_AFTER_AGREEMENT_SENT =
   'transition/operator-cancels-after-agreement-sent';
-export const TRANSITION_OPERATOR_CONFIRMS_RENTAL_AGREEMENT = 'transition/operator-confirms-rental-agreement';
+export const TRANSITION_OPERATOR_CONFIRMS_RENTAL_AGREEMENT =
+  'transition/operator-confirms-rental-agreement';
 
 export const TRANSITION_REQUEST_PAYMENT = 'transition/request-payment';
 
@@ -267,7 +270,7 @@ const stateDescription = {
     [STATE_PREAUTHORIZED]: {
       on: {
         [TRANSITION_COMPLETE]: STATE_DELIVERED,
-        [TRANSITION_HOST_CANCELS_AFTER_CONTRACT_START]: STATE_DELIVERED
+        [TRANSITION_HOST_CANCELS_AFTER_CONTRACT_START]: STATE_DELIVERED,
       },
     },
 
@@ -372,7 +375,7 @@ export const txIsCancelledAfterAgreementSent = tx =>
   getTransitionsToState(STATE_CANCELLED_AFTER_AGREEMENT_SENT).includes(txLastTransition(tx));
 
 export const txIsRentalAgreementSigned = tx =>
-  getTransitionsToState(STATE_RENTAL_AGREEMENT_FINALIZED).includes(txLastTransition(tx))
+  getTransitionsToState(STATE_RENTAL_AGREEMENT_FINALIZED).includes(txLastTransition(tx));
 
 export const txIsPaymentPending = tx =>
   getTransitionsToState(STATE_PENDING_PAYMENT).includes(txLastTransition(tx));

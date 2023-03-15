@@ -1,6 +1,7 @@
 @import '../../styles/propertySets.css';
 
-.root {}
+.root {
+}
 
 .button {
   @apply --marketplaceRoundedButtonStyles;
@@ -10,8 +11,8 @@
   border-radius: 26px;
   text-align: center;
   letter-spacing: 0px;
-  color: #FFFFFF;
-  border-color: #FFFFFF;
+  color: #ffffff;
+  border-color: #ffffff;
   cursor: pointer;
   font-family: 'Montserrat', sans-serif;
   padding: 16px 27px;
@@ -19,15 +20,17 @@
   z-index: 2;
   min-width: 215px;
 
-  &:hover, &:focus, &:active {
-    background: #FFFFFF 0% 0% no-repeat padding-box;
+  &:hover,
+  &:focus,
+  &:active {
+    background: #ffffff 0% 0% no-repeat padding-box;
     border-color: #171717;
     color: #171717;
   }
 }
 
 .buttonActive {
-  background: #FFFFFF 0% 0% no-repeat padding-box;
+  background: #ffffff 0% 0% no-repeat padding-box;
   color: #171717;
   border-color: #171717;
 }
@@ -38,7 +41,7 @@
   margin: 0;
   padding-top: 30px;
   list-style-type: none;
-  background: #FFFFFFC4 0% 0% no-repeat padding-box;
+  background: #ffffffc4 0% 0% no-repeat padding-box;
   border: 1px solid #000000;
   border-radius: 16px;
   color: #171717;

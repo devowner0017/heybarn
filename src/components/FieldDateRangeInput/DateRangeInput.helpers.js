@@ -125,8 +125,8 @@ export const isDayBlockedFn = (timeSlots, startDate, endDate, focusedInput, unit
 
   // find the next booking after a start date
   const nextBookingStarts = startDateSelected
-  ? firstBlockedBetween(timeSlots, startDate, moment(lastBookableDate).add(1, 'days'))
-  : null;
+    ? firstBlockedBetween(timeSlots, startDate, moment(lastBookableDate).add(1, 'days'))
+    : null;
 
   // end date is focused but no dates are selected
   const selectingEndDate = isSelectingEndDateNightly(
@@ -138,7 +138,6 @@ export const isDayBlockedFn = (timeSlots, startDate, endDate, focusedInput, unit
   );
 
   if (selectingEndDate) {
-
     // if end date is being selected first, block the day after a booked date
     // (as a booking can end on the day the following booking starts)
     return day =>

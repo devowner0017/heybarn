@@ -54,7 +54,7 @@
   z-index: 2;
 }
 .field {
-  margin-top: .5rem;
+  margin-top: 0.5rem;
 }
 .detailRow {
   display: flex;
@@ -65,10 +65,10 @@
     margin: 0;
   }
 }
-.bold{
+.bold {
   font-weight: 700;
 }
 .fieldGroup {
   display: flex;
-justify-content: space-between;
+  justify-content: space-between;
 }

@@ -23,7 +23,6 @@ import {
   setInitialValues as TransactionInitPageInitialValues,
 } from './TransactionInitPage/TransactionInitPage.duck';
 
-
 const getPageDataLoadingAPI = () => {
   return {
     LandingPage: {

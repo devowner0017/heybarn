@@ -24,9 +24,7 @@ const DropdownButton = ({
     modifiers: [
       {
         name: 'flip',
-        options: {
-
-        },
+        options: {},
       },
       {
         name: 'preventOverflow',
@@ -73,8 +71,7 @@ const DropdownButton = ({
           type="button"
           ref={setReferenceElement}
         >
-          {buttonText}{' '}
-          <span className={css.caret}>{reverse ? carretReverse : carret}</span>
+          {buttonText} <span className={css.caret}>{reverse ? carretReverse : carret}</span>
         </button>
 
         {dropdownOpen && (
@@ -86,10 +83,7 @@ const DropdownButton = ({
           >
             {options.map(item => {
               return (
-                <li
-                  className={classNames(css.listItem, listItemClassName)}
-                  key={item.name}
-                >
+                <li className={classNames(css.listItem, listItemClassName)} key={item.name}>
                   {item.label}
                 </li>
               );

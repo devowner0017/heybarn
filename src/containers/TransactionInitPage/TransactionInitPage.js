@@ -117,14 +117,11 @@ export const TransactionInitPageComponent = props => {
     }
   }, []);
 
-  useEffect(
-    () => {
-      if (couponCode === 'TEST') {
-        setValidCouponCode(true);
-      }
-    },
-    [couponCode]
-  );
+  useEffect(() => {
+    if (couponCode === 'TEST') {
+      setValidCouponCode(true);
+    }
+  }, [couponCode]);
   /**
    * Load initial data for the page
    *

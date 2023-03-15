@@ -33,7 +33,7 @@ const exampleTransaction = params => {
       ],
       protectedData: {
         ongoingContract: true,
-         lengthOfContract: true
+        lengthOfContract: true,
       },
 
       // payinTotal, payoutTotal, and lineItems required in params

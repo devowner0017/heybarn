@@ -26,8 +26,8 @@
     margin: 0;
   }
 }
-.rootPicker  > div > fieldset {
+.rootPicker > div > fieldset {
   border: none;
   border-radius: 0;
-  border-bottom: 2px solid var(--marketplaceColor)
+  border-bottom: 2px solid var(--marketplaceColor);
 }

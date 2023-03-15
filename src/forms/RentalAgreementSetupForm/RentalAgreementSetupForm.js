@@ -48,11 +48,7 @@ const RentalAgreementSetupFormComponent = props => (
         filterConfig,
       } = fieldRenderProps;
 
-      const {
-        startDate,
-        endDate,
-        ongoingContract: [ongoingContract] = [],
-      } = values;
+      const { startDate, endDate, ongoingContract: [ongoingContract] = [] } = values;
       const [confirmAgreementOpen, setConfirmAgreementOpen] = useState(false);
 
       // const errorArea = false ? errorMessage : <p className={css.errorPlaceholder} />;
@@ -350,7 +346,7 @@ RentalAgreementSetupFormComponent.defaultProps = {
   filterConfig: config.custom.filters,
 };
 
-const {  func, string } = PropTypes;
+const { func, string } = PropTypes;
 
 RentalAgreementSetupFormComponent.propTypes = {
   className: string,

@@ -26,7 +26,7 @@ export const pathByRouteName = (nameToFind, routes, params = {}) => {
   const hasEmptySlug = params && params.hasOwnProperty('slug') && params.slug === '';
   const pathParams = hasEmptySlug ? { ...params, slug: 'no-slug' } : params;
   // try {
-    // console.error(`Path "${nameToFind}" was not found.`);
+  // console.error(`Path "${nameToFind}" was not found.`);
   // } catch {
   //   return () => '#';
   // }

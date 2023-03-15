@@ -93,10 +93,9 @@
   margin-bottom: 1px;
   cursor: pointer;
 }
-.checkedCustomIcon{
- opacity: 1;
+.checkedCustomIcon {
+  opacity: 1;
 }
-.unCheckedCustomIcon{
- opacity: .2;
-
+.unCheckedCustomIcon {
+  opacity: 0.2;
 }

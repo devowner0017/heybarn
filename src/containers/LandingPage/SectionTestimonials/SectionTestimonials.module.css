@@ -1,6 +1,7 @@
 @import '../../../styles/propertySets.css';
 
-.root {}
+.root {
+}
 
 .container {
   background-color: #fff;

@@ -128,7 +128,7 @@ export class SearchMapComponent extends Component {
       activeListingId,
       messages,
       isMapOpen,
-      mapClass
+      mapClass,
     } = this.props;
 
     const classes = classNames(rootClassName || css.root, className);

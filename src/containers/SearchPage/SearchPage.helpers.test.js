@@ -18,7 +18,10 @@ const filters = [
     group: 'secondary',
     queryParamNames: ['pub_category'],
     config: {
-      options: [{ key: 'smoke', label: 'Smoke' }, { key: 'wooden', label: 'Wood' }],
+      options: [
+        { key: 'smoke', label: 'Smoke' },
+        { key: 'wooden', label: 'Wood' },
+      ],
     },
   },
   {
@@ -28,7 +31,10 @@ const filters = [
     group: 'secondary',
     queryParamNames: ['pub_param1', 'pub_param1'],
     config: {
-      options: [{ key: 'smoke', label: 'Smoke' }, { key: 'wooden', label: 'Wood' }],
+      options: [
+        { key: 'smoke', label: 'Smoke' },
+        { key: 'wooden', label: 'Wood' },
+      ],
     },
   },
   {

@@ -1,29 +1,25 @@
-import React, { useState } from "react";
-import { Popper } from "react-popper";
+import React, { useState } from 'react';
+import { Popper } from 'react-popper';
 
 const modifiers = {
   preventOverflow: {
-    padding: 0
+    padding: 0,
   },
   shift: {
-    enabled: true
+    enabled: true,
   },
   flip: {
     enabled: true,
     // flipVariationsByContent: true,
-    behavior: "flip"
-  }
+    behavior: 'flip',
+  },
 };
 
 const SubMenu = ({ options, listRef, open }) => {
   return (
     <>
       {open ? (
-        <Popper
-          placement="left-start"
-          modifiers={modifiers}
-          referenceElement={listRef.current}
-        >
+        <Popper placement="left-start" modifiers={modifiers} referenceElement={listRef.current}>
           {({ ref, style, placement, arrowProps }) => (
             <ul
               ref={ref}
@@ -34,8 +30,7 @@ const SubMenu = ({ options, listRef, open }) => {
               {options.map(item => (
                 <li
                   className={`dropdown-button__list-item
-                ${(item.name && `dropdown-button__list-item--${item.name}`) ||
-                  ""}`}
+                ${(item.name && `dropdown-button__list-item--${item.name}`) || ''}`}
                   key={item.name}
                 >
                   {item.label}

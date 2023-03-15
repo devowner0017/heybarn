@@ -17,7 +17,7 @@ module.exports = (req, res) => {
         return integrationSdk.listings
           .update({ id: listing.id, publicData: { listingState: 'live' } }, { expand: true })
           .then(listingResponse => {
-            return "good"
+            return 'good';
           })
           .catch(e => {
             handleError(res, e);

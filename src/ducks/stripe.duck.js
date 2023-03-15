@@ -7,7 +7,10 @@ import {
 } from '../util/api';
 import { storableError } from '../util/errors';
 import * as log from '../util/log';
-import { TRANSITION_HOST_CANCELS_AFTER_CONTRACT_START, TRANSITION_RENTER_CANCELS_AFTER_CONTRACT_START } from '../util/transaction'
+import {
+  TRANSITION_HOST_CANCELS_AFTER_CONTRACT_START,
+  TRANSITION_RENTER_CANCELS_AFTER_CONTRACT_START,
+} from '../util/transaction';
 
 // ================ Action types ================ //
 
@@ -421,15 +424,17 @@ export const fetchSubscription = params => dispatch => {
     });
 };
 
-export const cancelSubscription = params => (dispatch ) => {
+export const cancelSubscription = params => dispatch => {
   dispatch(cancelSubscriptionRequest());
-const  { id,  actor, } = params
+  const { id, actor } = params;
   return cancelRentalPayments(params)
     .then(response => {
-
       const bodyParams = {
         id,
-        transition:actor === "provider" ?  TRANSITION_HOST_CANCELS_AFTER_CONTRACT_START : TRANSITION_RENTER_CANCELS_AFTER_CONTRACT_START  ,
+        transition:
+          actor === 'provider'
+            ? TRANSITION_HOST_CANCELS_AFTER_CONTRACT_START
+            : TRANSITION_RENTER_CANCELS_AFTER_CONTRACT_START,
         params: {},
       };
       const queryParams = { expand: true };

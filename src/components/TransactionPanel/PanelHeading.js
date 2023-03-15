@@ -205,7 +205,6 @@ const PanelHeading = props => {
             </p>
           ) : null}
           {showRelatedLink && relatedLink}
-
         </HeadingWithSubtitle>
       );
     case HEADING_RENTER_ENQUIRED:
@@ -247,7 +246,6 @@ const PanelHeading = props => {
             </p>
           ) : null}
           {showRelatedLink && relatedLink}
-
         </HeadingWithSubtitle>
       );
     case HEADING_RENTER_DECLINED_COMMUNICATION:
@@ -270,7 +268,6 @@ const PanelHeading = props => {
             </p>
           ) : null}
           {showRelatedLink && relatedLink}
-
         </HeadingWithSubtitle>
       );
     case HEADING_RENTAL_AGREEMENT_DISCUSSION:
@@ -293,7 +290,6 @@ const PanelHeading = props => {
             </p>
           ) : null}
           {showRelatedLink && relatedLink}
-
         </HeadingWithSubtitle>
       );
     case HEADING_WAS_APPROVED_BY_RENTER:
@@ -312,7 +308,6 @@ const PanelHeading = props => {
             </p>
           ) : null}
           {showRelatedLink && relatedLink}
-
         </HeadingWithSubtitle>
       );
     case HEADING_REVERSED_TRANSACTION_FLOW:
@@ -365,7 +360,6 @@ const PanelHeading = props => {
             </p>
           ) : null}
           {showRelatedLink && relatedLink}
-
         </HeadingWithSubtitle>
       );
     case HEADING_RENTAL_AGREEMENT_SENT:
@@ -384,7 +378,6 @@ const PanelHeading = props => {
             </p>
           ) : null}
           {showRelatedLink && relatedLink}
-
         </HeadingWithSubtitle>
       );
     case HEADING_CANCELLED_AFTER_AGREEENT_SENT:
@@ -404,7 +397,6 @@ const PanelHeading = props => {
               />
             </p>
           ) : null}
-
         </HeadingWithSubtitle>
       );
     case HEADING_RENTAL_AGREEMENT_FINALIZED:
@@ -423,7 +415,6 @@ const PanelHeading = props => {
             </p>
           ) : null}
           {showRelatedLink && relatedLink}
-
         </HeadingWithSubtitle>
       );
     case HEADING_RENT_PAID:
@@ -442,7 +433,6 @@ const PanelHeading = props => {
             </p>
           ) : null}
           {showRelatedLink && relatedLink}
-
         </HeadingWithSubtitle>
       );
     case HEADING_RENT_CANCELLED:

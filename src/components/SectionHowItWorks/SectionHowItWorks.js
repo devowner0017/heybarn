@@ -39,7 +39,6 @@ const SectionHowItWorks = props => {
   return (
     <div className={classes}>
       <div className={css.steps}>
-
         <div className={css.step}>
           <div className={css.card}>
             <img className={css.cardImage} src={img1} />
@@ -47,9 +46,7 @@ const SectionHowItWorks = props => {
               <h3 className={css.cardText}>
                 <FormattedMessage id="SectionHowItWorks.part1Title" />
               </h3>
-              <a className={css.readMore}>
-                {"Read more >"}
-              </a>
+              <a className={css.readMore}>{'Read more >'}</a>
             </div>
           </div>
         </div>
@@ -61,33 +58,31 @@ const SectionHowItWorks = props => {
               <h3 className={css.cardText}>
                 <FormattedMessage id="SectionHowItWorks.part2Title" />
               </h3>
-              <a className={css.readMore}>
-                {"Read more >"}
-              </a>
+              <a className={css.readMore}>{'Read more >'}</a>
             </div>
           </div>
         </div>
 
         <div className={css.step}>
           <div className={css.part3}>
-            <h3 className={css.part3Title}>
-              Doing it safely
-            </h3>
+            <h3 className={css.part3Title}>Doing it safely</h3>
 
             <p className={css.part3Text}>
-              Heybarn provides an innovative place specifically designed to market spaces available for rent on New Zealand properties.
+              Heybarn provides an innovative place specifically designed to market spaces available
+              for rent on New Zealand properties.
             </p>
 
             <p className={css.part3Text}>
-              Learn more about how you can use heybarn to advertise your space or to find the affordable space you need.
+              Learn more about how you can use heybarn to advertise your space or to find the
+              affordable space you need.
             </p>
 
             <a href="" className={css.part3Link}>
-              {"Learn more about heybarn >"}
+              {'Learn more about heybarn >'}
             </a>
 
             <a href="" className={css.part3Link}>
-              {"FAQs >"}
+              {'FAQs >'}
             </a>
           </div>
         </div>

@@ -26,7 +26,7 @@ import { pathByRouteName, findRouteByRouteName } from '../../util/routes';
 
 export const NamedLinkComponent = props => {
   const { name, params, title } = props;
-const routes = routeConfiguration();
+  const routes = routeConfiguration();
   const onOver = () => {
     const { component: Page } = findRouteByRouteName(name, routes);
     // Loadable Component has a "preload" function.

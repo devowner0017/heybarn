@@ -52,7 +52,7 @@
 }
 
 .columnWrapper1 {
-  background: #6D692B 0% 0% no-repeat padding-box;
+  background: #6d692b 0% 0% no-repeat padding-box;
   padding: 80px 22px;
   margin: 0 auto;
   max-width: 100%;
@@ -68,7 +68,7 @@
   text-align: center;
   font: normal normal bold 40px/62px var(--fontFamilyHeading);
   letter-spacing: -0.4px;
-  color: #FFFFFF;
+  color: #ffffff;
   margin: 0;
 }
 
@@ -76,12 +76,12 @@
   text-align: center;
   font: normal normal medium 17px/25px Montserrat;
   letter-spacing: 0px;
-  color: #FFFFFF;
+  color: #ffffff;
   margin: 20px 0 20px;
 }
 
 .columnWrapper2 {
-  background: #F7F7F7 0% 0% no-repeat padding-box;
+  background: #f7f7f7 0% 0% no-repeat padding-box;
   padding: 80px 22px;
   flex-grow: 1;
   max-width: 100%;
@@ -112,11 +112,11 @@
 
 .columnWrapper3 {
   composes: columnWrapper1;
-  background: #C35827 0% 0% no-repeat padding-box;
+  background: #c35827 0% 0% no-repeat padding-box;
 }
 
 .columnTitle3 {
-  composes: columnTitle1
+  composes: columnTitle1;
 }
 
 .columnContent3 {

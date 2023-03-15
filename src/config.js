@@ -1,6 +1,6 @@
 import * as custom from './marketplace-custom-config.js';
 import defaultLocationSearches from './default-location-searches';
-import { defaultMCC,  stripeCountryDetails } from './stripe-config';
+import { defaultMCC, stripeCountryDetails } from './stripe-config';
 import { currencyConfiguration } from './currency-config';
 
 const env = process.env.REACT_APP_ENV;
@@ -69,7 +69,7 @@ const sdkTransitVerbose = process.env.REACT_APP_SHARETRIBE_SDK_TRANSIT_VERBOSE =
 // Marketplace currency.
 // It should match one of the currencies listed in currency-config.js
 const currencyConf = process.env.REACT_APP_SHARETRIBE_MARKETPLACE_CURRENCY;
-const currency = currencyConf ? currencyConf.toUpperCase() : currencyConf || "NZD";
+const currency = currencyConf ? currencyConf.toUpperCase() : currencyConf || 'NZD';
 
 // Currency formatting options.
 // See: https://github.com/yahoo/react-intl/wiki/API#formatnumber
@@ -98,7 +98,7 @@ const canonicalRootURL = process.env.REACT_APP_CANONICAL_ROOT_URL;
 const siteTitle = 'Heybarn';
 
 // Twitter handle is needed in meta tags (twitter:site). Start it with '@' character
-const siteTwitterHandle = null
+const siteTwitterHandle = null;
 
 // Instagram page is used in SEO schema (http://schema.org/Organization)
 const siteInstagramPage = 'https://www.facebook.com/heybarn';

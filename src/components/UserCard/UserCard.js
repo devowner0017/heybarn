@@ -79,7 +79,6 @@ const UserCard = props => {
     [css.withBioMissingAbove]: !hasBio,
   });
 
-
   const editProfileMobile = (
     <span className={css.editProfileMobile}>
       <span className={css.linkSeparator}>•</span>

@@ -114,7 +114,7 @@ module.exports = (reportUri, enforceSsl, reportOnly) => {
     frameSrc: newFrameSrc,
     connectSrc: newConnectSrc,
     styleSrc: newStyleSrc,
-    imgSrc: newImgSrc
+    imgSrc: newImgSrc,
   };
 
   // ================ END CUSTOM CSP URLs ================ //

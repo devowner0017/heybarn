@@ -25,7 +25,7 @@ const prettyPrintObject = (object, host, renter) => {
   <br/>
   <div>Rental of: ${object.rentalAddress}</div>
 <div>Rental start date: ${object.startDate}</div>
-<div>Rental end date: ${object.ongoingContract ? "perpetual" : object.endDate}</div>
+<div>Rental end date: ${object.ongoingContract ? 'perpetual' : object.endDate}</div>
 <br/>
 <div>Weekly rental amount: $${object.price / 100}</div>
 <br/>

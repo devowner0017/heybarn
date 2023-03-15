@@ -8,11 +8,11 @@
 
 .filterLabel,
 .filterLabelSelected {
-   @apply --marketplaceH3FontStyles;
-display: flex;
-position: relative;
+  @apply --marketplaceH3FontStyles;
+  display: flex;
+  position: relative;
 
-justify-content: flex-end;
+  justify-content: flex-end;
   /* Baseline adjustment for label text */
   margin-top: 0;
   margin-bottom: 0;
@@ -27,7 +27,6 @@ justify-content: flex-end;
   color: var(--marketplaceColor);
 }
 
-
 .labelButton {
   /* Override button styles */
   outline: none;
@@ -36,7 +35,7 @@ justify-content: flex-end;
   padding: 0;
   cursor: pointer;
   margin-right: auto;
-    margin-left: auto;
+  margin-left: auto;
 }
 
 .formWrapper {
@@ -50,7 +49,7 @@ justify-content: flex-end;
   position: absolute;
   right: 10px;
   top: 0px;
-margin: 0;
+  margin: 0;
   /* Layout */
   display: inline;
   padding: 0;
@@ -66,5 +65,5 @@ margin: 0;
   }
 }
 .clearButton > div {
-  margin-bottom: 6px
+  margin-bottom: 6px;
 }

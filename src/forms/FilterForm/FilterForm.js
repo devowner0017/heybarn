@@ -7,7 +7,7 @@ import { injectIntl, intlShape } from '../../util/reactIntl';
 
 import { Form } from '../../components';
 import css from './FilterForm.module.css';
-import { isEqual } from 'lodash'
+import { isEqual } from 'lodash';
 
 const FilterFormComponent = props => {
   const {

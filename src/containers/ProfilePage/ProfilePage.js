@@ -316,8 +316,8 @@ const mapStateToProps = state => {
   const userMatches = getMarketplaceEntities(state, [{ type: 'user', id: userId }]);
   const user = userMatches.length === 1 ? userMatches[0] : null;
   const allListings = getMarketplaceEntities(state, userListingRefs);
-  const listings = allListings.filter(l => l.attributes.publicData.listingType === 'listing') || []
-  const adverts = allListings.filter(l => l.attributes.publicData.listingType === 'advert')
+  const listings = allListings.filter(l => l.attributes.publicData.listingType === 'listing') || [];
+  const adverts = allListings.filter(l => l.attributes.publicData.listingType === 'advert');
   return {
     scrollingDisabled: isScrollingDisabled(state),
     currentUser,

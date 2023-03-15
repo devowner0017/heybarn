@@ -130,7 +130,7 @@ class FieldDateRangeInputComponent extends Component {
       focusedInput: this.state.focusedInput,
       startDateId,
       endDateId,
-      disabled: "endDate"
+      disabled: 'endDate',
     };
     const classes = classNames(rootClassName || css.fieldRoot, className);
     const errorClasses = classNames({ [css.mobileMargins]: useMobileMargins });

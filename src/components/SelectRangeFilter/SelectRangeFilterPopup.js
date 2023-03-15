@@ -131,7 +131,7 @@ class SelectRangeFilterPopup extends Component {
       max,
       step,
       intl,
-      customDisplaySymbol
+      customDisplaySymbol,
     } = this.props;
     const classes = classNames(rootClassName || css.root, className);
     const numberQueryParam = getNumberQueryParamName(queryParamNames);

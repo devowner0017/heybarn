@@ -394,7 +394,7 @@ export class TransactionPanelComponent extends Component {
           relatedTxId,
           showDetailCardHeadings: true,
           showRentalAgreementButtons: true,
-          stripeIdRequired:!isCustomer,
+          stripeIdRequired: !isCustomer,
           showRelatedLink: otherListing?.id?.uuid,
           allowMessages: true,
           confirmationModalProps: {
@@ -808,7 +808,8 @@ export class TransactionPanelComponent extends Component {
       />
     );
     const ensuredStripeCustomer = ensureStripeCustomer(currentUser.stripeAccount);
-    const missingStripeId = stateData.stripeIdRequired  && !ensuredStripeCustomer?.attributes?.stripeAccountId ;
+    const missingStripeId =
+      stateData.stripeIdRequired && !ensuredStripeCustomer?.attributes?.stripeAccountId;
     const rentalAgreementButtons = (
       <ActionButtonsMaybe
         showButtons={stateData.showRentalAgreementButtons}

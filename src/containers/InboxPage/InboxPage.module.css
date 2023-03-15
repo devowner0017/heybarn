@@ -65,7 +65,7 @@
     padding: 109px 0 82px max(calc((100% - 1600px) / 2), 20px);
   }
 }
-.titleWrapper{
+.titleWrapper {
   margin-bottom: 20px;
   @media (--viewportMedium) {
     margin-bottom: 40px;
@@ -407,14 +407,12 @@
   }
 }
 
-
-
-.inboxFilters{
+.inboxFilters {
   display: flex;
 }
-.filterLink{
-padding: 1rem;
+.filterLink {
+  padding: 1rem;
 }
-.activeFilterLink{
-font-weight: 800;
+.activeFilterLink {
+  font-weight: 800;
 }

@@ -7,7 +7,7 @@ import { dateFromAPIToLocalNoon } from '../../util/dates';
 import css from './SubscriptionBreakdown.module.css';
 
 const BookingPeriod = props => {
-  const { startDate, endDate,  ongoingContract } = props;
+  const { startDate, endDate, ongoingContract } = props;
   const dateFormatOptions = {
     month: 'short',
     day: 'numeric',
@@ -29,7 +29,7 @@ const BookingPeriod = props => {
             <FormattedMessage id="SubscriptionBreakdown.bookingEnd" />
           </div>
           <div className={css.itemLabel}>
-            {ongoingContract ? "Ongoing" : <FormattedDate value={endDate} {...dateFormatOptions} />}
+            {ongoingContract ? 'Ongoing' : <FormattedDate value={endDate} {...dateFormatOptions} />}
           </div>
         </div>
       </div>
@@ -38,7 +38,7 @@ const BookingPeriod = props => {
 };
 
 const LineItemBookingPeriod = props => {
-  const { booking, unitType,  ongoingContract ,cancelledEndDate} = props;
+  const { booking, unitType, ongoingContract, cancelledEndDate } = props;
 
   // Attributes: displayStart and displayEnd can be used to differentiate shown time range
   // from actual start and end times used for availability reservation. It can help in situations
@@ -54,7 +54,11 @@ const LineItemBookingPeriod = props => {
   return (
     <>
       <div className={css.lineItem}>
-        <BookingPeriod startDate={localStartDate} endDate={endDay} ongoingContract={ongoingContract} />
+        <BookingPeriod
+          startDate={localStartDate}
+          endDate={endDay}
+          ongoingContract={ongoingContract}
+        />
       </div>
       <hr className={css.totalDivider} />
     </>

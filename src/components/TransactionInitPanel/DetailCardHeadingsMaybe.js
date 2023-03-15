@@ -14,7 +14,7 @@ const DetailCardHeadingsMaybe = props => {
     geolocation,
     showAddress,
     listing,
-    showPrice
+    showPrice,
   } = props;
   const publicData = getPropByName(listing, 'publicData');
   const { sizeOfSpace } = publicData || {};

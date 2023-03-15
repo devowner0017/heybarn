@@ -41,13 +41,11 @@
   composes: formMargins;
 }
 
-.idealUses{
-
+.idealUses {
 }
 .useText {
   @apply --marketplaceSmallFontStyles;
   composes: formMargins;
-
 }
 .moreInfoText {
   margin-top: auto;

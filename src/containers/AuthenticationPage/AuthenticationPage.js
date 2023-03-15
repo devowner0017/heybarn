@@ -59,7 +59,6 @@ export class AuthenticationPageComponent extends Component {
       signupStage: 1,
     };
     this.setSignupStage = this.setSignupStage.bind(this);
-
   }
 
   componentDidMount() {

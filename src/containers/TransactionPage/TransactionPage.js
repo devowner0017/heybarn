@@ -67,8 +67,8 @@ export const TransactionPageComponent = props => {
     history,
     intl,
     messages,
-location,
-onManageDisableScrolling,
+    location,
+    onManageDisableScrolling,
     onSendMessage,
     onSendReview,
     onShowMoreMessages,
@@ -127,7 +127,7 @@ onManageDisableScrolling,
   const isProviderRole = transactionRole === PROVIDER;
   const isCustomerRole = transactionRole === CUSTOMER;
 
-  const redirectToCheckoutPageWithInitialValues = (initialValues) => {
+  const redirectToCheckoutPageWithInitialValues = initialValues => {
     const routes = routeConfiguration();
     // Customize checkout page state with current listing and selected bookingDates
     const { setInitialValues } = findRouteByRouteName('CheckoutPage', routes);
@@ -202,10 +202,10 @@ onManageDisableScrolling,
     });
   };
   const handleUpdateSubscriptionPaymentMethod = pm => {
-    onUpdateSubscriptionPaymentMethod({subscription, pm, actor: 'customer'}).then(() => {
+    onUpdateSubscriptionPaymentMethod({ subscription, pm, actor: 'customer' }).then(() => {
       onFetchTransaction(currentTransaction.id, transactionRole).then(() => {
-        onFetchTransaction(currentTransaction.id, transactionRole)
-      })
+        onFetchTransaction(currentTransaction.id, transactionRole);
+      });
     });
   };
   const deletedListingTitle = intl.formatMessage({

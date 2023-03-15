@@ -178,7 +178,7 @@ export const deletePaymentMethod = () => (dispatch, getState, sdk) => {
     });
 };
 
-export const updatePaymentMethod = stripePaymentMethodId => (dispatch) => {
+export const updatePaymentMethod = stripePaymentMethodId => dispatch => {
   return dispatch(deletePaymentMethod())
     .then(() => {
       return dispatch(addPaymentMethod(stripePaymentMethodId));
@@ -191,7 +191,7 @@ export const updatePaymentMethod = stripePaymentMethodId => (dispatch) => {
 // This function helps to choose correct thunk function
 export const savePaymentMethod = (stripeCustomer, stripePaymentMethodId) => (
   dispatch,
-  getState,
+  getState
 ) => {
   const hasAlreadyDefaultPaymentMethod =
     stripeCustomer && stripeCustomer.defaultPaymentMethod && stripeCustomer.defaultPaymentMethod.id;

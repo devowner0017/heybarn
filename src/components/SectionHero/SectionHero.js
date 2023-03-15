@@ -21,17 +21,14 @@ const SectionHero = props => {
           <h2 className={css.heroSubTitle}>
             <FormattedMessage id="SectionHero.subTitle" />
           </h2>
-          <h1 className={css.heroMobileTitle}>
-            Find and advertise space on Kiwi properties
-          </h1>
+          <h1 className={css.heroMobileTitle}>Find and advertise space on Kiwi properties</h1>
         </div>
-
       </div>
-        <div>
-          <h3 className={css.heroCtaText}>
-            <FormattedMessage id="SectionHero.ctaText" />
-          </h3>
-        </div>
+      <div>
+        <h3 className={css.heroCtaText}>
+          <FormattedMessage id="SectionHero.ctaText" />
+        </h3>
+      </div>
     </div>
   );
 };

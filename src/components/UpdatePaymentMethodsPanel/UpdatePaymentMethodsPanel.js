@@ -124,8 +124,7 @@ const UpdatePaymentMethodsPanelComponent = props => {
       .then(recurringResponse => {
         return { ...rest, protectedData: { recurringResponse } };
       })
-      .catch(e => {
-      });
+      .catch(e => {});
   };
   const handleSubmit = params => {
     setIsSubmitting(true);
@@ -149,8 +148,8 @@ const UpdatePaymentMethodsPanelComponent = props => {
         // Note: stripe.handleCardSetup might return an error inside successful call (200), but those are rejected in thunk functions.
         return onSavePaymentMethod(stripeCustomer, newPaymentMethod).then(r => {
           if (!subscription) {
-            return createNewSubscription(newPaymentMethod).then((subResponse) => {
-              return {...newPaymentMethod, subResponse};
+            return createNewSubscription(newPaymentMethod).then(subResponse => {
+              return { ...newPaymentMethod, subResponse };
             });
           } else {
             return newPaymentMethod;

@@ -19,7 +19,7 @@ import routeConfiguration from './routeConfiguration';
 import Routes from './Routes';
 import config from './config';
 import DateAdapter from '@mui/lab/AdapterMoment';
-import HttpsRedirect from './HttpsWrapper'
+import HttpsRedirect from './HttpsWrapper';
 // Flex template application uses English translations as default.
 import defaultMessages from './translations/en.json';
 

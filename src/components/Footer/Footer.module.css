@@ -153,7 +153,7 @@
 
   /* flex-basis: 165px; */
   /* margin-bottom: 24px; */
-  
+
   @media (--viewportMedium) {
     display: initial;
     padding-top: 2px;
@@ -371,7 +371,7 @@
 }
 
 .button {
-  background: #FFFFFF 0% 0% no-repeat padding-box!important;
-  color: #171717!important;
-  border-color: #171717!important;
+  background: #ffffff 0% 0% no-repeat padding-box !important;
+  color: #171717 !important;
+  border-color: #171717 !important;
 }

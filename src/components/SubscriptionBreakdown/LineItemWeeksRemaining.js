@@ -5,24 +5,29 @@ import { propTypes } from '../../util/types';
 import css from './SubscriptionBreakdown.module.css';
 
 const LineItemWeeksRemaining = props => {
-  const { weeksRemaining,ongoingContract } = props;
+  const { weeksRemaining, ongoingContract } = props;
 
-  return !ongoingContract && (
-    <>
-      <div className={css.lineItem}>
-        <span className={css.itemLabel}>
-          <FormattedMessage id="SubscriptionBreakdown.timeRemaining" values={{ units: 'Weeks' }} />
-        </span>
-        <span className={css.totalPrice}>
-          <FormattedMessage
-            id="SubscriptionBreakdown.weeksRemaining"
-            values={{ quantity: weeksRemaining }}
-          />{' '}
-          Weeks
-        </span>
-      </div>
-      <hr className={css.totalDivider} />
-    </>
+  return (
+    !ongoingContract && (
+      <>
+        <div className={css.lineItem}>
+          <span className={css.itemLabel}>
+            <FormattedMessage
+              id="SubscriptionBreakdown.timeRemaining"
+              values={{ units: 'Weeks' }}
+            />
+          </span>
+          <span className={css.totalPrice}>
+            <FormattedMessage
+              id="SubscriptionBreakdown.weeksRemaining"
+              values={{ quantity: weeksRemaining }}
+            />{' '}
+            Weeks
+          </span>
+        </div>
+        <hr className={css.totalDivider} />
+      </>
+    )
   );
 };
 

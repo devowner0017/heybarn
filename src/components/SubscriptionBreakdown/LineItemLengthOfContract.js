@@ -7,20 +7,22 @@ import css from './SubscriptionBreakdown.module.css';
 import { getPropByName } from '../../util/devHelpers';
 
 const LineItemLengthOfContract = props => {
-  const { transaction, ongoingContract} = props;
+  const { transaction, ongoingContract } = props;
 
   const protectedData = getPropByName(transaction, 'protectedData');
 
   const totalLabel = <FormattedMessage id="SubscriptionBreakdown.lengthOfContract" />;
   const { lengthOfContract } = protectedData;
 
-  return !ongoingContract && (
-    <>
-      <div className={css.lineItemTotal}>
-        <div className={css.totalLabel}>{totalLabel}</div>
-        <div className={css.totalPrice}>{lengthOfContract} Weeks</div>
-      </div>
-    </>
+  return (
+    !ongoingContract && (
+      <>
+        <div className={css.lineItemTotal}>
+          <div className={css.totalLabel}>{totalLabel}</div>
+          <div className={css.totalPrice}>{lengthOfContract} Weeks</div>
+        </div>
+      </>
+    )
   );
 };
 

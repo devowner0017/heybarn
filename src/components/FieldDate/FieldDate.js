@@ -76,7 +76,9 @@ class FieldDateComponent extends Component {
         ) : null}
         <MobileDatePicker
           inputFormat="DD/MM/yyyy"
-          renderInput={params => <TextField {...params} className={classNames(pickerClassname , css.rootPicker)} />}
+          renderInput={params => (
+            <TextField {...params} className={classNames(pickerClassname, css.rootPicker)} />
+          )}
           {...inputProps}
         />
         <ValidationError className={errorClasses} fieldMeta={meta} />

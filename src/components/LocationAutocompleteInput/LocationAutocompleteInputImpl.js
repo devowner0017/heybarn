@@ -309,7 +309,7 @@ class LocationAutocompleteInputImpl extends Component {
       ...this.props.input,
       selectedPlace: null,
     });
-    const region = prediction?.context?.find(c => c.id.includes('region'))?.text
+    const region = prediction?.context?.find(c => c.id.includes('region'))?.text;
     this.setState({ fetchingPlaceDetails: true });
 
     this.getGeocoder()

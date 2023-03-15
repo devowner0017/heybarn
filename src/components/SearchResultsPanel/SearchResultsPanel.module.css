@@ -11,7 +11,7 @@
   grid-auto-flow: dense;
 
   @media (--viewportMedium) {
-  grid-template-columns: repeat(auto-fit, minmax(200px, 31%));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 31%));
 
     /* display: flex;
     flex-direction: row;

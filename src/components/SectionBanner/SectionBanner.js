@@ -22,7 +22,7 @@ const SectionBanner = props => {
           sign up and create an account
         </NamedLink>
         , we'll let you know as soon as we are in your area. For more information about our plans,{' '}
-        <a style={{ cursor: "pointer", color: '#fff' }} onClick={() => setLearnMoreOpen(true)}>
+        <a style={{ cursor: 'pointer', color: '#fff' }} onClick={() => setLearnMoreOpen(true)}>
           read more here
         </a>
         .
@@ -36,7 +36,7 @@ const SectionBanner = props => {
         }
         onManageDisableScrolling={onManageDisableScrolling}
         hideNegative={true}
-        affirmativeButtonText={"Sounds good"}
+        affirmativeButtonText={'Sounds good'}
       />
     </div>
   );

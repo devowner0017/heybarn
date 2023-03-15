@@ -238,7 +238,7 @@ const currentTransactions = listingId => (dispatch, getState, sdk) => {
           .then(response => {
             const transactions = denormalisedResponseEntities(response);
             const activeTransaction = transactions.find(t => {
-            return  ACTIVE_TRANSITIONS.includes(t.attributes.lastTransition);
+              return ACTIVE_TRANSITIONS.includes(t.attributes.lastTransition);
             });
             dispatch(getCurrentTransactionsSuccess(activeTransaction));
           })

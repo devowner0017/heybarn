@@ -800,7 +800,7 @@ export const cancelDuringRad = data => (dispatch, _, sdk) => {
     });
 };
 
-export const sendRentalAgreement = data => (dispatch) => {
+export const sendRentalAgreement = data => dispatch => {
   // TODO: Add booking data to params here
   const { txId, listingId, wasRequested, contractLines, bookingDates } = data;
 
@@ -808,7 +808,7 @@ export const sendRentalAgreement = data => (dispatch) => {
   dispatch(sendRentalAgreementRequest());
   const bookingData = {
     startDate: startDate.toISOString(),
-    endDate: endDate?.toISOString() ||  new moment().add(1, 'years').toISOString(),
+    endDate: endDate?.toISOString() || new moment().add(1, 'years').toISOString(),
   };
   const transition = wasRequested
     ? TRANSITION_HOST_SENDS_AGREEMENT_AFTER_REQUEST
@@ -900,7 +900,7 @@ export const sendRentalAgreement = data => (dispatch) => {
     .catch(handleError);
 };
 
-export const requestRentalAgreement = data => (dispatch) => {
+export const requestRentalAgreement = data => dispatch => {
   // TODO: Add booking data to params here
   const { txId, listingId } = data;
 
@@ -1030,7 +1030,6 @@ export const signRentalAgreement = data => (dispatch, getState, sdk) => {
       throw e;
     });
 };
-
 
 const fetchMessages = (txId, page) => (dispatch, getState, sdk) => {
   const paging = { page, per_page: MESSAGES_PAGE_SIZE };
@@ -1200,7 +1199,7 @@ const timeSlotsRequest = params => (dispatch, getState, sdk) => {
   });
 };
 
-const fetchTimeSlots = listingId => (dispatch) => {
+const fetchTimeSlots = listingId => dispatch => {
   dispatch(fetchTimeSlotsRequest);
 
   // Time slots can be fetched for 90 days at a time,
@@ -1311,6 +1310,6 @@ export const loadData = params => (dispatch, getState) => {
     dispatch(fetchTransaction(txId, txRole)),
     dispatch(fetchMessages(txId, 1)),
     dispatch(fetchNextTransitions(txId)),
-    dispatch(stripeCustomer())
+    dispatch(stripeCustomer()),
   ]);
 };

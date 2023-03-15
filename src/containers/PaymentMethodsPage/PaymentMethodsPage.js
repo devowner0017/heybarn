@@ -261,10 +261,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const PaymentMethodsPage = compose(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
   injectIntl
 )(PaymentMethodsPageComponent);
 

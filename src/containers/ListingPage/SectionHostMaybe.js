@@ -6,11 +6,7 @@ import { EnquiryForm } from '../../forms';
 import css from './ListingPage.module.css';
 
 const SectionHostMaybe = props => {
-  const {
-    listing,
-    currentUser,
-    listingType,
-  } = props;
+  const { listing, currentUser, listingType } = props;
 
   if (!listing.author) {
     return null;
@@ -21,7 +17,7 @@ const SectionHostMaybe = props => {
       <h2 className={css.yourHostHeading}>
         <FormattedMessage id={`ListingPage.${listingType}yourHostHeading`} />
       </h2>
-      <UserCard user={listing.author} currentUser={currentUser}  />
+      <UserCard user={listing.author} currentUser={currentUser} />
     </div>
   );
 };

@@ -18,7 +18,7 @@ const SearchFiltersPrimaryComponent = props => {
     toggleSecondaryFiltersOpen,
     selectedSecondaryFiltersCount,
     typeButton,
-    searchType
+    searchType,
   } = props;
 
   const hasNoResult = listingsAreLoaded && resultsCount === 0;
@@ -66,7 +66,7 @@ const SearchFiltersPrimaryComponent = props => {
 
       {hasNoResult ? (
         <div className={css.noSearchResults}>
-          <FormattedMessage id="SearchFiltersPrimary.noResults" values={{searchType}}/>
+          <FormattedMessage id="SearchFiltersPrimary.noResults" values={{ searchType }} />
         </div>
       ) : null}
 

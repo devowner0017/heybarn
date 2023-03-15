@@ -285,10 +285,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const StripePayoutPage = compose(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
   injectIntl
 )(StripePayoutPageComponent);
 

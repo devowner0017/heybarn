@@ -327,8 +327,7 @@ export class CheckoutPageComponent extends Component {
         .then(confirmResponse => {
           return confirmResponse;
         })
-        .catch(e => {
-        });
+        .catch(e => {});
     };
     // Step 3: optionally save card as defaultPaymentMethod
     const fnSavePaymentMethod = fnParams => {
@@ -354,8 +353,7 @@ export class CheckoutPageComponent extends Component {
         .then(recurringResponse => {
           return { ...rest, protectedData: { recurringResponse } };
         })
-        .catch(e => {
-        });
+        .catch(e => {});
     };
     // Step 4: send initial message
     const fnSendMessage = fnParams => {
@@ -611,7 +609,7 @@ export class CheckoutPageComponent extends Component {
     //   bookingDates.bookingStart &&
     //   bookingDates.bookingEnd
     // );
-    const hasRequiredData = hasListingAndAuthor
+    const hasRequiredData = hasListingAndAuthor;
     // && hasBookingDates;
     const canShowPage = hasRequiredData && !isOwnListing;
     const shouldRedirect = !isLoading && !canShowPage;
@@ -1028,7 +1026,6 @@ const CheckoutPage = compose(
 )(CheckoutPageComponent);
 
 CheckoutPage.setInitialValues = (initialValues, saveToSessionStorage = false) => {
-
   if (saveToSessionStorage) {
     const { listing, bookingData, bookingDates } = initialValues;
     storeData(bookingData, bookingDates, listing, null, STORAGE_KEY);

@@ -341,7 +341,7 @@ export const filters = [
       options: [
         {
           key: 'anytimeUnrestricted',
-          label: "All the time",
+          label: 'All the time',
         },
         {
           key: 'anytimeArranged',

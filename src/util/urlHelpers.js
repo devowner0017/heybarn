@@ -202,7 +202,7 @@ export const stringify = params => {
  * @return {Object} key/value pairs parsed from the given String
  */
 export const parse = (search, options = {}) => {
-const { latlng = [], latlngBounds = [] } = options;
+  const { latlng = [], latlngBounds = [] } = options;
   const params = queryString.parse(search);
   return Object.keys(params).reduce((result, key) => {
     const val = params[key];

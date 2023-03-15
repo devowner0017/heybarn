@@ -8,8 +8,6 @@ import { FormattedMessage, injectIntl, intlShape } from '../../util/reactIntl';
 import { propTypes } from '../../util/types';
 import css from './SelectRangeFilterPlain.module.css';
 
-
-
 const RADIX = 10;
 
 const getNumberQueryParamName = queryParamNames => {

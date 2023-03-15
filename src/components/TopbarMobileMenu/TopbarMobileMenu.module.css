@@ -56,8 +56,8 @@
   @apply --marketplaceH2FontStyles;
   color: var(--marketplaceColor);
   position: relative;
-    margin-top: 2rem;
-    margin-bottom: 1px;
+  margin-top: 2rem;
+  margin-bottom: 1px;
 }
 .inbox {
   /* Font */

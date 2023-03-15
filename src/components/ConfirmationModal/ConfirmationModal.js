@@ -96,7 +96,7 @@ const ConfirmationModal = props => {
               disabled={buttonsDisabled}
               onClick={val => {
                 !!negativeAction ? negativeAction(val) : onCloseModal(false);
-                 onCloseModal(false);
+                onCloseModal(false);
               }}
             >
               {negativeButtonText || <FormattedMessage id="TransactionPanel.declineButton" />}

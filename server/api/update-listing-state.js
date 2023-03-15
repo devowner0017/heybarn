@@ -10,10 +10,7 @@ module.exports = (req, res) => {
   });
   const { listingId, listingState, transactionId } = req.body;
   return integrationSdk.listings
-    .update(
-      { id: listingId, publicData: { listingState, transactionId } },
-      { expand: true }
-    )
+    .update({ id: listingId, publicData: { listingState, transactionId } }, { expand: true })
     .then(listingResponse => {
       res
         .status(200)

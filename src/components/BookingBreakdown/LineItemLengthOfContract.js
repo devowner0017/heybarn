@@ -14,14 +14,16 @@ const LineItemLengthOfContract = props => {
 
   const totalLabel = <FormattedMessage id="BookingBreakdown.lengthOfContract" />;
 
-  return !ongoingContract && (
-    <>
-      <hr className={css.totalDivider} />
-      <div className={css.lineItemTotal}>
-        <div className={css.totalLabel}>{totalLabel}</div>
-        <div className={css.totalPrice}>{lengthOfContract}</div>
-      </div>
-    </>
+  return (
+    !ongoingContract && (
+      <>
+        <hr className={css.totalDivider} />
+        <div className={css.lineItemTotal}>
+          <div className={css.totalLabel}>{totalLabel}</div>
+          <div className={css.totalPrice}>{lengthOfContract}</div>
+        </div>
+      </>
+    )
   );
 };
 

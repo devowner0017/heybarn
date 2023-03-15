@@ -36,8 +36,7 @@
 
 @font-face {
   font-family: 'Dia Bold';
-  src: url('../fonts/Dia-Bold.woff2') format('woff2'),
-    url('../fonts/Dia-Bold.woff') format('woff');
+  src: url('../fonts/Dia-Bold.woff2') format('woff2'), url('../fonts/Dia-Bold.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
@@ -281,7 +280,6 @@ select {
 li {
   @apply --marketplaceSmallFontStyles;
   font-family: var(--fontFamilySecondary);
-
 }
 p,
 pre {
@@ -349,9 +347,9 @@ textarea {
 
 .fontsLoaded {
   & body {
-    font-family: "Montserrat", Helvetica, sans-serif;
+    font-family: 'Montserrat', Helvetica, sans-serif;
   }
   & button {
-    font-family: "Montserrat", Helvetica, sans-serif;
+    font-family: 'Montserrat', Helvetica, sans-serif;
   }
 }

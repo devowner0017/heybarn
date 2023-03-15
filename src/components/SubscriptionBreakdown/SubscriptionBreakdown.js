@@ -29,7 +29,7 @@ import LineItemNextPayment from './LineItemNextPayment';
 import css from './SubscriptionBreakdown.module.css';
 import LineItemLengthOfContract from './LineItemLengthOfContract';
 import moment from 'moment';
-import { getPropByName } from '../../util/devHelpers'
+import { getPropByName } from '../../util/devHelpers';
 
 export const SubscriptionBreakdownComponent = props => {
   const {
@@ -62,11 +62,13 @@ export const SubscriptionBreakdownComponent = props => {
   const { ongoingContract } =
     agreementCancelled || agreementExtended || transaction?.attributes?.protectedData || {};
   const { start, end } = booking?.attributes;
-  const cancelledEndDate = agreementCancelled?.endDate
+  const cancelledEndDate = agreementCancelled?.endDate;
 
   const weeksRemaining = moment(start).diff(moment(cancelledEndDate || end), 'weeks');
   const nextPaymentDate = moment.unix(nextPeriodBegins);
-  const lastPaymentPayment = cancelledEndDate ? moment(cancelledEndDate).subtract(2, 'weeks')  : moment.unix(contractEnd);
+  const lastPaymentPayment = cancelledEndDate
+    ? moment(cancelledEndDate).subtract(2, 'weeks')
+    : moment.unix(contractEnd);
 
   const classes = classNames(rootClassName || css.root, className);
 

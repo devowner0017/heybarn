@@ -313,7 +313,6 @@
   padding: 0;
 }
 
-
 .perUnit {
   /* Font */
   @apply --marketplaceH5FontStyles;
@@ -591,13 +590,12 @@
   @media (--viewportMedium) {
     flex-direction: row;
     align-items: center;
-
   }
 }
-.divider{
+.divider {
   display: none;
   @media (--viewportMedium) {
- display: inline-block;
- margin: 0 .2rem;
+    display: inline-block;
+    margin: 0 0.2rem;
   }
 }

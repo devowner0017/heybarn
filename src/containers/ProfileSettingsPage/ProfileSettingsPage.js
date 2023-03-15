@@ -178,10 +178,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const ProfileSettingsPage = compose(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
   injectIntl
 )(ProfileSettingsPageComponent);
 

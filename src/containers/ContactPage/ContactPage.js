@@ -136,7 +136,9 @@ const data ={
                 </div>
               )}
               <div className={css.contactInfoWrapper}>
-                <a href="tel:0800 4392276" className={css.contactInfo}><LocalPhoneIcon fontSize='small' /> 0800 4392276</a>
+                <a href="tel:0800 4392276" className={css.contactInfo}>
+                  <LocalPhoneIcon fontSize="small" /> 0800 4392276
+                </a>
                 <p className={css.contactInfo}>PO Box 2103 South Dunedin</p>
               </div>
             </div>

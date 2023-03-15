@@ -224,7 +224,9 @@ export class TransactionInitPanelComponent extends Component {
       : currentListing.attributes.title;
     const selectedListingTitle = selectedListing?.attributes.title;
     const selectedListingPriceRaw = selectedListing?.attributes.price;
-    const selectedListingPrice = selectedListingPriceRaw ? `${formatMoney(intl, selectedListingPriceRaw)}` : '';
+    const selectedListingPrice = selectedListingPriceRaw
+      ? `${formatMoney(intl, selectedListingPriceRaw)}`
+      : '';
 
     const unitType = config.bookingUnitType;
     const isNightly = unitType === LINE_ITEM_NIGHT;

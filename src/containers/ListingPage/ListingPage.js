@@ -100,7 +100,6 @@ export class ListingPageComponent extends Component {
     this.onContactUser = this.onContactUser.bind(this);
     this.onSubmitEnquiry = this.onSubmitEnquiry.bind(this);
     this.setShowPublishedListingModal = this.setShowPublishedListingModal.bind(this);
-
   }
 
   componentDidMount() {

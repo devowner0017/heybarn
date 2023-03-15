@@ -9,7 +9,6 @@ import css from './SelectRangeFilterForm.module.css';
 
 const DEBOUNCE_WAIT_TIME = 400;
 const CustomInput = props => {
-
   const { input, setFocusedInput, ...rest } = props;
   return (
     <input
@@ -111,7 +110,7 @@ const SelectRangeFilterFormComponent = props => {
           max,
           step,
           label,
-          customDisplaySymbol
+          customDisplaySymbol,
         } = formRenderProps;
         const { minNumber: minNumberRaw, maxNumber: maxNumberRaw } = values;
         const minNumber = typeof minNumberRaw !== 'string' ? minNumberRaw : min;
@@ -186,7 +185,9 @@ const SelectRangeFilterFormComponent = props => {
                             setFocusedInput={setFocusedInput}
                           />
                         )}
-                        {customDisplaySymbol && customDisplaySymbol !== ' in.' && customDisplaySymbol}
+                        {customDisplaySymbol &&
+                          customDisplaySymbol !== ' in.' &&
+                          customDisplaySymbol}
                       </>
                     );
                   }}
@@ -228,7 +229,9 @@ const SelectRangeFilterFormComponent = props => {
                             setFocusedInput={setFocusedInput}
                           />
                         )}
-                        {customDisplaySymbol && customDisplaySymbol !== ' in.' && customDisplaySymbol}
+                        {customDisplaySymbol &&
+                          customDisplaySymbol !== ' in.' &&
+                          customDisplaySymbol}
                       </>
                     );
                   }}

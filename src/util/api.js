@@ -160,7 +160,6 @@ export const cancelRentalPayments = body => {
   return post('/api/cancel-recurring-payments', body);
 };
 
-
 export const extendRentalPayments = body => {
   return post('/api/extend-recurring-payments', body);
 };

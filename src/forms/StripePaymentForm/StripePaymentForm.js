@@ -140,7 +140,7 @@ const PaymentMethodSelector = props => {
     error,
     paymentMethod,
     intl,
-    forceSaveCard
+    forceSaveCard,
   } = props;
   const last4Digits = defaultPaymentMethod.attributes.card.last4Digits;
   const labelText = intl.formatMessage(
@@ -345,7 +345,7 @@ class StripePaymentForm extends Component {
       form,
       hasHandledCardPayment,
       defaultPaymentMethod,
-      forceSaveCard
+      forceSaveCard,
     } = formRenderProps;
 
     this.finalFormAPI = form;

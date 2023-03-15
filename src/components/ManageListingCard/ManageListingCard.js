@@ -153,7 +153,7 @@ export const ManageListingCardComponent = props => {
   const { title = '', price, state, publicData } = currentListing.attributes;
   if (!publicData) return null;
   const { listingState, listingType, transactionId, notHidden } = publicData;
-  const isHidden = notHidden === false
+  const isHidden = notHidden === false;
   const slug = createSlug(title);
   const isPendingApproval = state === LISTING_STATE_PENDING_APPROVAL;
   const isClosed = state === LISTING_STATE_CLOSED;
@@ -278,7 +278,7 @@ export const ManageListingCardComponent = props => {
             <FormattedMessage id={`ManageListingCard.respondToEnquiry`} />
           </NamedLink>
         </Overlay>
-      ) : isHidden ?  (
+      ) : isHidden ? (
         <Overlay
           message={intl.formatMessage(
             { id: `ManageListingCard.hidden${listingType}` },

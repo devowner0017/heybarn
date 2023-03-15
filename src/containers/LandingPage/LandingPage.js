@@ -86,10 +86,7 @@ export const LandingPageComponent = props => {
             {!!pageListings?.length && (
               <li className={css.section}>
                 <div className={css.sectionContent}>
-                  <SectionRecommendation
-                    listings={pageListings}
-                    linkName={'NewListingPage'}
-                  />
+                  <SectionRecommendation listings={pageListings} linkName={'NewListingPage'} />
                 </div>
               </li>
             )}

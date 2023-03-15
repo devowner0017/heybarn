@@ -5,14 +5,14 @@ import { FormSpy, Form as FinalForm } from 'react-final-form';
 import { intlShape, injectIntl, FormattedMessage } from '../../util/reactIntl';
 import classNames from 'classnames';
 import { propTypes } from '../../util/types';
-import { Form, Button,  FieldCheckbox, FieldDate } from '../../components';
+import { Form, Button, FieldCheckbox, FieldDate } from '../../components';
 import { TransitionGroup } from 'react-transition-group';
 
 // import ManageAvailabilityCalendar from './ManageAvailabilityCalendar';
 import css from './EditListingAvailabilityForm.module.css';
 import { Collapse } from '@mui/material';
-import moment from 'moment'
-import { required } from '../../util/validators'
+import moment from 'moment';
+import { required } from '../../util/validators';
 
 export class EditListingAvailabilityFormComponent extends Component {
   render() {
@@ -45,7 +45,12 @@ export class EditListingAvailabilityFormComponent extends Component {
           const classes = classNames(rootClassName || css.root, className);
           const submitReady = (updated && pristine) || ready;
           const submitInProgress = updateInProgress;
-          const submitDisabled = invalid || disabled || submitInProgress || !values.startDate || (values.endDate && values.endDate.isBefore(values.startDate));
+          const submitDisabled =
+            invalid ||
+            disabled ||
+            submitInProgress ||
+            !values.startDate ||
+            (values.endDate && values.endDate.isBefore(values.startDate));
 
           return (
             <Form className={classes} onSubmit={handleSubmit}>
@@ -60,41 +65,41 @@ export class EditListingAvailabilityFormComponent extends Component {
                   }
                 }}
               />
-                  <div>
-              <div className={css.calendarWrapper}>
-                <div className={css.fieldWrapper}>
-                  <FieldDate
-                    pickerClassname={css.dateField}
-                    label={'Start Date'}
-                    name="startDate"
-                    minDate={moment()}
-                    id={`startDate`}
-                    validators={required("Required")}
-                    required
-                  />
-                </div>
+              <div>
+                <div className={css.calendarWrapper}>
+                  <div className={css.fieldWrapper}>
+                    <FieldDate
+                      pickerClassname={css.dateField}
+                      label={'Start Date'}
+                      name="startDate"
+                      minDate={moment()}
+                      id={`startDate`}
+                      validators={required('Required')}
+                      required
+                    />
+                  </div>
 
-                <TransitionGroup className={css.fieldWrapper}>
-                  {!values?.perpetual?.[0] && (
-                    <Collapse timeout={300} orientation='horizontal'>
-                     <FieldDate
-                    pickerClassname={css.dateField}
-                    label={'End Date'}
-                    name="endDate"
-                    minDate={values?.startDate}
-                    id={`endDate`}
-                  />
-                    </Collapse>
-                  )}
-                </TransitionGroup>
-              </div>
-              <FieldCheckbox
-                className={css.field}
-                id={'perpetual'}
-                name={'perpetual'}
-                label={'Ongoing rental (no specific end date)?'}
-                value={true}
-              />
+                  <TransitionGroup className={css.fieldWrapper}>
+                    {!values?.perpetual?.[0] && (
+                      <Collapse timeout={300} orientation="horizontal">
+                        <FieldDate
+                          pickerClassname={css.dateField}
+                          label={'End Date'}
+                          name="endDate"
+                          minDate={values?.startDate}
+                          id={`endDate`}
+                        />
+                      </Collapse>
+                    )}
+                  </TransitionGroup>
+                </div>
+                <FieldCheckbox
+                  className={css.field}
+                  id={'perpetual'}
+                  name={'perpetual'}
+                  label={'Ongoing rental (no specific end date)?'}
+                  value={true}
+                />
               </div>
               <Button
                 className={css.submitButton}

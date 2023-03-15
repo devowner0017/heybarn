@@ -42,7 +42,7 @@ const BookingPeriod = props => {
 };
 
 const LineItemNextPayment = props => {
-  const { booking, unitType, dateType, nextPaymentDate, lastPaymentDate,ongoingContract } = props;
+  const { booking, unitType, dateType, nextPaymentDate, lastPaymentDate, ongoingContract } = props;
 
   // Attributes: displayStart and displayEnd can be used to differentiate shown time range
   // from actual start and end times used for availability reservation. It can help in situations
@@ -57,8 +57,11 @@ const LineItemNextPayment = props => {
   return (
     <>
       <div className={css.lineItem}>
-        <BookingPeriod startDate={localStartDate} endDate={endDay}
-        ongoingContract={ongoingContract} />
+        <BookingPeriod
+          startDate={localStartDate}
+          endDate={endDay}
+          ongoingContract={ongoingContract}
+        />
       </div>
       <hr className={css.totalDivider} />
     </>

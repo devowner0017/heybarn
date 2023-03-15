@@ -90,13 +90,13 @@ const BookingPanel = props => {
   const isWeekly = true;
 
   const unitTranslationKey = isWeekly
-  ? 'BookingPanel.perWeek'
-  : isNightly
-  ? 'BookingPanel.perNight'
-  : isDaily
-  ? 'BookingPanel.perDay'
-  : 'BookingPanel.perUnit';
-  
+    ? 'BookingPanel.perWeek'
+    : isNightly
+    ? 'BookingPanel.perNight'
+    : isDaily
+    ? 'BookingPanel.perDay'
+    : 'BookingPanel.perUnit';
+
   const classes = classNames(rootClassName || css.root, className);
   const titleClasses = classNames(titleClassName || css.bookingTitle);
 
@@ -214,7 +214,4 @@ BookingPanel.propTypes = {
   intl: intlShape.isRequired,
 };
 
-export default compose(
-  withRouter,
-  injectIntl
-)(BookingPanel);
+export default compose(withRouter, injectIntl)(BookingPanel);

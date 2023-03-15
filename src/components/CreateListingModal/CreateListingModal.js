@@ -21,7 +21,7 @@ const CreateListingModal = props => {
     listingType,
     authorName,
     pageLocation,
-    redirectProps
+    redirectProps,
   } = props;
   const history = useHistory();
 
@@ -38,7 +38,7 @@ const CreateListingModal = props => {
       ),
       {
         fromPage: pageLocation.pathname,
-        ...redirectProps
+        ...redirectProps,
       }
     );
   };

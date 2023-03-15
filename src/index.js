@@ -67,7 +67,7 @@ const setupAnalyticsHandlers = () => {
   }
 
   // Add Google Analytics handler if tracker ID is found
-// eslint-disable-next-line no-undef
+  // eslint-disable-next-line no-undef
   if (process.env.REACT_APP_GOOGLE_ANALYTICS_ID) {
     if (window?.ga) {
       handlers.push(new GoogleAnalyticsHandler(window.ga));
@@ -102,7 +102,7 @@ if (typeof window !== 'undefined') {
   const analyticsHandlers = setupAnalyticsHandlers();
   const store = configureStore(initialState, sdk, analyticsHandlers);
 
-// eslint-disable-next-line no-undef
+  // eslint-disable-next-line no-undef
   require('./util/polyfills');
   render(store, !!window.__PRELOADED_STATE__);
 

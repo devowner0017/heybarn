@@ -8,7 +8,7 @@ import { ensureListing } from '../../util/data';
 import config from '../../config';
 
 import css from './SearchMapPriceLabel.module.css';
-import { Avatar } from '@mui/material'
+import { Avatar } from '@mui/material';
 
 class SearchMapPriceLabel extends Component {
   shouldComponentUpdate(nextProps) {
@@ -26,10 +26,9 @@ class SearchMapPriceLabel extends Component {
   render() {
     const { className, rootClassName, intl, listing, onListingClicked, isActive } = this.props;
     const currentListing = ensureListing(listing);
-  const { title = '', price, publicData } = currentListing.attributes;
-  const firstImage =
-    currentListing.images && currentListing.images.length > 0 ? currentListing.images[0] : null;
-
+    const { title = '', price, publicData } = currentListing.attributes;
+    const firstImage =
+      currentListing.images && currentListing.images.length > 0 ? currentListing.images[0] : null;
 
     // Create formatted price if currency is known or alternatively show just the unknown currency.
     const formattedPrice =

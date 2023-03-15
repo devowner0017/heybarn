@@ -1,7 +1,6 @@
-
-import React from 'react'
-import { NamedLink } from '../../../components'
-import css from './SectionHelpUs.module.css'
+import React from 'react';
+import { NamedLink } from '../../../components';
+import css from './SectionHelpUs.module.css';
 
 const SectionHelpUs = () => {
   return (
@@ -10,20 +9,28 @@ const SectionHelpUs = () => {
         <div className={css.content}>
           <h2 className={css.title}>Help us grow & support the Westpac Chopper Appeal</h2>
           <p className={css.text}>
-            Do you know a Kiwi or three who have space to spare or need affordable space to rent? Recommending heybarn to your friends and family is easy:<br /><br />
-            
-            1. Send a referral to your email contacts,<br />
-            2. Share on Facebook, and<br />
-            3. Every time one of your contacts lists on heybarn, we’ll donate $10 to the Westpac Chopper Appeal<br /><br />
-            
-            Heybarn is on a mission to empower Kiwis to rent unused space direct from other Kiwis. Help us spread the word by recommending heybarn to your friends and family.
+            Do you know a Kiwi or three who have space to spare or need affordable space to rent?
+            Recommending heybarn to your friends and family is easy:
+            <br />
+            <br />
+            1. Send a referral to your email contacts,
+            <br />
+            2. Share on Facebook, and
+            <br />
+            3. Every time one of your contacts lists on heybarn, we’ll donate $10 to the Westpac
+            Chopper Appeal
+            <br />
+            <br />
+            Heybarn is on a mission to empower Kiwis to rent unused space direct from other Kiwis.
+            Help us spread the word by recommending heybarn to your friends and family.
           </p>
         </div>
         <div className={css.sectionReffer}>
           <NamedLink
             name="SearchPage"
             to={{
-              search: 'pub_listingType=listing&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618',
+              search:
+                'pub_listingType=listing&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618',
             }}
             className={css.buttonEmail}
           >
@@ -34,7 +41,8 @@ const SectionHelpUs = () => {
           <NamedLink
             name="SearchPage"
             to={{
-              search: 'pub_listingType=listing&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618',
+              search:
+                'pub_listingType=listing&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618',
             }}
             className={css.buttonFacebook}
           >
@@ -45,7 +53,8 @@ const SectionHelpUs = () => {
           <NamedLink
             name="SearchPage"
             to={{
-              search: 'pub_listingType=listing&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618',
+              search:
+                'pub_listingType=listing&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618',
             }}
           >
             <Logo />
@@ -53,12 +62,12 @@ const SectionHelpUs = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SectionHelpUs
+export default SectionHelpUs;
 
-const IconMail = (props) => (
+const IconMail = props => (
   <svg xmlns="http://www.w3.org/2000/svg" width={36} height={36} {...props}>
     <path
       data-name="Icon awesome-envelope-open-text"
@@ -66,9 +75,9 @@ const IconMail = (props) => (
       fill="#fff"
     />
   </svg>
-)
+);
 
-const IconFacebook = (props) => (
+const IconFacebook = props => (
   <svg xmlns="http://www.w3.org/2000/svg" width={36} height={36} {...props}>
     <g data-name="Group 448" transform="translate(-1650 -4947.213)">
       <circle
@@ -86,15 +95,10 @@ const IconFacebook = (props) => (
       />
     </g>
   </svg>
-)
+);
 
-const Logo = (props) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={246}
-    height={58.927}
-    {...props}
-  >
+const Logo = props => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={246} height={58.927} {...props}>
     <defs>
       <clipPath id="a">
         <path
@@ -107,95 +111,43 @@ const Logo = (props) => (
     </defs>
     <g data-name="Group 447">
       <g data-name="Group 1">
-        <path
-          data-name="Path 6"
-          d="M84.048 52.29h4.259V16.825l-4.259-2.317Z"
-          fill="#fff"
-        />
+        <path data-name="Path 6" d="M84.048 52.29h4.259V16.825l-4.259-2.317Z" fill="#fff" />
       </g>
       <g data-name="Group 2">
-        <path
-          data-name="Path 7"
-          d="M35.019 52.29h4.26V9.849l-4.26 2.317Z"
-          fill="#fff"
-        />
+        <path data-name="Path 7" d="M35.019 52.29h4.26V9.849l-4.26 2.317Z" fill="#fff" />
       </g>
       <g data-name="Group 3">
-        <path
-          data-name="Path 8"
-          d="M77.044 52.29h4.259V13.019l-4.259-2.322Z"
-          fill="#fff"
-        />
+        <path data-name="Path 8" d="M77.044 52.29h4.259V13.019l-4.259-2.322Z" fill="#fff" />
       </g>
       <g data-name="Group 4">
-        <path
-          data-name="Path 9"
-          d="m74.302 9.204-4.26-2.317v22.08h4.26Z"
-          fill="#fff"
-        />
+        <path data-name="Path 9" d="m74.302 9.204-4.26-2.317v22.08h4.26Z" fill="#fff" />
       </g>
       <g data-name="Group 5">
-        <path
-          data-name="Path 10"
-          d="m57.382 0-1.35.736v28.23h4.259V1.583Z"
-          fill="#fff"
-        />
+        <path data-name="Path 10" d="m57.382 0-1.35.736v28.23h4.259V1.583Z" fill="#fff" />
       </g>
       <g data-name="Group 6">
-        <path
-          data-name="Path 11"
-          d="M28.015 52.291h4.26V13.66l-4.26 2.318Z"
-          fill="#fff"
-        />
+        <path data-name="Path 11" d="M28.015 52.291h4.26V13.66l-4.26 2.318Z" fill="#fff" />
       </g>
       <g data-name="Group 7">
-        <path
-          data-name="Path 12"
-          d="m67.297 5.393-4.26-2.317v25.891h4.26Z"
-          fill="#fff"
-        />
+        <path data-name="Path 12" d="m67.297 5.393-4.26-2.317v25.891h4.26Z" fill="#fff" />
       </g>
       <g data-name="Group 8">
-        <path
-          data-name="Path 13"
-          d="M7.003 52.291h4.26V20.318l-4.26.846Z"
-          fill="#fff"
-        />
+        <path data-name="Path 13" d="M7.003 52.291h4.26V20.318l-4.26.846Z" fill="#fff" />
       </g>
       <g data-name="Group 9">
-        <path
-          data-name="Path 14"
-          d="M14.008 52.291h4.26V18.926l-4.26.846Z"
-          fill="#fff"
-        />
+        <path data-name="Path 14" d="M14.008 52.291h4.26V18.926l-4.26.846Z" fill="#fff" />
       </g>
       <g data-name="Group 10">
-        <path
-          data-name="Path 15"
-          d="M21.012 18.381V52.29h4.259V17.467l-.186.1Z"
-          fill="#fff"
-        />
+        <path data-name="Path 15" d="M21.012 18.381V52.29h4.259V17.467l-.186.1Z" fill="#fff" />
       </g>
       <g data-name="Group 11">
-        <path
-          data-name="Path 16"
-          d="M0 22.555v29.736h4.259V21.709Z"
-          fill="#fff"
-        />
+        <path data-name="Path 16" d="M0 22.555v29.736h4.259V21.709Z" fill="#fff" />
       </g>
       <g data-name="Group 12">
-        <path
-          data-name="Path 17"
-          d="M49.027 52.291h4.26V2.228l-4.26 2.317Z"
-          fill="#fff"
-        />
+        <path data-name="Path 17" d="M49.027 52.291h4.26V2.228l-4.26 2.317Z" fill="#fff" />
       </g>
       <g data-name="Group 13">
-        <path
-          data-name="Path 18"
-          d="M42.024 52.29h4.259V6.038l-4.259 2.321Z"
-          fill="#fff"
-        />
+        <path data-name="Path 18" d="M42.024 52.29h4.259V6.038l-4.259 2.321Z" fill="#fff" />
       </g>
       <g data-name="Group 21" clipPath="url(#a)">
         <g data-name="Group 14">
@@ -250,4 +202,4 @@ const Logo = (props) => (
       </g>
     </g>
   </svg>
-)
+);

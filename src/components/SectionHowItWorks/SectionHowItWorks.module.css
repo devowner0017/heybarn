@@ -5,7 +5,7 @@
   padding: 92px 22px;
 
   @media (--viewportMedium) {
-    padding: 121px 0 85px 0
+    padding: 121px 0 85px 0;
   }
 }
 
@@ -87,14 +87,14 @@
 .cardText {
   font: normal normal medium 18px/25px Montserrat;
   letter-spacing: 0px;
-  color: #FFFFFF;
+  color: #ffffff;
   opacity: 1;
 }
 
 .readMore {
   font: normal normal 600 16px/19px Montserrat;
   letter-spacing: 0px;
-  color: #FFFFFF;
+  color: #ffffff;
   opacity: 1;
 }
 
@@ -108,7 +108,7 @@
   text-align: left;
   font: normal normal bold 30px/35px var(--fontFamilyHeading);
   letter-spacing: -0.3px;
-  color: #FFFFFF;
+  color: #ffffff;
   margin-top: 0;
 }
 
@@ -116,7 +116,7 @@
   text-align: left;
   font: normal normal medium 17px/25px Montserrat;
   letter-spacing: 0px;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .part3Link {
@@ -125,7 +125,7 @@
   text-decoration: underline;
   font: normal normal 600 16px/19px Montserrat;
   letter-spacing: 0px;
-  color: #FFFFFF;
+  color: #ffffff;
   text-decoration: underline;
   margin-bottom: 17px;
 }

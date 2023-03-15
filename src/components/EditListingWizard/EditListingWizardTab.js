@@ -116,7 +116,7 @@ const EditListingWizardTab = props => {
     currentUser,
     isAdvert,
     listingType,
-    backButton
+    backButton,
   } = props;
   const { type } = params;
   const isNewURI = type === LISTING_PAGE_PARAM_TYPE_NEW;
@@ -186,7 +186,7 @@ const EditListingWizardTab = props => {
       currentUser,
       isAdvert,
       listingType,
-      backButton
+      backButton,
     };
   };
 
@@ -278,7 +278,7 @@ const EditListingWizardTab = props => {
     }
     case PHOTOS: {
       const submitButtonTranslationKey = isNewListingFlow
-        ? 'EditListingWizard.saveNewPhotos'+ listingType
+        ? 'EditListingWizard.saveNewPhotos' + listingType
         : 'EditListingWizard.saveEditPhotos';
 
       return (

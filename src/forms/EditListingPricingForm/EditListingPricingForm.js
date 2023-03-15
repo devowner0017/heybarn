@@ -19,7 +19,6 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-
 const { Money } = sdkTypes;
 
 export const EditListingPricingFormComponent = props => (
@@ -100,12 +99,14 @@ export const EditListingPricingFormComponent = props => (
         { region: 'Otago', price: 45 },
       ];
       const table = (
-        <TableContainer component={Paper} sx={{maxWidth: 400}}>
-          <Table  size="small"aria-label="simple table">
+        <TableContainer component={Paper} sx={{ maxWidth: 400 }}>
+          <Table size="small" aria-label="simple table">
             <TableHead>
-              <TableRow sx={{ backgroundColor: '#c35827'}}>
-                <TableCell sx={{color: '#fff', fontWeight: 800 }} >Region</TableCell>
-                <TableCell sx={{color: '#fff', fontWeight: 800 }}  align="center">$ per week per bay of space</TableCell>
+              <TableRow sx={{ backgroundColor: '#c35827' }}>
+                <TableCell sx={{ color: '#fff', fontWeight: 800 }}>Region</TableCell>
+                <TableCell sx={{ color: '#fff', fontWeight: 800 }} align="center">
+                  $ per week per bay of space
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -166,12 +167,13 @@ export const EditListingPricingFormComponent = props => (
             currencyConfig={config.currencyConfig}
             validate={priceValidators}
           />
-<p>To help you select an appropriate rental rate, this table gives the average weekly
-rates being charged for purpose-built, self storage bays (6m x 3m) in February
-2022. Multiply this by the number of available bays you wish to rent and adjust it
-to reflect the quality of the space you think you are offering:
-</p>
-{table}
+          <p>
+            To help you select an appropriate rental rate, this table gives the average weekly rates
+            being charged for purpose-built, self storage bays (6m x 3m) in February 2022. Multiply
+            this by the number of available bays you wish to rent and adjust it to reflect the
+            quality of the space you think you are offering:
+          </p>
+          {table}
           <Button
             className={css.submitButton}
             type="submit"

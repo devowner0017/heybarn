@@ -1,4 +1,4 @@
-const {  handleError, serialize } = require('../api-util/sdk');
+const { handleError, serialize } = require('../api-util/sdk');
 const flexIntegrationSdk = require('sharetribe-flex-integration-sdk');
 const { types } = require('sharetribe-flex-sdk');
 
@@ -7,7 +7,7 @@ module.exports = (req, res) => {
     clientId: process.env.SHARETRIBE_INTEGRATION_CLIENT_ID,
     clientSecret: process.env.SHARETRIBE_INTEGRATION_CLIENT_SECRET,
   });
-  const {listingId} = req.body
+  const { listingId } = req.body;
   return integrationSdk.listings
     .close({ id: listingId }, { expand: true })
     .then(listingResponse => {

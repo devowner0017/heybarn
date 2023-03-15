@@ -146,7 +146,13 @@ export const ListingCardComponent = props => {
             }}
             defaultWrapper={children => <div className={css.title}>{children}</div>}
           >
-            <div className={css.title} data-tip-disable={!tooltipActive} data-tip={title} id={listing.id.uuid} data-for={listing.id.uuid}>
+            <div
+              className={css.title}
+              data-tip-disable={!tooltipActive}
+              data-tip={title}
+              id={listing.id.uuid}
+              data-for={listing.id.uuid}
+            >
               <Truncate
                 lines={2}
                 ellipsis={<span>...</span>}
@@ -158,7 +164,7 @@ export const ListingCardComponent = props => {
                 })}
               </Truncate>
             </div>
-            <ReactTooltip delayShow={500}   id={listing.id.uuid}/>
+            <ReactTooltip delayShow={500} id={listing.id.uuid} />
           </ConditionalWrapper>
           <div className={css.authorInfo}>
             <FormattedMessage

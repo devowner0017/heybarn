@@ -23,7 +23,8 @@ const SectionGuarantee = () => {
             <NamedLink
               name="SearchPage"
               to={{
-                search: 'pub_listingType=listing&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618',
+                search:
+                  'pub_listingType=listing&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618',
               }}
               className={classNames(css.button, css.rentButton)}
             >
@@ -33,13 +34,16 @@ const SectionGuarantee = () => {
             <NamedLink
               name="SearchPage"
               to={{
-                search: 'pub_listingType=listing&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618',
+                search:
+                  'pub_listingType=listing&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618',
               }}
               className={classNames(css.button, css.findButton)}
             >
-              <FormattedMessage id="SectionGuarantee.findButton" values={{ icon: <SearchIcon /> }} />
+              <FormattedMessage
+                id="SectionGuarantee.findButton"
+                values={{ icon: <SearchIcon /> }}
+              />
             </NamedLink>
-
           </div>
         </div>
         <div className={css.column}>
@@ -64,11 +68,15 @@ const SectionGuarantee = () => {
             <NamedLink
               name="SearchPage"
               to={{
-                search: 'pub_listingType=listing&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618',
+                search:
+                  'pub_listingType=listing&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618',
               }}
               className={classNames(css.button, css.downloadButton)}
             >
-              <FormattedMessage id="SectionGuarantee.downloadButton" values={{ icon: <DownloadIcon /> }} />
+              <FormattedMessage
+                id="SectionGuarantee.downloadButton"
+                values={{ icon: <DownloadIcon /> }}
+              />
             </NamedLink>
           </div>
         </div>
@@ -79,28 +87,18 @@ const SectionGuarantee = () => {
 
 export default SectionGuarantee;
 
-const SearchIcon = (props) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={13.325}
-    height={13.327}
-    {...props}
-  >
+const SearchIcon = props => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={13.325} height={13.327} {...props}>
     <path
       data-name="Icon awesome-search"
       d="m.181 11.522 2.595-2.595a.624.624 0 0 1 .442-.182h.424a5.411 5.411 0 1 1 .937.937v.424a.624.624 0 0 1-.182.442L1.8 13.143a.622.622 0 0 1-.882 0l-.737-.737a.628.628 0 0 1 0-.884Zm7.73-2.777A3.331 3.331 0 1 0 4.58 5.414a3.33 3.33 0 0 0 3.331 3.331Z"
       fill="currentColor"
     />
   </svg>
-)
+);
 
-const DownloadIcon = (props) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={20.192}
-    height={20.192}
-    {...props}
-  >
+const DownloadIcon = props => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={20.192} height={20.192} {...props}>
     <g
       data-name="Icon feather-download"
       fill="none"
@@ -117,4 +115,4 @@ const DownloadIcon = (props) => (
       <path data-name="Path 320" d="M10.096 13.128V1" />
     </g>
   </svg>
-)
+);

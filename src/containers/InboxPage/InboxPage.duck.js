@@ -76,18 +76,16 @@ const INBOX_PAGE_SIZE = 10;
 export const getInbox = (params, search) => (dispatch, getState, sdk) => {
   const { state } = params;
 
-
-
   dispatch(fetchOrdersOrSalesRequest());
 
   const { page = 1 } = parse(search);
 
   const filterValues = {
     active: TRANSITION_CONFIRM_PAYMENT,
-    all: TRANSITIONS
+    all: TRANSITIONS,
   };
   const apiQueryParams = {
-    lastTransitions:filterValues[state],
+    lastTransitions: filterValues[state],
     include: [
       'provider',
       'provider.profileImage',
@@ -137,11 +135,11 @@ export const loadData = (params, search) => (dispatch, getState, sdk) => {
 
   dispatch(fetchOrdersOrSalesRequest());
 
-  const { page = 1, state= 'all' } = parse(search);
+  const { page = 1, state = 'all' } = parse(search);
 
   const filterValues = {
     active: TRANSITION_CONFIRM_PAYMENT,
-    all: TRANSITIONS
+    all: TRANSITIONS,
   };
   const apiQueryParams = {
     only: onlyFilter,

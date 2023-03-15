@@ -34,27 +34,27 @@ const prepareChildren = children => {
     if (child.type === LayoutWrapperTopbar) {
       childrenMap.layoutWrapperTopbar = child;
     } else if (
-             [
-               LayoutWrapperSideNav,
-               LayoutWrapperAccountSettingsSideNav,
-               LayoutWrapperManageListingsSideNav,
-             ].includes(child.type)
-           ) {
-             childrenMap.layoutWrapperSideNav = child;
-           } else if (child.type === LayoutWrapperMain) {
-             // LayoutWrapperMain needs different rootClassName
-             const childWithAddedCSS = React.cloneElement(child, {
-               rootClassName: css.layoutWrapperMain,
-             });
-             childrenMap.layoutWrapperMain = childWithAddedCSS;
-           } else if (child.type === LayoutWrapperFooter) {
-             childrenMap.layoutWrapperFooter = child;
-           } else {
-             throw new Error(
-               `LayoutSideNavigation has an unknown child.
+      [
+        LayoutWrapperSideNav,
+        LayoutWrapperAccountSettingsSideNav,
+        LayoutWrapperManageListingsSideNav,
+      ].includes(child.type)
+    ) {
+      childrenMap.layoutWrapperSideNav = child;
+    } else if (child.type === LayoutWrapperMain) {
+      // LayoutWrapperMain needs different rootClassName
+      const childWithAddedCSS = React.cloneElement(child, {
+        rootClassName: css.layoutWrapperMain,
+      });
+      childrenMap.layoutWrapperMain = childWithAddedCSS;
+    } else if (child.type === LayoutWrapperFooter) {
+      childrenMap.layoutWrapperFooter = child;
+    } else {
+      throw new Error(
+        `LayoutSideNavigation has an unknown child.
       Only LayoutWrapperTopbar, LayoutWrapperSideNav, LayoutWrapperMain, LayoutWrapperFooter are allowed.`
-             );
-           }
+      );
+    }
   });
   return childrenMap;
 };

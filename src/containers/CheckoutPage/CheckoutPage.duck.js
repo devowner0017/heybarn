@@ -1,6 +1,11 @@
 import pick from 'lodash/pick';
 import config from '../../config';
-import { initiatePrivileged, transitionPrivileged, updateListingState, updateTransactionMetadata } from '../../util/api';
+import {
+  initiatePrivileged,
+  transitionPrivileged,
+  updateListingState,
+  updateTransactionMetadata,
+} from '../../util/api';
 import { denormalisedResponseEntities } from '../../util/data';
 import { storableError } from '../../util/errors';
 import { createRentalPayments } from '../../util/api';
@@ -12,8 +17,8 @@ import {
 } from '../../util/transaction';
 import * as log from '../../util/log';
 import { fetchCurrentUserHasOrdersSuccess, fetchCurrentUser } from '../../ducks/user.duck';
-import { LISTING_UNDER_OFFER } from '../../util/types'
-import { getPropByName } from '../../util/devHelpers'
+import { LISTING_UNDER_OFFER } from '../../util/types';
+import { getPropByName } from '../../util/devHelpers';
 
 // ================ Action types ================ //
 
@@ -123,7 +128,6 @@ export default function checkoutPageReducer(state = initialState, action = {}) {
 // ================ Action creators ================ //
 
 export const setInitialValues = initialValues => {
-
   return {
     type: SET_INITIAL_VALUES,
     payload: pick(initialValues, Object.keys(initialState)),
@@ -192,7 +196,6 @@ export const stripeCustomerError = e => ({
 /* ================ Thunks ================ */
 
 export const initiateOrder = (orderParams, transactionId) => (dispatch, getState, sdk) => {
-
   dispatch(initiateOrderRequest());
 
   // If we already have a transaction ID, we should transition, not
@@ -281,12 +284,12 @@ export const confirmPayment = orderParams => (dispatch, getState, sdk) => {
   };
 
   return sdk.transactions
-    .transition(bodyParams, {expand: true, include: ["listing"]})
+    .transition(bodyParams, { expand: true, include: ['listing'] })
     .then(response => {
       const order = response.data.data;
       dispatch(confirmPaymentSuccess(order.id));
       const transaction = denormalisedResponseEntities(response)?.[0];
-      const listing = getPropByName (transaction, 'listing');
+      const listing = getPropByName(transaction, 'listing');
       const selectedListingId = getPropByName(transaction, 'selectedListingId');
       updateListingState({
         listingId: listing.id.uuid,
@@ -318,7 +321,7 @@ export const createRecurring = orderParams => (dispatch, getState, sdk) => {
 
   return createRentalPayments(orderParams)
     .then(recurringResponse => {
-      updateTransactionMetadata({transactionId: orderParams.transactionId,recurringResponse})
+      updateTransactionMetadata({ transactionId: orderParams.transactionId, recurringResponse });
       createRecurringSuccess(recurringResponse);
       return recurringResponse;
     })

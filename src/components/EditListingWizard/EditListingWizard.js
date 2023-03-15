@@ -35,7 +35,7 @@ import EditListingWizardTab, {
   PHOTOS,
 } from './EditListingWizardTab';
 import css from './EditListingWizard.module.css';
-import ExternalLink from '../ExternalLink/ExternalLink'
+import ExternalLink from '../ExternalLink/ExternalLink';
 
 // Show availability calendar only if environment variable availabilityEnabled is true
 const availabilityMaybe = config.enableAvailability ? [AVAILABILITY] : [];
@@ -485,19 +485,22 @@ class EditListingWizard extends Component {
               <>
                 <p className={css.modalMessage}>
                   Almost done! In order to send you money, we need to create Stripe account for you.
-                  Heybarn has partnered with <ExternalLink href={"https://www.stripe.com"}>Stripe</ExternalLink>, a global payment service, to provide a secure
-                  online payment service. To do this, Stripe requires some extra details. Heybarn
-                  does not access these details
+                  Heybarn has partnered with{' '}
+                  <ExternalLink href={'https://www.stripe.com'}>Stripe</ExternalLink>, a global
+                  payment service, to provide a secure online payment service. To do this, Stripe
+                  requires some extra details. Heybarn does not access these details
                 </p>
                 <p className={css.modalMessage}>
-                  If you are listing as an individual, you will be asked for some <b>personal details </b>
-                  (including date of birth) and <b>proof of identification</b> (e.g., a driving licence)
-                  and <b>proof of address</b> (e.g., a utility bill).
+                  If you are listing as an individual, you will be asked for some{' '}
+                  <b>personal details </b>
+                  (including date of birth) and <b>proof of identification</b> (e.g., a driving
+                  licence) and <b>proof of address</b> (e.g., a utility bill).
                 </p>
                 <p className={css.modalMessage}>
-                  If you wish to list your shed under a business, then you will be asked <b>for
-                  personal details</b> of key representatives, directors and/or business executives
-                  (including their dates of birth) and <b>proof of identification</b> and <b>proof of address</b>
+                  If you wish to list your shed under a business, then you will be asked{' '}
+                  <b>for personal details</b> of key representatives, directors and/or business
+                  executives (including their dates of birth) and <b>proof of identification</b> and{' '}
+                  <b>proof of address</b>
                   for the business.
                 </p>
                 <StripeConnectAccountForm

@@ -344,7 +344,7 @@ export const InboxPageComponent = props => {
     scrollingDisabled,
     transactions,
     fetchInbox,
-    type
+    type,
   } = props;
   const { tab } = params;
   const { state } = parse(location.search);
@@ -438,26 +438,27 @@ export const InboxPageComponent = props => {
         <LayoutWrapperMain className={css.inboxPageWrapper}>
           {error}
           <div className={css.titleWrapper}>
-
-          <h1 className={css.title}>
-            <FormattedMessage id="InboxPage.title" />
-          </h1>
-          <div className={css.inboxFilters}>
-            <NamedLink
-              name={'InboxPage'}
-              className={classNames(css.filterLink, { [css.activeFilterLink]: !state })}
+            <h1 className={css.title}>
+              <FormattedMessage id="InboxPage.title" />
+            </h1>
+            <div className={css.inboxFilters}>
+              <NamedLink
+                name={'InboxPage'}
+                className={classNames(css.filterLink, { [css.activeFilterLink]: !state })}
               >
-              All
-            </NamedLink>
-            <NamedLink
-              className={classNames(css.filterLink, { [css.activeFilterLink]: state === 'active' })}
-              name={'InboxPage'}
-              to={{ search: 'state=active' }}
+                All
+              </NamedLink>
+              <NamedLink
+                className={classNames(css.filterLink, {
+                  [css.activeFilterLink]: state === 'active',
+                })}
+                name={'InboxPage'}
+                to={{ search: 'state=active' }}
               >
-              Active
-            </NamedLink>
+                Active
+              </NamedLink>
+            </div>
           </div>
-              </div>
           <ul className={css.itemList}>
             {!fetchInProgress ? (
               transactions.map(toTxItem)

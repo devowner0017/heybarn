@@ -71,7 +71,7 @@ const ContactPanel = props => {
     onHideListing,
     onDeleteListing,
     requestShowListing,
-    fromPage
+    fromPage,
   } = props;
   const [showConfirmActionModal, setShowConfirmActionModal] = useState(false);
   const [confirmProps, setConfirmProps] = useState(false);
@@ -191,13 +191,11 @@ const ContactPanel = props => {
               <h1 className={css.title}>What would you like to do?</h1>
               <div className={css.author}></div>
             </>
-          ) :fromPage ?
-          (
+          ) : fromPage ? (
             <>
-            <h1 className={css.title}>You're already talking with {authorDisplayName}</h1>
-          </>
-          ):
-          (
+              <h1 className={css.title}>You're already talking with {authorDisplayName}</h1>
+            </>
+          ) : (
             <>
               <h1 className={css.title}>{title}</h1>
               <div className={css.author}>

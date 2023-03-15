@@ -54,11 +54,10 @@
     margin-top: 86px;
   }
 }
-.fieldWrapper:last-child{
+.fieldWrapper:last-child {
   margin-left: 5px;
 }
-.field{
+.field {
   margin: 0.5rem 0.5rem 0.5rem 0;
-max-height: 72px;
+  max-height: 72px;
 }
-

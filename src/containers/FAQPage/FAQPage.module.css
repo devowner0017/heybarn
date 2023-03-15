@@ -6,7 +6,7 @@
   cursor: pointer;
   font-weight: 500;
 }
-.active{
+.active {
   font-weight: 800;
 }
 .pageSubTitle {
@@ -54,8 +54,8 @@
   width: 100%;
 
   @media (--viewportMedium) {
-  width: 90%;
-  max-width: 650px;
+    width: 90%;
+    max-width: 650px;
   }
 }
 

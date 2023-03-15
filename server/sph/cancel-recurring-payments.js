@@ -1,5 +1,5 @@
 const { serialize } = require('../api-util/sdk');
-const moment = require('moment')
+const moment = require('moment');
 module.exports = async (req, res) => {
   // Set your secret key. Remember to switch to your live secret key in production!
   // See your keys here: https://dashboard.stripe.com/account/apikeys
@@ -9,7 +9,7 @@ module.exports = async (req, res) => {
     clientId: process.env.SHARETRIBE_INTEGRATION_CLIENT_ID,
     clientSecret: process.env.SHARETRIBE_INTEGRATION_CLIENT_SECRET,
   });
-const UUID = flexIntegrationSdk.types.UUID;
+  const UUID = flexIntegrationSdk.types.UUID;
 
   const { actor, subscription, txId } = req.body;
 
@@ -28,7 +28,7 @@ const UUID = flexIntegrationSdk.types.UUID;
         metadata: {
           agreementCancelled: {
             ongoingContract: false,
-            endDate:   new Date(newCancelDate * 1000).toISOString(),
+            endDate: new Date(newCancelDate * 1000).toISOString(),
             lengthOfContract: false,
             occurredOn: new Date().toISOString(),
             cancelledBy: actor,

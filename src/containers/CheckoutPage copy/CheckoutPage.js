@@ -956,10 +956,7 @@ const mapDispatchToProps = dispatch => ({
 
 const CheckoutPage = compose(
   withRouter,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
   injectIntl
 )(CheckoutPageComponent);
 

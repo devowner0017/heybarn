@@ -92,7 +92,6 @@
     font-weight: var(--fontWeightMedium);
     transition: var(--transitionStyleButton);
     color: var(--marketplaceColorRed);
-
   }
 
   margin-top: 0;

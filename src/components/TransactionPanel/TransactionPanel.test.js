@@ -137,7 +137,7 @@ describe('TransactionPanel - Sale', () => {
     fetchLineItemsInProgress: false,
     intl: fakeIntl,
     ensuredRelated: createListing('ensuredRelated'),
-    location: {pathname: ''}
+    location: { pathname: '' },
   };
 
   it('enquired matches snapshot', () => {
@@ -341,7 +341,7 @@ describe('TransactionPanel - Order', () => {
     onFetchTransactionLineItems: noop,
     fetchLineItemsInProgress: false,
     ensuredRelated: createListing('ensuredRelated'),
-    location: {pathname: ''}
+    location: { pathname: '' },
   };
 
   it('enquired matches snapshot', () => {

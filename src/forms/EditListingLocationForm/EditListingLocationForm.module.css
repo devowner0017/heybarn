@@ -1,6 +1,5 @@
 @import '../../styles/propertySets.css';
 
-
 .root {
   /* Dimensions */
   width: 100%;
@@ -93,9 +92,9 @@
 .regionWrapper {
   padding: 2rem 0;
 }
-.category{
-    padding-bottom: 1rem ;
+.category {
+  padding-bottom: 1rem;
 }
-.disclaimerText{
+.disclaimerText {
   @apply --marketplaceTinyFontStyles;
 }

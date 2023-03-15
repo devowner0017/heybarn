@@ -26,7 +26,7 @@
   padding-bottom: 62px;
   padding-left: 15px;
   padding-right: 15px;
-  
+
   @media (--viewportMedium) {
     max-width: 671px;
   }
@@ -55,11 +55,11 @@
 }
 
 .rentButton {
-  color: var(--marketplaceColorOrange)
+  color: var(--marketplaceColorOrange);
 }
 
 .findButton {
-  color: var(--marketplaceColor)
+  color: var(--marketplaceColor);
 }
 
 .heroRentColumnHeader {
@@ -72,7 +72,7 @@
   @apply --marketplaceHeroTitleFontStyles;
   font-size: 26px;
   line-height: 30px;
-  color: #FFFFFF;
+  color: #ffffff;
   max-width: 332px;
 }
 

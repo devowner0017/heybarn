@@ -161,10 +161,9 @@
   align-items: center;
   flex-shrink: 0;
   @media (--viewportMedium) {
-
-  margin-right: 22px;
-  padding: 5px 12px;
-}
+    margin-right: 22px;
+    padding: 5px 12px;
+  }
 }
 
 .priceValue {

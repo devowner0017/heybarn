@@ -1,12 +1,12 @@
-import React from 'react'
+import React from 'react';
 import Slider from 'react-slick';
 
-import css from './SectionTestimonials.module.css'
+import css from './SectionTestimonials.module.css';
 
-import logo1 from './logo-1.png'
-import logo2 from './logo-2.png'
-import logo3 from './logo-3.png'
-import logo4 from './logo-4.png'
+import logo1 from './logo-1.png';
+import logo2 from './logo-2.png';
+import logo3 from './logo-3.png';
+import logo4 from './logo-4.png';
 
 export const SectionTestimonials = () => {
   return (
@@ -54,31 +54,39 @@ export const SectionTestimonials = () => {
             ]}
           >
             <div className={css.slideWrapper}>
-              <div className={css.imageWrapper} style={{ backgroundImage: `url('${logo1}')` }}>
-              </div>
+              <div
+                className={css.imageWrapper}
+                style={{ backgroundImage: `url('${logo1}')` }}
+              ></div>
             </div>
             <div className={css.slideWrapper}>
-              <div className={css.imageWrapper} style={{ backgroundImage: `url('${logo2}')` }}>
-              </div>
+              <div
+                className={css.imageWrapper}
+                style={{ backgroundImage: `url('${logo2}')` }}
+              ></div>
             </div>
             <div className={css.slideWrapper}>
-              <div className={css.imageWrapper} style={{ backgroundImage: `url('${logo3}')` }}>
-              </div>
+              <div
+                className={css.imageWrapper}
+                style={{ backgroundImage: `url('${logo3}')` }}
+              ></div>
             </div>
             <div className={css.slideWrapper}>
-              <div className={css.imageWrapper} style={{ backgroundImage: `url('${logo4}')` }}>
-              </div>
+              <div
+                className={css.imageWrapper}
+                style={{ backgroundImage: `url('${logo4}')` }}
+              ></div>
             </div>
           </Slider>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SectionTestimonials
+export default SectionTestimonials;
 
-const NextArrow = (props) => (
+const NextArrow = props => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={20}
@@ -98,9 +106,9 @@ const NextArrow = (props) => (
       <path data-name="Path 62" d="m11.576 1.061 10.826 10.826-10.826 10.827" />
     </g>
   </svg>
-)
+);
 
-const PrevArrow = (props) => (
+const PrevArrow = props => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={20}
@@ -120,4 +128,4 @@ const PrevArrow = (props) => (
       <path data-name="Path 62" d="M11.576 1.061.75 11.887l10.826 10.827" />
     </g>
   </svg>
-)
+);

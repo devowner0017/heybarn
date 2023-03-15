@@ -220,7 +220,7 @@ export const signup = params => (dispatch, getState, sdk) => {
     });
 };
 
-export const signupWithIdp = params => (dispatch) => {
+export const signupWithIdp = params => dispatch => {
   dispatch(confirmRequest());
   return createUserWithIdp(params)
     .then(() => {

@@ -44,7 +44,7 @@ const BookingPeriod = props => {
           <div className={css.dayLabel}>
             <FormattedMessage id="BookingBreakdown.bookingEnd" />
           </div>
-          {endDate ?  (
+          {endDate ? (
             <>
               <div className={css.dayInfo}>
                 <FormattedDate value={endDate} {...timeFormatOptions} />
@@ -53,11 +53,11 @@ const BookingPeriod = props => {
                 <FormattedDate value={endDate} {...dateFormatOptions} />
               </div>
             </>
-          ) : (   <>
-            <div className={css.dayInfo}>
-              Ongoing
-            </div>
-          </>)}
+          ) : (
+            <>
+              <div className={css.dayInfo}>Ongoing</div>
+            </>
+          )}
         </div>
       </div>
     </>
