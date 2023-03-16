@@ -163,7 +163,6 @@ const routeConfiguration = () => {
           name="EditListingPage"
           params={{ slug: draftSlug, id: draftId, type: 'new', tab: 'description', listingType: "listing" }}
           state={props.location.state}
-
         />
       ),
     },

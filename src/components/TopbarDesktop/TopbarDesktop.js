@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, intlShape } from '../../util/reactIntl';
 import classNames from 'classnames';
-import { ACCOUNT_SETTINGS_PAGES } from '../../routeConfiguration';
+import routeConfiguration, { ACCOUNT_SETTINGS_PAGES } from '../../routeConfiguration';
 import { propTypes } from '../../util/types';
 import {
   Avatar,
@@ -20,6 +20,8 @@ import css from './TopbarDesktop.module.css';
 import { AvatarMedium } from '../Avatar/Avatar';
 import ProfileSettingsPage from '../../containers/ProfileSettingsPage/ProfileSettingsPage';
 import DropdownButton from '../Dropdown/Dropdown';
+import { useHistory } from 'react-router-dom';
+import { createResourceLocatorString } from '../../util/routes';
 
 const TopbarDesktop = props => {
   const {
@@ -36,6 +38,8 @@ const TopbarDesktop = props => {
     initialSearchFormValues,
   } = props;
   const [mounted, setMounted] = useState(false);
+
+  const history = useHistory();
 
   useEffect(() => {
     setMounted(true);
@@ -59,13 +63,50 @@ const TopbarDesktop = props => {
   const optionsArr = [
     {
       name: 'rent',
-      label: 'Rent your space',
-      onClick: () => {},
+      label: (
+        <NamedLink name="NewListingPage">
+          <FormattedMessage id="TopbarDesktop.createListing" />
+        </NamedLink>
+      ),
     },
     {
       name: 'browse',
-      label: 'Browse renter requests',
-      onClick: () => {},
+      label: (
+        <NamedLink
+          name="SearchPage"
+          to={{
+            search:
+              'pub_listingType=advert&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618',
+          }}
+        >
+          Browse renter requests
+        </NamedLink>
+      ),
+    },
+  ];
+
+  const advertOptionsArr = [
+    {
+      name: 'rent',
+      label: (
+        <NamedLink name="NewAdvertPage">
+          <FormattedMessage id="TopbarDesktop.createAdvert" />
+        </NamedLink>
+      ),
+    },
+    {
+      name: 'browse',
+      label: (
+        <NamedLink
+          name="SearchPage"
+          to={{
+            search:
+              'pub_listingType=listing&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618',
+          }}
+        >
+          Find your space
+        </NamedLink>
+      ),
     },
   ];
 
@@ -149,7 +190,7 @@ const TopbarDesktop = props => {
       </NamedLink>
       <div className={css.dropdownContainer}>
         <DropdownButton className={css.dropdown} buttonText="Space Owners" options={optionsArr} />
-        <DropdownButton className={css.dropdown} buttonText="Renters" options={optionsArr} />
+        <DropdownButton className={css.dropdown} buttonText="Renters" options={advertOptionsArr} />
       </div>
       <div className={css.buttonRecomendWrapper}>
         <NamedLink className={css.buttonRecomend} name="LandingPage">

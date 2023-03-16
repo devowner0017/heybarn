@@ -40,10 +40,6 @@
     border: 0;
     border-radius: 0;
   }
-
-  @media (--viewportXLarge) {
-    padding: 0;
-  }
 }
 
 .sections {

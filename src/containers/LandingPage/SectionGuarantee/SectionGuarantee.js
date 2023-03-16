@@ -20,14 +20,7 @@ const SectionGuarantee = () => {
             <p className={css.columnContent1}>
               <FormattedMessage id="SectionGuarantee.column1.content" />
             </p>
-            <NamedLink
-              name="SearchPage"
-              to={{
-                search:
-                  'pub_listingType=listing&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618',
-              }}
-              className={classNames(css.button, css.rentButton)}
-            >
+            <NamedLink name="NewListingPage" className={classNames(css.button, css.rentButton)}>
               <FormattedMessage id="SectionHero.rentButton" />
             </NamedLink>
 

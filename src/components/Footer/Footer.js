@@ -58,18 +58,57 @@ const Footer = props => {
   const { rootClassName, className, intl } = props;
   const socialMediaLinks = renderSocialMediaLinks(intl);
   const classes = classNames(rootClassName || css.root, className);
+
   const optionsArr = [
     {
       name: 'rent',
-      label: 'Rent your space',
-      onClick: () => {},
+      label: (
+        <NamedLink name="NewListingPage">
+          <FormattedMessage id="TopbarDesktop.createListing" />
+        </NamedLink>
+      ),
     },
     {
       name: 'browse',
-      label: 'Browse renter requests',
-      onClick: () => {},
+      label: (
+        <NamedLink
+          name="SearchPage"
+          to={{
+            search:
+              'pub_listingType=advert&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618',
+          }}
+        >
+          Browse renter requests
+        </NamedLink>
+      ),
     },
   ];
+
+  const advertOptionsArr = [
+    {
+      name: 'rent',
+      label: (
+        <NamedLink name="NewAdvertPage">
+          <FormattedMessage id="TopbarDesktop.createAdvert" />
+        </NamedLink>
+      ),
+    },
+    {
+      name: 'browse',
+      label: (
+        <NamedLink
+          name="SearchPage"
+          to={{
+            search:
+              'pub_listingType=listing&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618',
+          }}
+        >
+          Find your space
+        </NamedLink>
+      ),
+    },
+  ];
+
   return (
     <div className={classes}>
       <div className={css.topBorderWrapper}>
@@ -107,7 +146,7 @@ const Footer = props => {
                 className={css.dropdown}
                 buttonClassName={css.button}
                 buttonText="Renters"
-                options={optionsArr}
+                options={advertOptionsArr}
               />
             </div>
             <div className={css.infoLinks}>
