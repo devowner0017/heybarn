@@ -561,7 +561,7 @@ ManageListingCardComponent.propTypes = {
 
   // from withRouter
   history: shape({
-    sh: func.isRequired,
+    push: func.isRequired,
   }).isRequired,
 };
 

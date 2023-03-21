@@ -67,7 +67,6 @@ const routeConfiguration = () => {
       name: 'LandingPage',
       component: LandingPage,
       loadData: pageDataLoadingAPI.LandingPage.loadData,
-
     },
     {
       path: '/adm1n',
@@ -87,11 +86,6 @@ const routeConfiguration = () => {
       path: '/contact-us',
       name: 'ContactPage',
       component: ContactPage,
-    },
-    {
-      path: '/faq',
-      name: 'FAQPage',
-      component: FAQPage,
     },
     {
       path: '/s',

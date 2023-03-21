@@ -25,11 +25,6 @@
     background: linear-gradient(-45deg, rgba(140, 20, 20, 0.2), rgba(140, 22, 22, 0.2)),
       url('../../assets/background-mobile.png');
 
-    @media (--viewportMedium) {
-      background: linear-gradient(-45deg, rgba(140, 20, 20, 0.2), rgba(140, 22, 22, 0.2)),
-        url('../../assets/background.png');
-    }
-
     /* Add loading color for the div */
     background-color: var(--matterColor);
 

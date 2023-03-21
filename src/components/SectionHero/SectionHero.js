@@ -4,6 +4,8 @@ import { FormattedMessage } from '../../util/reactIntl';
 import classNames from 'classnames';
 import { NamedLink } from '../../components';
 
+import heroVideo from './video.mp4';
+
 import css from './SectionHero.module.css';
 
 const SectionHero = props => {
@@ -13,6 +15,20 @@ const SectionHero = props => {
 
   return (
     <div className={classes}>
+      <div className={css.videoBackground}>
+        <video
+          src={heroVideo}
+          autoPlay
+          loop
+          muted
+          playsInline
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+          }}
+        />
+      </div>
       <div className={css.heroContent}>
         <div>
           <h1 className={css.heroMainTitle}>

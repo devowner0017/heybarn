@@ -44,7 +44,6 @@ const FAQPage = () => {
   };
   const northIsland = [
     { region: 'Auckland', price: 79 },
-    { region: 'Auckland', price: 79 },
     { region: 'Hamilton', price: 62 },
     { region: 'Manawatu-Wanganui', price: 54 },
     { region: 'Taranaki', price: 38 },

@@ -5,6 +5,24 @@ exports[`SectionHero matches snapshot 1`] = `
   className="root"
 >
   <div
+    className="videoBackground"
+  >
+    <video
+      autoPlay={true}
+      loop={true}
+      muted={true}
+      playsInline={true}
+      src="test-file-stub"
+      style={
+        Object {
+          "height": "100%",
+          "objectFit": "cover",
+          "width": "100%",
+        }
+      }
+    />
+  </div>
+  <div
     className="heroContent"
   >
     <div>
