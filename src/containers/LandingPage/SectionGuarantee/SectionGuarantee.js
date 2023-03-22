@@ -2,7 +2,7 @@ import React from 'react';
 import css from './SectionGuarantee.module.css';
 
 import { FormattedMessage } from '../../../util/reactIntl';
-import { NamedLink } from '../../../components';
+import { ExternalLink, NamedLink } from '../../../components';
 import classNames from 'classnames';
 
 const SectionGuarantee = () => {
@@ -47,6 +47,21 @@ const SectionGuarantee = () => {
             <p className={css.columnContent2}>
               <FormattedMessage id="SectionGuarantee.column2.content" />
             </p>
+
+            <div className={css.noNosWrapper}>
+              <p className={css.noNos}>
+                <span>
+                  <IconCheckmark />
+                </span>{' '}
+                NO CONTRACTS
+              </p>
+              <p className={css.noNos}>
+                <span>
+                  <IconCheckmark />
+                </span>{' '}
+                NO HIDDEN CHARGES
+              </p>
+            </div>
           </div>
         </div>
         <div className={css.column}>
@@ -58,19 +73,15 @@ const SectionGuarantee = () => {
               <FormattedMessage id="SectionGuarantee.column3.content" />
             </p>
 
-            <NamedLink
-              name="SearchPage"
-              to={{
-                search:
-                  'pub_listingType=listing&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618',
-              }}
+            <ExternalLink
+              href="/Rental_agreement_template.pdf"
               className={classNames(css.button, css.downloadButton)}
             >
               <FormattedMessage
                 id="SectionGuarantee.downloadButton"
                 values={{ icon: <DownloadIcon /> }}
               />
-            </NamedLink>
+            </ExternalLink>
           </div>
         </div>
       </div>
@@ -106,6 +117,23 @@ const DownloadIcon = props => (
       />
       <path data-name="Path 319" d="m5.043 8.075 5.053 5.053 5.054-5.053" />
       <path data-name="Path 320" d="M10.096 13.128V1" />
+    </g>
+  </svg>
+);
+
+const IconCheckmark = props => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={23.558} height={23.558} {...props}>
+    <defs>
+      <clipPath id="abs">
+        <path fill="#c35827" d="M0 0h23.558v23.558H0z" />
+      </clipPath>
+    </defs>
+    <g clipPath="url(#abs)" fill="#c35827">
+      <path
+        data-name="Path 310"
+        d="M11.783 3.09a8.685 8.685 0 1 0 8.685 8.685 8.694 8.694 0 0 0-8.685-8.685m4.719 4.388-7.7 8.984a.3.3 0 0 1-.227.1.3.3 0 0 1-.284-.2l-1.283-3.85a.3.3 0 1 1 .568-.189l1.107 3.352 7.361-8.585a.3.3 0 0 1 .455.39"
+      />
+      <path d="M20.108 3.45A11.779 11.779 0 0 0 3.45 20.108 11.779 11.779 0 0 0 20.108 3.45m-8.329 17.613a9.284 9.284 0 1 1 9.284-9.284 9.294 9.294 0 0 1-9.284 9.284" />
     </g>
   </svg>
 );

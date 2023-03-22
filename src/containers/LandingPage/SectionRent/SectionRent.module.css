@@ -29,6 +29,8 @@
 
   @media (--viewportMedium) {
     max-width: 671px;
+    min-height: 276px;
+    justify-content: space-between;
   }
 }
 

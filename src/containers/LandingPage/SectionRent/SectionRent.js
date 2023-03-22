@@ -56,7 +56,7 @@ export const SectionRent = () => {
           <div className={css.heroArrow}>
             <ArrowIcon />
           </div>
-          <div className={css.heroRentColumnTitle}>
+          <div className={css.heroRentColumnTitle} style={{ maxWidth: 'unset' }}>
             <FormattedMessage id="SectionHero.findTitle" />
           </div>
         </div>

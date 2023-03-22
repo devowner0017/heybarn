@@ -77,13 +77,13 @@ const SectionHowItWorks = props => {
               affordable space you need.
             </p>
 
-            <a href="" className={css.part3Link}>
+            <NamedLink name="AboutPage" className={css.part3Link}>
               {'Learn more about heybarn >'}
-            </a>
+            </NamedLink>
 
-            <a href="" className={css.part3Link}>
+            <NamedLink name="FAQPage" className={css.part3Link}>
               {'FAQs >'}
-            </a>
+            </NamedLink>
           </div>
         </div>
       </div>

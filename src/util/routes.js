@@ -12,8 +12,6 @@ const findRouteByName = (nameToFind, routes) => find(routes, route => route.name
 const toPathByRouteName = (nameToFind, routes) => {
   const route = findRouteByName(nameToFind, routes);
   if (!route) {
-    // console.error(`Path "${nameToFind}" was not found.`);
-    // return () => '#';
     throw new Error(`Path "${nameToFind}" was not found.`);
   }
   return compile(route.path);
@@ -95,8 +93,6 @@ export const createResourceLocatorString = (
 export const findRouteByRouteName = (nameToFind, routes) => {
   const route = findRouteByName(nameToFind, routes);
   if (!route) {
-    console.error(`Path "${nameToFind}" was not found.`);
-    //  return () => null;
     throw new Error(`Component "${nameToFind}" was not found.`);
   }
   return route;

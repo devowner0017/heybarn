@@ -70,6 +70,7 @@ const routeConfiguration = () => {
     },
     {
       path: '/adm1n',
+      name: 'AdminPage',
       component: AdminPage,
     },
     {
@@ -120,9 +121,7 @@ const routeConfiguration = () => {
       loadData: pageDataLoadingAPI.ListingPage.loadData,
     },
 
-
-
-  {
+    {
       path: '/a',
       name: 'AdvertBasePage',
       component: RedirectToLandingPage,
@@ -160,7 +159,7 @@ const routeConfiguration = () => {
         />
       ),
     },
-     {
+    {
       path: '/a/new',
       name: 'NewAdvertPage',
       auth: true,
@@ -186,7 +185,7 @@ const routeConfiguration = () => {
       component: EditListingPage,
       loadData: pageDataLoadingAPI.EditListingPage.loadData,
     },
-  {
+    {
       path: '/a/:slug/:id/:type/:tab',
       name: 'EditAdvertPage',
       auth: true,
@@ -326,7 +325,7 @@ const routeConfiguration = () => {
       authPage: 'LoginPage',
       component: props => <NamedRedirect name="SaleDetailsPage" params={{ ...props.params }} />,
     },
-     {
+    {
       path: '/sale/:id/details',
       name: 'SaleDetailsPage',
       auth: true,
@@ -446,7 +445,7 @@ const routeConfiguration = () => {
     {
       path: '/reset-password',
       name: 'PasswordResetPage',
-      component: PasswordResetPage ,
+      component: PasswordResetPage,
     },
 
     // Do not change this path!

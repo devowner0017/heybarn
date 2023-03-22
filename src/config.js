@@ -101,7 +101,7 @@ const siteTitle = 'Heybarn';
 const siteTwitterHandle = null;
 
 // Instagram page is used in SEO schema (http://schema.org/Organization)
-const siteInstagramPage = 'https://www.facebook.com/heybarn';
+const siteInstagramPage = 'https://www.instagram.com/heybarn_nz';
 
 // Facebook page is used in SEO schema (http://schema.org/Organization)
 const siteFacebookPage = 'https://www.facebook.com/heybarn';

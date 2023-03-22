@@ -46,7 +46,7 @@ export const SectionStory = () => {
               </a>
             </div>
 
-            <a href="https://www.facebook.com/heybarnnz/" className={css.followUsLink}>
+            <a href="https://www.facebook.com/heybarn/" className={css.followUsLink}>
               {'Learn more about heybarn >'}
             </a>
           </div>
@@ -61,7 +61,7 @@ export const SectionStory = () => {
             <div className={css.socialIcons}>
               <a
                 className={css.socialIcon}
-                href="https://www.facebook.com/heybarnnz/"
+                href="https://www.facebook.com/heybarn"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -69,7 +69,7 @@ export const SectionStory = () => {
               </a>
               <a
                 className={css.socialIcon}
-                href="https://www.instagram.com/heybarnnz/"
+                href="https://www.instagram.com/heybarn_nz"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -77,7 +77,7 @@ export const SectionStory = () => {
               </a>
             </div>
 
-            <a href="https://www.facebook.com/heybarnnz/" className={css.followUsLink}>
+            <a href="https://www.facebook.com/heybarn" className={css.followUsLink}>
               {'Learn more about heybarn >'}
             </a>
           </div>
