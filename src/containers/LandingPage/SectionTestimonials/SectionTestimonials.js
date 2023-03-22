@@ -82,7 +82,7 @@ export default SectionTestimonials;
 const SlickArrowLeft = ({ currentSlide, slideCount, ...props }) => (
   <button
     {...props}
-    className={classNames('slick-prev', 'slick-arrow', css.arrowLeft, {
+    className={classNames(css.arrow, 'slick-prev', 'slick-arrow', {
       'slick-disabled': currentSlide === 0,
     })}
     aria-hidden="true"
@@ -96,7 +96,7 @@ const SlickArrowLeft = ({ currentSlide, slideCount, ...props }) => (
 const SlickArrowRight = ({ currentSlide, slideCount, ...props }) => (
   <button
     {...props}
-    className={classNames('slick-next', 'slick-arrow', css.arrowRight, {
+    className={classNames(css.arrow, 'slick-next', 'slick-arrow', {
       'slick-disabled': currentSlide === slideCount - 1,
     })}
     aria-hidden="true"

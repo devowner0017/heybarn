@@ -58,9 +58,8 @@
   mix-blend-mode: luminosity;
 }
 
-.arrowLeft,
-.arrowRight {
+.arrow {
   &::before {
-    content: initial;
+    content: initial!important;
   }
 }
