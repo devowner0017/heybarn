@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Slider from 'react-slick';
 
 import css from './SectionTestimonials.module.css';
@@ -7,8 +7,49 @@ import logo1 from './logo-1.png';
 import logo2 from './logo-2.png';
 import logo3 from './logo-3.png';
 import logo4 from './logo-4.png';
+import classNames from 'classnames';
 
 export const SectionTestimonials = () => {
+  const settings = useMemo(
+    () => ({
+      dots: false,
+      infinite: true,
+      speed: 500,
+      slidesToShow: 3,
+      slidesToScroll: 4,
+      prevArrow: <SlickArrowLeft />,
+      nextArrow: <SlickArrowRight />,
+      autoplay: true,
+      responsive: [
+        {
+          breakpoint: 1024,
+          settings: {
+            slidesToShow: 4,
+            slidesToScroll: 4,
+            infinite: true,
+            dots: true,
+          },
+        },
+        {
+          breakpoint: 600,
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 2,
+            initialSlide: 2,
+          },
+        },
+        {
+          breakpoint: 480,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1,
+          },
+        },
+      ],
+    }),
+    []
+  );
+
   return (
     <div className={css.root}>
       <div className={css.container}>
@@ -16,66 +57,18 @@ export const SectionTestimonials = () => {
           <h2 className={css.featuredInTitle}>Featured in:</h2>
         </div>
         <div className={css.slider}>
-          <Slider
-            dots={false}
-            infinite={true}
-            speed={500}
-            slidesToShow={3}
-            slidesToScroll={4}
-            arrows
-            nextArrow={<NextArrow />}
-            prevArrow={<PrevArrow />}
-            autoplay
-            responsive={[
-              {
-                breakpoint: 1024,
-                settings: {
-                  slidesToShow: 4,
-                  slidesToScroll: 4,
-                  infinite: true,
-                  dots: true,
-                },
-              },
-              {
-                breakpoint: 600,
-                settings: {
-                  slidesToShow: 2,
-                  slidesToScroll: 2,
-                  initialSlide: 2,
-                },
-              },
-              {
-                breakpoint: 480,
-                settings: {
-                  slidesToShow: 1,
-                  slidesToScroll: 1,
-                },
-              },
-            ]}
-          >
+          <Slider {...settings}>
             <div className={css.slideWrapper}>
-              <div
-                className={css.imageWrapper}
-                style={{ backgroundImage: `url('${logo1}')` }}
-              ></div>
+              <div className={css.imageWrapper} style={{ backgroundImage: `url('${logo1}')` }} />
             </div>
             <div className={css.slideWrapper}>
-              <div
-                className={css.imageWrapper}
-                style={{ backgroundImage: `url('${logo2}')` }}
-              ></div>
+              <div className={css.imageWrapper} style={{ backgroundImage: `url('${logo2}')` }} />
             </div>
             <div className={css.slideWrapper}>
-              <div
-                className={css.imageWrapper}
-                style={{ backgroundImage: `url('${logo3}')` }}
-              ></div>
+              <div className={css.imageWrapper} style={{ backgroundImage: `url('${logo3}')` }} />
             </div>
             <div className={css.slideWrapper}>
-              <div
-                className={css.imageWrapper}
-                style={{ backgroundImage: `url('${logo4}')` }}
-              ></div>
+              <div className={css.imageWrapper} style={{ backgroundImage: `url('${logo4}')` }} />
             </div>
           </Slider>
         </div>
@@ -86,14 +79,36 @@ export const SectionTestimonials = () => {
 
 export default SectionTestimonials;
 
-const NextArrow = props => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={20}
-    height={20}
-    viewBox="0 0 23.153 23.774"
+const SlickArrowLeft = ({ currentSlide, slideCount, ...props }) => (
+  <button
     {...props}
+    className={classNames('slick-prev', 'slick-arrow', css.arrowLeft, {
+      'slick-disabled': currentSlide === 0,
+    })}
+    aria-hidden="true"
+    aria-disabled={currentSlide === 0 ? true : false}
+    type="button"
   >
+    <PrevArrow />
+  </button>
+);
+
+const SlickArrowRight = ({ currentSlide, slideCount, ...props }) => (
+  <button
+    {...props}
+    className={classNames('slick-next', 'slick-arrow', css.arrowRight, {
+      'slick-disabled': currentSlide === slideCount - 1,
+    })}
+    aria-hidden="true"
+    aria-disabled={currentSlide === slideCount - 1 ? true : false}
+    type="button"
+  >
+    <NextArrow />
+  </button>
+);
+
+const NextArrow = props => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 23.153 23.774">
     <g
       data-name="Icon feather-arrow-right"
       fill="none"
@@ -109,13 +124,7 @@ const NextArrow = props => (
 );
 
 const PrevArrow = props => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={20}
-    height={20}
-    viewBox="0 0 23.153 23.774"
-    {...props}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 23.153 23.774">
     <g
       data-name="Icon feather-arrow-right"
       fill="none"

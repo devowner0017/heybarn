@@ -57,3 +57,10 @@
   background-position: center;
   mix-blend-mode: luminosity;
 }
+
+.arrowLeft,
+.arrowRight {
+  &::before {
+    content: initial;
+  }
+}
