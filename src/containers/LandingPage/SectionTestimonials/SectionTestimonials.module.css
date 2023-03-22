@@ -60,6 +60,6 @@
 
 .arrow {
   &::before {
-    content: initial!important;
+    content: initial !important;
   }
 }

@@ -43,7 +43,9 @@ class ListingImage extends Component {
     return <ResponsiveImage {...this.props} />;
   }
 }
-const LazyImage = lazyLoadWithDimensions(ListingImage, { loadAfterInitialRendering: 3000 });
+const LazyImage = lazyLoadWithDimensions(ListingImage, {
+  loadAfterInitialRendering: 3000,
+});
 
 export const ListingCardComponent = props => {
   const {
@@ -54,10 +56,13 @@ export const ListingCardComponent = props => {
     renderSizes,
     setActiveListing,
     minInfo,
+    isRecommendation,
     showAvatar,
   } = props;
   const [tooltipActive, setTooltipActive] = useState(false);
-  const classes = classNames(rootClassName || css.root, className, { [css.minInfo]: minInfo });
+  const classes = classNames(rootClassName || css.root, className, {
+    [css.minInfo]: minInfo,
+  });
   const currentListing = ensureListing(listing);
   const id = currentListing.id.uuid;
   const { title = '', price, publicData } = currentListing.attributes;
@@ -114,18 +119,36 @@ export const ListingCardComponent = props => {
       >
         {listingUnderEnquiry && !minInfo && (
           <Overlay
-            message={intl.formatMessage({ id: `ManageListingCard.${listingType}UnderEnquiry` })}
+            message={intl.formatMessage({
+              id: `ManageListingCard.${listingType}UnderEnquiry`,
+            })}
           ></Overlay>
         )}
-        <div className={css.aspectWrapper}>
-          <LazyImage
-            rootClassName={css.rootForImage}
-            alt={title}
-            image={firstImage}
-            variants={['landscape-crop', 'landscape-crop2x']}
-            sizes={renderSizes}
-          />
-        </div>
+        <ConditionalWrapper
+          condition={isRecommendation && minInfo}
+          wrapper={children => {
+            return (
+              <NamedLink
+                className={classes}
+                name={`${capitalize(listingType)}Page`}
+                params={{ id, slug }}
+              >
+                {children}
+              </NamedLink>
+            );
+          }}
+          defaultWrapper={children => <div className={classes}>{children}</div>}
+        >
+          <div className={css.aspectWrapper}>
+            <LazyImage
+              rootClassName={css.rootForImage}
+              alt={title}
+              image={firstImage}
+              variants={['landscape-crop', 'landscape-crop2x']}
+              sizes={renderSizes}
+            />
+          </div>
+        </ConditionalWrapper>
         {showAvatar && <Avatar className={css.avatar} user={listing.author} />}
       </div>
 

@@ -12,22 +12,27 @@ exports[`ListingCard matches snapshot 1`] = `
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
   >
-    <div
-      className="aspectWrapper"
+    <Component
+      defaultWrapper={[Function]}
+      wrapper={[Function]}
     >
-      <lazyLoadWithDimensions(ListingImage)
-        alt="listing1 title"
-        image={null}
-        rootClassName="rootForImage"
-        sizes={null}
-        variants={
-          Array [
-            "landscape-crop",
-            "landscape-crop2x",
-          ]
-        }
-      />
-    </div>
+      <div
+        className="aspectWrapper"
+      >
+        <lazyLoadWithDimensions(ListingImage)
+          alt="listing1 title"
+          image={null}
+          rootClassName="rootForImage"
+          sizes={null}
+          variants={
+            Array [
+              "landscape-crop",
+              "landscape-crop2x",
+            ]
+          }
+        />
+      </div>
+    </Component>
   </div>
   <div
     className="info"

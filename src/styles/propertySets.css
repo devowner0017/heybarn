@@ -506,7 +506,7 @@
     line-height: 18px;
     min-height: unset;
     text-transform: uppercase;
-    border-radius: 24px;
+    border-radius: 999px;
 
     @media (--viewportMedium) {
       padding: 16px 69px;
