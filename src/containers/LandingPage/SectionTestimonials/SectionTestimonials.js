@@ -1,6 +1,8 @@
 import React, { useMemo } from 'react';
 import Slider from 'react-slick';
 
+import { FormattedMessage } from '../../../util/reactIntl';
+
 import css from './SectionTestimonials.module.css';
 
 import logo1 from './logo-1.png';
@@ -54,7 +56,9 @@ export const SectionTestimonials = () => {
     <div className={css.root}>
       <div className={css.container}>
         <div className={css.featuredIn}>
-          <h2 className={css.featuredInTitle}>Featured in:</h2>
+          <h2 className={css.featuredInTitle}>
+            <FormattedMessage id="SectionTestimonials.featuredInTitle" />
+          </h2>
         </div>
         <div className={css.slider}>
           <Slider {...settings}>

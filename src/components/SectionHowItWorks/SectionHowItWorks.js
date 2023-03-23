@@ -3,86 +3,69 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from '../../util/reactIntl';
 import classNames from 'classnames';
 
-import { IconCamera, IconComputer, IconHandshake, NamedLink } from '../../components';
+import { NamedLink } from '../../components';
 
 import css from './SectionHowItWorks.module.css';
 
-import img1 from './img-1.png';
-import img2 from './img-2.png';
+import video1 from './video-1.mp4';
+import video2 from './video-2.mp4';
 
 const SectionHowItWorks = props => {
   const { rootClassName, className } = props;
 
   const classes = classNames(rootClassName || css.root, className);
-  const listingLink = (
-    <NamedLink
-      name="SearchPage"
-      to={{
-        search:
-          'pub_listingType=listing&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618',
-      }}
-    >
-      browse listings
-    </NamedLink>
-  );
-  const advertLink = (
-    <NamedLink
-      name="SearchPage"
-      to={{
-        search:
-          'pub_listingType=advert&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618',
-      }}
-    >
-      browse adverts
-    </NamedLink>
-  );
+
   return (
     <div className={classes}>
       <div className={css.steps}>
         <div className={css.step}>
           <div className={css.card}>
-            <img className={css.cardImage} src={img1} />
+            <video className={css.cardImage} src={video1} controls />
             <div className={css.cardFooter}>
               <h3 className={css.cardText}>
                 <FormattedMessage id="SectionHowItWorks.part1Title" />
               </h3>
-              <a className={css.readMore}>{'Read more >'}</a>
+              <a className={css.readMore}>
+                <FormattedMessage id="readMore" />
+              </a>
             </div>
           </div>
         </div>
 
         <div className={css.step}>
           <div className={css.card}>
-            <img className={css.cardImage} src={img2} />
+            <video className={css.cardImage} src={video2} controls />
             <div className={css.cardFooter}>
               <h3 className={css.cardText}>
                 <FormattedMessage id="SectionHowItWorks.part2Title" />
               </h3>
-              <a className={css.readMore}>{'Read more >'}</a>
+              <a className={css.readMore}>
+                <FormattedMessage id="SectionHowItWorks.readMore" />
+              </a>
             </div>
           </div>
         </div>
 
         <div className={css.step}>
           <div className={css.part3}>
-            <h3 className={css.part3Title}>Doing it safely</h3>
+            <h3 className={css.part3Title}>
+              <FormattedMessage id="SectionHowItWorks.part3Title" />
+            </h3>
 
             <p className={css.part3Text}>
-              Heybarn provides an innovative place specifically designed to market spaces available
-              for rent on New Zealand properties.
+              <FormattedMessage id="SectionHowItWorks.part3Text1" />
             </p>
 
             <p className={css.part3Text}>
-              Learn more about how you can use heybarn to advertise your space or to find the
-              affordable space you need.
+              <FormattedMessage id="SectionHowItWorks.part3Text2" />
             </p>
 
             <NamedLink name="AboutPage" className={css.part3Link}>
-              {'Learn more about heybarn >'}
+              <FormattedMessage id="SectionHowItWorks.part3Link1" />
             </NamedLink>
 
             <NamedLink name="FAQPage" className={css.part3Link}>
-              {'FAQs >'}
+              <FormattedMessage id="SectionHowItWorks.part3Link2" />
             </NamedLink>
           </div>
         </div>

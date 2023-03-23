@@ -1,5 +1,8 @@
 import React from 'react';
 
+import { ExternalLink } from '../../../components';
+import { FormattedMessage } from '../../../util/reactIntl';
+
 import css from './SectionStory.module.css';
 
 import imageLeft from './image-left.png';
@@ -13,60 +16,57 @@ export const SectionStory = () => {
           <img src={imageLeft} alt="Story" />
         </div>
         <div className={css.content}>
-          <h2 className={css.title}>Hear how heybarn came about…</h2>
+          <h2 className={css.title}>
+            <FormattedMessage id="SectionStory.title" />
+          </h2>
           <p className={css.text}>
-            Heybarn began when founders, Tom and Jaimie, couldn’t find a low-cost option to
-            advertise their unused shed space online. Market research found there is over 4 million
-            square metres of unused, privately owned shed space across New Zealand, not to mention
-            garages, paddocks, outhouses, henhouses… you get the idea. And everyday Kiwis are
-            looking for alternative, affordable and flexible options for storage, events, and work
-            and creative activities.
+            <FormattedMessage id="SectionStory.text" />
           </p>
           <div className={css.followUsWrapper}>
             <h3 className={css.followUs}>
-              Need space or have space? Heybarn is for you. Follow us on Facebook and Instagram.
+              <FormattedMessage id="SectionStory.followUs" />
             </h3>
 
             <div className={css.socialIcons}>
-              <a
+              <ExternalLink
                 className={css.socialIcon}
                 href="https://www.facebook.com/heybarnnz/"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <FacebookIcon />
-              </a>
-              <a
+              </ExternalLink>
+              <ExternalLink
                 className={css.socialIcon}
                 href="https://www.instagram.com/heybarnnz/"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <InstagramIcon />
-              </a>
+              </ExternalLink>
             </div>
 
-            <a href="https://www.facebook.com/heybarn/" className={css.followUsLink}>
-              {'Learn more about heybarn >'}
-            </a>
+            <ExternalLink href="https://www.facebook.com/heybarn/" className={css.followUsLink}>
+              <FormattedMessage id="SectionStory.followUsLink" />
+            </ExternalLink>
           </div>
         </div>
         <div className={css.rightImage}>
           <img src={imageRight} alt="Story" />
           <div className={css.followUsWrapperMobile}>
             <h3 className={css.followUs}>
-              Need space or have space? Heybarn is for you. Follow us on Facebook and Instagram.
+              <FormattedMessage id="SectionStory.followUs" />
             </h3>
 
             <div className={css.socialIcons}>
-              <a
+              <ExternalLink
                 className={css.socialIcon}
                 href="https://www.facebook.com/heybarn"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <FacebookIcon />
-              </a>
+              </ExternalLink>
               <a
                 className={css.socialIcon}
                 href="https://www.instagram.com/heybarn_nz"
@@ -77,9 +77,9 @@ export const SectionStory = () => {
               </a>
             </div>
 
-            <a href="https://www.facebook.com/heybarn" className={css.followUsLink}>
-              {'Learn more about heybarn >'}
-            </a>
+            <ExternalLink href="https://www.facebook.com/heybarn" className={css.followUsLink}>
+              <FormattedMessage id="SectionStory.followUsLink" />
+            </ExternalLink>
           </div>
         </div>
       </div>

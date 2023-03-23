@@ -1,5 +1,7 @@
 import React from 'react';
 import { ExternalLink, NamedLink } from '../../../components';
+import { FormattedMessage } from '../../../util/reactIntl';
+
 import css from './SectionHelpUs.module.css';
 
 const SectionHelpUs = () => {
@@ -7,27 +9,23 @@ const SectionHelpUs = () => {
     <div className={css.root}>
       <div className={css.container}>
         <div className={css.content}>
-          <h2 className={css.title}>Help us grow & support the Westpac Chopper Appeal</h2>
+          <h2 className={css.title}>
+            <FormattedMessage id="SectionHelpUs.title" />
+          </h2>
           <p className={css.text}>
-            Do you know a Kiwi or three who have space to spare or need affordable space to rent?
-            Recommending heybarn to your friends and family is easy:
-            <br />
-            <br />
-            1. Send a referral to your email contacts,
-            <br />
-            2. Share on Facebook, and
-            <br />
-            3. Every time one of your contacts lists on heybarn, we’ll donate $10 to the Westpac
-            Chopper Appeal
-            <br />
-            <br />
-            Heybarn is on a mission to empower Kiwis to rent unused space direct from other Kiwis.
-            Help us spread the word by recommending heybarn to your friends and family.
+            <FormattedMessage
+              id="SectionHelpUs.text"
+              values={{
+                br: () => <br />,
+              }}
+            />
           </p>
         </div>
         <div className={css.sectionReffer}>
           <NamedLink name="ContactPage" className={css.buttonEmail}>
-            <div>REFER YOUR EMAIL CONTACTS</div>
+            <div>
+              <FormattedMessage id="SectionHelpUs.buttonEmail" />
+            </div>
             <IconMail />
           </NamedLink>
 
@@ -35,7 +33,9 @@ const SectionHelpUs = () => {
             href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fheybarn.co.nz%2F"
             className={css.buttonFacebook}
           >
-            <div>SHARE ON FACEBOOK</div>
+            <div>
+              <FormattedMessage id="SectionHelpUs.buttonFacebook" />
+            </div>
             <IconFacebook />
           </ExternalLink>
 

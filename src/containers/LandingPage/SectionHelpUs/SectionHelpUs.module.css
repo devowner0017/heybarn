@@ -65,6 +65,7 @@
   height: 150px;
   padding: 36px;
   max-width: 246px;
+  border-radius: 28px;
 
   margin-bottom: 22px;
 
@@ -76,8 +77,12 @@
 .buttonEmail {
   composes: button;
   background-color: var(--marketplaceColor);
+  padding-left: 0;
+  padding-right: 0;
 
-  &:hover {
+  &:hover,
+  &:focus,
+  &:active {
     background-color: var(--marketplaceColor);
   }
 }
@@ -85,8 +90,12 @@
 .buttonFacebook {
   composes: button;
   background-color: var(--marketplaceColorGreen);
+  padding-left: 0;
+  padding-right: 0;
 
-  &:hover {
+  &:hover,
+  &:focus,
+  &:active {
     background-color: var(--marketplaceColorGreen);
   }
 
