@@ -513,6 +513,7 @@ export class ListingPageComponent extends Component {
                 onManageDisableScrolling={onManageDisableScrolling}
                 typeOfListing={typeOfListing}
                 fromPage={location?.state?.fromPage}
+                need={need}
               />
               <div className={css.contentContainer}>
                 <SectionAvatar user={currentAuthor} params={params} />
