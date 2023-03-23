@@ -17,6 +17,11 @@ import ReactTooltip from 'react-tooltip';
 import css from './ListingCard.module.css';
 import { capitalize } from 'lodash';
 
+import creativeImage from './../../assets/creative.png';
+import eventImage from './../../assets/event.png';
+import storageImage from './../../assets/storage.png';
+import workImage from './../../assets/work.png';
+
 const MIN_LENGTH_FOR_LONG_WORDS = 10;
 
 const priceData = (price, intl) => {
@@ -72,6 +77,19 @@ export const ListingCardComponent = props => {
   const authorName = author.attributes.profile.displayName;
   const firstImage =
     currentListing.images && currentListing.images.length > 0 ? currentListing.images[0] : null;
+  const defaultImage = () => {
+    if (need && need.length > 0) {
+      if (need[0] === 'creative') {
+        return creativeImage;
+      } else if (need[0] === 'event') {
+        return eventImage;
+      } else if (need[0] === 'storage') {
+        return storageImage;
+      } else if (need[0] === 'work') {
+        return workImage;
+      }
+    }
+  }
 
   const { formattedPrice, priceTitle } = priceData(price, intl);
 
@@ -140,13 +158,21 @@ export const ListingCardComponent = props => {
           defaultWrapper={children => <div className={classes}>{children}</div>}
         >
           <div className={css.aspectWrapper}>
-            <LazyImage
-              rootClassName={css.rootForImage}
-              alt={title}
-              image={firstImage}
-              variants={['landscape-crop', 'landscape-crop2x']}
-              sizes={renderSizes}
-            />
+            {firstImage ? (
+              <LazyImage
+                rootClassName={css.rootForImage}
+                alt={title}
+                image={firstImage}
+                variants={['landscape-crop', 'landscape-crop2x']}
+                sizes={renderSizes}
+              />
+            ) : (
+              <img
+                className={css.rootForImage}
+                alt={title}
+                src={defaultImage()}
+              />
+            )}
           </div>
         </ConditionalWrapper>
         {showAvatar && <Avatar className={css.avatar} user={listing.author} />}

@@ -61,6 +61,7 @@ export class EditListingPhotosFormComponent extends Component {
             updated,
             updateInProgress,
             listingType,
+            isAdvert,
           } = formRenderProps;
 
           const chooseImageText = (
@@ -184,20 +185,36 @@ export class EditListingPhotosFormComponent extends Component {
                   }}
                 </Field>
 
-                <Field
-                  component={props => {
-                    const { input, meta } = props;
-                    return (
-                      <div className={css.imageRequiredWrapper}>
-                        <input {...input} />
-                        <ValidationError fieldMeta={meta} />
-                      </div>
-                    );
-                  }}
-                  name="images"
-                  type="hidden"
-                  validate={composeValidators(nonEmptyArray(imageRequiredMessage))}
-                />
+                {isAdvert ? (
+                  <Field
+                    component={props => {
+                      const { input, meta } = props;
+                      return (
+                        <div className={css.imageRequiredWrapper}>
+                          <input {...input} />
+                          <ValidationError fieldMeta={meta} />
+                        </div>
+                      );
+                    }}
+                    name="images"
+                    type="hidden"
+                  />
+                ) : (
+                  <Field
+                    component={props => {
+                      const { input, meta } = props;
+                      return (
+                        <div className={css.imageRequiredWrapper}>
+                          <input {...input} />
+                          <ValidationError fieldMeta={meta} />
+                        </div>
+                      );
+                    }}
+                    name="images"
+                    type="hidden"
+                    validate={composeValidators(nonEmptyArray(imageRequiredMessage))}
+                  />
+              )}
               </AddImages>
               {uploadImageFailed}
 
