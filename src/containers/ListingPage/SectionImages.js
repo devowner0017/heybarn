@@ -7,6 +7,11 @@ import ActionBarMaybe from './ActionBarMaybe';
 
 import css from './ListingPage.module.css';
 
+import creativeImage from './../../assets/creative.png';
+import eventImage from './../../assets/event.png';
+import storageImage from './../../assets/storage.png';
+import workImage from './../../assets/work.png';
+
 const SectionImages = props => {
   const {
     title,
@@ -20,11 +25,25 @@ const SectionImages = props => {
     currentUserInTransaction,
     typeOfListing,
     fromPage,
+    need,
   } = props;
   const history = useHistory();
 
   const hasImages = listing.images && listing.images.length > 0;
   const firstImage = hasImages ? listing.images[0] : null;
+  const defaultImage = () => {
+    if (need && need.length > 0) {
+      if (need[0] === 'creative') {
+        return creativeImage;
+      } else if (need[0] === 'event') {
+        return eventImage;
+      } else if (need[0] === 'storage') {
+        return storageImage;
+      } else if (need[0] === 'work') {
+        return workImage;
+      }
+    }
+  }
 
   // Action bar is wrapped with a div that prevents the click events
   // to the parent that would otherwise open the image carousel
@@ -73,17 +92,25 @@ const SectionImages = props => {
         <div className={css.aspectWrapper} onClick={handleViewPhotosClick}>
           {actionBar}
           {listingStateBar}
-          <ResponsiveImage
-            rootClassName={css.rootForImage}
-            alt={title}
-            image={firstImage}
-            variants={[
-              'landscape-crop',
-              'landscape-crop2x',
-              'landscape-crop4x',
-              'landscape-crop6x',
-            ]}
-          />
+          {firstImage ? (
+            <ResponsiveImage
+              rootClassName={css.rootForImage}
+              alt={title}
+              image={firstImage}
+              variants={[
+                'landscape-crop',
+                'landscape-crop2x',
+                'landscape-crop4x',
+                'landscape-crop6x',
+              ]}
+            />
+          ) : (
+            <img
+              className={css.rootForImageAlt}
+              alt={title}
+              src={defaultImage()}
+            />
+          )}
           {viewPhotosButton}
         </div>
       </div>

@@ -157,6 +157,35 @@
   }
 }
 
+.rootForImageAlt {
+  /* Layout - image will take space defined by aspect ratio wrapper */
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+
+  transition: var(--transitionStyleButton);
+
+  @media (--viewportMedium) {
+    position: static;
+    top: auto;
+    bottom: auto;
+    left: auto;
+    right: auto;
+    height: calc(0.41 * 100vw);
+    max-height: 100vh;
+    object-fit: cover;
+    border-radius: var(--borderRadius);
+
+    &:hover {
+      transform: scale(1.005);
+      box-shadow: var(--boxShadowListingCard);
+    }
+  }
+}
+
 .viewPhotos {
   @apply --marketplaceTinyFontStyles;
   font-weight: var(--fontWeightMedium);

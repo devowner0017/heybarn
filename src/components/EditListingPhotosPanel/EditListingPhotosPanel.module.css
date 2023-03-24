@@ -48,3 +48,13 @@
     padding: 1px 0 7px 0;
   }
 }
+
+.subtitle {
+  margin-bottom: 19px;
+  opacity: 0.5;
+
+  @media (--viewportLarge) {
+    margin-bottom: 38px;
+    padding: 1px 0 7px 0;
+  }
+}
