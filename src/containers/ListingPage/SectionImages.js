@@ -43,7 +43,7 @@ const SectionImages = props => {
         return workImage;
       }
     }
-  }
+  };
 
   // Action bar is wrapped with a div that prevents the click events
   // to the parent that would otherwise open the image carousel
@@ -105,11 +105,7 @@ const SectionImages = props => {
               ]}
             />
           ) : (
-            <img
-              className={css.rootForImageAlt}
-              alt={title}
-              src={defaultImage()}
-            />
+            <img className={css.rootForImageAlt} alt={title} src={defaultImage()} />
           )}
           {viewPhotosButton}
         </div>

@@ -34,7 +34,7 @@ class EditListingPhotosPanel extends Component {
     const rootClass = rootClassName || css.root;
     const classes = classNames(rootClass, className);
     const currentListing = ensureOwnListing(listing);
-    const isAdvert = listingType === "advert";
+    const isAdvert = listingType === 'advert';
 
     const isPublished =
       currentListing.id && currentListing.attributes.state !== LISTING_STATE_DRAFT;
@@ -43,22 +43,17 @@ class EditListingPhotosPanel extends Component {
         id="EditListingPhotosPanel.title"
         values={{ listingTitle: <ListingLink listing={listing} /> }}
       />
-    ) : isAdvert ?
-      (
-        <FormattedMessage id="EditListingPhotosPanel.createListingTitle" />
-      ) : (
-        <FormattedMessage id="EditListingPhotosPanel.createListingTitleBase" />
-      );
-    const panelSubtitle = (
-      <FormattedMessage id="EditListingPhotosPanel.createListingSubtitle" />
+    ) : isAdvert ? (
+      <FormattedMessage id="EditListingPhotosPanel.createListingTitle" />
+    ) : (
+      <FormattedMessage id="EditListingPhotosPanel.createListingTitleBase" />
     );
+    const panelSubtitle = <FormattedMessage id="EditListingPhotosPanel.createListingSubtitle" />;
 
     return (
       <div className={classes}>
         <h1 className={css.title}>{panelTitle}</h1>
-        {isAdvert && (
-          <h5 className={css.subtitle}>{panelSubtitle}</h5>
-        )}
+        {isAdvert && <h5 className={css.subtitle}>{panelSubtitle}</h5>}
         <EditListingPhotosForm
           className={css.form}
           disabled={disabled}

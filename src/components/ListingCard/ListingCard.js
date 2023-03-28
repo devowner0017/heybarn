@@ -89,7 +89,7 @@ export const ListingCardComponent = props => {
         return workImage;
       }
     }
-  }
+  };
 
   const { formattedPrice, priceTitle } = priceData(price, intl);
 
@@ -167,11 +167,7 @@ export const ListingCardComponent = props => {
                 sizes={renderSizes}
               />
             ) : (
-              <img
-                className={css.rootForImage}
-                alt={title}
-                src={defaultImage()}
-              />
+              <img className={css.rootForImage} alt={title} src={defaultImage()} />
             )}
           </div>
         </ConditionalWrapper>

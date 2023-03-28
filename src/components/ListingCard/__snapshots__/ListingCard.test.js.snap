@@ -19,17 +19,9 @@ exports[`ListingCard matches snapshot 1`] = `
       <div
         className="aspectWrapper"
       >
-        <lazyLoadWithDimensions(ListingImage)
+        <img
           alt="listing1 title"
-          image={null}
-          rootClassName="rootForImage"
-          sizes={null}
-          variants={
-            Array [
-              "landscape-crop",
-              "landscape-crop2x",
-            ]
-          }
+          className="rootForImage"
         />
       </div>
     </Component>

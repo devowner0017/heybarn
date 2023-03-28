@@ -214,7 +214,7 @@ export class EditListingPhotosFormComponent extends Component {
                     type="hidden"
                     validate={composeValidators(nonEmptyArray(imageRequiredMessage))}
                   />
-              )}
+                )}
               </AddImages>
               {uploadImageFailed}
 
