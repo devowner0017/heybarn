@@ -832,7 +832,8 @@ export class TransactionPanelComponent extends Component {
         negativeAction={() => this.setShowConfirmationModal(true)}
         affirmativeText={`${isCustomer ? 'Request' : 'Create'} Rental Agreement`}
         negativeText={'Cancel Transaction'}
-        hideAffirmative={stateData.hideAffirmative}
+        // hideAffirmative={stateData.hideAffirmative}
+        hideAffirmative
       />
     );
 
