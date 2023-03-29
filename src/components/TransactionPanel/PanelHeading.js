@@ -2,7 +2,7 @@ import React from 'react';
 import { FormattedMessage } from '../../util/reactIntl';
 import classNames from 'classnames';
 import { createSlug, stringify } from '../../util/urlHelpers';
-import { NamedLink, Button } from '../../components';
+import { NamedLink, Button, ExternalLink } from '../../components';
 
 import css from './TransactionPanel.module.css';
 const lineBreak = (
@@ -184,6 +184,9 @@ const PanelHeading = props => {
     browseLink,
     accountSettingsLink,
     faqLink: <NamedLink name={'FAQPage'}>FAQs</NamedLink>,
+    templateLink: (...chuncks) => (
+      <ExternalLink href="/Rental_agreement_template.pdf">{chuncks}</ExternalLink>
+    ),
   };
   switch (panelHeadingState) {
     case HEADING_HOST_ENQUIRED:
