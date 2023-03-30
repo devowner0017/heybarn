@@ -159,13 +159,6 @@ const EditListingDescriptionFormComponent = props => (
             </>
           )}
 
-          <FieldCheckboxGroup
-            className={css.title}
-            id={'amenities'}
-            name={'amenities'}
-            options={options}
-          />
-
           <FieldTextInput
             id="description"
             name="description"
@@ -179,6 +172,16 @@ const EditListingDescriptionFormComponent = props => (
                 : composeValidators(required(descriptionRequiredMessage))
             }
           />
+
+          <div>
+            <label className={css.amenitiesLabel}>Click on any icons that you will need</label>
+            <FieldCheckboxGroup
+              className={css.title}
+              id={'amenities'}
+              name={'amenities'}
+              options={options}
+            />
+          </div>
 
           <CustomSelect
             id="preferredUse"
@@ -196,10 +199,13 @@ const EditListingDescriptionFormComponent = props => (
             }
           />
           <div className={css.useText}>
-            These ideal uses are helpful for hosts and renters to understand what frequency of
-            access can be expected. Storage space suggests infrequent visits; Creative space
-            suggests more infrequent and irregular visits, Work space suggests more frequent and
-            regular visits and Event space suggests a short period of use.
+            Storage space: suggests infrequent visits.
+            <br />
+            Creative space: suggests infrequent and/or irregular visits
+            <br />
+            Work space: suggests visits are typically frequent and regular
+            <br />
+            Event space: suggests a short period of use
           </div>
 
           <div className={css.moreInfoText}>{moreInfoText}</div>

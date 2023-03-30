@@ -67,7 +67,7 @@ export const ADVERT_TABS = [
   // FEATURES,
   LOCATION,
   ...availabilityMaybe,
-  POLICY,
+  // POLICY,
   // PRICING,
   PHOTOS,
 ];
@@ -82,7 +82,8 @@ const tabLabel = (intl, tab, listingType) => {
   if (tab === DESCRIPTION) {
     key = 'EditListingWizard.tabLabelDescription';
   } else if (tab === LOCATION) {
-    key = 'EditListingWizard.tabLabelLocation';
+    key = `EditListingWizard.tabLabel${listingType}Location`;
+    // key = 'EditListingWizard.tabLabelLocation';
     // } else if (tab === FEATURES) {
     //   key = 'EditListingWizard.tabLabelFeatures';
   } else if (tab === POLICY) {

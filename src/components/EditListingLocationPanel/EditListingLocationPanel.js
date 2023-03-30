@@ -9,6 +9,7 @@ import { EditListingLocationForm } from '../../forms';
 import config from '../../config';
 import css from './EditListingLocationPanel.module.css';
 import { findOptionsForSelectFilter } from '../../util/search';
+import { ensureArray } from '../../util/devHelpers';
 
 class EditListingLocationPanel extends Component {
   constructor(props) {
@@ -25,7 +26,7 @@ class EditListingLocationPanel extends Component {
     const { listing } = this.props;
     const currentListing = ensureOwnListing(listing);
     const { geolocation, publicData } = currentListing.attributes;
-    const { locRegion, locIsland, locDistrict } = publicData;
+    const { locRegion, locIsland, locDistrict, accessFrequency } = publicData;
     // Only render current search if full place object is available in the URL params
     // TODO bounds are missing - those need to be queried directly from Google Places
     const locationFieldsPresent = publicData?.location?.address && geolocation;
@@ -36,6 +37,7 @@ class EditListingLocationPanel extends Component {
       locIsland,
       locDistrict,
       locRegion,
+      accessFrequency,
       location: locationFieldsPresent
         ? {
             search: address,
@@ -82,7 +84,7 @@ class EditListingLocationPanel extends Component {
           className={css.form}
           initialValues={this.state.initialValues}
           onSubmit={values => {
-            const { location, locRegion, locIsland, locDistrict } = values;
+            const { location, locRegion, locIsland, locDistrict, accessFrequency } = values;
             const {
               selectedPlace: { address, origin },
             } = location;
@@ -93,6 +95,7 @@ class EditListingLocationPanel extends Component {
                 locRegion,
                 locIsland,
                 locDistrict,
+                accessFrequency: ensureArray(accessFrequency),
               },
             };
             this.setState({

@@ -12,10 +12,17 @@ import {
   composeValidators,
   required,
 } from '../../util/validators';
-import { Form, LocationAutocompleteInputField, Button, FieldSelect } from '../../components';
+import {
+  Form,
+  LocationAutocompleteInputField,
+  Button,
+  FieldSelect,
+  FieldRadioButton,
+} from '../../components';
 
 import css from './EditListingLocationForm.module.css';
 import { getPropByName } from '../../util/devHelpers';
+import { findOptionsForSelectFilter } from '../../util/search';
 
 const identity = v => v;
 
@@ -76,6 +83,8 @@ export const EditListingLocationFormComponent = props => (
       const districts = districtConfig.config.options;
       const filteredDistricts = districts?.filter(r => r.parent === values?.locRegion);
 
+      const options = findOptionsForSelectFilter(`${listingType}AccessFrequency`, filterConfig);
+
       useEffect(() => {
         const regionValue = regions.find(r => r.key === region);
         if (!!regionValue) {
@@ -110,20 +119,22 @@ export const EditListingLocationFormComponent = props => (
             {listingType === 'listing' && (
               <h2 className={css.title}>Where is this listing located?</h2>
             )}
-            <p>
-              To help {listingType === 'advert' ? 'hosts' : 'renters'} search for local{' '}
-              {listingType}s, please select a region and district in which{' '}
-              {listingType === 'advert' ? 'you are seeking space' : 'your space is located'}.
-              {listingType === 'advert'
-                ? ` To
+            {listingType === 'listing' && (
+              <p>
+                To help {listingType === 'advert' ? 'hosts' : 'renters'} search for local{' '}
+                {listingType}s, please select a region and district in which{' '}
+                {listingType === 'advert' ? 'you are seeking space' : 'your space is located'}.
+                {listingType === 'advert'
+                  ? ` To
                 help the maps work to locate the area you need space in, please provide the nearest town in the address field.`
-                : `
+                  : `
                To
               help the maps work to locate the area space
               is in, please provide an address. For
               those with security concerns, only enter a suburb or the nearest town.
               `}
-            </p>
+              </p>
+            )}
             <FieldSelect
               className={css.category}
               name={'locRegion'}
@@ -175,11 +186,32 @@ export const EditListingLocationFormComponent = props => (
               autocompletePlaceSelected(addressNotRecognizedMessage)
             )}
           />
-          <p className={css.disclaimerText}>
-            Your data security is our highest concern and your address will not be made available to
-            any other user. Your location will be contained in a 2km circle on our location map and
-            this address will only be used to populate search queries.
-          </p>
+
+          {listingType === 'listing' && (
+            <p className={css.disclaimerText}>
+              Your data security is our highest concern and your address will not be made available
+              to any other user. Your location will be contained in a 2km circle on our location map
+              and this address will only be used to populate search queries.
+            </p>
+          )}
+
+          {listingType === 'advert' && (
+            <div className={css.radioButtonRow}>
+              <label>How frequently would you need access?</label>
+              {options.map(o => {
+                return (
+                  <FieldRadioButton
+                    key={o.key}
+                    id={o.key}
+                    name="accessFrequency"
+                    label={o.label}
+                    value={o.key}
+                    checked={values?.accessFrequency?.includes(o.key)}
+                  />
+                );
+              })}
+            </div>
+          )}
           <Button
             className={css.submitButton}
             type="submit"
