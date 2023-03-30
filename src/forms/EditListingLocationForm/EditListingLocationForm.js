@@ -72,6 +72,13 @@ export const EditListingLocationFormComponent = props => (
         </p>
       ) : null;
 
+      const rulesLabelMessage = intl.formatMessage({
+        id: 'EditListingPoliciesForm.rulesLabel',
+      });
+      const rulesPlaceholderMessage = intl.formatMessage({
+        id: 'EditListingPoliciesForm.rulesPlaceholder',
+      });
+
       const classes = classNames(css.root, className);
       const submitReady = (updated && pristine) || ready;
       const submitInProgress = updateInProgress;
@@ -84,6 +91,7 @@ export const EditListingLocationFormComponent = props => (
       const filteredDistricts = districts?.filter(r => r.parent === values?.locRegion);
 
       const options = findOptionsForSelectFilter(`${listingType}AccessFrequency`, filterConfig);
+      const groundRulesOptions = findOptionsForSelectFilter(`groundRules`, filterConfig);
 
       useEffect(() => {
         const regionValue = regions.find(r => r.key === region);
@@ -121,37 +129,32 @@ export const EditListingLocationFormComponent = props => (
             )}
             {listingType === 'listing' && (
               <p>
-                To help {listingType === 'advert' ? 'hosts' : 'renters'} search for local{' '}
-                {listingType}s, please select a region and district in which{' '}
-                {listingType === 'advert' ? 'you are seeking space' : 'your space is located'}.
-                {listingType === 'advert'
-                  ? ` To
-                help the maps work to locate the area you need space in, please provide the nearest town in the address field.`
-                  : `
-               To
-              help the maps work to locate the area space
-              is in, please provide an address. For
-              those with security concerns, only enter a suburb or the nearest town.
-              `}
+                Your data security is our highest concern and your address will not be made
+                available to any other user. Your address will be contained within a 5 km circle on
+                the location map.
               </p>
             )}
-            <FieldSelect
-              className={css.category}
-              name={'locRegion'}
-              id={'locRegion'}
-              autoFocus
-              label={'Region'}
-              validate={required('Required')}
-            >
-              <option disabled value="">
-                {'Select Region'}
-              </option>
-              {regions.map(c => (
-                <option key={c.key} value={c.key}>
-                  {c.label}
-                </option>
-              ))}
-            </FieldSelect>
+            {listingType === 'advert' && (
+              <>
+                <FieldSelect
+                  className={css.category}
+                  name={'locRegion'}
+                  id={'locRegion'}
+                  autoFocus
+                  label={'Region'}
+                  validate={required('Required')}
+                >
+                  <option disabled value="">
+                    {'Select Region'}
+                  </option>
+                  {regions.map(c => (
+                    <option key={c.key} value={c.key}>
+                      {c.label}
+                    </option>
+                  ))}
+                </FieldSelect>
+              </>
+            )}
             <FieldSelect
               name={'locDistrict'}
               id={'locDistrict'}
@@ -188,11 +191,23 @@ export const EditListingLocationFormComponent = props => (
           />
 
           {listingType === 'listing' && (
-            <p className={css.disclaimerText}>
-              Your data security is our highest concern and your address will not be made available
-              to any other user. Your location will be contained in a 2km circle on our location map
-              and this address will only be used to populate search queries.
-            </p>
+            <>
+              <h2 className={css.title}>Other common ground rules</h2>
+              <FieldCheckboxGroup
+                className={css.features}
+                id={'groundRules'}
+                name={'groundRules'}
+                options={groundRulesOptions}
+              />
+              <FieldTextInput
+                id="rules"
+                name="rules"
+                className={css.policy}
+                type="textarea"
+                label={rulesLabelMessage}
+                placeholder={rulesPlaceholderMessage}
+              />
+            </>
           )}
 
           {listingType === 'advert' && (

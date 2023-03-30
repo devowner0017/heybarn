@@ -552,17 +552,6 @@ exports[`EditListingDescriptionForm matches snapshot 1`] = `
     ]
   </div>
   <div
-    className="useText"
-  >
-    Storage space: suggests infrequent visits.
-    <br />
-    Creative space: suggests infrequent and/or irregular visits
-    <br />
-    Work space: suggests visits are typically frequent and regular
-    <br />
-    Event space: suggests a short period of use
-  </div>
-  <div
     className="moreInfoText"
   >
     <span>

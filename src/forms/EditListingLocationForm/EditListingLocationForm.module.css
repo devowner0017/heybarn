@@ -98,3 +98,21 @@
 .disclaimerText {
   @apply --marketplaceTinyFontStyles;
 }
+
+.formMargins {
+  margin-bottom: 24px;
+
+  @media (--viewportMedium) {
+    margin-bottom: 32px;
+  }
+}
+
+.title {
+  composes: formMargins;
+}
+
+.policy {
+  margin-top: 2rem;
+  composes: formMargins;
+  flex-shrink: 0;
+}
