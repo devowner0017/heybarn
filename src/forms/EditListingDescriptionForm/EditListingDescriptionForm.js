@@ -136,6 +136,20 @@ const EditListingDescriptionFormComponent = props => (
             autoFocus
           />
 
+          <FieldTextInput
+            id="description"
+            name="description"
+            className={css.description}
+            type="textarea"
+            label={descriptionMessage}
+            placeholder={descriptionPlaceholderMessage}
+            validate={
+              submitInProgress
+                ? () => null
+                : composeValidators(required(descriptionRequiredMessage))
+            }
+          />
+
           {listingType === 'listing' && (
             <>
               <FieldNumberInput
@@ -159,22 +173,12 @@ const EditListingDescriptionFormComponent = props => (
             </>
           )}
 
-          <FieldTextInput
-            id="description"
-            name="description"
-            className={css.description}
-            type="textarea"
-            label={descriptionMessage}
-            placeholder={descriptionPlaceholderMessage}
-            validate={
-              submitInProgress
-                ? () => null
-                : composeValidators(required(descriptionRequiredMessage))
-            }
-          />
-
           <div>
-            <label className={css.amenitiesLabel}>Click on any icons that you will need</label>
+            <label className={css.amenitiesLabel}>
+              {listingType === 'listing'
+                ? 'Click on any icons that describe available facilities in your space.'
+                : 'Click on any icons that you will need'}
+            </label>
             <FieldCheckboxGroup
               className={css.title}
               id={'amenities'}
@@ -198,15 +202,32 @@ const EditListingDescriptionFormComponent = props => (
                 : requiredObject(preferredUseRequiredMessage)
             }
           />
-          <div className={css.useText}>
-            Storage space: suggests infrequent visits.
-            <br />
-            Creative space: suggests infrequent and/or irregular visits
-            <br />
-            Work space: suggests visits are typically frequent and regular
-            <br />
-            Event space: suggests a short period of use
-          </div>
+          {listingType === 'advert' && (
+            <div className={css.useText}>
+              Storage space: suggests infrequent visits.
+              <br />
+              Creative space: suggests infrequent and/or irregular visits
+              <br />
+              Work space: suggests visits are typically frequent and regular
+              <br />
+              Event space: suggests a short period of use
+            </div>
+          )}
+
+          {listingType === 'listing' && (
+            <div className={css.useText}>
+              Selecting one or more ideal use(s) for your space helps renters understand how often
+              you'd prefer access to your space.
+              <br />
+              Storage space suggests infrequent visits.
+              <br />
+              Creative space suggests infrequent and irregular visits.
+              <br />
+              Work space suggests more frequent and regular visits.
+              <br />
+              Event space suggests a short period of use.
+            </div>
+          )}
 
           <div className={css.moreInfoText}>{moreInfoText}</div>
           <Button

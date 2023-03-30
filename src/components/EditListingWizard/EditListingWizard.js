@@ -44,33 +44,9 @@ const availabilityMaybe = config.enableAvailability ? [AVAILABILITY] : [];
 // Note 1: You need to change save button translations for new listing flow
 // Note 2: Ensure that draft listing is created after the first panel
 // and listing publishing happens after last panel.
-export const TABS = [
-  DESCRIPTION,
-  LOCATION,
-  // FEATURES,
-  POLICY,
-  PRICING,
-  ...availabilityMaybe,
-  PHOTOS,
-];
-export const LISTING_TABS = [
-  DESCRIPTION,
-  LOCATION,
-  // FEATURES,
-  POLICY,
-  ...availabilityMaybe,
-  PRICING,
-  PHOTOS,
-];
-export const ADVERT_TABS = [
-  DESCRIPTION,
-  // FEATURES,
-  LOCATION,
-  ...availabilityMaybe,
-  // POLICY,
-  // PRICING,
-  PHOTOS,
-];
+export const TABS = [DESCRIPTION, LOCATION, POLICY, PRICING, ...availabilityMaybe, PHOTOS];
+export const LISTING_TABS = [DESCRIPTION, LOCATION, ...availabilityMaybe, PRICING, PHOTOS];
+export const ADVERT_TABS = [DESCRIPTION, LOCATION, ...availabilityMaybe, PHOTOS];
 // Tabs are horizontal in small screens
 const MAX_HORIZONTAL_NAV_SCREEN_WIDTH = 1023;
 
@@ -83,11 +59,6 @@ const tabLabel = (intl, tab, listingType) => {
     key = 'EditListingWizard.tabLabelDescription';
   } else if (tab === LOCATION) {
     key = `EditListingWizard.tabLabel${listingType}Location`;
-    // key = 'EditListingWizard.tabLabelLocation';
-    // } else if (tab === FEATURES) {
-    //   key = 'EditListingWizard.tabLabelFeatures';
-  } else if (tab === POLICY) {
-    key = `EditListingWizard.tabLabel${listingType}Policy`;
   } else if (tab === PRICING) {
     key = 'EditListingWizard.tabLabelPricing';
   } else if (tab === AVAILABILITY) {
@@ -129,10 +100,9 @@ const tabCompleted = (tab, listing) => {
         geolocation &&
         publicData &&
         publicData.location &&
-        publicData.location.address
+        publicData.location.address &&
+        typeof publicData.rules !== 'undefined'
       );
-    // case FEATURES:
-    //   return !!(!!listingType && publicData && publicData.amenities);
     case POLICY:
       return !!(!!listingType && publicData && typeof publicData.rules !== 'undefined');
     case PRICING:

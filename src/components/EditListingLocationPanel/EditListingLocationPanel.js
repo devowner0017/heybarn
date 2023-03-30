@@ -26,7 +26,14 @@ class EditListingLocationPanel extends Component {
     const { listing } = this.props;
     const currentListing = ensureOwnListing(listing);
     const { geolocation, publicData } = currentListing.attributes;
-    const { locRegion, locIsland, locDistrict, accessFrequency } = publicData;
+    const {
+      locRegion,
+      locIsland,
+      locDistrict,
+      accessFrequency,
+      rules = '',
+      groundRules,
+    } = publicData;
     // Only render current search if full place object is available in the URL params
     // TODO bounds are missing - those need to be queried directly from Google Places
     const locationFieldsPresent = publicData?.location?.address && geolocation;
@@ -38,6 +45,8 @@ class EditListingLocationPanel extends Component {
       locDistrict,
       locRegion,
       accessFrequency,
+      rules,
+      groundRules,
       location: locationFieldsPresent
         ? {
             search: address,
@@ -96,6 +105,8 @@ class EditListingLocationPanel extends Component {
                 locIsland,
                 locDistrict,
                 accessFrequency: ensureArray(accessFrequency),
+                rules,
+                groundRules,
               },
             };
             this.setState({
