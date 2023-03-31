@@ -16,6 +16,21 @@ exports[`EditListingLocationForm matches snapshot 1`] = `
       "now": [Function],
     }
   }
+  mutators={
+    Object {
+      "concat": [Function],
+      "insert": [Function],
+      "move": [Function],
+      "pop": [Function],
+      "push": [Function],
+      "remove": [Function],
+      "removeBatch": [Function],
+      "shift": [Function],
+      "swap": [Function],
+      "unshift": [Function],
+      "update": [Function],
+    }
+  }
   onSubmit={[Function]}
   ready={false}
   render={[Function]}

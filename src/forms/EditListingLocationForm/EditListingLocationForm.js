@@ -3,6 +3,8 @@ import { bool, func, shape, string } from 'prop-types';
 import config from '../../config';
 import { compose } from 'redux';
 import { Form as FinalForm, FormSpy } from 'react-final-form';
+import arrayMutators from 'final-form-arrays';
+
 import { intlShape, injectIntl, FormattedMessage } from '../../util/reactIntl';
 import classNames from 'classnames';
 import { propTypes } from '../../util/types';
@@ -18,6 +20,8 @@ import {
   Button,
   FieldSelect,
   FieldRadioButton,
+  FieldCheckboxGroup,
+  FieldTextInput,
 } from '../../components';
 
 import css from './EditListingLocationForm.module.css';
@@ -29,6 +33,7 @@ const identity = v => v;
 export const EditListingLocationFormComponent = props => (
   <FinalForm
     {...props}
+    mutators={{ ...arrayMutators }}
     render={formRenderProps => {
       const {
         className,
@@ -153,23 +158,23 @@ export const EditListingLocationFormComponent = props => (
                     </option>
                   ))}
                 </FieldSelect>
+                <FieldSelect
+                  name={'locDistrict'}
+                  id={'locDistrict'}
+                  label={'District'}
+                  validate={required('Required')}
+                >
+                  <option disabled value="">
+                    {'Select District'}
+                  </option>
+                  {filteredDistricts.map(c => (
+                    <option key={c.key} value={c.key}>
+                      {c.label}
+                    </option>
+                  ))}
+                </FieldSelect>
               </>
             )}
-            <FieldSelect
-              name={'locDistrict'}
-              id={'locDistrict'}
-              label={'District'}
-              validate={required('Required')}
-            >
-              <option disabled value="">
-                {'Select District'}
-              </option>
-              {filteredDistricts.map(c => (
-                <option key={c.key} value={c.key}>
-                  {c.label}
-                </option>
-              ))}
-            </FieldSelect>
           </div>
 
           <LocationAutocompleteInputField
