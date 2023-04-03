@@ -179,6 +179,8 @@ const TopbarDesktop = props => {
     </NamedLink>
   );
 
+  const separator = isAuthenticatedOrJustHydrated ? null : <span className={css.separator} />;
+
   return (
     <nav className={classes}>
       <NamedLink className={css.logoLink} name="LandingPage">
@@ -209,23 +211,11 @@ const TopbarDesktop = props => {
           />
         </NamedLink>
       </div>
-      {/* <NamedLink className={css.createListingLink} name="NewListingPage">
-        <span className={css.createListing}>
-          <FormattedMessage id="TopbarDesktop.createListing" />
-        </span>
-      </NamedLink> */}
-      {/* <NamedLink className={css.createListingLink} name="NewAdvertPage">
-        <span className={css.createListing}>
-          <FormattedMessage id="TopbarDesktop.createAdvert" />
-        </span>
-      </NamedLink> */}
       {inboxLink}
       {profileMenu}
-      {/* <div style={{ height: '100%' }}> */}
       {signupLink}
-      <span className={css.separator}>|</span>
+      {separator}
       {loginLink}
-      {/* </div> */}
     </nav>
   );
 };

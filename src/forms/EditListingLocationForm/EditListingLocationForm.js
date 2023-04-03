@@ -104,6 +104,7 @@ export const EditListingLocationFormComponent = props => (
           form.change('locIsland', regionValue.parent);
         }
       }, [region]);
+
       useEffect(() => {
         const regionValue = regions.find(r => r.key === region);
         if (!!regionValue) {
@@ -118,10 +119,6 @@ export const EditListingLocationFormComponent = props => (
           <FormSpy
             subscription={{ values: true }}
             onChange={val => {
-              // if (val?.values?.locIsland !== values?.locIsland) {
-              //   form.change('locRegion', null);
-              //   form.change('locDistrict', null);
-              // }
               if (val?.values?.locRegion !== values?.locRegion) {
                 form.change('locDistrict', null);
               }
@@ -129,16 +126,6 @@ export const EditListingLocationFormComponent = props => (
           />
 
           <div className={css.regionWrapper}>
-            {listingType === 'listing' && (
-              <h2 className={css.title}>Where is this listing located?</h2>
-            )}
-            {listingType === 'listing' && (
-              <p>
-                Your data security is our highest concern and your address will not be made
-                available to any other user. Your address will be contained within a 5 km circle on
-                the location map.
-              </p>
-            )}
             {listingType === 'advert' && (
               <>
                 <FieldSelect
@@ -150,7 +137,7 @@ export const EditListingLocationFormComponent = props => (
                   validate={required('Required')}
                 >
                   <option disabled value="">
-                    {'Select Region'}
+                    Select Region
                   </option>
                   {regions.map(c => (
                     <option key={c.key} value={c.key}>
@@ -165,7 +152,7 @@ export const EditListingLocationFormComponent = props => (
                   validate={required('Required')}
                 >
                   <option disabled value="">
-                    {'Select District'}
+                    Select District
                   </option>
                   {filteredDistricts.map(c => (
                     <option key={c.key} value={c.key}>

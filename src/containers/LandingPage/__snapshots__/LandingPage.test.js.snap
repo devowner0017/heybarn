@@ -42,10 +42,12 @@ exports[`LandingPage matches snapshot 1`] = `
     rootClassName={null}
   >
     <LayoutWrapperTopbar
-      className={null}
+      className="topbarRoot"
       rootClassName={null}
     >
-      <withRouter(Connect(TopbarContainerComponent)) />
+      <withRouter(Connect(TopbarContainerComponent))
+        desktopClassName="desktopTopBar"
+      />
     </LayoutWrapperTopbar>
     <LayoutWrapperMain
       className={null}

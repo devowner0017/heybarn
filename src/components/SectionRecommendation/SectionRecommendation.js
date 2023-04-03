@@ -8,7 +8,7 @@ import css from './SectionRecommendation.module.css';
 
 const SectionRecommendation = props => {
   const { rootClassName, listings, reversed } = props;
-  if (listings.length < 4) return null;
+  if (listings.length < 5) return null;
 
   const classes = classNames(rootClassName || css.root);
 
@@ -22,8 +22,10 @@ const SectionRecommendation = props => {
     `${panelLargeWidth / 3}vw`,
   ].join(', ');
 
-  const maxListings = 8;
+  const maxListings = 10;
   const listingsToShow = listings.slice(0, maxListings);
+
+  console.log('listingsToShow', listingsToShow);
 
   return (
     <div className={classes}>

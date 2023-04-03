@@ -828,11 +828,6 @@
   }
 
   --marketplaceCardGridContainer {
-    /* margin: 0;
-  display: flex;
-  flex-wrap: wrap;
-  width: 100%;
-  justify-content: space-between; */
     box-sizing: border-box;
     max-width: 100%;
     width: 100%;
@@ -844,25 +839,20 @@
 
     @media (min-width: 500px) {
       grid-template-columns: repeat(2, 1fr);
-      /* grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr)); */
       grid-gap: 0.3rem;
     }
+
     @media (min-width: 600px) {
       grid-template-columns: repeat(3, 1fr);
       grid-gap: 0.3rem;
     }
 
-    @media (min-width: 768px) {
+    @media (--viewportMedium) {
       grid-template-columns: repeat(4, 1fr);
       grid-gap: 0.5rem;
     }
-    /* @media (min-width: 850px) {
-      grid-template-columns: repeat(6, 1fr);
-      grid-gap: 0.5rem;
-    } */
+
     @media (--viewportLarge) {
-      grid-template-columns: repeat(4, 1fr);
-      /* grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr)); */
       grid-gap: 1rem;
     }
 

@@ -116,3 +116,14 @@
     top: calc(-1 * var(--LandingPage_sectionMarginTopLarge));
   }
 }
+
+.topbarRoot {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  z-index: var(--zIndexTopbar);
+}
+
+.desktopTopBar {
+  background-color: transparent;
+}

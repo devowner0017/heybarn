@@ -17,6 +17,11 @@
 .listingCards {
   max-width: 100%;
   @apply --marketplaceCardGridContainer;
+
+  @media (--viewportMedium) {
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 0.5rem;
+  }
 }
 
 .listingCard {

@@ -361,10 +361,5 @@ exports[`TopbarDesktop data matches snapshot 1`] = `
       </ul>
     </div>
   </div>
-  <span
-    className="separator"
-  >
-    |
-  </span>
 </nav>
 `;

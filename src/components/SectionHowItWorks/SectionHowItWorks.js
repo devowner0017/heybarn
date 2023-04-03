@@ -26,7 +26,7 @@ const SectionHowItWorks = props => {
                 <FormattedMessage id="SectionHowItWorks.part1Title" />
               </h3>
               <a className={css.readMore}>
-                <FormattedMessage id="readMore" />
+                <FormattedMessage id="SectionHowItWorks.readMore" />
               </a>
             </div>
           </div>

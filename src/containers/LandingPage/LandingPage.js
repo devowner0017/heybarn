@@ -64,8 +64,8 @@ export const LandingPageComponent = props => {
       }}
     >
       <LayoutSingleColumn>
-        <LayoutWrapperTopbar>
-          <TopbarContainer />
+        <LayoutWrapperTopbar className={css.topbarRoot}>
+          <TopbarContainer desktopClassName={css.desktopTopBar} />
         </LayoutWrapperTopbar>
         <LayoutWrapperMain>
           <div className={css.heroContainer}>
@@ -79,19 +79,6 @@ export const LandingPageComponent = props => {
               <li className={css.section}>
                 <div className={css.sectionContent}>
                   <SectionRecommendation listings={pageListings} linkName={'NewListingPage'} />
-                </div>
-              </li>
-            )}
-            {!!pageAdverts?.length && (
-              <li className={css.section}>
-                <div className={classNames(css.sectionContent)}>
-                  <SectionRecommendation
-                    listings={pageAdverts}
-                    heading={'Find a new exciting idea for your property'}
-                    reversed
-                    linkName={'NewAdvertPage'}
-                    linkText={'Advertise your need'}
-                  />
                 </div>
               </li>
             )}
