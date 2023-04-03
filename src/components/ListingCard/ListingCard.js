@@ -135,13 +135,6 @@ export const ListingCardComponent = props => {
         onMouseLeave={() => setActiveListing(null)}
         id="listingCard"
       >
-        {listingUnderEnquiry && !minInfo && (
-          <Overlay
-            message={intl.formatMessage({
-              id: `ManageListingCard.${listingType}UnderEnquiry`,
-            })}
-          ></Overlay>
-        )}
         <ConditionalWrapper
           condition={isRecommendation && minInfo}
           wrapper={children => {
@@ -169,8 +162,17 @@ export const ListingCardComponent = props => {
             ) : (
               <img className={css.rootForImage} alt={title} src={defaultImage()} />
             )}
+
+            {listingUnderEnquiry && !minInfo && (
+              <Overlay
+                message={intl.formatMessage({
+                  id: `ManageListingCard.${listingType}UnderEnquiry`,
+                })}
+              />
+            )}
           </div>
         </ConditionalWrapper>
+
         {showAvatar && <Avatar className={css.avatar} user={listing.author} />}
       </div>
 
