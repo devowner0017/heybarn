@@ -35,8 +35,6 @@ const EnquiryFormComponent = props => (
         onCancel,
       } = fieldRenderProps;
 
-      console.log('fieldRenderProps', authorDisplayName);
-
       const messageLabel = intl.formatMessage(
         {
           id: 'EnquiryForm.messageLabel',

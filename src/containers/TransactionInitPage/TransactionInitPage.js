@@ -26,6 +26,7 @@ import {
   ensureTransaction,
   ensureStripeCustomer,
   ensurePaymentMethodCard,
+  userDisplayNameAsString,
 } from '../../util/data';
 import {
   NamedRedirect,
@@ -178,6 +179,8 @@ export const TransactionInitPageComponent = props => {
   const currentListing = ensureListing(getListing(listingId));
   const currentAuthor = ensureUser(currentListing.author);
   const listingType = getPropByName(currentListing, 'listingType');
+
+  const authorDisplayNameAsString = userDisplayNameAsString(currentAuthor, '');
 
   const currentTransaction = ensureTransaction(transaction);
 
@@ -606,7 +609,7 @@ export const TransactionInitPageComponent = props => {
           onSubmit={handleSubmitPlatformFee}
           inProgress={submittingPlatformFee}
           formId="TransactionInitPagePaymentForm"
-          authorDisplayName={'currentAuthor'}
+          authorDisplayName={authorDisplayNameAsString}
           initialValues={initalValuesForStripePayment}
           initiateOrderError={null}
           confirmCardPaymentError={null}
