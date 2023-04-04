@@ -4,7 +4,13 @@ import { FormattedMessage, injectIntl, intlShape } from '../../util/reactIntl';
 import classNames from 'classnames';
 import { TRANSITION_REQUEST_PAYMENT_AFTER_ENQUIRY, txIsEnquired } from '../../util/transaction';
 import { LINE_ITEM_NIGHT, LINE_ITEM_DAY, propTypes } from '../../util/types';
-import { ensureTransaction, ensureUser, userDisplayNameAsString } from '../../util/data';
+import {
+  ensureTransaction,
+  ensureUser,
+  isAdvert,
+  isListing,
+  userDisplayNameAsString,
+} from '../../util/data';
 import { isMobileSafari } from '../../util/userAgent';
 import { formatMoney } from '../../util/currency';
 import {
@@ -310,8 +316,8 @@ export class TransactionInitPanelComponent extends Component {
       </NamedLink>
     );
 
-    const shouldShowListingSelector = selectedFlow === SELECT_FLOW || listingType === 'advert';
-    const shouldShowCreateListingButton = selectedFlow === PUBLIC_FLOW || listingType === 'advert';
+    const shouldShowListingSelector = selectedFlow === SELECT_FLOW;
+    const shouldShowCreateListingButton = selectedFlow === PUBLIC_FLOW;
 
     const downloadRentalAgreementButton = (
       <ExternalLink
@@ -392,6 +398,7 @@ export class TransactionInitPanelComponent extends Component {
               <SelectFlowForm
                 initialValues={initialValues}
                 providerName={authorDisplayName}
+                listingType={listingType}
                 onChange={this.handleSelectFlow}
               />
 

@@ -386,3 +386,11 @@ export const humanizeLineItemCode = code => {
 
   return lowercase.charAt(0).toUpperCase() + lowercase.slice(1);
 };
+
+export const isAdvert = listing => {
+  return listing?.attributes?.publicData?.listingType === 'advert';
+};
+
+export const isListing = listing => {
+  return listing?.attributes?.publicData?.listingType === 'listing';
+};
