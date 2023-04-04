@@ -119,7 +119,7 @@ export const EditListingPageComponent = props => {
   if (shouldRedirect) {
     const isPendingApproval =
       currentListing && currentListingState === LISTING_STATE_PENDING_APPROVAL;
-    const { fromPage, ...rest } = locationState || {};
+    const { fromPage, selectedFlow, message, ...rest } = locationState || {};
     // If page has already listingId (after submit) and current listings exist
     // redirect to listing page
     const listingSlug = currentListing ? createSlug(currentListing.attributes.title) : null;
@@ -141,9 +141,20 @@ export const EditListingPageComponent = props => {
 
       // Clear previous Stripe errors from store if there is any
       onInitializeCardPaymentData();
+
       // Redirect to CheckoutPage
-      // history.push(fromPage);
-      return <Redirect to={{ pathname: fromPage }} push={true} />;
+      const selectedFlowMaybe = selectedFlow ? { selectedFlow } : {};
+      const messageMaybe = message ? { message } : {};
+      const listingMaybe = currentListing ? { listing: currentListing } : {};
+      return (
+        <Redirect
+          to={{
+            pathname: fromPage,
+            state: { ...selectedFlowMaybe, ...messageMaybe, ...listingMaybe },
+          }}
+          push={true}
+        />
+      );
     }
     const redirectProps = isPendingApproval
       ? {

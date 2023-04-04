@@ -322,6 +322,7 @@ export class TransactionPanelComponent extends Component {
             isProvider && !isCustomerBanned && hasCorrectNextTransition,
           showRelatedLink: otherListing?.id?.uuid,
           stripeIdRequired: !isCustomer,
+          allowMessages: true,
           confirmationModalProps: {
             negativeAction: () =>
               onDeclineCommunication({
@@ -354,6 +355,7 @@ export class TransactionPanelComponent extends Component {
           showAcceptCommunicationButtons:
             isProvider && !isCustomerBanned && hasCorrectNextTransition,
           showRelatedLink: otherListing?.id?.uuid,
+          allowMessages: true,
           confirmationModalProps: {
             negativeAction: () =>
               onDeclineCommunication({

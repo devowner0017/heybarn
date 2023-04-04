@@ -32,3 +32,14 @@
     margin-top: 0;
   }
 }
+
+.actionButtonWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  & > button {
+    max-width: 49%;
+  }
+}

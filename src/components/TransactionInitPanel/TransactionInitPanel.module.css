@@ -402,27 +402,6 @@
   }
 }
 
-.actionButtonWrapper {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-
-  @media (--viewportLarge) {
-    flex-direction: column;
-  }
-
-  & button:first-child {
-    margin: 0 12px 0 0;
-
-    @media (--viewportLarge) {
-      margin: 8px 0 0 0;
-
-      /* Switch order in desktop layout with accept button being on the top */
-      order: 1;
-    }
-  }
-}
-
 .actionError {
   @apply --marketplaceH5FontStyles;
   color: var(--failColor);
@@ -478,4 +457,27 @@
 }
 .panelContentWrapper {
   padding: 0 1rem;
+}
+
+.downloadRentalAgreementButton {
+  @apply --marketplaceRoundedButtonStyles;
+  padding: 14px;
+  text-transform: capitalize;
+  margin: 20px auto 10px auto;
+  width: auto;
+}
+
+.actionButtonWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  margin-top: 1rem;
+
+  & button:first-child {
+    margin-right: 12px;
+
+    @media (--viewportLarge) {
+      /* Switch order in desktop layout with accept button being on the top */
+    }
+  }
 }

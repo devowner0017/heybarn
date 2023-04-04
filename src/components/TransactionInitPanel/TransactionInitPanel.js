@@ -7,7 +7,17 @@ import { LINE_ITEM_NIGHT, LINE_ITEM_DAY, propTypes } from '../../util/types';
 import { ensureTransaction, ensureUser, userDisplayNameAsString } from '../../util/data';
 import { isMobileSafari } from '../../util/userAgent';
 import { formatMoney } from '../../util/currency';
-import { AvatarLarge, CreateListingModal, NamedLink, UserDisplayName, Button } from '..';
+import {
+  AvatarLarge,
+  CreateListingModal,
+  NamedLink,
+  UserDisplayName,
+  Button,
+  ExternalLink,
+  Modal,
+  PrimaryButton,
+  SecondaryButton,
+} from '..';
 import config from '../../config';
 
 // These are internal components that make this file more readable.
@@ -18,6 +28,9 @@ import PanelHeading, { HEADING_READY, HEADING_ENQUIRED } from './PanelHeading';
 import css from './TransactionInitPanel.module.css';
 import routeConfiguration from '../../routeConfiguration';
 import { createResourceLocatorString } from '../../util/routes';
+import SelectFlowForm, { DIRECT_FLOW, PUBLIC_FLOW, SELECT_FLOW } from './SelectFlowForm';
+import { EnquiryForm } from '../../forms';
+import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 
 // Helper function to get display names for different roles
 const displayNames = (currentUser, currentProvider, currentCustomer, intl) => {
@@ -39,11 +52,14 @@ const displayNames = (currentUser, currentProvider, currentCustomer, intl) => {
     otherUserDisplayNameString = userDisplayNameAsString(currentCustomer, '');
   }
 
+  const currentUserDisplayNameAsString = userDisplayNameAsString(currentUser, '');
+
   return {
     authorDisplayName,
     customerDisplayName,
     otherUserDisplayName,
     otherUserDisplayNameString,
+    currentUserDisplayNameAsString,
   };
 };
 
@@ -64,6 +80,7 @@ export class TransactionInitPanelComponent extends Component {
     this.onSendMessageFormBlur = this.onSendMessageFormBlur.bind(this);
     this.onMessageSubmit = this.onMessageSubmit.bind(this);
     this.scrollToMessage = this.scrollToMessage.bind(this);
+    this.handleSelectFlow = this.handleSelectFlow.bind(this);
   }
 
   componentDidMount() {
@@ -127,6 +144,23 @@ export class TransactionInitPanelComponent extends Component {
     }
   }
 
+  handleSelectFlow(values) {
+    const { setSelectedFlow, pageLocation, setSelectedListing, setIsConfirmed } = this.props;
+    setSelectedFlow(values.flow, nextState => {
+      const shouldOpenEnquiryModal =
+        nextState === DIRECT_FLOW && pageLocation?.state?.selectedFlow !== DIRECT_FLOW;
+
+      if (!pageLocation?.state?.listing) {
+        setSelectedListing(null);
+        setIsConfirmed(false);
+      }
+
+      if (shouldOpenEnquiryModal) {
+        this.props.setEnquiryModalOpen(true);
+      }
+    });
+  }
+
   render() {
     const {
       rootClassName,
@@ -152,6 +186,18 @@ export class TransactionInitPanelComponent extends Component {
       guest,
       host,
       contactingAs,
+      enquiryModalOpen,
+      setEnquiryModalOpen,
+      onSubmitEnquiry,
+      selectedFlow,
+      setSelectedFlow,
+      showCreateListingDirectFlowPopup,
+      setShowCreateListingDirectFlowPopup,
+      message,
+      onSkipDirectFlow,
+      showConfirmActionModal,
+      setShowConfirmActionModal,
+      setIsConfirmed,
     } = this.props;
 
     const currentProvider = ensureUser(currentListing.author);
@@ -188,7 +234,9 @@ export class TransactionInitPanelComponent extends Component {
       }
     };
     const stateData = stateDataFn(currentListing);
+
     const handleRedirect = () => {
+      setShowCreateListingDirectFlowPopup(false);
       const routes = routeConfiguration();
       history.push(
         createResourceLocatorString(
@@ -202,18 +250,24 @@ export class TransactionInitPanelComponent extends Component {
           guest,
           host,
           contactingAs,
+          selectedFlow,
+          message,
         }
       );
     };
+
     const deletedListingTitle = intl.formatMessage({
       id: 'TransactionInitPanel.deletedListingTitle',
     });
+
+    const initialValues = { flow: selectedFlow };
 
     const {
       authorDisplayName,
       customerDisplayName,
       otherUserDisplayName,
       otherUserDisplayNameString,
+      currentUserDisplayNameAsString,
     } = displayNames(currentUser, currentProvider, currentCustomer, intl);
 
     const { publicData, geolocation } = currentListing.attributes;
@@ -255,16 +309,46 @@ export class TransactionInitPanelComponent extends Component {
         <FormattedMessage id="TransactionInitPanel.paymentMethodsPageLink" />
       </NamedLink>
     );
-    const createAListingButton = (
-      <Button className={css.createAListingButton} onClick={() => handleRedirect()}>
-        <FormattedMessage
-          id="TransactionInitPanel.createAListingButton"
-          values={{ listingType: listingType === 'listing' ? 'advert' : 'listing' }}
-        />
-      </Button>
+
+    const shouldShowListingSelector = selectedFlow === SELECT_FLOW || listingType === 'advert';
+    const shouldShowCreateListingButton = selectedFlow === PUBLIC_FLOW || listingType === 'advert';
+
+    const downloadRentalAgreementButton = (
+      <ExternalLink
+        href="/Rental_agreement_template.pdf"
+        className={css.downloadRentalAgreementButton}
+      >
+        <FormattedMessage id="TransactionInitPanel.downloadRentalAgreementButton" />
+      </ExternalLink>
+    );
+
+    const renderCreateListingActions = () => (
+      <div className={css.actionButtonWrapper}>
+        <PrimaryButton onClick={handleRedirect}>
+          <FormattedMessage
+            id="TransactionInitPanel.createAListingButton"
+            values={{ listingType: listingType === 'listing' ? 'advert' : 'listing' }}
+          />
+        </PrimaryButton>
+        <SecondaryButton onClick={() => setSelectedFlow(undefined)}>
+          <FormattedMessage id="TransactionInitPanel.cancelButton" />
+        </SecondaryButton>
+      </div>
+    );
+
+    const renderCreateSelectActions = () => (
+      <div className={css.actionButtonWrapper}>
+        <PrimaryButton disabled={!selectedListing} onClick={() => setShowConfirmActionModal(true)}>
+          <FormattedMessage id="TransactionInitPanel.submit" />
+        </PrimaryButton>
+        <SecondaryButton onClick={() => setSelectedFlow(undefined)}>
+          <FormattedMessage id="TransactionInitPanel.cancelButton" />
+        </SecondaryButton>
+      </div>
     );
 
     const classes = classNames(rootClassName || css.root, className);
+
     return (
       <div className={classes}>
         <div className={css.container}>
@@ -303,10 +387,22 @@ export class TransactionInitPanelComponent extends Component {
                   />
                 </p>
               ) : null}
+              {downloadRentalAgreementButton}
 
-              {createAListingButton}
-              <div style={{ textAlign: 'center' }}>Or</div>
-              {selectListing}
+              <SelectFlowForm
+                initialValues={initialValues}
+                providerName={authorDisplayName}
+                onChange={this.handleSelectFlow}
+              />
+
+              {shouldShowCreateListingButton && renderCreateListingActions()}
+              {shouldShowListingSelector && (
+                <>
+                  {selectListing}
+                  {renderCreateSelectActions()}
+                </>
+              )}
+
               {paymentForm}
               {/* {couponCodeComp} */}
             </div>
@@ -361,8 +457,67 @@ export class TransactionInitPanelComponent extends Component {
           listingType={listingType}
           pageLocation={pageLocation}
           authorName={authorDisplayName}
-          redirectProps={{ guest, host, contactingAs }}
+          redirectProps={{ guest, host, contactingAs, selectedFlow, message }}
         />
+
+        <ConfirmationModal
+          id="CreateListingModaDirectFlow"
+          isOpen={showCreateListingDirectFlowPopup}
+          onCloseModal={() => setShowCreateListingDirectFlowPopup(false)}
+          negativeAction={onSkipDirectFlow}
+          onManageDisableScrolling={onManageDisableScrolling}
+          affirmativeAction={handleRedirect}
+          titleText={intl.formatMessage({
+            id: 'TransactionInitPanel.createListingModal.createRenterRequest',
+          })}
+          contentText={intl.formatMessage({
+            id: 'TransactionInitPanel.createListingModal.description',
+          })}
+          affirmativeButtonText={intl.formatMessage({
+            id: 'TransactionInitPanel.createListingModal.title',
+          })}
+          negativeButtonText={intl.formatMessage({
+            id: 'TransactionInitPanel.createListingModal.skip',
+          })}
+        />
+
+        <ConfirmationModal
+          id="ConfirmationModal"
+          isOpen={showConfirmActionModal}
+          onCloseModal={() => setShowConfirmActionModal(false)}
+          negativeAction={() => {
+            setShowConfirmActionModal(false);
+            setSelectedFlow(undefined);
+          }}
+          onManageDisableScrolling={onManageDisableScrolling}
+          affirmativeAction={() => setIsConfirmed(true)}
+          titleText={intl.formatMessage({ id: 'TransactionInitPanel.confirmation.title' })}
+          contentText={intl.formatMessage({ id: 'TransactionInitPanel.confirmation.subtitle' })}
+          affirmativeButtonText={intl.formatMessage({
+            id: 'TransactionInitPanel.confirmation.affirmativeButtonText',
+          })}
+          negativeButtonText={intl.formatMessage({
+            id: 'TransactionInitPanel.confirmation.negativeButtonText',
+          })}
+        />
+        <Modal
+          id="ListingPage.enquiry"
+          contentClassName={css.enquiryModalContent}
+          isOpen={enquiryModalOpen}
+          onClose={() => setEnquiryModalOpen(false)}
+          usePortal
+          onManageDisableScrolling={onManageDisableScrolling}
+        >
+          <EnquiryForm
+            className={css.enquiryForm}
+            submitButtonWrapperClassName={css.enquirySubmitButtonWrapper}
+            listingTitle={listingTitle}
+            authorDisplayName={otherUserDisplayNameString}
+            currentUserDisplayName={currentUserDisplayNameAsString}
+            onSubmit={onSubmitEnquiry}
+            onCancel={() => setEnquiryModalOpen(false)}
+          />
+        </Modal>
       </div>
     );
   }

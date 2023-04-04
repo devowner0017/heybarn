@@ -117,6 +117,13 @@ const PanelHeading = props => {
     ),
     faqLink: <NamedLink name={'FAQPage'}>FAQs</NamedLink>,
     lineBreak,
+    u: (...chunks) => <u>{chunks}</u>,
+    em: (...chunks) => <em>{chunks}</em>,
+    connectionFeeLink: (...chunks) => (
+      <NamedLink name="FAQPage" to={{ hash: '#connection-fee' }}>
+        {chunks}
+      </NamedLink>
+    ),
   };
 
   switch (panelHeadingState) {

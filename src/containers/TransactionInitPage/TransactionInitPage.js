@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -48,6 +48,7 @@ import {
 import { types as sdkTypes } from '../../util/sdkLoader';
 import css from './TransactionInitPage.module.css';
 import { getPropByName } from '../../util/devHelpers';
+import { DIRECT_FLOW } from '../../components/TransactionInitPanel/SelectFlowForm';
 
 const { UUID } = sdkTypes;
 const PROVIDER = 'provider';
@@ -68,6 +69,28 @@ const initializeOrderPage = (initialValues, routes, dispatch) => {
 };
 
 const checkCouponCode = (coupon, currentUser) => {};
+
+function useStateCallback(initialState) {
+  const [state, setState] = useState(initialState);
+  const cbRef = useRef(null); // init mutable ref container for callbacks
+
+  const setStateCallback = useCallback((state, cb) => {
+    cbRef.current = cb; // store current, passed callback in ref
+    setState(state);
+  }, []); // keep object reference stable, exactly like `useState`
+
+  useEffect(() => {
+    // cb.current is `null` on initial render,
+    // so we only invoke callback on state *updates*
+    if (cbRef.current) {
+      cbRef.current(state);
+      cbRef.current = null; // reset callback after execution
+    }
+  }, [state]);
+
+  return [state, setStateCallback];
+}
+
 // TransactionInitPage handles data loading for Sale and Order views to transaction pages in Inbox.
 export const TransactionInitPageComponent = props => {
   const {
@@ -103,14 +126,20 @@ export const TransactionInitPageComponent = props => {
   const [couponCode, setCouponCode] = useState('');
   const [validCouponCode, setValidCouponCode] = useState(null);
 
-  const [selectedListingId, setSelectedListingId] = useState(null);
-  const [selectedListing, setSelectedListing] = useState(null);
-  if (!queryInProgress && !listings?.length && !showCreateListingPopup) {
-    setShowCreateListingPopup(true);
-  }
+  const [showCreateListingDirectFlowPopup, setShowCreateListingDirectFlowPopup] = useState(false);
+  const [enquiryModalOpen, setEnquiryModalOpen] = useState(false);
+  const [selectedFlow, setSelectedFlow] = useStateCallback(location?.state?.selectedFlow);
+  const [selectedListing, setSelectedListing] = useState(location?.state?.listing || null);
+  const [message, setMessage] = useState(location?.state?.message || null);
+  const [showConfirmActionModal, setShowConfirmActionModal] = useState(
+    !!location?.state?.listing || false
+  );
+  const [isConfirmed, setIsConfirmed] = useState(false);
+
   const [savedPaymentIntents, setSavedPaymentIntents] = useState(null);
   const [stripeFunction, setStripeFunction] = useState(null);
   const [submittingPlatformFee, setSubmittingPlatformFee] = useState(null);
+
   useEffect(() => {
     if (window) {
       loadInitialData();
@@ -122,6 +151,13 @@ export const TransactionInitPageComponent = props => {
       setValidCouponCode(true);
     }
   }, [couponCode]);
+
+  // useEffect(() => {
+  //   if (!queryInProgress && !listings?.length && !showCreateListingPopup) {
+  //     setShowCreateListingPopup(true);
+  //   }
+  // }, [queryInProgress, listings?.length, showCreateListingPopup]);
+
   /**
    * Load initial data for the page
    *
@@ -316,11 +352,16 @@ export const TransactionInitPageComponent = props => {
       const paymentIntent = fnParams.paymentIntent;
       setSavedPaymentIntents(paymentIntent);
 
+      const selectedListingIdMaybe =
+        selectedFlow === DIRECT_FLOW && !selectedListing
+          ? {}
+          : { selectedListingId: selectedListing.id.uuid };
+
       return onCreateTransaction({
         listingId: listingId.uuid,
         protectedData: {
-          selectedListingId: selectedListing.id.uuid,
           contactingAs,
+          ...selectedListingIdMaybe,
         },
       }).then(tx => {
         return { tx, paymentIntent };
@@ -416,7 +457,7 @@ export const TransactionInitPageComponent = props => {
     }
     setSubmittingPlatformFee(true);
     const { history, currentUser, dispatch } = props;
-    const { card, paymentMethod, formValues, message } = values;
+    const { card, paymentMethod, formValues, message: formMessage } = values;
     const {
       name,
       addressLine1,
@@ -427,6 +468,8 @@ export const TransactionInitPageComponent = props => {
       country,
       saveAfterOnetimePayment,
     } = formValues || {};
+
+    const messageParam = formMessage ? formMessage : message;
 
     // Billing address is recommended.
     // However, let's not assume that <StripePaymentAddress> data is among formValues.
@@ -458,16 +501,21 @@ export const TransactionInitPageComponent = props => {
       billingDetails,
       selectedPaymentMethod: paymentMethod,
       saveAfterOnetimePayment: !!saveAfterOnetimePayment,
-      message,
+      message: messageParam,
       validCouponCode,
     };
+
     handlePaymentIntent(requestPaymentParams)
       .then(res => {
         const { orderId, messageSuccess, paymentMethodSaved } = res;
         setSubmittingPlatformFee(false);
 
         const routes = routeConfiguration();
-        const initialMessageFailedToTransaction = !message ? null : messageSuccess ? null : orderId;
+        const initialMessageFailedToTransaction = !messageParam
+          ? null
+          : messageSuccess
+          ? null
+          : orderId;
         const orderDetailsPath = pathByRouteName('OrderDetailsPage', routes, { id: orderId.uuid });
         const initialValues = {
           initialMessageFailedToTransaction,
@@ -482,7 +530,21 @@ export const TransactionInitPageComponent = props => {
         setSubmittingPlatformFee(false);
       });
   };
-  const showPaymentForm = !!selectedListing;
+
+  const onSubmitEnquiry = values => {
+    const { message } = values;
+
+    setMessage(message);
+    setEnquiryModalOpen(false);
+    setShowCreateListingDirectFlowPopup(true);
+  };
+
+  const onSkipDirectFlow = () => {
+    setShowCreateListingDirectFlowPopup(false);
+    setShowConfirmActionModal(true);
+  };
+
+  const showPaymentForm = isConfirmed && (!!selectedListing || selectedFlow === DIRECT_FLOW);
   // Get first and last name of the current user and use it in the StripePaymentForm to autofill the name field
   const userName =
     currentUser && currentUser.attributes
@@ -506,13 +568,13 @@ export const TransactionInitPageComponent = props => {
       <select
         onChange={e => {
           const listingId = e.target.value;
-          setSelectedListingId(listingId);
           setSelectedListing(listings.find(l => l.id.uuid === listingId));
           scrollRef.current.scrollIntoView();
         }}
         className={css.selectListing}
+        value={selectedListing ? selectedListing.id.uuid : ''}
       >
-        <option disabled value="" selected>
+        <option disabled value="">
           Select {listingType === 'listing' ? 'An Advert' : 'A Listing'}
         </option>
         {listings?.map(l => {
@@ -526,6 +588,7 @@ export const TransactionInitPageComponent = props => {
       </select>
     </>
   );
+
   const paymentForm = showPaymentForm ? (
     validCouponCode ? (
       <button
@@ -542,33 +605,20 @@ export const TransactionInitPageComponent = props => {
           className={css.paymentForm}
           onSubmit={handleSubmitPlatformFee}
           inProgress={submittingPlatformFee}
-          disabled={showCreateListingPopup || !selectedListing}
           formId="TransactionInitPagePaymentForm"
-          // Message above submit button
-          // paymentInfo={intl.formatMessage({
-          //   id: 'TransactionInitPage.paymentInfo',
-          // })}
-          // authorDisplayName={currentAuthor.attributes.profile.displayName}
           authorDisplayName={'currentAuthor'}
-          showInitialMessageInput={false}
           initialValues={initalValuesForStripePayment}
-          // initiateOrderError={initiateOrderError}
           initiateOrderError={null}
-          // confirmCardPaymentError={confirmCardPaymentError}
           confirmCardPaymentError={null}
-          // confirmPaymentError={confirmPaymentError}
           confirmPaymentError={null}
-          // hasHandledCardPayment={hasPaymentIntentUserActionsDone}
           hasHandledCardPayment={false}
-          // loadingData={!stripeCustomerFetched}
           loadingData={false}
           defaultPaymentMethod={
             hasDefaultPaymentMethod ? currentUser.stripeCustomer.defaultPaymentMethod : null
           }
           paymentIntent={null}
-          // paymentIntent={paymentIntent}
           onStripeInitialized={onStripeInitialized}
-          showInitialMessageInput={true}
+          showInitialMessageInput={selectedFlow !== DIRECT_FLOW}
         />
       </>
     )
@@ -615,6 +665,19 @@ export const TransactionInitPageComponent = props => {
         guest={guest}
         host={host}
         contactingAs={contactingAs}
+        enquiryModalOpen={enquiryModalOpen}
+        setEnquiryModalOpen={setEnquiryModalOpen}
+        onSubmitEnquiry={onSubmitEnquiry}
+        selectedFlow={selectedFlow}
+        setSelectedFlow={setSelectedFlow}
+        showCreateListingDirectFlowPopup={showCreateListingDirectFlowPopup}
+        setShowCreateListingDirectFlowPopup={setShowCreateListingDirectFlowPopup}
+        onSkipDirectFlow={onSkipDirectFlow}
+        message={message}
+        showConfirmActionModal={showConfirmActionModal}
+        setShowConfirmActionModal={setShowConfirmActionModal}
+        setIsConfirmed={setIsConfirmed}
+        setSelectedListing={setSelectedListing}
       />
       <span ref={scrollRef}></span>
     </>

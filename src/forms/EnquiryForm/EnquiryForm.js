@@ -4,7 +4,13 @@ import { compose } from 'redux';
 import { FormattedMessage, injectIntl, intlShape } from '../../util/reactIntl';
 import { Form as FinalForm } from 'react-final-form';
 import classNames from 'classnames';
-import { Form, PrimaryButton, FieldTextInput, IconEnquiry } from '../../components';
+import {
+  Form,
+  PrimaryButton,
+  FieldTextInput,
+  IconEnquiry,
+  SecondaryButton,
+} from '../../components';
 import * as validators from '../../util/validators';
 import { propTypes } from '../../util/types';
 
@@ -24,8 +30,12 @@ const EnquiryFormComponent = props => (
         intl,
         listingTitle,
         authorDisplayName,
+        currentUserDisplayName,
         sendEnquiryError,
+        onCancel,
       } = fieldRenderProps;
+
+      console.log('fieldRenderProps', authorDisplayName);
 
       const messageLabel = intl.formatMessage(
         {
@@ -52,8 +62,14 @@ const EnquiryFormComponent = props => (
         <Form className={classes} onSubmit={handleSubmit} enforcePagePreloadFor="OrderDetailsPage">
           <IconEnquiry className={css.icon} />
           <h2 className={css.heading}>
-            <FormattedMessage id="EnquiryForm.heading" values={{ listingTitle }} />
+            <FormattedMessage id="EnquiryForm.heading" values={{ authorDisplayName }} />
           </h2>
+          <p>
+            <FormattedMessage
+              id="EnquiryForm.subheading"
+              values={{ currentUserDisplayName, authorDisplayName }}
+            />
+          </p>
           <FieldTextInput
             className={css.field}
             type="textarea"
@@ -69,9 +85,14 @@ const EnquiryFormComponent = props => (
                 <FormattedMessage id="EnquiryForm.sendEnquiryError" />
               </p>
             ) : null}
-            <PrimaryButton type="submit" inProgress={submitInProgress} disabled={submitDisabled}>
-              <FormattedMessage id="EnquiryForm.submitButtonText" />
-            </PrimaryButton>
+            <div className={css.actionButtonWrapper}>
+              <PrimaryButton type="submit" inProgress={submitInProgress} disabled={submitDisabled}>
+                <FormattedMessage id="EnquiryForm.submitButtonText" />
+              </PrimaryButton>
+              <SecondaryButton type="button" onClick={onCancel}>
+                <FormattedMessage id="EnquiryForm.cancelButtonText" />
+              </SecondaryButton>
+            </div>
           </div>
         </Form>
       );
