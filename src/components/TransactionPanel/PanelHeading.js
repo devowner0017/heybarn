@@ -185,7 +185,7 @@ const PanelHeading = props => {
     accountSettingsLink,
     faqLink: <NamedLink name={'FAQPage'}>FAQs</NamedLink>,
     templateLink: (...chuncks) => (
-      <ExternalLink href="/Rental_agreement_template.pdf">{chuncks}</ExternalLink>
+      <ExternalLink href="/static/Rental_agreement_template.pdf">{chuncks}</ExternalLink>
     ),
   };
   switch (panelHeadingState) {

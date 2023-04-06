@@ -451,7 +451,7 @@ class StripePaymentFormPlatformFee extends Component {
                   placeholder={billingDetailsNamePlaceholder}
                 />
 
-                {billingAddress}
+                {/* {billingAddress} */}
               </div>
             ) : null}
           </React.Fragment>

@@ -74,7 +74,7 @@ const SectionGuarantee = () => {
             </p>
 
             <ExternalLink
-              href="/Rental_agreement_template.pdf"
+              href="/static/Rental_agreement_template.pdf"
               className={classNames(css.button, css.downloadButton)}
             >
               <FormattedMessage

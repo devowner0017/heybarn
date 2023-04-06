@@ -321,7 +321,7 @@ export class TransactionInitPanelComponent extends Component {
 
     const downloadRentalAgreementButton = (
       <ExternalLink
-        href="/Rental_agreement_template.pdf"
+        href="/static/Rental_agreement_template.pdf"
         className={css.downloadRentalAgreementButton}
       >
         <FormattedMessage id="TransactionInitPanel.downloadRentalAgreementButton" />
