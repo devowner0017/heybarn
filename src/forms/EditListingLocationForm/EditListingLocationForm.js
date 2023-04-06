@@ -126,6 +126,14 @@ export const EditListingLocationFormComponent = props => (
           />
 
           <div className={css.regionWrapper}>
+            {listingType === 'listing' && (
+              <p>
+                Your data security is our highest concern and your address will not be made
+                available to any other user. Your address will be contained within a 5 km circle on
+                the location map.
+              </p>
+            )}
+
             {listingType === 'advert' && (
               <>
                 <FieldSelect
