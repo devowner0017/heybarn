@@ -1,14 +1,17 @@
 import React from 'react';
 
-import { ExternalLink } from '../../../components';
+import { ExternalLink, NamedLink } from '../../../components';
 import { FormattedMessage } from '../../../util/reactIntl';
 
 import css from './SectionStory.module.css';
 
 import imageLeft from './image-left.png';
 import imageRight from './image-right.png';
+import config from '../../../config';
 
 export const SectionStory = () => {
+  const { siteFacebookPage, siteInstagramPage } = config;
+
   return (
     <div className={css.root}>
       <div className={css.container}>
@@ -30,7 +33,7 @@ export const SectionStory = () => {
             <div className={css.socialIcons}>
               <ExternalLink
                 className={css.socialIcon}
-                href="https://www.facebook.com/heybarnnz/"
+                href={siteFacebookPage}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -38,7 +41,7 @@ export const SectionStory = () => {
               </ExternalLink>
               <ExternalLink
                 className={css.socialIcon}
-                href="https://www.instagram.com/heybarnnz/"
+                href={siteInstagramPage}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -46,9 +49,9 @@ export const SectionStory = () => {
               </ExternalLink>
             </div>
 
-            <ExternalLink href="https://www.facebook.com/heybarn/" className={css.followUsLink}>
+            <NamedLink name="AboutPage" className={css.followUsLink}>
               <FormattedMessage id="SectionStory.followUsLink" />
-            </ExternalLink>
+            </NamedLink>
           </div>
         </div>
         <div className={css.rightImage}>
@@ -61,25 +64,25 @@ export const SectionStory = () => {
             <div className={css.socialIcons}>
               <ExternalLink
                 className={css.socialIcon}
-                href="https://www.facebook.com/heybarn"
+                href={siteFacebookPage}
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <FacebookIcon />
               </ExternalLink>
-              <a
+              <ExternalLink
                 className={css.socialIcon}
-                href="https://www.instagram.com/heybarn_nz"
+                href={siteInstagramPage}
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <InstagramIcon />
-              </a>
+              </ExternalLink>
             </div>
 
-            <ExternalLink href="https://www.facebook.com/heybarn" className={css.followUsLink}>
+            <NamedLink name="AboutPage" className={css.followUsLink}>
               <FormattedMessage id="SectionStory.followUsLink" />
-            </ExternalLink>
+            </NamedLink>
           </div>
         </div>
       </div>

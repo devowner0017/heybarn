@@ -25,9 +25,6 @@ const SectionHowItWorks = props => {
               <h3 className={css.cardText}>
                 <FormattedMessage id="SectionHowItWorks.part1Title" />
               </h3>
-              <a className={css.readMore}>
-                <FormattedMessage id="SectionHowItWorks.readMore" />
-              </a>
             </div>
           </div>
         </div>
@@ -39,9 +36,6 @@ const SectionHowItWorks = props => {
               <h3 className={css.cardText}>
                 <FormattedMessage id="SectionHowItWorks.part2Title" />
               </h3>
-              <a className={css.readMore}>
-                <FormattedMessage id="SectionHowItWorks.readMore" />
-              </a>
             </div>
           </div>
         </div>
