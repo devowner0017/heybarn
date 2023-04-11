@@ -680,6 +680,7 @@ export const TransactionInitPageComponent = props => {
         showConfirmActionModal={showConfirmActionModal}
         setShowConfirmActionModal={setShowConfirmActionModal}
         setIsConfirmed={setIsConfirmed}
+        isConfirmed={isConfirmed}
         setSelectedListing={setSelectedListing}
       />
       <span ref={scrollRef}></span>
