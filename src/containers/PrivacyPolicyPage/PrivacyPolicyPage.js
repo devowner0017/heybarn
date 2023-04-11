@@ -18,6 +18,7 @@ import {
 import config from '../../config';
 
 import css from './PrivacyPolicyPage.module.css';
+import { alignProperty } from '@mui/material/styles/cssUtils';
 
 const PrivacyPolicyPageComponent = props => {
   const { scrollingDisabled, intl } = props;
@@ -30,13 +31,13 @@ const PrivacyPolicyPageComponent = props => {
         name: 'PrivacyPolicyPage',
       },
     },
-    {
-      text: intl.formatMessage({ id: 'PrivacyPolicyPage.tosTabTitle' }),
-      selected: false,
-      linkProps: {
-        name: 'TermsOfServicePage',
-      },
-    },
+    // {
+    //   text: intl.formatMessage({ id: 'PrivacyPolicyPage.tosTabTitle' }),
+    //   selected: false,
+    //   linkProps: {
+    //     name: 'TermsOfServicePage',
+    //   },
+    // },
   ];
   const siteTitle = config.siteTitle;
   const schemaTitle = intl.formatMessage({ id: 'PrivacyPolicyPage.schemaTitle' }, { siteTitle });
@@ -51,11 +52,15 @@ const PrivacyPolicyPageComponent = props => {
         <LayoutWrapperTopbar>
           <TopbarContainer currentPage="PrivacyPolicyPage" />
         </LayoutWrapperTopbar>
-        <LayoutWrapperSideNav tabs={tabs} />
+        <LayoutWrapperSideNav>
+          <h1 className='policy-tab'>Privacy Policy</h1>
+          <p className='policy-tab-p'>Last updated - 26 February 2023</p>
+        </LayoutWrapperSideNav> 
+        
         <LayoutWrapperMain>
           <div className={css.content}>
             <h1 className={css.heading}>
-              <FormattedMessage id="PrivacyPolicyPage.heading" />
+              {/* <FormattedMessage id="PrivacyPolicyPage.heading" /> */}
             </h1>
             <PrivacyPolicy />
           </div>

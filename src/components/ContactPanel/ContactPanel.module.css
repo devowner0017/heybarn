@@ -196,6 +196,8 @@
   @apply --marketplaceButtonStylesPrimary;
 
   /* Clear padding that is set for link elements looking like buttons */
+  width: 310px;
+  background-color: darkgoldenrod;
   padding: 0;
 }
 

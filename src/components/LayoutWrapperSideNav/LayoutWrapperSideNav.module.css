@@ -21,7 +21,9 @@
   }
 
   @media (--viewportLargeWithPaddings) {
-    padding: 109px 0 82px max(calc((100% - 1600px) / 2), 20px);
+    /* padding: 109px 0 82px max(calc((100% - 1600px) / 2), 20px); */
+    width: 434px;
+    padding-right: 50px;
   }
 }
 

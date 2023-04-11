@@ -32,19 +32,19 @@ const FilterComponent = props => {
   const name = id.replace(/\s+/g, '-').toLowerCase();
   if (!listingType || !listingType.includes(searchType)) return null;
   switch (type) {
-    case 'SelectSingleFilter': {
-      return (
-        <SelectSingleFilter
-          id={componentId}
-          label={label}
-          queryParamNames={queryParamNames}
-          initialValues={initialValues(queryParamNames)}
-          onSelect={getHandleChangedValueFn(useHistoryPush)}
-          {...config}
-          {...rest}
-        />
-      );
-    }
+    // case 'SelectSingleFilter': {
+    //   return (
+    //     <SelectSingleFilter
+    //       id={componentId}
+    //       label={label}
+    //       queryParamNames={queryParamNames}
+    //       initialValues={initialValues(queryParamNames)}
+    //       onSelect={getHandleChangedValueFn(useHistoryPush)}
+    //       {...config}
+    //       {...rest}
+    //     />
+    //   );
+    // }
     case 'SelectRegionFilter': {
       return (
         <SelectRegionFilter
@@ -59,59 +59,59 @@ const FilterComponent = props => {
         />
       );
     }
-    case 'SelectMultipleFilter': {
-      return (
-        <SelectMultipleFilter
-          id={componentId}
-          label={label}
-          name={name}
-          queryParamNames={queryParamNames}
-          initialValues={initialValues(queryParamNames)}
-          onSubmit={getHandleChangedValueFn(useHistoryPush)}
-          {...config}
-          {...rest}
-        />
-      );
-    }
-    case 'BookingDateRangeFilter': {
-      return (
-        <BookingDateFromFilter
-          id={componentId}
-          label={label}
-          queryParamNames={queryParamNames}
-          initialValues={initialValues(queryParamNames)}
-          onSubmit={getHandleChangedValueFn(useHistoryPush)}
-          {...config}
-          {...rest}
-        />
-      );
-    }
-    case 'PriceFilter': {
-      return (
-        <PriceFilter
-          id={componentId}
-          label={label}
-          queryParamNames={queryParamNames}
-          initialValues={initialValues(queryParamNames)}
-          onSubmit={getHandleChangedValueFn(useHistoryPush)}
-          {...config}
-          {...rest}
-        />
-      );
-    }
-    case 'KeywordFilter':
-      return (
-        <KeywordFilter
-          id={componentId}
-          label={label}
-          name={name}
-          queryParamNames={queryParamNames}
-          initialValues={initialValues(queryParamNames)}
-          onSubmit={getHandleChangedValueFn(useHistoryPush)}
-          {...config}
-          {...rest}
-        />
-      );
+    // case 'SelectMultipleFilter': {
+    //   return (
+    //     <SelectMultipleFilter
+    //       id={componentId}
+    //       label={label}
+    //       name={name}
+    //       queryParamNames={queryParamNames}
+    //       initialValues={initialValues(queryParamNames)}
+    //       onSubmit={getHandleChangedValueFn(useHistoryPush)}
+    //       {...config}
+    //       {...rest}
+    //     />
+    //   );
+    // }
+    // case 'BookingDateRangeFilter': {
+    //   return (
+    //     <BookingDateFromFilter
+    //       id={componentId}
+    //       label={label}
+    //       queryParamNames={queryParamNames}
+    //       initialValues={initialValues(queryParamNames)}
+    //       onSubmit={getHandleChangedValueFn(useHistoryPush)}
+    //       {...config}
+    //       {...rest}
+    //     />
+    //   );
+    // }
+    // case 'PriceFilter': {
+    //   return (
+    //     <PriceFilter
+    //       id={componentId}
+    //       label={label}
+    //       queryParamNames={queryParamNames}
+    //       initialValues={initialValues(queryParamNames)}
+    //       onSubmit={getHandleChangedValueFn(useHistoryPush)}
+    //       {...config}
+    //       {...rest}
+    //     />
+    //   );
+    // }
+    // case 'KeywordFilter':
+    //   return (
+    //     <KeywordFilter
+    //       id={componentId}
+    //       label={label}
+    //       name={name}
+    //       queryParamNames={queryParamNames}
+    //       initialValues={initialValues(queryParamNames)}
+    //       onSubmit={getHandleChangedValueFn(useHistoryPush)}
+    //       {...config}
+    //       {...rest}
+    //     />
+    //   );
     default:
       return null;
   }

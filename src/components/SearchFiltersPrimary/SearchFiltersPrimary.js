@@ -4,6 +4,7 @@ import { FormattedMessage } from '../../util/reactIntl';
 import classNames from 'classnames';
 
 import css from './SearchFiltersPrimary.module.css';
+import Button from './Button';
 
 const SearchFiltersPrimaryComponent = props => {
   const {
@@ -45,6 +46,9 @@ const SearchFiltersPrimaryComponent = props => {
   return (
     <div className={classes}>
       <div className={css.searchOptions}>
+        <div className={css.searchOptionslogo}>
+            Find a place to suit you
+        </div>
         {listingsAreLoaded ? (
           <div className={css.searchResultSummary}>
             <span className={css.resultsFound}>
@@ -56,13 +60,34 @@ const SearchFiltersPrimaryComponent = props => {
           </div>
         ) : null}
         {sortByComponent}
-        {typeButton}
+        {/* {typeButton} */}
       </div>
 
       <div className={css.filters}>
-        {children}
-        {toggleSecondaryFiltersOpenButton}
+        <div className={css.filterButtons}>
+          {children}
+          {children}
+          {children}
+        </div>
+        <div className={css.filterLinks}>
+          <div className={css.filterP}>
+            <p className='button_blank'>Advertise what you need</p>
+          </div>
+          <div className={css.filterR}>
+            <Button/>
+          </div>
+        </div>
+        
+        {/* <button className='button_rent'>+ RENT YOUR SPACE</button> */}
+        {/* {toggleSecondaryFiltersOpenButton} */}
+        
       </div>
+      {/* <div className='filter'>
+        <button className='_button'>Region</button>
+        <button className='_button'>District</button>
+        <button className='_button'>Space size</button>
+        <button className='button_blank'>Advertise what you need</button>
+      </div> */}
 
       {hasNoResult ? (
         <div className={css.noSearchResults}>

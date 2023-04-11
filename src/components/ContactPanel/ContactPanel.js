@@ -249,8 +249,8 @@ const ContactPanel = props => {
         ) : (
           <>
             <div className={css.bookingHeading}>
-              <h2 className={titleClasses}>{title}</h2>
-              {subTitleText ? <div className={css.bookingHelp}>{subTitleText}</div> : null}
+              {/* <h2 className={titleClasses}>{title}</h2> */}
+              {/* {subTitleText ? <div className={css.bookingHelp}>{subTitleText}</div> : null} */}
             </div>
             <Button
               rootClassName={css.bookButton}

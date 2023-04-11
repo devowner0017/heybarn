@@ -37,7 +37,7 @@ import { nestedRegions } from './nzRegions';
 export const filters = [
   {
     id: 'locIsland',
-    label: 'Location',
+    label: 'Region',
     type: 'SelectRegionFilter',
     group: 'primary',
     queryParamNames: ['pub_locIsland', 'pub_locRegion', 'pub_locDistrict'],
@@ -424,7 +424,7 @@ export const sortConfig = {
   conflictingFilters: ['keyword'],
 
   options: [
-    { key: 'createdAt', label: 'Newest' },
+    { key: 'createdAt', label: 'NEWEST' },
     { key: '-createdAt', label: 'Oldest' },
     { key: '-price', label: 'Lowest price' },
     { key: 'price', label: 'Highest price' },

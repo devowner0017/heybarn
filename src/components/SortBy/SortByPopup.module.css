@@ -22,9 +22,9 @@
   height: auto;
   min-height: 0;
   border-radius: 4px;
-
+  border: none;
   white-space: nowrap;
-
+  text-decoration: underline;
   &:focus {
     outline: none;
     background-color: var(--matterColorLight);

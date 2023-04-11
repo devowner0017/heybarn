@@ -225,11 +225,11 @@ export const ListingCardComponent = props => {
           </div>
         </div>
 
-        {listingType === 'listing' && (
+        {listingType !== 'listing' && (
           <>
             <div className={minInfo ? css.smallPrice : css.price}>
               <div className={minInfo ? css.smallPriceValue : css.priceValue} title={priceTitle}>
-                {formattedPrice}
+                {/* {formattedPrice} */}
               </div>
               {!minInfo && (
                 <>

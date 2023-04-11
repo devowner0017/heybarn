@@ -21,7 +21,10 @@ import Stack from '@mui/material/Stack';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import SwitchUnstyled, { switchUnstyledClasses } from '@mui/core/SwitchUnstyled';
-
+import {
+  LayoutWrapperFooter,
+  Footer,
+} from '../../components';
 import { searchMapListings, setActiveListing } from './SearchPage.duck';
 import {
   pickSearchParamsOnly,
@@ -47,7 +50,7 @@ export class SearchPageComponent extends Component {
       mapOpened: false,
       mapClosing: false,
       mapClosed: true,
-      mapState: css.mapClosed,
+      mapState: css.mapOpened,
     };
 
     this.searchMapListingsInProgress = false;
@@ -225,6 +228,7 @@ export class SearchPageComponent extends Component {
         />
         <div className={classNames(css.container, { [css.mapOpenContainer]: isMapOpen })}>
           <MainPanel
+            className={css.List}
             urlQueryParams={validQueryParams}
             listings={listings}
             searchInProgress={searchInProgress}
@@ -239,11 +243,11 @@ export class SearchPageComponent extends Component {
             searchParamsForPagination={parse(location.search)}
             showAsModalMaxWidth={MODAL_BREAKPOINT}
             history={history}
-            mapSwitch={mapSwitch}
-            isMapOpen={isMapOpen}
+            // mapSwitch={mapSwitch}
+            // isMapOpen={isMapOpen}
             searchType={pub_listingType || 'listing'}
           />
-          <ModalInMobile
+          {/* <ModalInMobile
             className={css.mapPanel}
             id="SearchPage.map"
             isModalOpenOnMobile={this.state.isSearchMapOpenOnMobile}
@@ -276,8 +280,13 @@ export class SearchPageComponent extends Component {
                 />
               ) : null}
             </div>
-          </ModalInMobile>
+          </ModalInMobile> */}
+          
         </div>
+        <LayoutWrapperFooter>
+            <Footer />
+        </LayoutWrapperFooter>
+          
       </Page>
     );
   }

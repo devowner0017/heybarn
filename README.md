@@ -32,7 +32,8 @@ heybarn has 2 main trunks and many feature branches.
 
 Sharetribe is pre rolled with Jest as the testing library, and heybarn continues to use Jest.
 
-Heybarn also uses husky for pre-commit linting to ensure code formatting and precision. Ensure that you have installed Husky and it will run before every commit, ensuring the validity of your code.
+Heybarn also uses husky for pre-commit linting to ensure code formatting and precision. 
+Ensure that you have installed Husky and it will run before every commit, ensuring the validity of your code.
 
 
 

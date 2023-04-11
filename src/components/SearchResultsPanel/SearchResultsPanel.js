@@ -47,7 +47,7 @@ const SearchResultsPanel = props => {
             listing={l}
             renderSizes={cardRenderSizes}
             setActiveListing={setActiveListing}
-            showAvatar
+            // showAvatar
           />
         ))}
         {props.children}

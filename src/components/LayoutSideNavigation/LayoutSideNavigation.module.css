@@ -45,6 +45,6 @@
   }
 
   @media (--viewportLargeWithPaddings) {
-    padding: 40px calc((100% - 1600px) / 2) 82px 59px;
+    /* padding: 200px calc((100% - 1600px) / 2) 82px 59px; */
   }
 }

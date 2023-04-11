@@ -31,6 +31,10 @@
     min-height: calc(100vh - var(--topbarHeightDesktop));
   }
 }
+.List{
+  display: flex;
+  flex-basis: 50%;
+}
 .mapOpenContainer {
   width: 62.5vw;
   transition: 2;
@@ -89,6 +93,7 @@
 
   @media (--viewportLarge) {
     padding: 0 36px;
+    border-bottom: solid 1px #EEE;
   }
 }
 
@@ -110,11 +115,18 @@
   }
 }
 
-.listings {
-  flex-grow: 1;
+.mainContent {
   display: flex;
-  flex-direction: column;
+}
+
+.listings {
+  display: flex;
   padding: 0;
+  flex-basis: 60%;
+}
+
+.mapContent {
+  flex-basis: 40%;
 }
 
 .newSearchInProgress {
@@ -143,12 +155,12 @@
     flex-basis: 50%;
 
     /* Own layout settings */
-    display: flex;
+
     height: 100%;
   }
 
   @media (--viewportLarge) {
-    flex-basis: 37.5%;
+    flex-basis: 50%;
   }
 }
 
@@ -181,9 +193,9 @@
 
   @media (--viewportMedium) {
     /* Map is fixed so that it doesn't scroll along search results */
-    position: fixed;
+    position: relative;
     top: var(--topbarHeightDesktop);
-    right: 0;
+    /* right: 0; */
 
     /* Fixed content needs width relative to viewport */
     width: 50vw;

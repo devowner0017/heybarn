@@ -22,6 +22,9 @@
     margin-bottom: 12px;
   }
 }
+.money {
+  float: right;
+}
 
 .rules {
   margin-top: 0;
