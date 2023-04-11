@@ -2,10 +2,7 @@ import React, { Component } from 'react';
 import { array, arrayOf, bool, func, number, string } from 'prop-types';
 import { FormattedMessage, injectIntl, intlShape } from '../../util/reactIntl';
 import classNames from 'classnames';
-import {
-  TRANSITION_REQUEST_PAYMENT_AFTER_ENQUIRY,
-  txIsEnquired,
-} from '../../util/transaction';
+import { TRANSITION_REQUEST_PAYMENT_AFTER_ENQUIRY, txIsEnquired } from '../../util/transaction';
 import { LINE_ITEM_NIGHT, LINE_ITEM_DAY, propTypes } from '../../util/types';
 import {
   ensureTransaction,
@@ -37,33 +34,21 @@ import PanelHeading, { HEADING_READY, HEADING_ENQUIRED } from './PanelHeading';
 import css from './TransactionInitPanel.module.css';
 import routeConfiguration from '../../routeConfiguration';
 import { createResourceLocatorString } from '../../util/routes';
-import SelectFlowForm, {
-  DIRECT_FLOW,
-  PUBLIC_FLOW,
-  SELECT_FLOW,
-} from './SelectFlowForm';
+import SelectFlowForm, { DIRECT_FLOW, PUBLIC_FLOW, SELECT_FLOW } from './SelectFlowForm';
 import { EnquiryForm } from '../../forms';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 
 // Helper function to get display names for different roles
 const displayNames = (currentUser, currentProvider, currentCustomer, intl) => {
-  const authorDisplayName = (
-    <UserDisplayName user={currentProvider} intl={intl} />
-  );
-  const customerDisplayName = (
-    <UserDisplayName user={currentCustomer} intl={intl} />
-  );
+  const authorDisplayName = <UserDisplayName user={currentProvider} intl={intl} />;
+  const customerDisplayName = <UserDisplayName user={currentCustomer} intl={intl} />;
 
   let otherUserDisplayName = '';
   let otherUserDisplayNameString = '';
   const currentUserIsCustomer =
-    currentUser.id &&
-    currentCustomer.id &&
-    currentUser.id.uuid === currentCustomer.id.uuid;
+    currentUser.id && currentCustomer.id && currentUser.id.uuid === currentCustomer.id.uuid;
   const currentUserIsProvider =
-    currentUser.id &&
-    currentProvider.id &&
-    currentUser.id.uuid === currentProvider.id.uuid;
+    currentUser.id && currentProvider.id && currentUser.id.uuid === currentProvider.id.uuid;
 
   if (currentUserIsCustomer) {
     otherUserDisplayName = authorDisplayName;
@@ -73,10 +58,7 @@ const displayNames = (currentUser, currentProvider, currentCustomer, intl) => {
     otherUserDisplayNameString = userDisplayNameAsString(currentCustomer, '');
   }
 
-  const currentUserDisplayNameAsString = userDisplayNameAsString(
-    currentUser,
-    ''
-  );
+  const currentUserDisplayNameAsString = userDisplayNameAsString(currentUser, '');
 
   return {
     authorDisplayName,
@@ -121,9 +103,7 @@ export class TransactionInitPanelComponent extends Component {
     const { reviewRating, reviewContent } = values;
     const rating = Number.parseInt(reviewRating, 10);
     onSendReview(transactionRole, currentTransaction, rating, reviewContent)
-      .then(r =>
-        this.setState({ isReviewModalOpen: false, reviewSubmitted: true })
-      )
+      .then(r => this.setState({ isReviewModalOpen: false, reviewSubmitted: true }))
       .catch(e => {
         // Do nothing.
       });
@@ -175,16 +155,10 @@ export class TransactionInitPanelComponent extends Component {
   }
 
   handleSelectFlow(values) {
-    const {
-      setSelectedFlow,
-      pageLocation,
-      setSelectedListing,
-      setIsConfirmed,
-    } = this.props;
+    const { setSelectedFlow, pageLocation, setSelectedListing, setIsConfirmed } = this.props;
     setSelectedFlow(values.flow, nextState => {
       const shouldOpenEnquiryModal =
-        nextState === DIRECT_FLOW &&
-        pageLocation?.state?.selectedFlow !== DIRECT_FLOW;
+        nextState === DIRECT_FLOW && pageLocation?.state?.selectedFlow !== DIRECT_FLOW;
 
       if (!pageLocation?.state?.listing) {
         setSelectedListing(null);
@@ -244,11 +218,9 @@ export class TransactionInitPanelComponent extends Component {
     const listingLoaded = !!currentListing.id;
     const listingDeleted = listingLoaded && currentListing.attributes.deleted;
     const iscustomerLoaded = !!currentCustomer.id;
-    const isCustomerBanned =
-      iscustomerLoaded && currentCustomer.attributes.banned;
+    const isCustomerBanned = iscustomerLoaded && currentCustomer.attributes.banned;
     const isProviderLoaded = !!currentProvider.id;
-    const isProviderBanned =
-      isProviderLoaded && currentProvider.attributes.banned;
+    const isProviderBanned = isProviderLoaded && currentProvider.attributes.banned;
 
     const stateDataFn = tx => {
       // THIS WAS JUST FOR EXAMPLE PURPOSES
@@ -260,12 +232,10 @@ export class TransactionInitPanelComponent extends Component {
             })
           : [];
         const hasCorrectNextTransition =
-          transitions.length > 0 &&
-          transitions.includes(TRANSITION_REQUEST_PAYMENT_AFTER_ENQUIRY);
+          transitions.length > 0 && transitions.includes(TRANSITION_REQUEST_PAYMENT_AFTER_ENQUIRY);
         return {
           headingState: HEADING_ENQUIRED,
-          showBookingPanel:
-            isCustomer && !isProviderBanned && hasCorrectNextTransition,
+          showBookingPanel: isCustomer && !isProviderBanned && hasCorrectNextTransition,
         };
       } else {
         return {
@@ -312,8 +282,7 @@ export class TransactionInitPanelComponent extends Component {
     } = displayNames(currentUser, currentProvider, currentCustomer, intl);
 
     const { publicData, geolocation } = currentListing.attributes;
-    const location =
-      publicData && publicData.location ? publicData.location : {};
+    const location = publicData && publicData.location ? publicData.location : {};
 
     const listingTitle = currentListing.attributes.deleted
       ? deletedListingTitle
@@ -341,9 +310,7 @@ export class TransactionInitPanelComponent extends Component {
     const price = priceRaw ? `${formatMoney(intl, priceRaw)}` : '';
 
     const firstImage =
-      currentListing.images && currentListing.images.length > 0
-        ? currentListing.images[0]
-        : null;
+      currentListing.images && currentListing.images.length > 0 ? currentListing.images[0] : null;
 
     const selectedFirstImage =
       selectedListing?.images?.length > 0 ? selectedListing.images[0] : null;
@@ -384,7 +351,7 @@ export class TransactionInitPanelComponent extends Component {
 
     const renderCreateSelectActions = () => {
       if (isConfirmed) {
-        return null
+        return null;
       }
 
       return (
@@ -418,10 +385,7 @@ export class TransactionInitPanelComponent extends Component {
             />
             {isProvider ? (
               <div className={css.avatarWrapperProviderDesktop}>
-                <AvatarLarge
-                  user={currentCustomer}
-                  className={css.avatarDesktop}
-                />
+                <AvatarLarge user={currentCustomer} className={css.avatarDesktop} />
               </div>
             ) : null}
             <div className={css.panelContentWrapper}>

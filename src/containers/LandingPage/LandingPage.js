@@ -63,7 +63,7 @@ export const LandingPageComponent = props => {
         image: [schemaImage],
       }}
     >
-      <LayoutSingleColumn>
+      <LayoutSingleColumn className={css.layoutWrapper}>
         <LayoutWrapperTopbar className={css.topbarRoot}>
           <TopbarContainer desktopClassName={css.desktopTopBar} />
         </LayoutWrapperTopbar>

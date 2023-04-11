@@ -30,7 +30,7 @@ exports[`ListingPage matches snapshot 1`] = `
       <withRouter(Connect(TopbarContainerComponent)) />
     </LayoutWrapperTopbar>
     <LayoutWrapperMain
-      className={null}
+      className="layoutWrapperMain"
       rootClassName={null}
     >
       <div>

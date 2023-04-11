@@ -499,7 +499,7 @@ export class ListingPageComponent extends Component {
       >
         <LayoutSingleColumn className={css.pageRoot}>
           <LayoutWrapperTopbar>{topbar}</LayoutWrapperTopbar>
-          <LayoutWrapperMain>
+          <LayoutWrapperMain className={css.layoutWrapperMain}>
             <div>
               <div className={css.imgHeader}>
                 <div>
@@ -614,20 +614,6 @@ export class ListingPageComponent extends Component {
                     <div>
                       <button className={css.contactButton}>CONTACT SPACE OWNER</button>
                     </div>
-
-                    {/* <SectionReviews
-                      reviews={reviews}
-                      fetchReviewsError={fetchReviewsError}
-                      listingType={typeOfListing}
-                    /> */}
-                    {/* <SectionHostMaybe
-                      title={title}
-                      listing={currentListing}
-                      authorDisplayName={authorDisplayName}
-                      currentUser={currentUser}
-                      onManageDisableScrolling={onManageDisableScrolling}
-                      listingType={typeOfListing}
-                    /> */}
                   </div>
                 </div>
                 <div>

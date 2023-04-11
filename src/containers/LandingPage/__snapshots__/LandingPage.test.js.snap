@@ -38,7 +38,7 @@ exports[`LandingPage matches snapshot 1`] = `
   }
 >
   <LayoutSingleColumn
-    className={null}
+    className="layoutWrapper"
     rootClassName={null}
   >
     <LayoutWrapperTopbar
