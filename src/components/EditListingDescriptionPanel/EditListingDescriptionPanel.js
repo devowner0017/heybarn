@@ -47,6 +47,9 @@ const EditListingDescriptionPanel = props => {
     ageOfSpace,
     amenities,
     notHidden,
+    lengthOfSpace,
+    widthOfSpace,
+    heightOfSpace,
   } = publicData;
 
   const isPublished = currentListing.id && currentListing.attributes.state !== LISTING_STATE_DRAFT;
@@ -73,6 +76,9 @@ const EditListingDescriptionPanel = props => {
     sizeOfSpace,
     ageOfSpace,
     amenities,
+    lengthOfSpace,
+    widthOfSpace,
+    heightOfSpace,
   });
   return (
     <div className={classes}>
@@ -87,10 +93,22 @@ const EditListingDescriptionPanel = props => {
             description,
             category,
             preferredUse,
-            sizeOfSpace,
             ageOfSpace,
             amenities,
+            lengthOfSpace,
+            widthOfSpace,
+            heightOfSpace,
           } = values;
+
+          const isVolume = lengthOfSpace && widthOfSpace && heightOfSpace;
+          const isArea = (lengthOfSpace && widthOfSpace && !heightOfSpace) || heightOfSpace === 1;
+
+          const sizeOfSpace = isVolume
+            ? lengthOfSpace * widthOfSpace * heightOfSpace
+            : isArea
+            ? lengthOfSpace * widthOfSpace
+            : undefined;
+
           const listingState = !currentListingState || !isPublished ? LISTING_LIVE : null;
           const notDeleted = true;
           const updateValues = {
@@ -106,6 +124,9 @@ const EditListingDescriptionPanel = props => {
               sizeOfSpace,
               ageOfSpace,
               amenities,
+              lengthOfSpace,
+              widthOfSpace,
+              heightOfSpace,
             },
           };
           const defaultPrice = new Money(0, config.currency);

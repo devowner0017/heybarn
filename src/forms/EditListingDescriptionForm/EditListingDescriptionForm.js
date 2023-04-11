@@ -1,7 +1,7 @@
 import React from 'react';
 import { arrayOf, bool, func, shape, string } from 'prop-types';
 import { compose } from 'redux';
-import { Form as FinalForm } from 'react-final-form';
+import { Form as FinalForm, FormSpy } from 'react-final-form';
 import { intlShape, injectIntl, FormattedMessage } from '../../util/reactIntl';
 import { findConfigForSelectFilter, findOptionsForSelectFilter } from '../../util/search';
 import classNames from 'classnames';
@@ -34,6 +34,7 @@ const EditListingDescriptionFormComponent = props => (
     mutators={{ ...arrayMutators }}
     render={formRenderProps => {
       const {
+        form,
         preferredUse,
         className,
         disabled,
@@ -48,6 +49,7 @@ const EditListingDescriptionFormComponent = props => (
         fetchErrors,
         listingType,
         filterConfig,
+        values,
       } = formRenderProps;
 
       const titleMessage = intl.formatMessage({
@@ -115,6 +117,23 @@ const EditListingDescriptionFormComponent = props => (
       const sizeOptions = findConfigForSelectFilter('sizeOfSpace', filterConfig);
       const ageOptions = findConfigForSelectFilter('ageOfSpace', filterConfig);
 
+      const { lengthOfSpace, widthOfSpace, heightOfSpace } = values || {};
+
+      const isVolume = lengthOfSpace && widthOfSpace && heightOfSpace;
+      const isArea = lengthOfSpace && widthOfSpace;
+
+      const sizeOfSpace = isVolume
+        ? lengthOfSpace * widthOfSpace * heightOfSpace
+        : isArea
+        ? lengthOfSpace * widthOfSpace
+        : undefined;
+
+      const sizeOfLabel = isVolume
+        ? intl.formatMessage({ id: 'EditListingFeaturesForm.sizeOfSpaceVolumeLabel' })
+        : isArea
+        ? intl.formatMessage({ id: 'EditListingFeaturesForm.sizeOfSpaceAreaLabel' })
+        : '';
+
       return (
         <Form className={classes} onSubmit={handleSubmit}>
           {errorMessageCreateListingDraft}
@@ -152,16 +171,40 @@ const EditListingDescriptionFormComponent = props => (
 
           {listingType === 'listing' && (
             <>
+              <label className={css.spaceLabel}>
+                <FormattedMessage id="EditListingFeaturesForm.sizeOfSpaceLabel" />{' '}
+                <span>{sizeOfSpace}</span>
+                <span>{sizeOfLabel}</span>
+              </label>
+
               <FieldNumberInput
+                type="number"
                 className={css.title}
-                label={<FormattedMessage id="EditListingFeaturesForm.sizeOfSpaceLabel" />}
-                id={'sizeOfSpace'}
-                placeholder={'m2'}
-                name={'sizeOfSpace'}
-                config={sizeOptions}
+                label={<FormattedMessage id="EditListingFeaturesForm.lengthOfSpaceLabel" />}
+                id="lengthOfSpace"
+                name="lengthOfSpace"
                 validate={submitInProgress ? () => null : required('Required')}
               />
+
               <FieldNumberInput
+                type="number"
+                className={css.title}
+                label={<FormattedMessage id="EditListingFeaturesForm.widthOfSpaceLabel" />}
+                id="widthOfSpace"
+                name="widthOfSpace"
+                validate={submitInProgress ? () => null : required('Required')}
+              />
+
+              <FieldNumberInput
+                type="number"
+                className={css.title}
+                label={<FormattedMessage id="EditListingFeaturesForm.heightOfSpaceLabel" />}
+                id={'heightOfSpace'}
+                name={'heightOfSpace'}
+              />
+
+              <FieldNumberInput
+                type="number"
                 className={css.title}
                 label={<FormattedMessage id="EditListingFeaturesForm.ageOfSpaceLabel" />}
                 placeholder={'years'}
