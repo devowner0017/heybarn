@@ -254,7 +254,7 @@ class MainPanel extends Component {
     const isMobileLayout = isWindowDefined && window.innerWidth < MODAL_BREAKPOINT;
     const shouldShowSearchMap =
       !isMobileLayout || (isMobileLayout && this.state.isSearchMapOpenOnMobile);
-    
+
     return (
       <div className={classes}>
         {mapSwitch}

@@ -319,13 +319,13 @@ label {
 
 button {
   font-family: Helvetica, Arial, sans-serif;
-  background-color: #EEEEEE;
+  background-color: #eeeeee;
   border: none;
   border-radius: 999px;
   margin-right: 30px;
 }
-.button_blank{
-  background-color: white
+.button_blank {
+  background-color: white;
 }
 select {
   @apply --marketplaceSelectStyles;
@@ -359,10 +359,10 @@ textarea {
     font-family: 'Montserrat', Helvetica, sans-serif;
   }
 }
-.policy-tab{
+.policy-tab {
   font-size: 40px;
 }
-.policy-tab-p{
+.policy-tab-p {
   line-height: 0px;
   margin-top: 0px;
 }

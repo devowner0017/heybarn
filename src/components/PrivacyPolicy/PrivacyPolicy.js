@@ -5,11 +5,11 @@ import classNames from 'classnames';
 import css from './PrivacyPolicy.module.css';
 
 const PrivacyPolicy = props => {
-const { rootClassName, className } = props;
-const classes = classNames(rootClassName || css.root, className);
+  const { rootClassName, className } = props;
+  const classes = classNames(rootClassName || css.root, className);
 
-// prettier-ignore
-return (
+  // prettier-ignore
+  return (
 <div className={classes}>
   {/* <p className={css.lastUpdated}>Last updated - 26 February 2023</p> */}
 
@@ -118,15 +118,15 @@ return (
 };
 
 PrivacyPolicy.defaultProps = {
-rootClassName: null,
-className: null,
+  rootClassName: null,
+  className: null,
 };
 
 const { string } = PropTypes;
 
 PrivacyPolicy.propTypes = {
-rootClassName: string,
-className: string,
+  rootClassName: string,
+  className: string,
 };
 
 export default PrivacyPolicy;

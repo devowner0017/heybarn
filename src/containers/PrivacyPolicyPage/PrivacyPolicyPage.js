@@ -53,10 +53,10 @@ const PrivacyPolicyPageComponent = props => {
           <TopbarContainer currentPage="PrivacyPolicyPage" />
         </LayoutWrapperTopbar>
         <LayoutWrapperSideNav>
-          <h1 className='policy-tab'>Privacy Policy</h1>
-          <p className='policy-tab-p'>Last updated - 26 February 2023</p>
-        </LayoutWrapperSideNav> 
-        
+          <h1 className="policy-tab">Privacy Policy</h1>
+          <p className="policy-tab-p">Last updated - 26 February 2023</p>
+        </LayoutWrapperSideNav>
+
         <LayoutWrapperMain>
           <div className={css.content}>
             <h1 className={css.heading}>

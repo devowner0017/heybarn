@@ -21,10 +21,7 @@ import Stack from '@mui/material/Stack';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import SwitchUnstyled, { switchUnstyledClasses } from '@mui/core/SwitchUnstyled';
-import {
-  LayoutWrapperFooter,
-  Footer,
-} from '../../components';
+import { LayoutWrapperFooter, Footer } from '../../components';
 import { searchMapListings, setActiveListing } from './SearchPage.duck';
 import {
   pickSearchParamsOnly,
@@ -281,12 +278,10 @@ export class SearchPageComponent extends Component {
               ) : null}
             </div>
           </ModalInMobile> */}
-          
         </div>
         <LayoutWrapperFooter>
-            <Footer />
+          <Footer />
         </LayoutWrapperFooter>
-          
       </Page>
     );
   }

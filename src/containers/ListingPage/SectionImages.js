@@ -56,7 +56,7 @@ const SectionImages = props => {
     <div onClick={e => e.stopPropagation()}>
       <ActionBarMaybe
         listingUnderEnquiry={listingUnderEnquiry}
-        isOwnListing={isOwnListing} 
+        isOwnListing={isOwnListing}
         currentUserInTransaction={currentUserInTransaction}
         listing={listing}
         typeOfListing={typeOfListing}

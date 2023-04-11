@@ -46,9 +46,7 @@ const SearchFiltersPrimaryComponent = props => {
   return (
     <div className={classes}>
       <div className={css.searchOptions}>
-        <div className={css.searchOptionslogo}>
-            Find a place to suit you
-        </div>
+        <div className={css.searchOptionslogo}>Find a place to suit you</div>
         {listingsAreLoaded ? (
           <div className={css.searchResultSummary}>
             <span className={css.resultsFound}>
@@ -71,16 +69,15 @@ const SearchFiltersPrimaryComponent = props => {
         </div>
         <div className={css.filterLinks}>
           <div className={css.filterP}>
-            <p className='button_blank'>Advertise what you need</p>
+            <p className="button_blank">Advertise what you need</p>
           </div>
           <div className={css.filterR}>
-            <Button/>
+            <Button />
           </div>
         </div>
-        
+
         {/* <button className='button_rent'>+ RENT YOUR SPACE</button> */}
         {/* {toggleSecondaryFiltersOpenButton} */}
-        
       </div>
       {/* <div className='filter'>
         <button className='_button'>Region</button>

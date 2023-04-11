@@ -31,7 +31,7 @@
     min-height: calc(100vh - var(--topbarHeightDesktop));
   }
 }
-.List{
+.List {
   display: flex;
   flex-basis: 50%;
 }
@@ -93,7 +93,7 @@
 
   @media (--viewportLarge) {
     padding: 0 36px;
-    border-bottom: solid 1px #EEE;
+    border-bottom: solid 1px #eee;
   }
 }
 

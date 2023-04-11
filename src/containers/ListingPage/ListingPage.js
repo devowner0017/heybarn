@@ -505,25 +505,23 @@ export class ListingPageComponent extends Component {
                 <div>
                   <h2>Pole Shed, Stabling or Covered Yards</h2>
                 </div>
-                <div>
-                  Manawatu
-                </div>
+                <div>Manawatu</div>
               </div>
               <div className={css.imageContainer}>
                 <div className={css.mainImage}>
                   <SectionImages
-                  // title={title}
-                  listing={currentListing}
-                  // isOwnListing={isOwnListing}
-                  // listingUnderEnquiry={listingUnderEnquiry}
-                  // currentUserInTransaction={currentUserInTransaction}
-                  imageCarouselOpen={this.state.imageCarouselOpen}
-                  onImageCarouselClose={() => this.setState({ imageCarouselOpen: false })}
-                  handleViewPhotosClick={handleViewPhotosClick}
-                  onManageDisableScrolling={onManageDisableScrolling}
-                  // typeOfListing={typeOfListing}
-                  // fromPage={location?.state?.fromPage}
-                  // need={need}
+                    // title={title}
+                    listing={currentListing}
+                    // isOwnListing={isOwnListing}
+                    // listingUnderEnquiry={listingUnderEnquiry}
+                    // currentUserInTransaction={currentUserInTransaction}
+                    imageCarouselOpen={this.state.imageCarouselOpen}
+                    onImageCarouselClose={() => this.setState({ imageCarouselOpen: false })}
+                    handleViewPhotosClick={handleViewPhotosClick}
+                    onManageDisableScrolling={onManageDisableScrolling}
+                    // typeOfListing={typeOfListing}
+                    // fromPage={location?.state?.fromPage}
+                    // need={need}
                   />
                 </div>
                 <div className={css.smallImages}>
@@ -559,7 +557,6 @@ export class ListingPageComponent extends Component {
                       // need={need}
                     />
                   </div>
-                  
                 </div>
               </div>
 
@@ -576,19 +573,26 @@ export class ListingPageComponent extends Component {
                       preferredUse={need}
                       listingType={typeOfListing}
                     /> */}
-                    <SectionDescriptionMaybe description={description} listingType={typeOfListing}/>
+                    <SectionDescriptionMaybe
+                      description={description}
+                      listingType={typeOfListing}
+                    />
                     <hr className={css.underline}></hr>
                     <div>
                       <h3 className={css.space}>About this page</h3>
                       <p>So many sheds, not enough of my own toys to fill them all.</p>
-                      <p>Covered yard spaces, pole shedding and enclosed stabling areas available for long/short term storage of
-                        trailers, attachments, feed or other gear/equipment.
+                      <p>
+                        Covered yard spaces, pole shedding and enclosed stabling areas available for
+                        long/short term storage of trailers, attachments, feed or other
+                        gear/equipment.
                       </p>
                     </div>
                     <hr className={css.underline}></hr>
                     <div>
                       <h3 className={css.space}>Size of space</h3>
-                      <p>Garage 3.6m x 6.1m<br></br>20.7m of floor space</p>
+                      <p>
+                        Garage 3.6m x 6.1m<br></br>20.7m of floor space
+                      </p>
                     </div>
                     <hr className={css.underline}></hr>
                     <SectionFeaturesMaybe
@@ -601,14 +605,16 @@ export class ListingPageComponent extends Component {
                     <hr className={css.underline}></hr>
                     <div>
                       <h3 className={css.space}>Property Rules</h3>
-                      <p>No Smoking<br></br>Pets are allowed</p>
+                      <p>
+                        No Smoking<br></br>Pets are allowed
+                      </p>
                     </div>
                     <hr className={css.underline}></hr>
                     <br></br>
                     <div>
                       <button className={css.contactButton}>CONTACT SPACE OWNER</button>
                     </div>
-                    
+
                     {/* <SectionReviews
                       reviews={reviews}
                       fetchReviewsError={fetchReviewsError}
@@ -661,30 +667,39 @@ export class ListingPageComponent extends Component {
                     <div className={css.spaceownercontainer}>
                       <div className={css.image}>
                         <div className={css._h2}>
-                          <h2>Your space owner<br></br><span className={css.name}>Owned by <span className={css.Name}>Hayden M</span></span></h2>
+                          <h2>
+                            Your space owner<br></br>
+                            <span className={css.name}>
+                              Owned by <span className={css.Name}>Hayden M</span>
+                            </span>
+                          </h2>
                         </div>
-                        <div className={css._image}>
-
-                        </div>
+                        <div className={css._image}></div>
                       </div>
                       <div>
-                        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
-                          ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo 
-                          dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
+                        <p>
+                          Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                          eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+                          voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
+                          clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
                           amet, consetetur sadipscingelitr, sed diam nonumy
                         </p>
                       </div>
-                      <div><a href='#' className={css.link}>View profile</a></div>
+                      <div>
+                        <a href="#" className={css.link}>
+                          View profile
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
               <div className={css.mapwrap}>
                 <SectionMapMaybe
-                    geolocation={geolocation}
-                    publicData={publicData}
-                    listingId={currentListing.id}
-                    listingType={typeOfListing}
+                  geolocation={geolocation}
+                  publicData={publicData}
+                  listingId={currentListing.id}
+                  listingType={typeOfListing}
                 />
               </div>
             </div>

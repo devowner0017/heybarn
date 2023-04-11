@@ -21,7 +21,6 @@ const SectionDescriptionMaybe = props => {
         Owned by <span>Hayden M</span>
       </p>
       <p className={css.money}>NZ $30.00/wk</p>
-      
     </div>
   ) : null;
 };
