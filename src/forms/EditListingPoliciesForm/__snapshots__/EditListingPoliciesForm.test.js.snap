@@ -21,7 +21,7 @@ exports[`EditListingPoliciesForm matches snapshot 1`] = `
         },
         "group": "primary",
         "id": "locIsland",
-        "label": "Location",
+        "label": "Region",
         "listingType": Array [
           "listing",
           "advert",

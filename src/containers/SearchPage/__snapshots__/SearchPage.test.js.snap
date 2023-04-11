@@ -26,7 +26,7 @@ exports[`SearchPageComponent matches snapshot 1`] = `
     className="container"
   >
     <MainPanel
-      className={null}
+      className="List"
       filterConfig={
         Array [
           Object {
@@ -44,7 +44,7 @@ exports[`SearchPageComponent matches snapshot 1`] = `
             },
             "group": "primary",
             "id": "locIsland",
-            "label": "Location",
+            "label": "Region",
             "listingType": Array [
               "listing",
               "advert",
@@ -1287,26 +1287,7 @@ exports[`SearchPageComponent matches snapshot 1`] = `
           "push": [Function],
         }
       }
-      isMapOpen={false}
       listings={Array []}
-      mapSwitch={
-        <ForwardRef(FormControlLabel)
-          className="mapSwitch"
-          control={
-            <ForwardRef(Switch)
-              checked={false}
-              inputProps={
-                Object {
-                  "aria-label": "Show map",
-                }
-              }
-              onChange={[Function]}
-            />
-          }
-          label="Show map"
-          labelPlacement="start"
-        />
-      }
       onActivateListing={[Function]}
       onCloseModal={[Function]}
       onManageDisableScrolling={[Function]}
@@ -1337,7 +1318,7 @@ exports[`SearchPageComponent matches snapshot 1`] = `
           "options": Array [
             Object {
               "key": "createdAt",
-              "label": "Newest",
+              "label": "NEWEST",
             },
             Object {
               "key": "-createdAt",
@@ -1363,33 +1344,12 @@ exports[`SearchPageComponent matches snapshot 1`] = `
       }
       urlQueryParams={Object {}}
     />
-    <withViewport(ModalInMobileComponent)
-      className="mapPanel"
-      id="SearchPage.map"
-      isModalOpenOnMobile={false}
-      onClose={[Function]}
-      onManageDisableScrolling={[Function]}
-      showAsModalMaxWidth={768}
-    >
-      <div
-        className="mapWrapper"
-      >
-        <withRouter(SearchMapComponent)
-          activeListingId={null}
-          isSearchMapOpenOnMobile={false}
-          listings={Array []}
-          location={
-            Object {
-              "search": "",
-            }
-          }
-          mapClass="mapClosed"
-          onCloseAsModal={[Function]}
-          onMapMoveEnd={[Function]}
-          reusableContainerClassName="map"
-        />
-      </div>
-    </withViewport(ModalInMobileComponent)>
   </div>
+  <LayoutWrapperFooter
+    className={null}
+    rootClassName={null}
+  >
+    <injectIntl(Footer) />
+  </LayoutWrapperFooter>
 </Page>
 `;

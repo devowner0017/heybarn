@@ -83,6 +83,26 @@ exports[`ListingCard matches snapshot 1`] = `
         />
       </div>
     </div>
+    <div
+      className="price"
+    >
+      <div
+        className="priceValue"
+        title={55}
+      />
+      <div
+        className="perUnit"
+      >
+        <MemoizedFormattedMessage
+          id="ListingCard.perWeek"
+        />
+      </div>
+      <div
+        className="perUnitMobile"
+      >
+        /wk
+      </div>
+    </div>
   </div>
 </Component>
 `;
