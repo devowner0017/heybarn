@@ -26,7 +26,7 @@ export class GoogleAnalyticsHandler {
 
 export class SegmentAnalyticsHandler {
   constructor(analytics) {
-    if (typeof analytics !== 'function') {
+    if (typeof analytics !== 'object') {
       throw new Error('Variable `analytics` missing for Segment Analytics');
     }
     this.analytics = analytics;
