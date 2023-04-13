@@ -31,7 +31,11 @@ import { authInfo } from './ducks/Auth.duck';
 import { fetchCurrentUser } from './ducks/user.duck';
 import routeConfiguration from './routeConfiguration';
 import * as log from './util/log';
-import { LoggingAnalyticsHandler, GoogleAnalyticsHandler } from './analytics/handlers';
+import {
+  LoggingAnalyticsHandler,
+  GoogleAnalyticsHandler,
+  SegmentAnalyticsHandler,
+} from './analytics/handlers';
 
 import './styles/marketplaceDefaults.css';
 
@@ -77,6 +81,14 @@ const setupAnalyticsHandlers = () => {
         'Google Analytics (window.ga) is not available. It might be that your adblocker is blocking it.'
       );
     }
+  }
+
+  if (!config.dev && window?.analytics) {
+    handlers.push(new SegmentAnalyticsHandler(window.analytics));
+  } else {
+    console.warn(
+      'Segment Analytics (window.analytics) is not available. It might be that your adblocker is blocking it.'
+    );
   }
 
   return handlers;

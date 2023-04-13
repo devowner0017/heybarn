@@ -100,10 +100,20 @@ module.exports = (reportUri, enforceSsl, reportOnly) => {
     styleSrc = [self],
     imgSrc = [self],
   } = defaultDirectives;
-  const newScriptSrc = scriptSrc.concat('*.tawk.to', '*.hotjar.com', '*.googletagmanager.com');
+  const newScriptSrc = scriptSrc.concat(
+    '*.tawk.to',
+    '*.hotjar.com',
+    '*.googletagmanager.com',
+    '*.segment.com'
+  );
   const newFontSrc = fontSrc.concat('*.cloudflare.com');
   const newFrameSrc = frameSrc.concat('*.tawk.to', '*.hotjar.com');
-  const newConnectSrc = connectSrc.concat('*.tawk.to', '*.hotjar.com');
+  const newConnectSrc = connectSrc.concat(
+    '*.tawk.to',
+    '*.hotjar.com',
+    '*.segment.com',
+    '*.segment.io'
+  );
   const newStyleSrc = styleSrc.concat('*.cloudflare.com');
   const newImgSrc = imgSrc.concat('*.cloudflare.com', '*.googletagmanager.com');
   const customDirectives = {

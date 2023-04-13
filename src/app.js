@@ -19,7 +19,6 @@ import routeConfiguration from './routeConfiguration';
 import Routes from './Routes';
 import config from './config';
 import DateAdapter from '@mui/lab/AdapterMoment';
-import HttpsRedirect from './HttpsWrapper';
 // Flex template application uses English translations as default.
 import defaultMessages from './translations/en.json';
 
@@ -92,15 +91,13 @@ export const ClientApp = props => {
   return (
     <LocalizationProvider dateAdapter={DateAdapter}>
       <IntlProvider locale={config.locale} messages={localeMessages} textComponent="span">
-        <HttpsRedirect>
-          <Provider store={store}>
-            <HelmetProvider>
-              <BrowserRouter>
-                <Routes routes={routeConfiguration()} />
-              </BrowserRouter>
-            </HelmetProvider>
-          </Provider>
-        </HttpsRedirect>
+        <Provider store={store}>
+          <HelmetProvider>
+            <BrowserRouter>
+              <Routes routes={routeConfiguration()} />
+            </BrowserRouter>
+          </HelmetProvider>
+        </Provider>
       </IntlProvider>
     </LocalizationProvider>
   );
@@ -127,7 +124,11 @@ export const ServerApp = props => {
   );
 };
 
-ServerApp.propTypes = { url: string.isRequired, context: any.isRequired, store: any.isRequired };
+ServerApp.propTypes = {
+  url: string.isRequired,
+  context: any.isRequired,
+  store: any.isRequired,
+};
 
 /**
  * Render the given route.
