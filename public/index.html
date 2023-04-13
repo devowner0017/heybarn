@@ -7,6 +7,8 @@
     <!--!meta-->
 
     <!--!googleAnalyticsScript-->
+    <!--!segmentAnalyticsScript-->
+    <!--!hotjarScript-->
 
     <link rel="manifest" href="%PUBLIC_URL%/static/manifest.json">
 
@@ -25,126 +27,57 @@
     <!--!ssrLinks-->
 
     <style>
-     /**
-      * Poppins font is downloaded from Google Fonts but served from sharetribe.com / CDN
-      */
-
-@import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Zilla+Slab:wght@400;500;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Zilla+Slab:wght@400;500;700&display=swap');
-
-
-
-
+      @import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Zilla+Slab:wght@400;500;700&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Zilla+Slab:wght@400;500;700&display=swap');
 
       @font-face {
-        /* 'Poppins-Regular' */
-        font-family: 'poppins';
-        src: url('https://assets-sharetribecom.sharetribe.com/webfonts/poppins/Poppins-Regular.ttf') format('truetype');
-        font-weight: 400; /* Regular */
+        font-family: 'apex_serifmedium';
+        src: url('%PUBLIC_URL%/static/fonts/apexserif_medium-webfont.woff2') format('woff2'),
+          url('%PUBLIC_URL%/static/fonts/apexserif_medium-webfont.woff') format('woff');
+        font-weight: normal;
         font-style: normal;
       }
 
       @font-face {
-        font-family: 'poppins';
-        src: url('https://assets-sharetribecom.sharetribe.com/webfonts/poppins/Poppins-Medium.ttf') format('truetype');
-        font-weight: 500; /* Medium */
+        font-family: 'apex_serifbook';
+        src: url('%PUBLIC_URL%/static/fonts/apexserif_book-webfont.woff2') format('woff2'),
+          url('%PUBLIC_URL%/static/fonts/apexserif_book-webfont.woff') format('woff');
+        font-weight: normal;
         font-style: normal;
       }
 
       @font-face {
-        font-family: 'poppins';
-        src: url('https://assets-sharetribecom.sharetribe.com/webfonts/poppins/Poppins-MediumItalic.ttf') format('truetype');
-        font-weight: 500; /* Medium italics */
-        font-style: italic;
-      }
-
-      @font-face {
-        font-family: 'poppins';
-        src: url('https://assets-sharetribecom.sharetribe.com/webfonts/poppins/Poppins-SemiBold.ttf') format('truetype');
-        font-weight: 600; /* SemiBold */
+        font-family: 'apex_serifbold';
+        src: url('%PUBLIC_URL%/static/fonts/apexserif_bold-webfont.woff2') format('woff2'),
+          url('%PUBLIC_URL%/static/fonts/apexserif_bold-webfont.woff') format('woff');
+        font-weight: normal;
         font-style: normal;
       }
 
       @font-face {
-        font-family: 'poppins';
-        src: url('https://assets-sharetribecom.sharetribe.com/webfonts/poppins/Poppins-Bold.ttf') format('truetype');
-        font-weight: 700; /* Bold */
+        font-family: 'montserratregular';
+        src: url('%PUBLIC_URL%/static/fonts/montserrat-regular-webfont.woff2') format('woff2'),
+          url('%PUBLIC_URL%/static/fonts/montserrat-regular-webfont.woff') format('woff');
+        font-weight: normal;
         font-style: normal;
       }
-      /* @font-face {
-          font-family: 'apex_serifmedium';
-          src: url('apexserif_medium-webfont.woff2') format('woff2'),
-              url('apexserif_medium-webfont.woff') format('woff');
-          font-weight: normal;
-          font-style: normal;
-      }
-
-      @font-face {
-          font-family: 'apex_serifbook';
-          src: url('apexserif_book-webfont.woff2') format('woff2'),
-              url('apexserif_book-webfont.woff') format('woff');
-          font-weight: normal;
-          font-style: normal;
-      }
-
-      @font-face {
-          font-family: 'apex_serifbold';
-          src: url('apexserif_bold-webfont.woff2') format('woff2'),
-              url('apexserif_bold-webfont.woff') format('woff');
-          font-weight: normal;
-          font-style: normal;
-      }
-
-      @font-face {
-          font-family: 'montserratregular';
-          src: url('montserrat-regular-webfont.woff2') format('woff2'),
-              url('montserrat-regular-webfont.woff') format('woff');
-          font-weight: normal;
-          font-style: normal;
-      } */
 
       @font-face {
         font-family: 'Dia Bold';
-        src: url('../src/fonts/Dia-Bold.woff2') format('woff2'),
-          url('../src/fonts/Dia-Bold.woff') format('woff');
+        src: url('%PUBLIC_URL%/static/fonts/Dia-Bold.woff2') format('woff2'),
+          url('%PUBLIC_URL%/static/fonts/Dia-Bold.woff') format('woff');
         font-weight: normal;
         font-style: normal;
       }
 
       @font-face {
         font-family: 'Dia Black';
-        src: url('../src/fonts/Dia-Black.woff2') format('woff2'),
-          url('../src/fonts/Dia-Black.woff') format('woff');
+        src: url('%PUBLIC_URL%/static/fonts/Dia-Black.woff2') format('woff2'),
+          url('%PUBLIC_URL%/static/fonts/Dia-Black.woff') format('woff');
         font-weight: normal;
         font-style: normal;
       }
     </style>
-    <!-- Hotjar Tracking Code for https://www.heybarn.co.nz/ -->
-    <script>
-      (function(h,o,t,j,a,r){
-          h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-          h._hjSettings={hjid:2691433,hjsv:6};
-          a=o.getElementsByTagName('head')[0];
-          r=o.createElement('script');r.async=1;
-          r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-          a.appendChild(r);
-      })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
-    </script>
-
-<!-- TAWK SCRIPT  -->
-<!--
-    <script type="text/javascript">
-      var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-      (function(){
-      var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-      s1.async=true;
-      s1.src='https://embed.tawk.to/61e0d20ff7cf527e84d20c89/1fpb39417';
-      s1.charset='UTF-8';
-      s1.setAttribute('crossorigin','*');
-      s0.parentNode.insertBefore(s1,s0);
-      })();
-      </script> -->
-
 
     <script>
       (function(document){
@@ -169,7 +102,6 @@
       type="text/css"
       href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"
     />
-
   </head>
   <body>
     <div id="root"><!--!body--></div>
@@ -203,22 +135,30 @@
 
 
         // Fonts we use (Check font-face rules from <style> tag in <head> section)
-        var poppinsRegular = new FontFaceObserver('poppins', { weight: 400 });
-        var poppinsMedium = new FontFaceObserver('poppins', { weight: 500 });
-        var poppinsSemibold = new FontFaceObserver('poppins', { weight: 600 });
-        var poppinsBold = new FontFaceObserver('poppins', { weight: 700 });
         var diaBold = new FontFaceObserver('Dia Bold', { weight: 700 });
         var diaBlack = new FontFaceObserver('Dia Black', { weight: 900 });
+        var monserat400 = new FontFaceObserver('Monserat', { weight: 400 });
+        var montserratregular = new FontFaceObserver('montserratregular', { weight: 400 });
+        var apexSerifMedium = new FontFaceObserver('apex_serifmedium', { weight: 400 });
+        var apexSerifBook = new FontFaceObserver('apex_serifbook', { weight: 400 });
+        var apexSerifBold = new FontFaceObserver('apex_serifbold', { weight: 400 });
+        var zillaSlabRegular = new FontFaceObserver('Zilla Slab', { weight: 400 });
+        var zillaSlabMedium = new FontFaceObserver('Zilla Slab', { weight: 500 });
+        var zillaSlabBold = new FontFaceObserver('Zilla Slab', { weight: 700 });
 
         var fontLoadingTimeout = 5000;
 
         Promise.all([
-          poppinsRegular.load(null, fontLoadingTimeout),
-          poppinsMedium.load(null, fontLoadingTimeout),
-          poppinsSemibold.load(null, fontLoadingTimeout),
-          poppinsBold.load(null, fontLoadingTimeout),
           diaBold.load(null, fontLoadingTimeout),
           diaBlack.load(null, fontLoadingTimeout),
+          monserat400.load(null, fontLoadingTimeout),
+          montserratregular.load(null, fontLoadingTimeout),
+          apexSerifMedium.load(null, fontLoadingTimeout),
+          apexSerifBook.load(null, fontLoadingTimeout),
+          apexSerifBold.load(null, fontLoadingTimeout),
+          zillaSlabRegular.load(null, fontLoadingTimeout),
+          zillaSlabMedium.load(null, fontLoadingTimeout),
+          zillaSlabBold.load(null, fontLoadingTimeout),
         ])
           .then(function () {
             document.documentElement.classList.add("fontsLoaded");

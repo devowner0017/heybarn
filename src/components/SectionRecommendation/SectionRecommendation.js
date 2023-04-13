@@ -25,8 +25,6 @@ const SectionRecommendation = props => {
   const maxListings = 10;
   const listingsToShow = listings.slice(0, maxListings);
 
-  console.log('listingsToShow', listingsToShow);
-
   return (
     <div className={classes}>
       <div className={css.listingCards}>

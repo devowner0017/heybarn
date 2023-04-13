@@ -2,52 +2,6 @@
 @import './customMediaQueries.css';
 @import './propertySets.css';
 
-@font-face {
-  font-family: 'apex_serifmedium';
-  src: url('../fonts/apexserif_medium-webfont.woff2') format('woff2'),
-    url('../fonts/apexserif_medium-webfont.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'apex_serifbook';
-  src: url('../fonts/apexserif_book-webfont.woff2') format('woff2'),
-    url('../fonts/apexserif_book-webfont.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'apex_serifbold';
-  src: url('../fonts/apexserif_bold-webfont.woff2') format('woff2'),
-    url('../fonts/apexserif_bold-webfont.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'montserratregular';
-  src: url('../fonts/montserrat-regular-webfont.woff2') format('woff2'),
-    url('../fonts/montserrat-regular-webfont.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Dia Bold';
-  src: url('../fonts/Dia-Bold.woff2') format('woff2'), url('../fonts/Dia-Bold.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Dia Black';
-  src: url('../fonts/Dia-Black.woff2') format('woff2'),
-    url('../fonts/Dia-Black.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
 /* ================ Custom Properties aka CSS variables ================ */
 
 /**

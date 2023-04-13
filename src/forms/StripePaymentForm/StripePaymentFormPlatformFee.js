@@ -65,8 +65,6 @@ const stripeElementsOptions = {
     {
       family: 'Montserrat',
       fontSmoothing: 'antialiased',
-      // src:
-      //   'local("poppins"), local("Poppins"), url("https://assets-sharetribecom.sharetribe.com/webfonts/poppins/Poppins-Medium.ttf") format("truetype")',
     },
   ],
 };
