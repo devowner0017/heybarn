@@ -57,11 +57,12 @@
 }
 
 .rentButton {
-  color: var(--marketplaceColorOrange);
+  color: black;
 }
 
 .findButton {
-  color: var(--marketplaceColor);
+  /* color: var(--marketplaceColor); */
+  color: black;
 }
 
 .heroRentColumnHeader {

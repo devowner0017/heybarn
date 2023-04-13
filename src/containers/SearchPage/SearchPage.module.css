@@ -31,10 +31,12 @@
     min-height: calc(100vh - var(--topbarHeightDesktop));
   }
 }
+
 .List {
   display: flex;
   flex-basis: 50%;
 }
+
 .mapOpenContainer {
   width: 62.5vw;
   transition: 2;
@@ -49,6 +51,7 @@
     flex-basis: 100% !important;
   }
 }
+
 .searchResultContainer {
   position: relative;
   flex-grow: 1;
@@ -136,8 +139,10 @@
 .searchListingsPanel {
   flex-grow: 1;
 }
+
 .mapSwitch {
   display: none;
+
   @media (--viewportMedium) {
     padding: 1rem;
     position: absolute;
@@ -146,6 +151,7 @@
     z-index: 1;
   }
 }
+
 .mapPanel {
   @media (--viewportMedium) {
     /**
@@ -196,7 +202,7 @@
     position: relative;
     top: var(--topbarHeightDesktop);
     /* right: 0; */
-
+    margin-top: -93px;
     /* Fixed content needs width relative to viewport */
     width: 50vw;
     height: calc(100vh - var(--topbarHeightDesktop));
@@ -206,18 +212,21 @@
     width: 37.5vw;
   }
 }
+
 .mapOpening {
   left: -100%;
   /* width: 0.1vw; */
 }
+
 .mapOpened {
   @media (--viewportMedium) {
     left: revert;
     -webkit-transform: translate(0, 0);
   }
 }
-.mapClosing {
-}
+
+.mapClosing {}
+
 .mapClosed {
   @media (--viewportMedium) {
     right: -120%;
@@ -226,6 +235,7 @@
     /* width: 0.1vw; */
   }
 }
+
 .typeButton {
   @apply --marketplaceButtonStylesSecondary;
   @apply --marketplaceSearchFilterLabelFontStyles;
@@ -245,6 +255,7 @@
     text-decoration: none;
     box-shadow: var(--boxShadowFilterButton);
   }
+
   @media (--viewportMedium) {
     margin-left: 1rem;
     margin-top: 0;

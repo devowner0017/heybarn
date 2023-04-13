@@ -4,8 +4,9 @@ import { FormattedMessage } from '../../util/reactIntl';
 import classNames from 'classnames';
 
 import css from './SearchFiltersPrimary.module.css';
-import Button from './Button';
+import Css from '../../containers/LandingPage/SectionGuarantee/SectionGuarantee.module.css';
 
+import { NamedLink } from '../../components';
 const SearchFiltersPrimaryComponent = props => {
   const {
     rootClassName,
@@ -69,10 +70,12 @@ const SearchFiltersPrimaryComponent = props => {
         </div>
         <div className={css.filterLinks}>
           <div className={css.filterP}>
-            <p className="button_blank">Advertise what you need</p>
+            <a className="button_blank" href='/a/draft/00000000-0000-0000-0000-000000000000/new/description'>Advertise what you need</a>
           </div>
           <div className={css.filterR}>
-            <Button />
+            <NamedLink name="NewListingPage" className={classNames(Css.button, Css.rentButton)}>
+              <FormattedMessage id="SectionHero.rentButton" />
+            </NamedLink>
           </div>
         </div>
 

@@ -134,7 +134,8 @@
 }
 
 .rentButton {
-  color: var(--marketplaceColorOrange);
+  background-color: var(--marketplaceColorOrange);
+  color: white;
   margin-bottom: 20px;
 }
 

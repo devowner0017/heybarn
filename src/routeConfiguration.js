@@ -166,7 +166,7 @@ const routeConfiguration = () => {
       component: (props) => (
         <NamedRedirect
           name="EditAdvertPage"
-          params={{ slug: draftSlug, id: draftId, type: 'new', tab: 'description' , listingType: "listing"}}
+          params={{ slug: draftSlug, id: draftId, type: 'new', tab: 'description', listingType: "listing" }}
           state={props.location.state}
         />
       ),
@@ -297,7 +297,8 @@ const routeConfiguration = () => {
       setInitialValues: pageDataLoadingAPI.TransactionInitPage.setInitialValues,
     },
     {
-      path: '/transaction/l/:id/initial',
+      // path: '/transaction/l/:id/initial',
+      path: '/contact-us',
       name: 'TransactionInitPageL',
       auth: true,
       authPage: 'LoginPage',

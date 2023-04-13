@@ -56,7 +56,7 @@ export const AvatarComponent = props => {
     ? deletedUserDisplayName
     : '';
 
-  const defaultUserAbbreviatedName = '';
+  const defaultUserAbbreviatedName = 'FC';
 
   const displayName = userDisplayNameAsString(avatarUser, defaultUserDisplayName);
   const abbreviatedName = userAbbreviatedName(avatarUser, defaultUserAbbreviatedName);
@@ -101,14 +101,14 @@ export const AvatarComponent = props => {
     // Placeholder avatar (initials)
     return (
       <NamedLink {...rootProps} {...linkProps}>
-        <span className={css.initials}>{abbreviatedName}</span>
+        <span className={css.initials}>{defaultUserAbbreviatedName}</span>
       </NamedLink>
     );
   } else {
     // Placeholder avatar (initials)
     return (
       <div {...rootProps}>
-        <span className={css.initials}>{abbreviatedName}</span>
+        <span className={css.initials}>{defaultUserAbbreviatedName}</span>
       </div>
     );
   }

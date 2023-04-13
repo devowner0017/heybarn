@@ -503,9 +503,12 @@ export class ListingPageComponent extends Component {
             <div>
               <div className={css.imgHeader}>
                 <div>
-                  <h2>Pole Shed, Stabling or Covered Yards</h2>
+                  <h1>Pole Shed, Stabling or Covered Yards</h1>
                 </div>
-                <div>Manawatu</div>
+                <div>
+                  <span>Manawatu</span>
+                  <a href="/s?pub_listingType=listing&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618">Back to search</a>
+                </div>
               </div>
               <div className={css.imageContainer}>
                 <div className={css.mainImage}>
@@ -519,9 +522,9 @@ export class ListingPageComponent extends Component {
                     onImageCarouselClose={() => this.setState({ imageCarouselOpen: false })}
                     handleViewPhotosClick={handleViewPhotosClick}
                     onManageDisableScrolling={onManageDisableScrolling}
-                    // typeOfListing={typeOfListing}
-                    // fromPage={location?.state?.fromPage}
-                    // need={need}
+                  // typeOfListing={typeOfListing}
+                  // fromPage={location?.state?.fromPage}
+                  // need={need}
                   />
                 </div>
                 <div className={css.smallImages}>
@@ -536,9 +539,9 @@ export class ListingPageComponent extends Component {
                       onImageCarouselClose={() => this.setState({ imageCarouselOpen: false })}
                       handleViewPhotosClick={handleViewPhotosClick}
                       onManageDisableScrolling={onManageDisableScrolling}
-                      // typeOfListing={typeOfListing}
-                      // fromPage={location?.state?.fromPage}
-                      // need={need}
+                    // typeOfListing={typeOfListing}
+                    // fromPage={location?.state?.fromPage}
+                    // need={need}
                     />
                   </div>
                   <div className={css.heightAuto}>
@@ -552,9 +555,9 @@ export class ListingPageComponent extends Component {
                       onImageCarouselClose={() => this.setState({ imageCarouselOpen: false })}
                       handleViewPhotosClick={handleViewPhotosClick}
                       onManageDisableScrolling={onManageDisableScrolling}
-                      // typeOfListing={typeOfListing}
-                      // fromPage={location?.state?.fromPage}
-                      // need={need}
+                    // typeOfListing={typeOfListing}
+                    // fromPage={location?.state?.fromPage}
+                    // need={need}
                     />
                   </div>
                 </div>
@@ -573,10 +576,17 @@ export class ListingPageComponent extends Component {
                       preferredUse={need}
                       listingType={typeOfListing}
                     /> */}
-                    <SectionDescriptionMaybe
+                    {/* <SectionDescriptionMaybe
                       description={description}
                       listingType={typeOfListing}
-                    />
+                    /> */}
+                    <div className={css.idealStorageTag}>
+                      <h2>Ideal for storage</h2>
+                      <div>
+                        <h3>Owned by <span>Hayden M</span></h3>
+                        <h3 className={css.dollar}>NZ $30.00/wk</h3>
+                      </div>
+                    </div>
                     <hr className={css.underline}></hr>
                     <div>
                       <h3 className={css.space}>About this page</h3>
@@ -612,7 +622,39 @@ export class ListingPageComponent extends Component {
                     <hr className={css.underline}></hr>
                     <br></br>
                     <div>
-                      <button className={css.contactButton}>CONTACT SPACE OWNER</button>
+                      <ContactPanel
+                        className={css.__bookingPanel}
+                        listing={currentListing}
+                        isOwnListing={isOwnListing}
+                        listingUnderEnquiry={listingUnderEnquiry}
+                        unitType={unitType}
+                        onSubmit={handleContactUser}
+                        title={bookingTitle}
+                        authorDisplayName={authorDisplayName}
+                        onManageDisableScrolling={onManageDisableScrolling}
+                        timeSlots={timeSlots}
+                        fetchTimeSlotsError={fetchTimeSlotsError}
+                        onFetchTransactionLineItems={onFetchTransactionLineItems}
+                        lineItems={lineItems}
+                        fetchLineItemsInProgress={fetchLineItemsInProgress}
+                        fetchLineItemsError={fetchLineItemsError}
+                        currentUserInTransaction={currentUserInTransaction}
+                        hidingListing={hidingListing}
+                        hidingListingError={hidingListingError}
+                        deletingListing={deletingListing}
+                        deletingListingError={deletingListingError}
+                        onHideListing={onHideListing}
+                        onDeleteListing={onDeleteListing}
+                        requestShowListing={requestShowListing}
+                        editParams={{
+                          id: listingId.uuid,
+                          slug: listingSlug,
+                          type: listingType,
+                          tab: listingTab,
+                        }}
+                        fromPage={location?.state?.fromPage}
+                      />
+                      {/* <button className={css.contactButton}>CONTACT SPACE OWNER</button> */}
                     </div>
                   </div>
                 </div>
@@ -672,9 +714,7 @@ export class ListingPageComponent extends Component {
                         </p>
                       </div>
                       <div>
-                        <a href="#" className={css.link}>
-                          View profile
-                        </a>
+                        <a href='/u/6405e51c-04b9-493f-814f-96c00608607b' className={css.link}>View profile</a>
                       </div>
                     </div>
                   </div>
