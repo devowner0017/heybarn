@@ -284,6 +284,8 @@ export class TransactionInitPanelComponent extends Component {
     const { publicData, geolocation } = currentListing.attributes;
     const location = publicData && publicData.location ? publicData.location : {};
 
+    const { preferredUse: need } = publicData || {};
+
     const listingTitle = currentListing.attributes.deleted
       ? deletedListingTitle
       : currentListing.attributes.title;
@@ -439,6 +441,7 @@ export class TransactionInitPanelComponent extends Component {
                 image={firstImage}
                 provider={currentProvider}
                 isCustomer={isCustomer}
+                need={need}
               />
               <DetailCardHeadingsMaybe
                 showDetailCardHeadings={stateData.showDetailCardHeadings}

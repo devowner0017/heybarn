@@ -89,7 +89,7 @@ const SectionImages = props => {
       </InlineTextButton>
 
       <div className={css.threeToTwoWrapper}>
-        <div className={css.aspectWrapper} onClick={handleViewPhotosClick}>
+        <div className={css.aspectWrapper} onClick={firstImage ? handleViewPhotosClick : undefined}>
           {actionBar}
           {listingStateBar}
           {firstImage ? (
