@@ -29,7 +29,6 @@ import logo2 from '../LandingPage/SectionTestimonials/logo-2.png';
 import logo3 from '../LandingPage/SectionTestimonials/logo-3.png';
 import logo4 from '../LandingPage/SectionTestimonials/logo-4.png';
 
-
 const AboutPage = () => {
   const { siteTwitterHandle, siteFacebookPage } = config;
   const siteTwitterPage = twitterPageURL(siteTwitterHandle);

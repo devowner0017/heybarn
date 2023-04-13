@@ -6,9 +6,8 @@
 }
 
 .staticPageWrapper {
-
-
-  @media (--viewportMedium) {}
+  @media (--viewportMedium) {
+  }
 }
 
 .coverImage {
@@ -105,7 +104,7 @@
   height: 900px;
   margin-left: -10px;
   /* background-color: red; */
-  background-image: url("about-us-1056.jpg");
+  background-image: url('about-us-1056.jpg');
   background-repeat: repeat-y;
   background-position: 50% 50%;
   border-radius: 20px;
@@ -120,7 +119,7 @@
   padding: 50px;
 }
 
-.founders_content>* {
+.founders_content > * {
   color: white;
 }
 

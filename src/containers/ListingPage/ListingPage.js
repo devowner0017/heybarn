@@ -212,11 +212,15 @@ export class ListingPageComponent extends Component {
     const { currentUser, history, callSetInitialValues, params, location } = this.props;
 
     if (!currentUser) {
-      const state = { from: `${location.pathname}${location.search}${location.hash}` };
+      const state = {
+        from: `${location.pathname}${location.search}${location.hash}`,
+      };
 
       // We need to log in before showing the modal, but first we need to ensure
       // that modal does open when user is redirected back to this listingpage
-      callSetInitialValues(setInitialValues, { enquiryModalOpenForListingId: params.id });
+      callSetInitialValues(setInitialValues, {
+        enquiryModalOpenForListingId: params.id,
+      });
 
       // signup and return back to listingPage.
       history.push(createResourceLocatorString('SignupPage', routeConfiguration(), {}, {}), state);
@@ -511,7 +515,9 @@ export class ListingPageComponent extends Component {
                 </div>
                 <div>
                   <span>Manawatu</span>
-                  <a href="/s?pub_listingType=listing&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618">Back to search</a>
+                  <a href="/s?pub_listingType=listing&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618">
+                    Back to search
+                  </a>
                 </div>
               </div>
               <div className={css.imageContainer}>
@@ -526,52 +532,54 @@ export class ListingPageComponent extends Component {
                     onImageCarouselClose={() => this.setState({ imageCarouselOpen: false })}
                     handleViewPhotosClick={handleViewPhotosClick}
                     onManageDisableScrolling={onManageDisableScrolling}
-                  // typeOfListing={typeOfListing}
-                  // fromPage={location?.state?.fromPage}
-                  // need={need}
+                    // typeOfListing={typeOfListing}
+                    // fromPage={location?.state?.fromPage}
+                    need={need}
                   />
                 </div>
-                <div className={css.smallImages}>
-                  <div className={css.heightAuto}>
-                    <SectionImages
-                      // title={title}
-                      listing={currentListing}
-                      // isOwnListing={isOwnListing}
-                      // listingUnderEnquiry={listingUnderEnquiry}
-                      // currentUserInTransaction={currentUserInTransaction}
-                      imageCarouselOpen={this.state.imageCarouselOpen}
-                      onImageCarouselClose={() => this.setState({ imageCarouselOpen: false })}
-                      handleViewPhotosClick={handleViewPhotosClick}
-                      onManageDisableScrolling={onManageDisableScrolling}
-                    // typeOfListing={typeOfListing}
-                    // fromPage={location?.state?.fromPage}
-                    // need={need}
-                    />
+                {totalImages && (
+                  <div className={css.smallImages}>
+                    <div className={css.heightAuto}>
+                      <SectionImages
+                        // title={title}
+                        listing={currentListing}
+                        // isOwnListing={isOwnListing}
+                        // listingUnderEnquiry={listingUnderEnquiry}
+                        // currentUserInTransaction={currentUserInTransaction}
+                        imageCarouselOpen={this.state.imageCarouselOpen}
+                        onImageCarouselClose={() => this.setState({ imageCarouselOpen: false })}
+                        handleViewPhotosClick={handleViewPhotosClick}
+                        onManageDisableScrolling={onManageDisableScrolling}
+                        // typeOfListing={typeOfListing}
+                        // fromPage={location?.state?.fromPage}
+                        // need={need}
+                      />
+                    </div>
+                    <div className={css.heightAuto}>
+                      <SectionImages
+                        // title={title}
+                        listing={currentListing}
+                        // isOwnListing={isOwnListing}
+                        // listingUnderEnquiry={listingUnderEnquiry}
+                        // currentUserInTransaction={currentUserInTransaction}
+                        imageCarouselOpen={this.state.imageCarouselOpen}
+                        onImageCarouselClose={() => this.setState({ imageCarouselOpen: false })}
+                        handleViewPhotosClick={handleViewPhotosClick}
+                        onManageDisableScrolling={onManageDisableScrolling}
+                        // typeOfListing={typeOfListing}
+                        // fromPage={location?.state?.fromPage}
+                        // need={need}
+                      />
+                    </div>
                   </div>
-                  <div className={css.heightAuto}>
-                    <SectionImages
-                      // title={title}
-                      listing={currentListing}
-                      // isOwnListing={isOwnListing}
-                      // listingUnderEnquiry={listingUnderEnquiry}
-                      // currentUserInTransaction={currentUserInTransaction}
-                      imageCarouselOpen={this.state.imageCarouselOpen}
-                      onImageCarouselClose={() => this.setState({ imageCarouselOpen: false })}
-                      handleViewPhotosClick={handleViewPhotosClick}
-                      onManageDisableScrolling={onManageDisableScrolling}
-                    // typeOfListing={typeOfListing}
-                    // fromPage={location?.state?.fromPage}
-                    // need={need}
-                    />
-                  </div>
+                )}
+              </div>
 
-                </div>
-
-                <div className={css.contentContainer}>
-                  {/* <SectionAvatar user={currentAuthor} params={params} /> */}
-                  <div className={css.mainContent}>
-                    <div>
-                      {/* <SectionHeading
+              <div className={css.contentContainer}>
+                {/* <SectionAvatar user={currentAuthor} params={params} /> */}
+                <div className={css.mainContent}>
+                  <div>
+                    {/* <SectionHeading
                       priceTitle={priceTitle}
                       formattedPrice={formattedPrice}
                       richTitle={richTitle}
@@ -580,179 +588,183 @@ export class ListingPageComponent extends Component {
                       preferredUse={need}
                       listingType={typeOfListing}
                     /> */}
-                      {/* <SectionDescriptionMaybe
+                    {/* <SectionDescriptionMaybe
                       description={description}
                       listingType={typeOfListing}
                     /> */}
-                      <div className={css.idealStorageTag}>
-                        <h2>Ideal for storage</h2>
-                        <div>
-                          <h3>Owned by <span>Hayden M</span></h3>
-                          <h3 className={css.dollar}>NZ $30.00/wk</h3>
-                        </div>
-                      </div>
-                      <hr className={css.underline}></hr>
+                    <div className={css.idealStorageTag}>
+                      <h2>Ideal for storage</h2>
                       <div>
-                        <h3 className={css.space}>About this page</h3>
-                        <p>So many sheds, not enough of my own toys to fill them all.</p>
-                        <p>
-                          Covered yard spaces, pole shedding and enclosed stabling areas available for
-                          long/short term storage of trailers, attachments, feed or other
-                          gear/equipment.
-                        </p>
-                      </div>
-                      <hr className={css.underline}></hr>
-                      <div>
-                        <h3 className={css.space}>Size of space</h3>
-                        <p>
-                          Garage 3.6m x 6.1m<br></br>20.7m of floor space
-                        </p>
-                      </div>
-                      <hr className={css.underline}></hr>
-                      <SectionFeaturesMaybe
-                        options={amenityOptions}
-                        publicData={publicData}
-                        listingType={typeOfListing}
-                      />
-                      <hr className={css.underline}></hr>
-                      <SectionRulesMaybe publicData={publicData} listingType={typeOfListing} />
-                      <hr className={css.underline}></hr>
-                      <div>
-                        <h3 className={css.space}>Property Rules</h3>
-                        <p>
-                          No Smoking<br></br>Pets are allowed
-                        </p>
-                      </div>
-                      <hr className={css.underline}></hr>
-                      <br></br>
-                      <div>
-                        <ContactPanel
-                          className={css.__bookingPanel}
-                          listing={currentListing}
-                          isOwnListing={isOwnListing}
-                          listingUnderEnquiry={listingUnderEnquiry}
-                          unitType={unitType}
-                          onSubmit={handleContactUser}
-                          title={bookingTitle}
-                          authorDisplayName={authorDisplayName}
-                          onManageDisableScrolling={onManageDisableScrolling}
-                          timeSlots={timeSlots}
-                          fetchTimeSlotsError={fetchTimeSlotsError}
-                          onFetchTransactionLineItems={onFetchTransactionLineItems}
-                          lineItems={lineItems}
-                          fetchLineItemsInProgress={fetchLineItemsInProgress}
-                          fetchLineItemsError={fetchLineItemsError}
-                          currentUserInTransaction={currentUserInTransaction}
-                          hidingListing={hidingListing}
-                          hidingListingError={hidingListingError}
-                          deletingListing={deletingListing}
-                          deletingListingError={deletingListingError}
-                          onHideListing={onHideListing}
-                          onDeleteListing={onDeleteListing}
-                          requestShowListing={requestShowListing}
-                          editParams={{
-                            id: listingId.uuid,
-                            slug: listingSlug,
-                            type: listingType,
-                            tab: listingTab,
-                          }}
-                          fromPage={location?.state?.fromPage}
-                        />
-                        {/* <button className={css.contactButton}>CONTACT SPACE OWNER</button> */}
+                        <h3>
+                          Owned by <span>Hayden M</span>
+                        </h3>
+                        <h3 className={css.dollar}>NZ $30.00/wk</h3>
                       </div>
                     </div>
-                  </div>
-                  <div>
-                    <ContactPanel
-                      className={css.bookingPanel}
-                      listing={currentListing}
-                      isOwnListing={isOwnListing}
-                      listingUnderEnquiry={listingUnderEnquiry}
-                      unitType={unitType}
-                      onSubmit={handleContactUser}
-                      title={bookingTitle}
-                      authorDisplayName={authorDisplayName}
-                      onManageDisableScrolling={onManageDisableScrolling}
-                      timeSlots={timeSlots}
-                      fetchTimeSlotsError={fetchTimeSlotsError}
-                      onFetchTransactionLineItems={onFetchTransactionLineItems}
-                      lineItems={lineItems}
-                      fetchLineItemsInProgress={fetchLineItemsInProgress}
-                      fetchLineItemsError={fetchLineItemsError}
-                      currentUserInTransaction={currentUserInTransaction}
-                      hidingListing={hidingListing}
-                      hidingListingError={hidingListingError}
-                      deletingListing={deletingListing}
-                      deletingListingError={deletingListingError}
-                      onHideListing={onHideListing}
-                      onDeleteListing={onDeleteListing}
-                      requestShowListing={requestShowListing}
-                      editParams={{
-                        id: listingId.uuid,
-                        slug: listingSlug,
-                        type: listingType,
-                        tab: listingTab,
-                      }}
-                      fromPage={location?.state?.fromPage}
+                    <hr className={css.underline}></hr>
+                    <div>
+                      <h3 className={css.space}>About this page</h3>
+                      <p>So many sheds, not enough of my own toys to fill them all.</p>
+                      <p>
+                        Covered yard spaces, pole shedding and enclosed stabling areas available for
+                        long/short term storage of trailers, attachments, feed or other
+                        gear/equipment.
+                      </p>
+                    </div>
+                    <hr className={css.underline}></hr>
+                    <div>
+                      <h3 className={css.space}>Size of space</h3>
+                      <p>
+                        Garage 3.6m x 6.1m<br></br>20.7m of floor space
+                      </p>
+                    </div>
+                    <hr className={css.underline}></hr>
+                    <SectionFeaturesMaybe
+                      options={amenityOptions}
+                      publicData={publicData}
+                      listingType={typeOfListing}
                     />
-                    <div className={css.spaceowner}>
-                      <div className={css.spaceownercontainer}>
-                        <div className={css.image}>
-                          <div className={css._h2}>
-                            <h2>
-                              Your space owner<br></br>
-                              <span className={css.name}>
-                                Owned by <span className={css.Name}>Hayden M</span>
-                              </span>
-                            </h2>
-                          </div>
-                          <div className={css._image}></div>
-                        </div>
-                        <div>
-                          <p>
-                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
-                            eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
-                            voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
-                            clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
-                            amet, consetetur sadipscingelitr, sed diam nonumy
-                          </p>
-                        </div>
-                        <div>
-                          <a href='/u/6405e51c-04b9-493f-814f-96c00608607b' className={css.link}>View profile</a>
-                        </div>
-                      </div>
+                    <hr className={css.underline}></hr>
+                    <SectionRulesMaybe publicData={publicData} listingType={typeOfListing} />
+                    <hr className={css.underline}></hr>
+                    <div>
+                      <h3 className={css.space}>Property Rules</h3>
+                      <p>
+                        No Smoking<br></br>Pets are allowed
+                      </p>
+                    </div>
+                    <hr className={css.underline}></hr>
+                    <br></br>
+                    <div>
+                      <ContactPanel
+                        className={css.__bookingPanel}
+                        listing={currentListing}
+                        isOwnListing={isOwnListing}
+                        listingUnderEnquiry={listingUnderEnquiry}
+                        unitType={unitType}
+                        onSubmit={handleContactUser}
+                        title={bookingTitle}
+                        authorDisplayName={authorDisplayName}
+                        onManageDisableScrolling={onManageDisableScrolling}
+                        timeSlots={timeSlots}
+                        fetchTimeSlotsError={fetchTimeSlotsError}
+                        onFetchTransactionLineItems={onFetchTransactionLineItems}
+                        lineItems={lineItems}
+                        fetchLineItemsInProgress={fetchLineItemsInProgress}
+                        fetchLineItemsError={fetchLineItemsError}
+                        currentUserInTransaction={currentUserInTransaction}
+                        hidingListing={hidingListing}
+                        hidingListingError={hidingListingError}
+                        deletingListing={deletingListing}
+                        deletingListingError={deletingListingError}
+                        onHideListing={onHideListing}
+                        onDeleteListing={onDeleteListing}
+                        requestShowListing={requestShowListing}
+                        editParams={{
+                          id: listingId.uuid,
+                          slug: listingSlug,
+                          type: listingType,
+                          tab: listingTab,
+                        }}
+                        fromPage={location?.state?.fromPage}
+                      />
+                      {/* <button className={css.contactButton}>CONTACT SPACE OWNER</button> */}
                     </div>
                   </div>
                 </div>
-                <div className={css.mapwrap}>
-                  <SectionMapMaybe
-                    geolocation={geolocation}
-                    publicData={publicData}
-                    listingId={currentListing.id}
-                    listingType={typeOfListing}
+                <div>
+                  <ContactPanel
+                    className={css.bookingPanel}
+                    listing={currentListing}
+                    isOwnListing={isOwnListing}
+                    listingUnderEnquiry={listingUnderEnquiry}
+                    unitType={unitType}
+                    onSubmit={handleContactUser}
+                    title={bookingTitle}
+                    authorDisplayName={authorDisplayName}
+                    onManageDisableScrolling={onManageDisableScrolling}
+                    timeSlots={timeSlots}
+                    fetchTimeSlotsError={fetchTimeSlotsError}
+                    onFetchTransactionLineItems={onFetchTransactionLineItems}
+                    lineItems={lineItems}
+                    fetchLineItemsInProgress={fetchLineItemsInProgress}
+                    fetchLineItemsError={fetchLineItemsError}
+                    currentUserInTransaction={currentUserInTransaction}
+                    hidingListing={hidingListing}
+                    hidingListingError={hidingListingError}
+                    deletingListing={deletingListing}
+                    deletingListingError={deletingListingError}
+                    onHideListing={onHideListing}
+                    onDeleteListing={onDeleteListing}
+                    requestShowListing={requestShowListing}
+                    editParams={{
+                      id: listingId.uuid,
+                      slug: listingSlug,
+                      type: listingType,
+                      tab: listingTab,
+                    }}
+                    fromPage={location?.state?.fromPage}
                   />
+                  <div className={css.spaceowner}>
+                    <div className={css.spaceownercontainer}>
+                      <div className={css.image}>
+                        <div className={css._h2}>
+                          <h2>
+                            Your space owner<br></br>
+                            <span className={css.name}>
+                              Owned by <span className={css.Name}>Hayden M</span>
+                            </span>
+                          </h2>
+                        </div>
+                        <div className={css._image}></div>
+                      </div>
+                      <div>
+                        <p>
+                          Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                          eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+                          voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
+                          clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
+                          amet, consetetur sadipscingelitr, sed diam nonumy
+                        </p>
+                      </div>
+                      <div>
+                        <a href="/u/6405e51c-04b9-493f-814f-96c00608607b" className={css.link}>
+                          View profile
+                        </a>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <Modal
-                id={`ListingPage.publishedListingModal`}
-                isOpen={this.state.showPublishedListingModal}
-                onClose={_ => this.setShowPublishedListingModal(false)}
-                onManageDisableScrolling={onManageDisableScrolling}
-              >
-                <div>
-                  <h1 className={css.modalTitle}>
-                    <FormattedMessage
-                      id="ListingPage.publishedListingTitle"
-                      values={{ listingType: typeOfListing }}
-                    />
-                  </h1>
-                  <div className={css.publishedListingButtonWrapper}>
-                    <Button onClick={() => this.setShowPublishedListingModal(false)}>
-                      Lets see it!
-                    </Button>
-                  </div>
+              <div className={css.mapwrap}>
+                <SectionMapMaybe
+                  geolocation={geolocation}
+                  publicData={publicData}
+                  listingId={currentListing.id}
+                  listingType={typeOfListing}
+                />
+              </div>
+            </div>
+            <Modal
+              id={`ListingPage.publishedListingModal`}
+              isOpen={this.state.showPublishedListingModal}
+              onClose={_ => this.setShowPublishedListingModal(false)}
+              onManageDisableScrolling={onManageDisableScrolling}
+            >
+              <div>
+                <h1 className={css.modalTitle}>
+                  <FormattedMessage
+                    id="ListingPage.publishedListingTitle"
+                    values={{ listingType: typeOfListing }}
+                  />
+                </h1>
+                <div className={css.publishedListingButtonWrapper}>
+                  <Button onClick={() => this.setShowPublishedListingModal(false)}>
+                    Lets see it!
+                  </Button>
                 </div>
-              </Modal>
+              </div>
+            </Modal>
           </LayoutWrapperMain>
           <LayoutWrapperFooter>
             <Footer />

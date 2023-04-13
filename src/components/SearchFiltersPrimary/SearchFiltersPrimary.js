@@ -70,7 +70,12 @@ const SearchFiltersPrimaryComponent = props => {
         </div>
         <div className={css.filterLinks}>
           <div className={css.filterP}>
-            <a className="button_blank" href='/a/draft/00000000-0000-0000-0000-000000000000/new/description'>Advertise what you need</a>
+            <a
+              className="button_blank"
+              href="/a/draft/00000000-0000-0000-0000-000000000000/new/description"
+            >
+              Advertise what you need
+            </a>
           </div>
           <div className={css.filterR}>
             <NamedLink name="NewListingPage" className={classNames(Css.button, Css.rentButton)}>

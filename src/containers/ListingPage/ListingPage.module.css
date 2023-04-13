@@ -1,7 +1,8 @@
 @import '../../styles/customMediaQueries.css';
 @import '../../styles/propertySets.css';
 
-.root {}
+.root {
+}
 
 .pageRoot {
   display: flex;

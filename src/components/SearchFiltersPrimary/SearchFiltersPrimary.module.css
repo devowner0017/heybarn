@@ -14,7 +14,7 @@
 .filters {
   display: flex;
 
-  &>*:not(:last-child) {
+  & > *:not(:last-child) {
     margin-right: 8px;
     margin-bottom: 8px;
     height: auto;
@@ -40,13 +40,11 @@
   text-decoration: underline;
 }
 
-
 .filterR {
   flex-basis: 50%;
   max-width: 315px;
   margin-top: -55px;
   /* padding-top: 50px; */
-
 }
 
 .searchOptionslogo {

@@ -88,8 +88,8 @@ const ContactPanel = props => {
   const subTitleText = !!subTitle
     ? subTitle
     : showClosedListingHelpText
-      ? intl.formatMessage({ id: 'ContactPanel.subTitleClosedListing' })
-      : null;
+    ? intl.formatMessage({ id: 'ContactPanel.subTitleClosedListing' })
+    : null;
 
   const classes = classNames(rootClassName || css.root, className);
   const titleClasses = classNames(titleClassName || css.bookingTitle);

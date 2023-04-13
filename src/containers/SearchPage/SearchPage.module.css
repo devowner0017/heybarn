@@ -225,7 +225,8 @@
   }
 }
 
-.mapClosing {}
+.mapClosing {
+}
 
 .mapClosed {
   @media (--viewportMedium) {
