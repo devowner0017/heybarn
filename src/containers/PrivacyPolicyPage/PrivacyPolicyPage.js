@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl, intlShape } from '../../util/reactIntl';
+import { injectIntl, intlShape } from '../../util/reactIntl';
 import { isScrollingDisabled } from '../../ducks/UI.duck';
 import { TopbarContainer } from '../../containers';
 import {
@@ -18,27 +18,10 @@ import {
 import config from '../../config';
 
 import css from './PrivacyPolicyPage.module.css';
-import { alignProperty } from '@mui/material/styles/cssUtils';
 
 const PrivacyPolicyPageComponent = props => {
   const { scrollingDisabled, intl } = props;
 
-  const tabs = [
-    {
-      text: intl.formatMessage({ id: 'PrivacyPolicyPage.privacyTabTitle' }),
-      selected: true,
-      linkProps: {
-        name: 'PrivacyPolicyPage',
-      },
-    },
-    // {
-    //   text: intl.formatMessage({ id: 'PrivacyPolicyPage.tosTabTitle' }),
-    //   selected: false,
-    //   linkProps: {
-    //     name: 'TermsOfServicePage',
-    //   },
-    // },
-  ];
   const siteTitle = config.siteTitle;
   const schemaTitle = intl.formatMessage({ id: 'PrivacyPolicyPage.schemaTitle' }, { siteTitle });
   const schema = {
@@ -59,9 +42,6 @@ const PrivacyPolicyPageComponent = props => {
 
         <LayoutWrapperMain>
           <div className={css.content}>
-            <h1 className={css.heading}>
-              {/* <FormattedMessage id="PrivacyPolicyPage.heading" /> */}
-            </h1>
             <PrivacyPolicy />
           </div>
         </LayoutWrapperMain>
