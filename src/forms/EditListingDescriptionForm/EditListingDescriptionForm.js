@@ -173,8 +173,10 @@ const EditListingDescriptionFormComponent = props => (
             <>
               <label className={css.spaceLabel}>
                 <FormattedMessage id="EditListingFeaturesForm.sizeOfSpaceLabel" />{' '}
-                <span>{sizeOfSpace}</span>
-                <span>{sizeOfLabel}</span>
+                <span className={css.calculatedSize}>
+                  <span>{sizeOfSpace}</span>
+                  <span>{sizeOfLabel}</span>
+                </span>
               </label>
 
               <FieldNumberInput
