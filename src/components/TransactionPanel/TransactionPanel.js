@@ -1089,17 +1089,6 @@ export class TransactionPanelComponent extends Component {
             )}
           </div>
         </div>
-        {/* <ReviewModal
-          id="ReviewOrderModal"
-          isOpen={this.state.isReviewModalOpen}
-          onCloseModal={() => this.setState({ isReviewModalOpen: false })}
-          onManageDisableScrolling={onManageDisableScrolling}
-          onSubmitReview={this.onSubmitReview}
-          revieweeName={otherUserDisplayName}
-          reviewSent={this.state.reviewSubmitted}
-          sendReviewInProgress={sendReviewInProgress}
-          sendReviewError={sendReviewError}
-        /> */}
         <ConfirmationModal
           id="ConfirmationModal"
           isOpen={this.state.showConfirmationModal}

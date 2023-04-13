@@ -480,6 +480,10 @@ export class ListingPageComponent extends Component {
     );
 
     const amenityOptions = findOptionsForSelectFilter('amenities', filterConfig);
+
+    const hasImages = currentListing.images && currentListing.images.length > 0;
+    const totalImages = hasImages ? currentListing.images.length : 0;
+
     return (
       <Page
         title={schemaTitle}
@@ -521,43 +525,45 @@ export class ListingPageComponent extends Component {
                     onManageDisableScrolling={onManageDisableScrolling}
                     // typeOfListing={typeOfListing}
                     // fromPage={location?.state?.fromPage}
-                    // need={need}
+                    need={need}
                   />
                 </div>
-                <div className={css.smallImages}>
-                  <div className={css.heightAuto}>
-                    <SectionImages
-                      // title={title}
-                      listing={currentListing}
-                      // isOwnListing={isOwnListing}
-                      // listingUnderEnquiry={listingUnderEnquiry}
-                      // currentUserInTransaction={currentUserInTransaction}
-                      imageCarouselOpen={this.state.imageCarouselOpen}
-                      onImageCarouselClose={() => this.setState({ imageCarouselOpen: false })}
-                      handleViewPhotosClick={handleViewPhotosClick}
-                      onManageDisableScrolling={onManageDisableScrolling}
-                      // typeOfListing={typeOfListing}
-                      // fromPage={location?.state?.fromPage}
-                      // need={need}
-                    />
+                {totalImages > 1 && (
+                  <div className={css.smallImages}>
+                    <div className={css.heightAuto}>
+                      <SectionImages
+                        // title={title}
+                        listing={currentListing}
+                        // isOwnListing={isOwnListing}
+                        // listingUnderEnquiry={listingUnderEnquiry}
+                        // currentUserInTransaction={currentUserInTransaction}
+                        imageCarouselOpen={this.state.imageCarouselOpen}
+                        onImageCarouselClose={() => this.setState({ imageCarouselOpen: false })}
+                        handleViewPhotosClick={handleViewPhotosClick}
+                        onManageDisableScrolling={onManageDisableScrolling}
+                        // typeOfListing={typeOfListing}
+                        // fromPage={location?.state?.fromPage}
+                        // need={need}
+                      />
+                    </div>
+                    <div className={css.heightAuto}>
+                      <SectionImages
+                        // title={title}
+                        listing={currentListing}
+                        // isOwnListing={isOwnListing}
+                        // listingUnderEnquiry={listingUnderEnquiry}
+                        // currentUserInTransaction={currentUserInTransaction}
+                        imageCarouselOpen={this.state.imageCarouselOpen}
+                        onImageCarouselClose={() => this.setState({ imageCarouselOpen: false })}
+                        handleViewPhotosClick={handleViewPhotosClick}
+                        onManageDisableScrolling={onManageDisableScrolling}
+                        // typeOfListing={typeOfListing}
+                        // fromPage={location?.state?.fromPage}
+                        // need={need}
+                      />
+                    </div>
                   </div>
-                  <div className={css.heightAuto}>
-                    <SectionImages
-                      // title={title}
-                      listing={currentListing}
-                      // isOwnListing={isOwnListing}
-                      // listingUnderEnquiry={listingUnderEnquiry}
-                      // currentUserInTransaction={currentUserInTransaction}
-                      imageCarouselOpen={this.state.imageCarouselOpen}
-                      onImageCarouselClose={() => this.setState({ imageCarouselOpen: false })}
-                      handleViewPhotosClick={handleViewPhotosClick}
-                      onManageDisableScrolling={onManageDisableScrolling}
-                      // typeOfListing={typeOfListing}
-                      // fromPage={location?.state?.fromPage}
-                      // need={need}
-                    />
-                  </div>
-                </div>
+                )}
               </div>
 
               <div className={css.contentContainer}>
