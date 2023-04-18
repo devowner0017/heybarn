@@ -232,13 +232,8 @@ exports[`TopbarDesktop data matches snapshot 1`] = `
     className="buttonRecomendWrapper"
   >
     <a
-      className="buttonRecomend NamedLink_active"
-      href="/"
-      onClick={[Function]}
-      onMouseOver={[Function]}
-      onTouchStart={[Function]}
-      style={Object {}}
-      title={null}
+      className="buttonRecomend cloudsponge-launch"
+      name="LandingPage"
     >
       <span>
         TopbarDesktop.recommend
@@ -279,7 +274,9 @@ exports[`TopbarDesktop data matches snapshot 1`] = `
       >
         <span
           className="initials"
-        />
+        >
+          FC
+        </span>
       </div>
     </button>
     <div
@@ -309,7 +306,9 @@ exports[`TopbarDesktop data matches snapshot 1`] = `
               >
                 <span
                   className="initials"
-                />
+                >
+                  FC
+                </span>
               </div>
             </div>
             <div

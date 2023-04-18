@@ -38,12 +38,19 @@ exports[`ListingPage matches snapshot 1`] = `
           className="imgHeader"
         >
           <div>
-            <h2>
+            <h1>
               Pole Shed, Stabling or Covered Yards
-            </h2>
+            </h1>
           </div>
           <div>
-            Manawatu
+            <span>
+              Manawatu
+            </span>
+            <a
+              href="/s?pub_listingType=listing&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618"
+            >
+              Back to search
+            </a>
           </div>
         </div>
         <div
@@ -109,9 +116,26 @@ exports[`ListingPage matches snapshot 1`] = `
             className="mainContent"
           >
             <div>
-              <SectionDescriptionMaybe
-                description="listing1 description"
-              />
+              <div
+                className="idealStorageTag"
+              >
+                <h2>
+                  Ideal for storage
+                </h2>
+                <div>
+                  <h3>
+                    Owned by 
+                    <span>
+                      Hayden M
+                    </span>
+                  </h3>
+                  <h3
+                    className="dollar"
+                  >
+                    NZ $30.00/wk
+                  </h3>
+                </div>
+              </div>
               <hr
                 className="underline"
               />
@@ -1448,11 +1472,87 @@ exports[`ListingPage matches snapshot 1`] = `
               />
               <br />
               <div>
-                <button
-                  className="contactButton"
-                >
-                  CONTACT SPACE OWNER
-                </button>
+                <withRouter(injectIntl(ContactPanel))
+                  authorDisplayName="user-1 display name"
+                  className="__bookingPanel"
+                  editParams={
+                    Object {
+                      "id": "listing1",
+                      "slug": "listing1-title",
+                      "tab": "description",
+                      "type": "edit",
+                    }
+                  }
+                  fetchLineItemsError={null}
+                  fetchLineItemsInProgress={false}
+                  fetchTimeSlotsError={null}
+                  isOwnListing={false}
+                  lineItems={null}
+                  listing={
+                    Object {
+                      "attributes": Object {
+                        "deleted": false,
+                        "description": "listing1 description",
+                        "geolocation": LatLng {
+                          "_sdkType": "LatLng",
+                          "lat": 40,
+                          "lng": 60,
+                        },
+                        "price": Money {
+                          "_sdkType": "Money",
+                          "amount": 5500,
+                          "currency": "USD",
+                        },
+                        "publicData": Object {},
+                        "state": "published",
+                        "title": "listing1 title",
+                      },
+                      "author": Object {
+                        "attributes": Object {
+                          "banned": false,
+                          "deleted": false,
+                          "profile": Object {
+                            "abbreviatedName": "TT",
+                            "displayName": "user-1 display name",
+                          },
+                        },
+                        "id": UUID {
+                          "_sdkType": "UUID",
+                          "uuid": "user-1",
+                        },
+                        "type": "user",
+                      },
+                      "id": UUID {
+                        "_sdkType": "UUID",
+                        "uuid": "listing1",
+                      },
+                      "images": Array [],
+                      "type": "listing",
+                    }
+                  }
+                  listingUnderEnquiry={false}
+                  onFetchTransactionLineItems={[Function]}
+                  onManageDisableScrolling={[Function]}
+                  onSubmit={[Function]}
+                  timeSlots={null}
+                  title={
+                    <Memo(MemoizedFormattedMessage)
+                      id="ListingPage.bookingTitle"
+                      values={
+                        Object {
+                          "title": <React.Fragment>
+                            
+                            listing1
+                             
+                            title
+                            
+                          </React.Fragment>,
+                        }
+                      }
+                    />
+                  }
+                  unitType="line-item/night"
+                />
               </div>
             </div>
           </div>
@@ -1577,7 +1677,7 @@ exports[`ListingPage matches snapshot 1`] = `
                 <div>
                   <a
                     className="link"
-                    href="#"
+                    href="/u/6405e51c-04b9-493f-814f-96c00608607b"
                   >
                     View profile
                   </a>

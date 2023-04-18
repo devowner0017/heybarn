@@ -76,7 +76,7 @@ exports[`ActivityFeed matches snapshot 1`] = `
         <span
           className="initials"
         >
-          TT
+          FC
         </span>
       </a>
       <div>

@@ -464,7 +464,7 @@ exports[`InboxPage matches snapshot 2`] = `
       <span
         className="initials"
       >
-        TT
+        FC
       </span>
     </a>
   </div>
@@ -979,7 +979,7 @@ exports[`InboxPage matches snapshot 4`] = `
       <span
         className="initials"
       >
-        TT
+        FC
       </span>
     </a>
   </div>
