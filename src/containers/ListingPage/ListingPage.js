@@ -537,7 +537,7 @@ export class ListingPageComponent extends Component {
                     need={need}
                   />
                 </div>
-                {totalImages && (
+                {totalImages > 0 && (
                   <div className={css.smallImages}>
                     <div className={css.heightAuto}>
                       <SectionImages

@@ -752,6 +752,8 @@ export class TransactionPanelComponent extends Component {
     const location = publicData && publicData.location ? publicData.location : {};
     const listingType = publicData && publicData.listingType;
 
+    const { preferredUse: need } = publicData || {};
+
     const unitType = config.bookingUnitType;
     const isNightly = unitType === LINE_ITEM_NIGHT;
     const isDaily = unitType === LINE_ITEM_DAY;
@@ -893,6 +895,7 @@ export class TransactionPanelComponent extends Component {
               image={otherListingImage}
               provider={currentProvider}
               isCustomer={isCustomer}
+              need={need}
             />
             <PanelHeading
               panelHeadingState={stateData.headingState}
@@ -1004,6 +1007,7 @@ export class TransactionPanelComponent extends Component {
                 image={showOtherListing ? otherListingImage : firstImage}
                 provider={currentProvider}
                 isCustomer={isCustomer}
+                need={need}
               />
               {!!(showOtherListing ? otherListing?.id?.uuid : currentListing?.id?.uuid) && (
                 <NamedLink
@@ -1071,6 +1075,7 @@ export class TransactionPanelComponent extends Component {
                   image={showOtherListing ? firstImage : relatedFirstImage}
                   provider={currentCustomer}
                   isCustomer={isCustomer}
+                  need={need}
                 />
                 <NamedLink
                   name={ensuredRelated?.id?.uuid ? 'ListingPage' : 'LandingPage'}

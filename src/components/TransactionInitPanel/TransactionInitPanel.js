@@ -384,6 +384,7 @@ export class TransactionInitPanelComponent extends Component {
               image={firstImage}
               provider={currentProvider}
               isCustomer={isCustomer}
+              need={need}
             />
             {isProvider ? (
               <div className={css.avatarWrapperProviderDesktop}>
@@ -461,6 +462,7 @@ export class TransactionInitPanelComponent extends Component {
                   image={selectedFirstImage}
                   provider={currentUser}
                   isCustomer={isCustomer}
+                  need={need}
                 />
                 <DetailCardHeadingsMaybe
                   showDetailCardHeadings={stateData.showDetailCardHeadings}
