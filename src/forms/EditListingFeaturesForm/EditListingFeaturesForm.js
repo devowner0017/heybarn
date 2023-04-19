@@ -77,7 +77,6 @@ const EditListingFeaturesFormComponent = props => (
                 id={'ageOfSpace'}
                 name={'ageOfSpace'}
                 config={ageOptions}
-                validate={required('Required')}
               />
             </>
           )}

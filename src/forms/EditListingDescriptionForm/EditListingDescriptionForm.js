@@ -217,7 +217,6 @@ const EditListingDescriptionFormComponent = props => (
                 id={'ageOfSpace'}
                 name={'ageOfSpace'}
                 config={ageOptions}
-                validate={submitInProgress ? () => null : required('Required')}
               />
             </>
           )}
