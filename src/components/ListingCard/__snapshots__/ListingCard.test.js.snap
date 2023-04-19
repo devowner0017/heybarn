@@ -77,7 +77,7 @@ exports[`ListingCard matches snapshot 1`] = `
             Object {
               "authorName": "user1 display name",
               "need": " space",
-              "region": "NZ",
+              "region": "NZ | 30$pw",
             }
           }
         />

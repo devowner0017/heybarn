@@ -191,24 +191,29 @@ body {
 }
 
 a {
-  @apply --marketplaceLinkStyles;
+  color: black;
+  text-decoration: none;
 }
 
 h1 {
-  @apply --marketplaceH1FontStyles;
 }
+
 h2 {
   @apply --marketplaceH2FontStyles;
 }
+
 h3 {
   @apply --marketplaceH3FontStyles;
 }
+
 h4 {
   @apply --marketplaceH4FontStyles;
 }
+
 h5 {
   @apply --marketplaceH5FontStyles;
 }
+
 h6 {
   @apply --marketplaceH6FontStyles;
 }
@@ -218,7 +223,7 @@ input {
   font-weight: var(--fontWeightMedium);
   font-size: 16px;
   line-height: 24px;
-  letter-spacing: -0.1px;
+  letter-spacing: 0.5px;
   /* No margins for default font */
 
   @media (--viewportMedium) {
@@ -231,10 +236,12 @@ textarea,
 select {
   @apply --marketplaceDefaultFontStyles;
 }
+
 li {
   @apply --marketplaceSmallFontStyles;
   font-family: var(--fontFamilySecondary);
 }
+
 p,
 pre {
   @apply --marketplaceBodyFontStyles;
@@ -276,11 +283,12 @@ button {
   background-color: #eeeeee;
   border: none;
   border-radius: 999px;
-  margin-right: 30px;
 }
+
 .button_blank {
   background-color: white;
 }
+
 select {
   @apply --marketplaceSelectStyles;
 }
@@ -309,14 +317,26 @@ textarea {
   & body {
     font-family: 'Montserrat', Helvetica, sans-serif;
   }
+
   & button {
     font-family: 'Montserrat', Helvetica, sans-serif;
   }
 }
+
 .policy-tab {
-  font-size: 40px;
+  padding-left: 41px;
+  padding-bottom: 27px;
+  font-family: 'Dia Bold', 'Montserrat', Helvetica, Arial, sans-serif;
+  font-weight: bold;
+  color: #222222;
+  opacity: 1;
+  font-size: 50px;
 }
+
 .policy-tab-p {
   line-height: 0px;
   margin-top: 0px;
+  padding-left: 45px;
+  color: #000000;
+  letter-spacing: 1px;
 }

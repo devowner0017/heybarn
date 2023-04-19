@@ -16,40 +16,39 @@
 
   & > *:not(:last-child) {
     margin-right: 8px;
-    margin-bottom: 8px;
+    margin-bottom: 13px;
     height: auto;
     padding-bottom: 10px;
   }
 }
 
 .filterButtons {
-  flex-basis: 52%;
+  flex-basis: 61%;
 }
 
 .filterLinks {
-  flex-basis: 48%;
-  display: flex;
+  flex-basis: 39%;
+  /* display: flex; */
 }
 
 .filterP {
-  flex-basis: 50%;
-}
-
-.filterP a {
   color: black;
   text-decoration: underline;
+  width: 200px;
 }
 
 .filterR {
-  flex-basis: 50%;
   max-width: 315px;
-  margin-top: -55px;
-  /* padding-top: 50px; */
+  margin-top: -53px;
+  margin-left: 400px;
+  margin-left: 400px;
 }
 
 .searchOptionslogo {
-  font-size: 25px;
+  font-size: 30px;
   margin-right: 30px;
+  font-weight: bold;
+  color: #222222;
 }
 
 .searchOptions {
@@ -65,6 +64,7 @@
   margin-bottom: 11px;
   margin-left: 0px;
   margin-right: 8px;
+  color: #9b9b9b;
 }
 
 .noSearchResults {

@@ -53,13 +53,10 @@ const TermsOfServicePageComponent = props => {
         </LayoutWrapperTopbar>
         <LayoutWrapperSideNav>
           <h1 className="policy-tab">Terms of Service</h1>
-          <p className="policy-tab-p">Last updated - 26 February 2023</p>
+          <p className="policy-tab-p">Last updated: February 26, 2023</p>
         </LayoutWrapperSideNav>
         <LayoutWrapperMain>
           <div className={css.content}>
-            <h1 className={css.heading}>
-              {/* <FormattedMessage id="TermsOfServicePage.heading" /> */}
-            </h1>
             <TermsOfService />
           </div>
         </LayoutWrapperMain>

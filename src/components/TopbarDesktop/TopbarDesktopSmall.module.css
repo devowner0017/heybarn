@@ -12,15 +12,13 @@
   justify-content: space-between;
   align-items: flex-start;
   padding: 0 12px 0 0;
-
-  /* fill */
   background-color: #ffffff;
 
   /* shadows */
   box-shadow: var(--boxShadowLight);
 
   @media (--viewportLarge) {
-    padding: 0 24px 0 0;
+    padding: 0 355px 0 0;
   }
 }
 
@@ -31,22 +29,19 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 21px 24px 21px 82px;
+  padding: 21px 24px 21px 427px;
   height: 100%;
   color: #fff;
-
-  @media (--viewportLarge) {
-  }
 }
 
 .logo {
   /* If height is increased, change link paddings accordingly */
-  height: 60px;
+  height: 36px;
 
   /* Good aspect ratio should be less than 160/27 (width/height) */
   /* NOTE: extremely wide logos, need special handling. */
   width: auto;
-  max-width: 220px;
+  max-width: 152px;
   object-fit: contain;
   object-position: left center;
 }
@@ -141,8 +136,6 @@
   position: absolute;
   top: 3px;
   right: -9px;
-
-  /* Style: red dot */
 
   animation-name: notificationPop;
   animation-duration: 0.1s;
@@ -351,7 +344,7 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  padding-left: 227px;
+  padding-left: 112px;
 }
 
 .dropdown {

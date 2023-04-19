@@ -151,6 +151,7 @@ export class SearchPageComponent extends Component {
       activeListingId,
       onActivateListing,
     } = this.props;
+
     const { isMapOpen, mapClosed, mapClosing, mapOpened, mapOpening } = this.state;
     // eslint-disable-next-line no-unused-vars
     const { mapSearch, page, pub_listingType, ...searchInURL } = parse(location.search, {
@@ -228,6 +229,7 @@ export class SearchPageComponent extends Component {
             className={css.List}
             urlQueryParams={validQueryParams}
             listings={listings}
+            mapData={this.props}
             searchInProgress={searchInProgress}
             searchListingsError={searchListingsError}
             searchParamsAreInSync={searchParamsAreInSync}

@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { array, bool, func, number, object, shape, string } from 'prop-types';
+import debounce from 'lodash/debounce';
+import unionWith from 'lodash/unionWith';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
 import config from '../../config';
+import { parse, stringify } from '../../util/urlHelpers';
 import routeConfiguration from '../../routeConfiguration';
 import { FormattedMessage } from '../../util/reactIntl';
-import { createResourceLocatorString } from '../../util/routes';
+import { createResourceLocatorString, pathByRouteName } from '../../util/routes';
 import { isAnyFilterActive } from '../../util/search';
 import { propTypes } from '../../util/types';
 import {
@@ -20,7 +23,7 @@ import {
 } from '../../components';
 
 import FilterComponent from './FilterComponent';
-import { validFilterParams } from './SearchPage.helpers';
+import { validFilterParams, validURLParamsForExtendedData } from './SearchPage.helpers';
 
 import css from './SearchPage.module.css';
 
@@ -53,7 +56,25 @@ const cleanSearchFromConflictingParams = (searchParams, sortConfig, filterConfig
 class MainPanel extends Component {
   constructor(props) {
     super(props);
-    this.state = { isSecondaryFiltersOpen: false, currentQueryParams: props.urlQueryParams };
+    this.state = {
+      isSecondaryFiltersOpen: false,
+      currentQueryParams: props.urlQueryParams,
+      isSearchMapOpenOnMobile: props.mapData.tab === 'map',
+      isMobileModalOpen: false,
+      isMapOpen: false,
+      mapOpening: false,
+      mapOpened: false,
+      mapClosing: false,
+      mapClosed: true,
+      mapState: css.mapOpened,
+    };
+
+    this.searchMapListingsInProgress = false;
+
+    this.onMapMoveEnd = debounce(this.onMapMoveEnd.bind(this), SEARCH_WITH_MAP_DEBOUNCE);
+    this.onOpenMobileModal = this.onOpenMobileModal.bind(this);
+    this.onCloseMobileModal = this.onCloseMobileModal.bind(this);
+    this.onOpenMap = this.onOpenMap.bind(this);
 
     this.applyFilters = this.applyFilters.bind(this);
     this.cancelFilters = this.cancelFilters.bind(this);
@@ -64,6 +85,79 @@ class MainPanel extends Component {
 
     // SortBy
     this.handleSortBy = this.handleSortBy.bind(this);
+  }
+
+  onMapMoveEnd(viewportBoundsChanged, data) {
+    const { viewportBounds, viewportCenter } = data;
+
+    const routes = routeConfiguration();
+    const searchPagePath = pathByRouteName('SearchPage', routes);
+    const currentPath =
+      typeof window !== 'undefined' && window.location && window.location.pathname;
+
+    // When using the ReusableMapContainer onMapMoveEnd can fire from other pages than SearchPage too
+    const isSearchPage = currentPath === searchPagePath;
+
+    // If mapSearch url param is given
+    // or original location search is rendered once,
+    // we start to react to "mapmoveend" events by generating new searches
+    // (i.e. 'moveend' event in Mapbox and 'bounds_changed' in Google Maps)
+    if (viewportBoundsChanged && isSearchPage) {
+      const { history, location, filterConfig } = this.props;
+
+      // parse query parameters, including a custom attribute named category
+      const { address, bounds, mapSearch, ...rest } = parse(location.search, {
+        latlng: ['origin'],
+        latlngBounds: ['bounds'],
+      });
+
+      //const viewportMapCenter = SearchMap.getMapCenter(map);
+      const originMaybe = config.sortSearchByDistance ? { origin: viewportCenter } : {};
+
+      const searchParams = {
+        address,
+        ...originMaybe,
+        bounds: viewportBounds,
+        mapSearch: true,
+        ...validFilterParams(rest, filterConfig),
+      };
+
+      history.push(createResourceLocatorString('SearchPage', routes, {}, searchParams));
+    }
+  }
+
+  // Invoked when a modal is opened from a child component,
+  // for example when a filter modal is opened in mobile view
+  onOpenMobileModal() {
+    this.setState({ isMobileModalOpen: true });
+  }
+
+  // Invoked when a modal is closed from a child component,
+  // for example when a filter modal is opened in mobile view
+  onCloseMobileModal() {
+    this.setState({ isMobileModalOpen: false });
+  }
+
+  handleOpenMap() {
+    this.setState({ isMapOpen: true, mapState: css.mapOpened });
+    setTimeout(() => {
+      this.setState({ mapState: css.mapOpened });
+    }, 1000);
+  }
+
+  handleCloseMap() {
+    this.setState({ isMapOpen: false, mapState: css.mapClosed });
+    setTimeout(() => {
+      this.setState({ mapState: css.mapClosed });
+    }, 1000);
+  }
+
+  onOpenMap() {
+    if (!!this.state.isMapOpen) {
+      this.handleCloseMap();
+    } else {
+      this.handleOpenMap();
+    }
   }
 
   // Apply the filters by redirecting to SearchPage with new filters.
@@ -159,7 +253,6 @@ class MainPanel extends Component {
       className,
       rootClassName,
       urlQueryParams,
-      listings,
       searchInProgress,
       searchListingsError,
       searchParamsAreInSync,
@@ -167,17 +260,42 @@ class MainPanel extends Component {
       onManageDisableScrolling,
       onOpenModal,
       onCloseModal,
-      onMapIconClick,
       pagination,
       searchParamsForPagination,
       showAsModalMaxWidth,
       filterConfig,
       sortConfig,
       mapSwitch,
-      isMapOpen,
       searchType,
-      activeListingId,
     } = this.props;
+
+    const {
+      id,
+      reusableContainerClassName,
+      center,
+      location,
+      listings,
+      zoom,
+      mapsConfig,
+      activeListingId,
+      messages,
+      mapClass,
+      mapListings,
+    } = this.props.mapData;
+
+    const { isMapOpen, mapClosed, mapClosing, mapOpened, mapOpening } = this.state;
+
+    const { mapSearch, page, pub_listingType, ...searchInURL } = parse(location.search, {
+      latlng: ['origin'],
+      latlngBounds: ['bounds'],
+    });
+
+    const onMapIconClick = () => {
+      this.useLocationSearchBounds = true;
+      this.setState({ isSearchMapOpenOnMobile: true });
+    };
+
+    const { address, bounds, origin } = searchInURL || {};
 
     const primaryFilters = filterConfig.filter(f => f.group === 'primary');
     const secondaryFilters = filterConfig.filter(f => f.group !== 'primary');
@@ -389,15 +507,15 @@ class MainPanel extends Component {
                     )}
                     mapClass={this.state.mapState}
                     activeListingId={activeListingId}
-                    // bounds={bounds}
-                    // center={origin}
-                    // isSearchMapOpenOnMobile={this.state.isSearchMapOpenOnMobile}
-                    // location={location}
-                    // listings={mapListings || []}
-                    // onMapMoveEnd={this.onMapMoveEnd}
-                    // onCloseAsModal={() => {
-                    //   onManageDisableScrolling('SearchPage.map', false);
-                    // }}
+                    bounds={bounds}
+                    center={origin}
+                    isSearchMapOpenOnMobile={this.state.isSearchMapOpenOnMobile}
+                    location={location}
+                    listings={mapListings || []}
+                    onMapMoveEnd={this.onMapMoveEnd}
+                    onCloseAsModal={() => {
+                      onManageDisableScrolling('SearchPage.map', false);
+                    }}
                     // messages={intl.messages}
                   />
                 ) : null}
@@ -443,6 +561,9 @@ MainPanel.propTypes = {
 
   history: shape({
     push: func.isRequired,
+  }).isRequired,
+  location: shape({
+    search: string.isRequired,
   }).isRequired,
 };
 

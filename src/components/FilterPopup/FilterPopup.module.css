@@ -10,22 +10,29 @@
   @apply --marketplaceSearchFilterLabelFontStyles;
 
   padding: var(--marketplaceButtonSmallDesktopPadding);
-  width: auto;
+  width: 141px;
   height: auto;
   min-height: 0;
   border-radius: 999px;
+  background-color: #efefef;
+  border: none;
+  margin-right: 20px;
 
   &:focus {
     outline: none;
-    background-color: var(--matterColorLight);
     border-color: transparent;
     text-decoration: none;
     box-shadow: var(--boxShadowFilterButton);
   }
 }
-/* .label::after{
-  content: &#9662;
-} */
+
+.caret {
+  font-size: 7px;
+  vertical-align: middle;
+  display: inline-block;
+  margin-left: 6px;
+  margin-bottom: 3px;
+}
 
 .labelSelected {
   @apply --marketplaceButtonStyles;
@@ -44,6 +51,7 @@
     border: 1px solid var(--marketplaceColorDark);
   }
 }
+
 .labelEllipsis {
   overflow: hidden;
   text-overflow: ellipsis;

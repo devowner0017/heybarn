@@ -56,6 +56,7 @@
   background-repeat: no-repeat;
   background-position: center;
   mix-blend-mode: luminosity;
+  width: 100%;
 }
 
 .arrow {

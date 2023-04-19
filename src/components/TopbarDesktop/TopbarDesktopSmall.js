@@ -16,13 +16,12 @@ import {
 } from '../../components';
 import { TopbarSearchForm } from '../../forms';
 
-import css from './TopbarDesktop.module.css';
+import css from './TopbarDesktopSmall.module.css';
 import { AvatarMedium } from '../Avatar/Avatar';
 import ProfileSettingsPage from '../../containers/ProfileSettingsPage/ProfileSettingsPage';
 import DropdownButton from '../Dropdown/Dropdown';
 import { useHistory } from 'react-router-dom';
 import { createResourceLocatorString } from '../../util/routes';
-import CloudSpongeWidget from '../CloudSpongeWidget/CloudSpongeWidget';
 import logoImg from '../../components/Logo/orange_logo.png';
 
 const TopbarDesktop = props => {
@@ -183,13 +182,14 @@ const TopbarDesktop = props => {
 
   const separator = isAuthenticatedOrJustHydrated ? null : <span className={css.separator} />;
 
-  const onSubmitContact = args => {
-    console.log('onSubmitContact', args);
-  };
-
   return (
     <nav className={classes}>
       <NamedLink className={css.logoLink} name="LandingPage">
+        {/* <Logo
+          format="desktop"
+          className={css.logo}
+          alt={intl.formatMessage({ id: 'TopbarDesktop.logo' })}
+        /> */}
         <img src={logoImg} className={css.logo} />
       </NamedLink>
       <div className={css.dropdownContainer}>
@@ -197,28 +197,21 @@ const TopbarDesktop = props => {
         <DropdownButton className={css.dropdown} buttonText="Renters" options={advertOptionsArr} />
       </div>
       <div className={css.buttonRecomendWrapper}>
-        <CloudSpongeWidget
-          cloudspongeKey="6Hdl5iCBL_O2v9jwSxpVfw"
-          options={{
-            afterSubmitContacts: onSubmitContact,
-          }}
-        >
-          <a className={classNames(css.buttonRecomend, 'cloudsponge-launch')} name="LandingPage">
-            <FormattedMessage
-              id="TopbarDesktop.recommend"
-              values={{
-                icon: (
-                  <svg xmlns="http://www.w3.org/2000/svg" width={16} height={18}>
-                    <path
-                      data-name="Icon awesome-thumbs-up"
-                      d="M3.232 6.961H.746A.746.746 0 0 0 0 7.707v7.458a.746.746 0 0 0 .746.746h2.486a.746.746 0 0 0 .746-.746V7.707a.746.746 0 0 0-.746-.746Zm-1.243 7.707a.746.746 0 1 1 .746-.746.746.746 0 0 1-.746.746Zm9.944-12.137c0 1.318-.807 2.057-1.034 2.938h3.161a1.857 1.857 0 0 1 1.851 1.805 2.25 2.25 0 0 1-.6 1.529 2.6 2.6 0 0 1-.289 2.47 2.457 2.457 0 0 1-.509 2.323 1.65 1.65 0 0 1-.191 1.387c-.634.911-2.206.924-3.536.924h-.096a8.921 8.921 0 0 1-3.715-.986 4.891 4.891 0 0 0-1.636-.5.373.373 0 0 1-.366-.373V7.406a.372.372 0 0 1 .111-.265c1.231-1.216 1.76-2.5 2.769-3.515A3.764 3.764 0 0 0 8.641 1.8C8.779 1.221 9.069 0 9.7 0c.742 0 2.233.249 2.233 2.531Z"
-                    />
-                  </svg>
-                ),
-              }}
-            />
-          </a>
-        </CloudSpongeWidget>
+        <NamedLink className={css.buttonRecomend} name="LandingPage">
+          <FormattedMessage
+            id="TopbarDesktop.recommend"
+            values={{
+              icon: (
+                <svg xmlns="http://www.w3.org/2000/svg" width={16} height={18}>
+                  <path
+                    data-name="Icon awesome-thumbs-up"
+                    d="M3.232 6.961H.746A.746.746 0 0 0 0 7.707v7.458a.746.746 0 0 0 .746.746h2.486a.746.746 0 0 0 .746-.746V7.707a.746.746 0 0 0-.746-.746Zm-1.243 7.707a.746.746 0 1 1 .746-.746.746.746 0 0 1-.746.746Zm9.944-12.137c0 1.318-.807 2.057-1.034 2.938h3.161a1.857 1.857 0 0 1 1.851 1.805 2.25 2.25 0 0 1-.6 1.529 2.6 2.6 0 0 1-.289 2.47 2.457 2.457 0 0 1-.509 2.323 1.65 1.65 0 0 1-.191 1.387c-.634.911-2.206.924-3.536.924h-.096a8.921 8.921 0 0 1-3.715-.986 4.891 4.891 0 0 0-1.636-.5.373.373 0 0 1-.366-.373V7.406a.372.372 0 0 1 .111-.265c1.231-1.216 1.76-2.5 2.769-3.515A3.764 3.764 0 0 0 8.641 1.8C8.779 1.221 9.069 0 9.7 0c.742 0 2.233.249 2.233 2.531Z"
+                  />
+                </svg>
+              ),
+            }}
+          />
+        </NamedLink>
       </div>
       {inboxLink}
       {profileMenu}

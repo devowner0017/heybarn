@@ -6,61 +6,109 @@
   cursor: pointer;
   font-weight: 500;
 }
+
 .active {
   font-weight: 800;
 }
+
 .pageSubTitle {
   text-align: left;
   cursor: pointer;
 }
+
+.accordion {
+  cursor: pointer;
+}
+
 .staticPageWrapper {
   width: calc(100% - 48px);
-  max-width: 1056px;
-  margin: 24px auto;
 
   @media (--viewportMedium) {
-    width: calc(100% - 72px);
-    margin: 72px auto;
+    width: 1079px;
+    margin: 105px 427px;
   }
 }
 
 .coverImage {
   width: 100%;
-  height: 528px;
+  height: 541px;
   border-radius: 4px;
   object-fit: cover;
-  margin: 32px 0 40px;
+  margin: 0;
 }
 
 .contentWrapper {
   display: flex;
   flex-direction: column;
+
   @media (--viewportMedium) {
     flex-direction: row;
   }
 }
 
 .contentSide {
-  font-style: italic;
+  font-family: 'montserrat';
 
   @media (--viewportMedium) {
-    width: 193px;
-    margin-right: 103px;
-    margin-top: 8px;
+    width: 609px;
   }
+}
+
+.contentSide p {
+  font-size: 17px;
+  color: #000000;
+  font-weight: medium;
+}
+
+.contentSide p a {
+  font-size: 17px;
+  color: #000000;
+  font-weight: normal;
+  text-decoration: underline;
+}
+
+.contentSide h2 {
+  font-size: 22px;
+  text-align: left;
 }
 
 .contentMain {
   width: 100%;
+  font-family: 'montserrat';
 
   @media (--viewportMedium) {
     width: 90%;
-    max-width: 650px;
+    max-width: 816px;
+    padding-left: 176px;
   }
+}
+
+.contentMain h3 {
+  font-size: 17px;
+}
+
+.contentMain p {
+  font-size: 14px;
 }
 
 .subtitle {
   @apply --marketplaceH3FontStyles;
   margin-top: 32px;
   margin-bottom: 16px;
+}
+
+#rentalAgree {
+  text-decoration: underline;
+}
+
+.isActive:after {
+  content: '\2212';
+}
+
+.accordion:after {
+  content: '\002B';
+  color: #000;
+  font-size: 20px;
+  float: right;
+  margin-left: 5px;
 }

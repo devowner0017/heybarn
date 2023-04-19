@@ -21,6 +21,7 @@
   /* Minimum touch size 44px (svg width + padding) */
   padding-right: 33px;
 }
+
 .next {
   /* Minimum touch size 44px (svg width + padding) */
   padding-left: 33px;
@@ -96,13 +97,12 @@
 
 .currentPage {
   /* Dimensions */
-  padding: 21px 5px 18px 5px;
-  border-bottom-style: solid;
-  border-bottom-width: 3px;
-  border-bottom-color: var(--matterColorDark);
+  background-color: black;
+  padding: 1px 12px;
+  color: white;
+  border-radius: 5px;
 
   /* Color */
-  color: var(--matterColorDark);
 }
 
 .paginationGap {

@@ -39,9 +39,6 @@
      */
     padding: 112px 36px 82px 36px;
     background-color: var(--matterColorLight);
-    border-left-width: 1px;
-    border-left-style: solid;
-    border-left-color: var(--matterColorNegative);
   }
 
   @media (--viewportLargeWithPaddings) {

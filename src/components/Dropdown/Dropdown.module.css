@@ -11,14 +11,12 @@
   border-radius: 999px;
   text-align: center;
   letter-spacing: 0px;
-  color: #ffffff;
-  border-color: #ffffff;
   cursor: pointer;
   font-family: 'Montserrat', sans-serif;
   padding: 16px 27px;
   position: relative;
   z-index: 2;
-  min-width: 215px;
+  color: black;
 
   &:hover,
   &:focus,

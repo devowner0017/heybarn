@@ -52,16 +52,21 @@
 
 .heroButton {
   @apply --marketplaceRoundedButtonStyles;
-  /* width: 100%; */
-  /* max-width: 292px; */
 }
 
 .rentButton {
+  color: white;
+}
+
+.rentButton:hover {
   color: black;
 }
 
 .findButton {
-  /* color: var(--marketplaceColor); */
+  color: white;
+}
+
+.findButton:hover {
   color: black;
 }
 

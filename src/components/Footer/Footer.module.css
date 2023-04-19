@@ -100,10 +100,12 @@
     order: 1;
     margin-right: 12px;
   }
+
   @media (--viewportLarge) {
     flex-basis: 240px;
     margin-right: 57px;
   }
+
   @media (--viewportLargeWithPaddings) {
     flex-basis: 250px;
     margin-right: 12px;
@@ -168,6 +170,7 @@
   margin-top: 0;
   margin-bottom: 0;
   justify-content: center;
+  margin-left: -105px;
 }
 
 .listItem {
@@ -193,7 +196,7 @@
   /* Font */
   @apply --marketplaceH5FontStyles;
   line-height: 20px;
-  color: var(--matterColor);
+  color: #222222;
   transition: var(--transitionStyleButton);
 
   margin-top: 0;
@@ -250,10 +253,10 @@
     flex-basis: 109px;
     margin-right: 24px;
     flex-direction: column;
-    margin-right: 12px;
+    margin-right: -150px;
   }
+
   @media (--viewportLarge) {
-    margin-right: 0;
   }
 }
 

@@ -76,7 +76,7 @@
     margin-bottom: 12px;
 
     @media (--viewportMedium) {
-      font-size: 16px;
+      font-size: 17px;
       line-height: 32px;
       /* margin-top + n * line-height + margin-bottom => x * 8px */
       margin-top: 16px;
@@ -191,7 +191,7 @@
   --marketplaceH3FontStyles: {
     font-weight: var(--fontWeightSemiBold);
     font-family: var(--fontFamilySecondary);
-    font-size: 18px;
+    font-size: 17px;
     line-height: 24px;
     /* margin-top + n * line-height + margin-bottom => x * 6px */
     margin-top: 16px;
@@ -264,7 +264,7 @@
   --marketplaceTinyFontStyles: {
     font-family: var(--fontFamily);
     font-weight: var(--fontWeightRegular);
-    font-size: 13px;
+    font-size: 16px;
     line-height: 18px;
     /* margin-top + n * line-height + margin-bottom => x * 6px */
     margin-top: 9.5px;
@@ -321,6 +321,8 @@
       font-weight: var(--fontWeightMedium);
       font-size: 13px;
       line-height: 20px;
+      color: #222222;
+      font-weight: bold;
     }
   }
 
@@ -406,6 +408,7 @@
       /* TODO: Make sure button text aligns with the baseline */
     }
   }
+
   --marketplaceButtonStyles {
     @apply --marketplaceButtonFontStyles;
 
@@ -446,6 +449,7 @@
       text-decoration: none;
       box-shadow: var(--boxShadowButton);
     }
+
     &:disabled {
       background-color: var(--matterColorNegative);
       color: var(--matterColorLight);
@@ -457,6 +461,7 @@
       min-height: 65px;
     }
   }
+
   --marketplaceButtonStylesPrimary {
     @apply --marketplaceButtonStyles;
 
@@ -467,30 +472,32 @@
     &:focus {
       background-color: var(--successColorDark);
     }
+
     &:disabled {
       background-color: var(--matterColorNegative);
       color: var(--matterColorLight);
     }
   }
+
   --marketplaceButtonStylesSecondary {
     @apply --marketplaceButtonStyles;
 
-    background-color: var(--matterColorLight);
-    color: var(--matterColor);
+    background-color: black;
+    color: white;
 
     /* Padding is only for <a> elements where button styles are applied,
    buttons elements should have zero padding */
     padding: 18px 0 0 0;
 
-    border-width: 1px;
-    border-style: solid;
     border-color: var(--matterColorNegative);
 
     &:hover,
     &:focus {
       background-color: var(--matterColorLight);
       border-color: var(--matterColorAnti);
+      color: orange;
     }
+
     &:disabled {
       background-color: var(--matterColorNegative);
       color: var(--matterColorLight);
@@ -768,10 +775,12 @@
       box-shadow: none;
       text-decoration: none;
     }
+
     &:enabled:active {
       background-color: transparent;
       color: var(--matterColorDark);
     }
+
     &:disabled {
       background-color: transparent;
     }
@@ -872,6 +881,7 @@
 
   --marketplaceDefaultListingCard {
     max-width: 100%;
+
     &:nth-of-type(2n) {
       @media screen and (min-width: 1024px) and (max-width: 1920px) {
         margin-right: 0;

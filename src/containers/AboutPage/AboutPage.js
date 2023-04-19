@@ -2,7 +2,8 @@ import React, { useMemo } from 'react';
 import Slider from 'react-slick';
 import config from '../../config';
 import { twitterPageURL } from '../../util/urlHelpers';
-import { StaticPage, TopbarContainer } from '../../containers';
+import { StaticPage } from '../../containers';
+import TopbarContainerSmall from '../TopbarContainer/TopbarContainerSmall';
 import {
   LayoutSingleColumn,
   LayoutWrapperTopbar,
@@ -19,9 +20,6 @@ import { NamedLink } from '../../components';
 import { FormattedMessage } from '../../util/reactIntl';
 import CSS from '../LandingPage/SectionRent/SectionRent.module.css';
 import SearchIcon from '../../components/Topbar/SearchIcon';
-// import Css from '../../components/Topbar/Topbar.module.css';
-
-import SectionTestimonials from '../LandingPage/SectionTestimonials/SectionTestimonials';
 
 import Css from '../LandingPage/SectionTestimonials/SectionTestimonials.module.css';
 import logo1 from '../LandingPage/SectionTestimonials/logo-1.png';
@@ -37,8 +35,8 @@ const AboutPage = () => {
       dots: false,
       infinite: true,
       speed: 500,
-      slidesToShow: 3,
-      slidesToScroll: 4,
+      slidesToShow: 4,
+      slidesToScroll: 1,
       prevArrow: <SlickArrowLeft />,
       nextArrow: <SlickArrowRight />,
       autoplay: true,
@@ -84,13 +82,10 @@ const AboutPage = () => {
     >
       <LayoutSingleColumn>
         <LayoutWrapperTopbar>
-          <TopbarContainer />
+          <TopbarContainerSmall />
         </LayoutWrapperTopbar>
 
         <LayoutWrapperMain className={css.staticPageWrapper}>
-
-          {/* <img className={css.coverImage} src={image} alt="My first ice cream." /> */}
-
           <div className={css.contentWrapper}>
 
             <div className={css.contentHeader}>
@@ -128,10 +123,13 @@ const AboutPage = () => {
                 {/* <SectionTestimonials /> */}
                 <Slider {...settings}>
                   <div className={Css.slideWrapper}>
-                    <div className={Css.imageWrapper} style={{ backgroundImage: `url('${logo1}')` }} />
+                    <div className={Css.imageWrapper} style={{ backgroundImage: `url('${logo4}')` }} />
                   </div>
                   <div className={Css.slideWrapper}>
                     <div className={Css.imageWrapper} style={{ backgroundImage: `url('${logo2}')` }} />
+                  </div>
+                  <div className={Css.slideWrapper}>
+                    <div className={Css.imageWrapper} style={{ backgroundImage: `url('${logo1}')` }} />
                   </div>
                   <div className={Css.slideWrapper}>
                     <div className={Css.imageWrapper} style={{ backgroundImage: `url('${logo3}')` }} />
@@ -151,6 +149,7 @@ const AboutPage = () => {
                   New Zealand have quality shed space which is ready to rent.
                 </p>
               </div>
+              <br />
               <div className={css.spaceSection__content}>
                 <h2>This equates to over</h2>
                 <div className={css.million}>
@@ -167,7 +166,7 @@ const AboutPage = () => {
               </div>
               <div className={css.founders_content}>
                 <div className={css.founder}>
-                  <div>
+                  <div className={css.founderContent}>
                     <h1>Heybarn founders</h1>
                     <p>Jaimie and Tom, developed heybarn after realising a site wasn't available which was specifically designed
                       to allow the owners of New Zealand properties to advertise their available space. Later joined by Dan and Dave,
@@ -182,7 +181,7 @@ const AboutPage = () => {
                   </div>
                 </div>
                 <hr></hr>
-                <h1>The heybarn team</h1>
+                <h1 id={css.head}>The heybarn team</h1>
                 <p>have worked widely across New Zealand and live on rural properties. They are excited to bring a new source of
                   passive income to New Zealand property owners, as well as encouraging Kiwis to find an alternative to commercial
                   building rentals.
@@ -225,7 +224,7 @@ const SlickArrowLeft = ({ currentSlide, slideCount, ...props }) => (
     })}
     aria-hidden="true"
     aria-disabled={currentSlide === 0 ? true : false}
-    type="button"
+    style={{ marginTop: -25, marginLeft: -20 }}
   >
     <PrevArrow />
   </button>
@@ -240,6 +239,7 @@ const SlickArrowRight = ({ currentSlide, slideCount, ...props }) => (
     aria-hidden="true"
     aria-disabled={currentSlide === slideCount - 1 ? true : false}
     type="button"
+    style={{ marginTop: -25, marginRight: -20 }}
   >
     <NextArrow />
   </button>

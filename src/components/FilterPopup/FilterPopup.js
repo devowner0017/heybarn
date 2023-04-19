@@ -121,6 +121,7 @@ class FilterPopup extends Component {
     const labelMaxWidthMaybe = labelMaxWidth ? { maxWidth: `${labelMaxWidth}px` } : {};
     const labelMaxWidthStyles = labelMaxWidth ? css.labelEllipsis : null;
     const contentStyle = this.positionStyleForContent();
+    const carret = '▼';
 
     return (
       <OutsideClickHandler onOutsideClick={this.handleBlur}>
@@ -137,6 +138,7 @@ class FilterPopup extends Component {
             onClick={() => this.toggleOpen()}
           >
             {label}
+            <span className={css.caret}>{carret}</span>
           </button>
           <div
             id={id}

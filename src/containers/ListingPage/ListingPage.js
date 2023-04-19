@@ -47,7 +47,7 @@ import {
   Modal,
   Button,
 } from '../../components';
-import { TopbarContainer, NotFoundPage } from '../../containers';
+import TopbarContainerSmall from '../../containers/TopbarContainer/TopbarContainerSmall';
 
 import {
   sendEnquiry,
@@ -354,7 +354,7 @@ export class ListingPageComponent extends Component {
       <FormattedMessage id="ListingPage.bookingTitle" values={{ title: richTitle }} />
     );
 
-    const topbar = <TopbarContainer />;
+    const topbar = <TopbarContainerSmall />;
 
     if (showListingError && showListingError.status === 404) {
       // 404 listing not found
@@ -510,10 +510,10 @@ export class ListingPageComponent extends Component {
           <LayoutWrapperMain className={css.layoutWrapperMain}>
             <div>
               <div className={css.imgHeader}>
-                <div>
+                <div className={css.imgHeader_h1}>
                   <h1>Pole Shed, Stabling or Covered Yards</h1>
                 </div>
-                <div>
+                <div className={css.imgHeader_span}>
                   <span>Manawatu</span>
                   <a href="/s?pub_listingType=listing&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618">
                     Back to search
@@ -523,17 +523,11 @@ export class ListingPageComponent extends Component {
               <div className={css.imageContainer}>
                 <div className={css.mainImage}>
                   <SectionImages
-                    // title={title}
                     listing={currentListing}
-                    // isOwnListing={isOwnListing}
-                    // listingUnderEnquiry={listingUnderEnquiry}
-                    // currentUserInTransaction={currentUserInTransaction}
                     imageCarouselOpen={this.state.imageCarouselOpen}
                     onImageCarouselClose={() => this.setState({ imageCarouselOpen: false })}
                     handleViewPhotosClick={handleViewPhotosClick}
                     onManageDisableScrolling={onManageDisableScrolling}
-                    // typeOfListing={typeOfListing}
-                    // fromPage={location?.state?.fromPage}
                     need={need}
                   />
                 </div>
@@ -541,34 +535,22 @@ export class ListingPageComponent extends Component {
                   <div className={css.smallImages}>
                     <div className={css.heightAuto}>
                       <SectionImages
-                        // title={title}
                         listing={currentListing}
-                        // isOwnListing={isOwnListing}
-                        // listingUnderEnquiry={listingUnderEnquiry}
-                        // currentUserInTransaction={currentUserInTransaction}
                         imageCarouselOpen={this.state.imageCarouselOpen}
                         onImageCarouselClose={() => this.setState({ imageCarouselOpen: false })}
                         handleViewPhotosClick={handleViewPhotosClick}
                         onManageDisableScrolling={onManageDisableScrolling}
-                        // typeOfListing={typeOfListing}
-                        // fromPage={location?.state?.fromPage}
-                        // need={need}
+                        need={need}
                       />
                     </div>
                     <div className={css.heightAuto}>
                       <SectionImages
-                        // title={title}
                         listing={currentListing}
-                        // isOwnListing={isOwnListing}
-                        // listingUnderEnquiry={listingUnderEnquiry}
-                        // currentUserInTransaction={currentUserInTransaction}
                         imageCarouselOpen={this.state.imageCarouselOpen}
                         onImageCarouselClose={() => this.setState({ imageCarouselOpen: false })}
                         handleViewPhotosClick={handleViewPhotosClick}
                         onManageDisableScrolling={onManageDisableScrolling}
-                        // typeOfListing={typeOfListing}
-                        // fromPage={location?.state?.fromPage}
-                        // need={need}
+                        need={need}
                       />
                     </div>
                   </div>
@@ -576,22 +558,8 @@ export class ListingPageComponent extends Component {
               </div>
 
               <div className={css.contentContainer}>
-                {/* <SectionAvatar user={currentAuthor} params={params} /> */}
                 <div className={css.mainContent}>
                   <div>
-                    {/* <SectionHeading
-                      priceTitle={priceTitle}
-                      formattedPrice={formattedPrice}
-                      richTitle={richTitle}
-                      hostLink={hostLink}
-                      region={region}
-                      preferredUse={need}
-                      listingType={typeOfListing}
-                    /> */}
-                    {/* <SectionDescriptionMaybe
-                      description={description}
-                      listingType={typeOfListing}
-                    /> */}
                     <div className={css.idealStorageTag}>
                       <h2>Ideal for storage</h2>
                       <div>
@@ -625,11 +593,12 @@ export class ListingPageComponent extends Component {
                       listingType={typeOfListing}
                     />
                     <hr className={css.underline}></hr>
+                    <br></br>
                     <SectionRulesMaybe publicData={publicData} listingType={typeOfListing} />
                     <hr className={css.underline}></hr>
                     <div>
                       <h3 className={css.space}>Property Rules</h3>
-                      <p>
+                      <p id={css.propertyRule}>
                         No Smoking<br></br>Pets are allowed
                       </p>
                     </div>
@@ -727,6 +696,7 @@ export class ListingPageComponent extends Component {
                           amet, consetetur sadipscingelitr, sed diam nonumy
                         </p>
                       </div>
+
                       <div>
                         <a href="/u/6405e51c-04b9-493f-814f-96c00608607b" className={css.link}>
                           View profile

@@ -48,6 +48,7 @@
   width: 100%;
   margin-top: 0;
   margin-bottom: 0;
+
   @media (--viewportMedium) {
     margin-top: 0;
     margin-bottom: 5px;
@@ -160,6 +161,7 @@
   flex-direction: column;
   align-items: center;
   flex-shrink: 0;
+
   @media (--viewportMedium) {
     margin-right: 22px;
     padding: 5px 12px;
@@ -173,6 +175,7 @@
 
   margin-top: 0;
   margin-bottom: 0px;
+
   @media (--viewportMedium) {
     margin-top: 0;
     margin-bottom: 0;
@@ -186,6 +189,7 @@
 
   margin-top: 0;
   margin-bottom: 0px;
+
   @media (--viewportMedium) {
     margin-top: 0;
     margin-bottom: 0;
@@ -197,7 +201,7 @@
 
   /* Clear padding that is set for link elements looking like buttons */
   width: 310px;
-  background-color: darkgoldenrod;
+  background-color: #da8627;
   padding: 0;
 }
 

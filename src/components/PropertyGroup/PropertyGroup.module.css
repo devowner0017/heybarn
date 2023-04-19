@@ -80,9 +80,11 @@
     );
   }
 }
+
 .checkedCustomIcon {
   opacity: 1;
 }
+
 .unCheckedCustomIcon {
   opacity: 0.2;
 }

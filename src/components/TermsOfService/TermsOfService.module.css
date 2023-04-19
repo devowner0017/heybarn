@@ -4,6 +4,7 @@
   & p {
     @apply --marketplaceH4FontStyles;
   }
+
   & h2 {
     /* Adjust heading margins to work with the reduced body font size */
     margin: 29px 0 13px 0;
@@ -12,10 +13,12 @@
       margin: 32px 0 0 0;
     }
   }
+
   & ul {
     list-style: inherit;
     padding-left: 1.2rem;
   }
+
   & .lastUpdated {
     @apply --marketplaceBodyFontStyles;
     margin-top: 0;
@@ -26,4 +29,18 @@
       margin-bottom: 54px;
     }
   }
+}
+
+.serviceContent > p {
+  font-size: 22px;
+  line-height: 1.5;
+}
+
+.serviceContent > ul > li > p {
+  font-size: 22px;
+  line-height: 1.5;
+}
+
+#first {
+  font-weight: bold;
 }

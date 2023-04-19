@@ -218,7 +218,7 @@ export const ListingCardComponent = props => {
               id={`ListingCard.${listingType}By`}
               values={{
                 need: `${capitalize(need)} space`,
-                region: (region && capitalize(region)) || 'NZ',
+                region: (region && capitalize(region)) || 'NZ | 30$pw',
                 authorName,
               }}
             />

@@ -37,12 +37,16 @@ exports[`ListingPage matches snapshot 1`] = `
         <div
           className="imgHeader"
         >
-          <div>
+          <div
+            className="imgHeader_h1"
+          >
             <h1>
               Pole Shed, Stabling or Covered Yards
             </h1>
           </div>
-          <div>
+          <div
+            className="imgHeader_span"
+          >
             <span>
               Manawatu
             </span>
@@ -192,6 +196,7 @@ exports[`ListingPage matches snapshot 1`] = `
               <hr
                 className="underline"
               />
+              <br />
               <SectionRulesMaybe
                 className={null}
                 filterConfig={
@@ -1461,7 +1466,9 @@ exports[`ListingPage matches snapshot 1`] = `
                 >
                   Property Rules
                 </h3>
-                <p>
+                <p
+                  id="propertyRule"
+                >
                   No Smoking
                   <br />
                   Pets are allowed

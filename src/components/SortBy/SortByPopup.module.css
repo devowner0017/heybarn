@@ -14,7 +14,6 @@
 }
 
 .menuLabel {
-  @apply --marketplaceButtonStylesSecondary;
   @apply --marketplaceSearchFilterLabelFontStyles;
 
   padding: var(--marketplaceButtonSmallDesktopPadding);
@@ -25,9 +24,9 @@
   border: none;
   white-space: nowrap;
   text-decoration: underline;
+
   &:focus {
     outline: none;
-    background-color: var(--matterColorLight);
     border-color: transparent;
     text-decoration: none;
     box-shadow: var(--boxShadowFilterButton);
@@ -101,6 +100,7 @@
     color: var(--matterColorAnti);
     cursor: default;
   }
+
   &:disabled:hover .menuItemBorder {
     width: 0;
   }
