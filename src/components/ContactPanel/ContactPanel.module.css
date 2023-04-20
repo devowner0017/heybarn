@@ -200,7 +200,7 @@
   @apply --marketplaceButtonStylesPrimary;
 
   /* Clear padding that is set for link elements looking like buttons */
-  width: 310px;
+  width: 338px;
   background-color: #da8627;
   padding: 0;
 }
@@ -217,4 +217,8 @@
   width: 100%;
   padding: 15px 24px 15px 24px;
   text-align: center;
+}
+
+.imgContact {
+  padding-right: 15px;
 }

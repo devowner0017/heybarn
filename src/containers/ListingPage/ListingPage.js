@@ -66,6 +66,17 @@ import SectionMapMaybe from './SectionMapMaybe';
 import css from './ListingPage.module.css';
 import { capitalize } from 'lodash';
 import { deleteListing, hideListing } from '../ManageListingsPage/ManageListingsPage.duck';
+import road from './road.png';
+import arrow from './arrow.png';
+import owner from './owner.png';
+import preferredUse__event from './Group362.png';
+import preferredUse__storage from './Group364.png';
+import preferredUse__space from './Group366.png';
+import preferredUse__workshop from './Group368.png';
+import viewProfile from './viewProfile.png';
+import backToSearch from './backToSearch.png';
+import showAll from './showAll.png';
+import smoking from './smoking.png';
 
 const MIN_LENGTH_FOR_LONG_WORDS_IN_TITLE = 16;
 
@@ -514,9 +525,11 @@ export class ListingPageComponent extends Component {
                   <h1>Pole Shed, Stabling or Covered Yards</h1>
                 </div>
                 <div className={css.imgHeader_span}>
+                  <img src={road} className={css.road}></img>
                   <span>Manawatu</span>
+                  {/* <img src={arrow} className={css.arrow}></img> */}
                   <a href="/s?pub_listingType=listing&address=New%20Zealand&bounds=-34.0465240000456%2C179.9%2C-52.6693956973145%2C165.770163500618">
-                    Back to search
+                    <img src={backToSearch} className={css.backToSearch} />
                   </a>
                 </div>
               </div>
@@ -593,13 +606,49 @@ export class ListingPageComponent extends Component {
                       listingType={typeOfListing}
                     />
                     <hr className={css.underline}></hr>
-                    <br></br>
-                    <SectionRulesMaybe publicData={publicData} listingType={typeOfListing} />
+                    <div>
+                      <h3 className={css.space}>Preferred Use</h3>
+                      <div className={css.preferredUse}>
+                        <div className={css.preferredUse__event}>
+                          <img src={preferredUse__event} />
+                          <div>
+                            <span>One-off events</span>
+                          </div>
+                        </div>
+                        <div className={css.preferredUse__storage}>
+                          <img src={preferredUse__storage} />
+                          <div>
+                            <span>Storage</span>
+                          </div>
+                        </div>
+                        <div className={css.preferredUse__space}>
+                          <img src={preferredUse__space} />
+                          <div>
+                            <span>Creative space</span>
+                          </div>
+                        </div>
+                        <div className={css.preferredUse__workshop}>
+                          <img src={preferredUse__workshop} />
+                          <div>
+                            <span>Workshop</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <hr className={css.underline}></hr>
+
+                    <div>
+                      <h3 className={css.space}>Access Frequency</h3>
+                      <p id={css.propertyRule}>Anytime, but by arrangement</p>
+                    </div>
                     <hr className={css.underline}></hr>
                     <div>
                       <h3 className={css.space}>Property Rules</h3>
                       <p id={css.propertyRule}>
-                        No Smoking<br></br>Pets are allowed
+                        <img src={smoking} className={css.smoking} />
+                        No Smoking<br></br>
+                        <img src={smoking} className={css.smoking} />
+                        Pets are allowed
                       </p>
                     </div>
                     <hr className={css.underline}></hr>
@@ -642,6 +691,9 @@ export class ListingPageComponent extends Component {
                   </div>
                 </div>
                 <div>
+                  <div className={css.showPhotos}>
+                    <img src={showAll} />
+                  </div>
                   <ContactPanel
                     className={css.bookingPanel}
                     listing={currentListing}
@@ -685,7 +737,9 @@ export class ListingPageComponent extends Component {
                             </span>
                           </h2>
                         </div>
-                        <div className={css._image}></div>
+                        <div className={css._image}>
+                          <img src={owner} />
+                        </div>
                       </div>
                       <div>
                         <p>
@@ -699,7 +753,7 @@ export class ListingPageComponent extends Component {
 
                       <div>
                         <a href="/u/6405e51c-04b9-493f-814f-96c00608607b" className={css.link}>
-                          View profile
+                          <img src={viewProfile} />
                         </a>
                       </div>
                     </div>

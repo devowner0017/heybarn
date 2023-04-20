@@ -33,7 +33,6 @@ exports[`ListingCard matches snapshot 1`] = `
       className="mainInfo"
     >
       <Component
-        defaultWrapper={[Function]}
         wrapper={[Function]}
       >
         <div
@@ -58,6 +57,10 @@ exports[`ListingCard matches snapshot 1`] = `
              
             title
           </Truncate>
+          <img
+            className="star"
+            src="test-file-stub"
+          />
         </div>
         <ReactTooltip
           clickable={false}
@@ -77,7 +80,7 @@ exports[`ListingCard matches snapshot 1`] = `
             Object {
               "authorName": "user1 display name",
               "need": " space",
-              "region": "NZ | 30$pw",
+              "region": "NZ | $30pw",
             }
           }
         />
@@ -104,5 +107,7 @@ exports[`ListingCard matches snapshot 1`] = `
       </div>
     </div>
   </div>
+  <br />
+  <br />
 </Component>
 `;

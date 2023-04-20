@@ -64,6 +64,7 @@ const SearchFiltersPrimaryComponent = props => {
 
       <div className={css.filters}>
         <div className={css.filterButtons}>
+          <div />
           {children}
           {children}
           {children}

@@ -21,6 +21,7 @@ import creativeImage from './../../assets/creative.png';
 import eventImage from './../../assets/event.png';
 import storageImage from './../../assets/storage.png';
 import workImage from './../../assets/work.png';
+import star from '../SearchResultsPanel/Path235.png';
 
 const MIN_LENGTH_FOR_LONG_WORDS = 10;
 
@@ -191,7 +192,6 @@ export const ListingCardComponent = props => {
                 </NamedLink>
               );
             }}
-            defaultWrapper={children => <div className={css.title}>{children}</div>}
           >
             <div
               className={css.title}
@@ -210,6 +210,7 @@ export const ListingCardComponent = props => {
                   longWordClass: css.longWord,
                 })}
               </Truncate>
+              <img src={star} className={css.star}></img>
             </div>
             <ReactTooltip delayShow={500} id={listing.id.uuid} />
           </ConditionalWrapper>
@@ -218,7 +219,7 @@ export const ListingCardComponent = props => {
               id={`ListingCard.${listingType}By`}
               values={{
                 need: `${capitalize(need)} space`,
-                region: (region && capitalize(region)) || 'NZ | 30$pw',
+                region: (region && capitalize(region)) || 'NZ | $30pw',
                 authorName,
               }}
             />
@@ -236,6 +237,7 @@ export const ListingCardComponent = props => {
                   <div className={css.perUnit}>
                     <FormattedMessage id={unitTranslationKey} />
                   </div>
+
                   <div className={css.perUnitMobile}>/wk</div>
                 </>
               )}
@@ -243,6 +245,8 @@ export const ListingCardComponent = props => {
           </>
         )}
       </div>
+      <br></br>
+      <br></br>
     </ConditionalWrapper>
   );
 };

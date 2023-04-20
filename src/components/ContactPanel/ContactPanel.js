@@ -16,6 +16,7 @@ import css from './ContactPanel.module.css';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 import { getPropByName } from '../../util/devHelpers';
 import { capitalize } from 'lodash';
+import contact from '../../containers/ListingPage/contact.png';
 
 // This defines when ModalInMobile shows content as Modal
 const MODAL_BREAKPOINT = 1023;
@@ -257,6 +258,7 @@ const ContactPanel = props => {
               disabled={listingUnderEnquiry}
               onClick={onSubmit}
             >
+              <img src={contact} className={css.imgContact}></img>
               <FormattedMessage id="ContactPanel.ctaButtonMessage" />
             </Button>
           </>
@@ -264,19 +266,6 @@ const ContactPanel = props => {
       </ModalInMobile>
 
       <div className={css.openBookingForm}>
-        <div className={css.priceContainer}>
-          {/* {listingType === 'listing' && (
-            <>
-              <div className={css.priceValue} title={priceTitle}>
-                {formattedPrice}
-              </div>
-              <div className={css.perUnit}>
-                <FormattedMessage id={unitTranslationKey} />
-              </div>
-            </>
-          )} */}
-        </div>
-
         {isOwnListing ? (
           <Button
             rootClassName={css.bookButton}
@@ -291,10 +280,7 @@ const ContactPanel = props => {
             name={'OrderDetailsPage'}
             params={{ id: currentUserInTransaction.id.uuid }}
           >
-            <Button rootClassName={css.bookButton}>
-              Return to your decision{' '}
-              {/* <FormattedMessage id="ContactPanel.ctaButtonMessage" /> */}
-            </Button>
+            <Button rootClassName={css.bookButton}>Return to your decision </Button>
           </NamedLink>
         ) : showBookingDatesForm ? (
           <Button

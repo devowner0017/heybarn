@@ -121,7 +121,9 @@ const FAQPage = () => {
         </LayoutWrapperTopbar>
 
         <LayoutWrapperMain>
-          <img className={css.coverImage} src={image} alt="My first ice cream." />
+          <div className={css.coverImage}>
+            <h1>We might have the answer here...</h1>
+          </div>
           <div className={css.staticPageWrapper}>
             <div className={css.contentWrapper}>
               <div className={css.contentSide}>

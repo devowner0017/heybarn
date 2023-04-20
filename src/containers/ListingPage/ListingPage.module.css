@@ -67,6 +67,11 @@
   margin-top: -10px;
 }
 
+.imgHeader_span .road {
+  margin-top: -3px;
+  margin-right: 10px;
+}
+
 .imgHeader_span span {
   font-family: 'montserrat';
   color: #171717;
@@ -253,6 +258,10 @@
       box-shadow: var(--boxShadowListingCard);
     }
   }
+}
+
+.backToSearch {
+  margin-right: -20px;
 }
 
 .rootForImageAlt {
@@ -461,6 +470,7 @@
 
 ._image {
   width: 30%;
+  padding-top: 10px;
 }
 
 .bookingPanel {
@@ -835,4 +845,91 @@
     display: inline-block;
     margin: 0 0.2rem;
   }
+}
+
+.preferredUse {
+  display: flex;
+  column-count: 3;
+  flex-flow: column wrap;
+  padding: 0 7px;
+  max-height: 190px;
+}
+
+.preferredUse img {
+  width: 30px;
+  height: 30px;
+}
+
+.preferredUse__event {
+  width: 50%;
+  margin-bottom: 15px;
+}
+
+.preferredUse__event div {
+  display: inline-block;
+  padding-left: 15px;
+}
+
+.preferredUse__event span {
+  font-size: 17px;
+  color: #e7e7e7;
+  font-weight: bold;
+}
+
+.preferredUse__storage {
+  width: 50%;
+  margin-bottom: 15px;
+}
+
+.preferredUse__storage div {
+  display: inline-block;
+  padding-left: 15px;
+}
+
+.preferredUse__storage span {
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.preferredUse__space {
+  width: 50%;
+  margin-bottom: 40px;
+}
+
+.preferredUse__space div {
+  display: inline-block;
+  padding-left: 15px;
+}
+
+.preferredUse__space span {
+  font-size: 17px;
+  font-weight: bold;
+  color: #e7e7e7;
+}
+
+.preferredUse__workshop {
+  width: 50%;
+  margin-left: 5px;
+}
+
+.preferredUse__workshop div {
+  display: inline-block;
+  padding-left: 15px;
+}
+
+.preferredUse__workshop span {
+  font-size: 17px;
+  font-weight: bold;
+  color: #e7e7e7;
+}
+
+.showPhotos {
+  float: right;
+  text-decoration: underline;
+  padding-top: 25px;
+}
+
+.smoking {
+  padding-right: 11px;
+  padding-bottom: 5px;
 }

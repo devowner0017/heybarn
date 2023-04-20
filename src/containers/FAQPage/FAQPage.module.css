@@ -31,10 +31,20 @@
 
 .coverImage {
   width: 100%;
-  height: 541px;
-  border-radius: 4px;
-  object-fit: cover;
+  height: 621px;
+  background-image: url('./12.png');
+  background-position: 50% 100%;
   margin: 0;
+}
+
+.coverImage h1 {
+  font-size: 50px;
+  color: white;
+  width: 473px;
+  line-height: 1.1;
+  position: relative;
+  top: 400px;
+  left: 425px;
 }
 
 .contentWrapper {

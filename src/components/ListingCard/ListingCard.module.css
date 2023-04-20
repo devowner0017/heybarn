@@ -16,6 +16,10 @@
   padding: 0.3rem;
 }
 
+.star {
+  float: right;
+}
+
 .threeToTwoWrapper {
   /* Layout */
   display: block;
@@ -172,6 +176,7 @@
   margin-top: 0;
   margin-bottom: 0;
   text-decoration: none;
+  width: 330px;
 
   @media (--viewportMedium) {
     margin-top: 0;

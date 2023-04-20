@@ -32,6 +32,9 @@
 
 .contentHeader {
   background-color: #f3ddbc;
+  background-image: url('./1.png');
+  background-size: 50% 140%;
+  background-position: 50% -258px;
   padding-bottom: 50px;
   padding-top: 20px;
 }
@@ -118,7 +121,7 @@
 .founders_image {
   width: 828px;
   height: 849px;
-  background-image: url('about-us-1056.jpg');
+  background-image: url('./DSC00348.png');
   background-repeat: repeat-y;
   background-position: 50% 50%;
   border-radius: 0 20px 20px 0;

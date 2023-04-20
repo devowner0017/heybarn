@@ -4,6 +4,7 @@ import classNames from 'classnames';
 
 import { Menu, MenuContent, MenuItem, MenuLabel } from '../../components';
 import css from './SortByPopup.module.css';
+import exchange from '../SearchFiltersPrimary/exchange.png';
 
 const optionLabel = (options, key) => {
   const option = options.find(o => o.key === key);
@@ -11,20 +12,7 @@ const optionLabel = (options, key) => {
 };
 
 const SortByIcon = () => {
-  return (
-    <svg className={css.icon} width="10" height="16" xmlns="http://www.w3.org/2000/svg">
-      <g
-        stroke="#4a4a4a"
-        strokeWidth="1.5"
-        fill="none"
-        fillRule="evenodd"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M3.25 7.125v7.438M5 12.813l-1.75 1.75-1.75-1.75M6.75 8.875V1.438M5 3.188l1.75-1.75 1.75 1.75" />
-      </g>
-    </svg>
-  );
+  return <img src={exchange} className={css.exchange}></img>;
 };
 
 class SortByPopup extends Component {
