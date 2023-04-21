@@ -80,6 +80,7 @@
 .contentSide h2 {
   font-size: 22px;
   text-align: left;
+  display: inline-block;
 }
 
 .contentMain {
@@ -95,6 +96,7 @@
 
 .contentMain h3 {
   font-size: 17px;
+  display: inline-block;
 }
 
 .contentMain p {
@@ -111,14 +113,23 @@
   text-decoration: underline;
 }
 
-.isActive:after {
-  content: '\2212';
-}
-
-.accordion:after {
-  content: '\002B';
+.symbol {
+  /* display: inline-block; */
   color: #000;
   font-size: 20px;
   float: right;
-  margin-left: 5px;
+  margin-top: 10px;
+}
+
+._symbol {
+  color: #000;
+  font-size: 20px;
+  float: right;
+  margin-top: -40px;
+}
+
+.__symbol {
+  display: inline-block;
+  margin-top: -5px;
+  margin-right: 20px;
 }

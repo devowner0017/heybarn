@@ -9,9 +9,8 @@ import {
   LayoutWrapperMain,
   LayoutWrapperFooter,
   Footer,
-  ExternalLink,
 } from '../../components';
-import { Grow, Collapse } from '@mui/material';
+import { Collapse } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -20,14 +19,17 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import css from './FAQPage.module.css';
-import image from './about-us-1056.jpg';
 import classNames from 'classnames';
+
+import arrowActived from './arrowActive.png';
+import arrowInactivated from './arrowInactive.png';
 
 const FAQPage = () => {
   const { siteTwitterHandle, siteFacebookPage } = config;
   const [sectionOpen, setSectionOpen] = useState('general') // prettier-ignore
   const [subSectionOpen, setSubSectionOpen] = useState('') // prettier-ignore
   const siteTwitterPage = twitterPageURL(siteTwitterHandle);
+  const [isActive, setIsActive] = useState(false);
 
   const handleSection = section => {
     setSubSectionOpen('');
@@ -35,6 +37,7 @@ const FAQPage = () => {
     else setSectionOpen(section);
   };
   const handleSubSection = section => {
+    setIsActive(current => !current);
     if (subSectionOpen.includes(section)) {
       setSubSectionOpen(subSectionOpen.filter(s => s !== section));
     } else {
@@ -131,41 +134,94 @@ const FAQPage = () => {
                   Can't find what you are after?<br></br>
                   <a href="/contact-us">Contact us.</a>
                 </p>
-
-                <h2
-                  className={classNames(css.pageTitle, { [css.active]: sectionOpen === 'general' })}
-                  onClick={() => handleSection('general')}
-                >
-                  General heybarn FAQ
-                </h2>
-                <h2
-                  className={classNames(css.pageTitle, { [css.active]: sectionOpen === 'host' })}
-                  onClick={() => handleSection('host')}
-                >
-                  Being a heybarn space owner
-                </h2>
-                <h2
-                  className={classNames(css.pageTitle, { [css.active]: sectionOpen === 'renter' })}
-                  onClick={() => handleSection('renter')}
-                >
-                  Being a heybarn renter
-                </h2>
+                <div>
+                  <span className={css.__symbol}>
+                    {sectionOpen === 'general' ? (
+                      <img src={arrowActived} />
+                    ) : (
+                      <img src={arrowInactivated} />
+                    )}
+                  </span>
+                  <h2
+                    className={classNames(css.pageTitle, {
+                      [css.active]: sectionOpen === 'general',
+                    })}
+                    onClick={() => handleSection('general')}
+                  >
+                    General heybarn FAQ
+                  </h2>
+                </div>
+                <div>
+                  <span className={css.__symbol}>
+                    {sectionOpen === 'host' ? (
+                      <img src={arrowActived} />
+                    ) : (
+                      <img src={arrowInactivated} />
+                    )}
+                  </span>
+                  <h2
+                    className={classNames(css.pageTitle, { [css.active]: sectionOpen === 'host' })}
+                    onClick={() => handleSection('host')}
+                  >
+                    Being a heybarn space owner
+                  </h2>
+                </div>
+                <div>
+                  <span className={css.__symbol}>
+                    {sectionOpen === 'renter' ? (
+                      <img src={arrowActived} />
+                    ) : (
+                      <img src={arrowInactivated} />
+                    )}
+                  </span>
+                  <h2
+                    className={classNames(css.pageTitle, {
+                      [css.active]: sectionOpen === 'renter',
+                    })}
+                    onClick={() => handleSection('renter')}
+                  >
+                    Being a heybarn renter
+                  </h2>
+                </div>
               </div>
               <div className={css.contentMain}>
                 <Collapse id={'general'} in={sectionOpen === 'general'}>
+                  {/* <CardHeader
+                    className={css.accordion}
+                    onClick={() => handleSubSection('generalBecome')}
+                    title="How do I become a heybarn account holder?"
+                    action={
+                      <IconButton
+                        onClick={() => handleSubSection('generalBecome')}
+                        aria-label="expand"
+                        size="small"
+                      >
+                        {subSectionOpen.includes('generalBecome') ? <KeyboardArrowUpIcon />
+                          : <KeyboardArrowDownIcon />}
+                      </IconButton>
+                    }
+                  ></CardHeader> */}
                   <h3 className={css.accordion} onClick={() => handleSubSection('generalBecome')}>
                     How do I become a heybarn account holder?
                   </h3>
+                  <span className={css.symbol}>
+                    {subSectionOpen.includes('generalBecome') ? '-' : '+'}
+                  </span>
                   <Collapse in={subSectionOpen.includes('generalBecome')}>
+                    {/* <CardContent> */}
                     <p className={css.panel}>
                       Easy! Select Sign up on the heybarn homepage and follow the instructions.
                       Becoming a heybarn member is completely free and carries no obligation.
                     </p>
+                    {/* </CardContent> */}
                   </Collapse>
                   <hr></hr>
                   <h3 className={css.accordion} onClick={() => handleSubSection('generalForget')}>
                     I've forgotten my password - How can I reset it?{' '}
                   </h3>
+                  <span className={css.symbol}>
+                    {subSectionOpen.includes('generalForget') ? '-' : '+'}
+                  </span>
                   <Collapse in={subSectionOpen.includes('generalForget')}>
                     <p className={css.panel}>
                       To reset your password, select Login on the heybarn homepage and follow the
@@ -179,6 +235,9 @@ const FAQPage = () => {
                   >
                     Where in New Zealand is heybarn available?
                   </h3>
+                  <span className={css.symbol}>
+                    {subSectionOpen.includes('generalAvailable') ? '-' : '+'}
+                  </span>
                   <Collapse in={subSectionOpen.includes('generalAvailable')}>
                     <p className={css.panel}>Heybarn is available throughout New Zealand.</p>
                   </Collapse>
@@ -189,6 +248,9 @@ const FAQPage = () => {
                   >
                     Is heybarn available in Australia?
                   </h3>
+                  <span className={css.symbol}>
+                    {subSectionOpen.includes('generalAvailableIn') ? '-' : '+'}
+                  </span>
                   <Collapse in={subSectionOpen.includes('generalAvailableIn')}>
                     <p className={css.panel}>
                       Not yet! Heybarn has been launched in New Zealand, with plans to expand into
@@ -201,6 +263,9 @@ const FAQPage = () => {
                   <h3 className={css.accordion} onClick={() => handleSubSection('generalSafe')}>
                     How can I be COVID-safe through heybarn?
                   </h3>
+                  <span className={css.symbol}>
+                    {subSectionOpen.includes('generalSafe') ? '-' : '+'}
+                  </span>
                   <Collapse in={subSectionOpen.includes('generalSafe')}>
                     <p className={css.panel}>
                       On the heybarn site, you can complete almost all steps involved in
@@ -214,6 +279,9 @@ const FAQPage = () => {
                   <h3 className={css.accordion} onClick={() => handleSubSection('generalLeave')}>
                     How do I leave feedback for heybarn?
                   </h3>
+                  <span className={css.symbol}>
+                    {subSectionOpen.includes('generalLeave') ? '-' : '+'}
+                  </span>
                   <Collapse in={subSectionOpen.includes('generalLeave')}>
                     <p className={css.panel}>
                       We are constantly working to improve the heybarn experience and would
@@ -226,6 +294,9 @@ const FAQPage = () => {
                   <h3 className={css.accordion} onClick={() => handleSubSection('generalContact')}>
                     Who can I contact at heybarn if I need help?
                   </h3>
+                  <span className={css.symbol}>
+                    {subSectionOpen.includes('generalContact') ? '-' : '+'}
+                  </span>
                   <Collapse in={subSectionOpen.includes('generalContact')}>
                     <p className={css.panel}>
                       If you need to contact heybarn, you can either call on 0800 439 2276 or email
@@ -236,6 +307,9 @@ const FAQPage = () => {
                   <h3 className={css.accordion} onClick={() => handleSubSection('generalConnect')}>
                     How does the heybarn Connection fee work?
                   </h3>
+                  <span className={css.symbol}>
+                    {subSectionOpen.includes('generalConnect') ? '-' : '+'}
+                  </span>
                   <Collapse in={subSectionOpen.includes('generalConnect')}>
                     <p className={css.panel}>
                       To contact either a Space Owner or renter on heybarn, you have to pay a
@@ -261,6 +335,9 @@ const FAQPage = () => {
                   <h3 className={css.accordion} onClick={() => handleSubSection('hostWork')}>
                     How does heybarn work for Space Owners?
                   </h3>
+                  <span className={css.symbol}>
+                    {subSectionOpen.includes('hostWork') ? '-' : '+'}
+                  </span>
                   <Collapse in={subSectionOpen.includes('hostWork')}>
                     <p className={css.panel}>
                       You can list your available space for free, being a shed, a garage, a paddock
@@ -277,6 +354,9 @@ const FAQPage = () => {
                   <h3 className={css.accordion} onClick={() => handleSubSection('hostNeed')}>
                     What do I need to be a Heybarn Space Owner?
                   </h3>
+                  <span className={css.symbol}>
+                    {subSectionOpen.includes('hostNeed') ? '-' : '+'}
+                  </span>
                   <Collapse in={subSectionOpen.includes('hostNeed')}>
                     <p className={css.panel}>
                       To become a heybarn Space Owner, you will need a shed or building or space
@@ -289,6 +369,9 @@ const FAQPage = () => {
                   <h3 className={css.accordion} onClick={() => handleSubSection('hostList')}>
                     What kind of space can I list on heybarn?
                   </h3>
+                  <span className={css.symbol}>
+                    {subSectionOpen.includes('hostList') ? '-' : '+'}
+                  </span>
                   <Collapse in={subSectionOpen.includes('hostList')}>
                     <p className={css.panel}>
                       Kiwis need space of all sizes and types, from open-sided sheds to paddocks to
@@ -301,6 +384,9 @@ const FAQPage = () => {
                   <h3 className={css.accordion} onClick={() => handleSubSection('hostHave')}>
                     I've got space in town - can I still list it on heybarn?
                   </h3>
+                  <span className={css.symbol}>
+                    {subSectionOpen.includes('hostHave') ? '-' : '+'}
+                  </span>
                   <Collapse in={subSectionOpen.includes('hostHave')}>
                     <p className={css.panel}>
                       Although heybarn focuses on listing available shed, building or paddock space
@@ -313,6 +399,9 @@ const FAQPage = () => {
                   <h3 className={css.accordion} onClick={() => handleSubSection('hostRent')}>
                     Can I rent my space out to more than one renter at a time?
                   </h3>
+                  <span className={css.symbol}>
+                    {subSectionOpen.includes('hostRent') ? '-' : '+'}
+                  </span>
                   <Collapse in={subSectionOpen.includes('hostRent')}>
                     <p className={css.panel}>
                       A single shed, for example, can be rented out to more than one renter at the
@@ -337,6 +426,9 @@ const FAQPage = () => {
                     >
                       How long does it take to create a listing?
                     </h3>
+                    <span className={css.symbol}>
+                      {subSectionOpen.includes('hostCreateListingCreate') ? '-' : '+'}
+                    </span>
                     <Collapse in={subSectionOpen.includes('hostCreateListingCreate')}>
                       <p className={css.panel}>
                         No time at all! Simply select Rent your space on the heybarn site homepage
@@ -354,6 +446,9 @@ const FAQPage = () => {
                     >
                       How can I create a fantastic listing?
                     </h3>
+                    <span className={css.symbol}>
+                      {subSectionOpen.includes('hostCreateListingfantasy') ? '-' : '+'}
+                    </span>
                     <Collapse in={subSectionOpen.includes('hostCreateListingfantasy')}>
                       <p className={css.panel}>
                         After selecting Rent your space, follow the steps to develop a great quality
@@ -371,6 +466,9 @@ const FAQPage = () => {
                     >
                       How much should I rent my space for?
                     </h3>
+                    <span className={css.symbol}>
+                      {subSectionOpen.includes('hostCreateListingRent') ? '-' : '+'}
+                    </span>
                     <Collapse in={subSectionOpen.includes('hostCreateListingRent')}>
                       <p className={css.panel}>
                         When you develop your listing, heybarn will provide you with estimates of
@@ -398,6 +496,9 @@ const FAQPage = () => {
                     >
                       How do I cancel a listing?
                     </h3>
+                    <span className={css.symbol}>
+                      {subSectionOpen.includes('hostCancelListingCancel') ? '-' : '+'}
+                    </span>
                     <Collapse in={subSectionOpen.includes('hostCancelListingCancel')}>
                       <p className={css.panel}>
                         You can delete, hide or edit your listing at any point while listed, simply
@@ -415,6 +516,9 @@ const FAQPage = () => {
                     >
                       Why has my listing been turned off or deleted?
                     </h3>
+                    <span className={css.symbol}>
+                      {subSectionOpen.includes('hostCancelListingTurn') ? '-' : '+'}
+                    </span>
                     <Collapse in={subSectionOpen.includes('hostCancelListingTurn')}>
                       <p className={css.panel}>
                         Heybarn reserves the right to suspend or delete a listing at any time.
@@ -443,6 +547,9 @@ const FAQPage = () => {
                     >
                       How do I contact a potential renter?
                     </h3>
+                    <span className={css.symbol}>
+                      {subSectionOpen.includes('hostTransactionsContact') ? '-' : '+'}
+                    </span>
                     <Collapse in={subSectionOpen.includes('hostTransactionsContact')}>
                       <p className={css.panel}>
                         If you find a potential renter on heybarn, make contact by initiating the
@@ -461,6 +568,9 @@ const FAQPage = () => {
                     >
                       What happens if a renter wants to contact me?
                     </h3>
+                    <span className={css.symbol}>
+                      {subSectionOpen.includes('hostTransactionsWant') ? '-' : '+'}
+                    </span>
                     <Collapse in={subSectionOpen.includes('hostTransactionsWant')}>
                       <p className={css.panel}>
                         If your listing is seen by a potential renter and they initiate a connection
@@ -480,6 +590,9 @@ const FAQPage = () => {
                     >
                       Does it cost me anything to list my space on heybarn?
                     </h3>
+                    <span className={css.symbol}>
+                      {subSectionOpen.includes('hostTransactionsCost') ? '-' : '+'}
+                    </span>
                     <Collapse in={subSectionOpen.includes('hostTransactionsCost')}>
                       <p className={css.panel}>
                         No. Listing your available space on heybarn is completely free.
@@ -492,6 +605,9 @@ const FAQPage = () => {
                     >
                       Do I need to pay tax on my rental earnings?
                     </h3>
+                    <span className={css.symbol}>
+                      {subSectionOpen.includes('hostTransactionsPay') ? '-' : '+'}
+                    </span>
                     <Collapse in={subSectionOpen.includes('hostTransactionsPay')}>
                       <p className={css.panel}>
                         Please discuss with your personal accountant on whether you will need to pay
@@ -506,6 +622,9 @@ const FAQPage = () => {
                     >
                       How can I change my credit card or rental account details?
                     </h3>
+                    <span className={css.symbol}>
+                      {subSectionOpen.includes('hostTransactionsChange') ? '-' : '+'}
+                    </span>
                     <Collapse in={subSectionOpen.includes('hostTransactionsChange')}>
                       <p className={css.panel}>
                         To change your credit card details, select View account under your profile
@@ -525,6 +644,9 @@ const FAQPage = () => {
                     >
                       How do I ensure renting out my space is as safe as possible?
                     </h3>
+                    <span className={css.symbol}>
+                      {subSectionOpen.includes('hostSecureensure') ? '-' : '+'}
+                    </span>
                     <Collapse in={subSectionOpen.includes('hostSecureensure')}>
                       <p className={css.panel}>
                         We know the process of renting out your available space may seem daunting.
@@ -547,6 +669,9 @@ const FAQPage = () => {
                     >
                       How do I stay safe when organising a viewing with a potential renter?
                     </h3>
+                    <span className={css._symbol}>
+                      {subSectionOpen.includes('hostSecuresafe') ? '-' : '+'}
+                    </span>
                     <Collapse in={subSectionOpen.includes('hostSecuresafe')}>
                       <p className={css.panel}>
                         When you arrange a viewing with a potential renter, heybarn recommends you
@@ -563,6 +688,9 @@ const FAQPage = () => {
                     >
                       Can I trust heybarn with my credit card details?
                     </h3>
+                    <span className={css.symbol}>
+                      {subSectionOpen.includes('hostSecuretrust') ? '-' : '+'}
+                    </span>
                     <Collapse in={subSectionOpen.includes('hostSecuretrust')}>
                       <p className={css.panel}>
                         Yes. Heybarn is committed to data privacy. We do not store your credit card
@@ -579,6 +707,9 @@ const FAQPage = () => {
                     >
                       Do I need to insure my space?
                     </h3>
+                    <span className={css.symbol}>
+                      {subSectionOpen.includes('hostSecureinsure') ? '-' : '+'}
+                    </span>
                     <Collapse in={subSectionOpen.includes('hostSecureinsure')}>
                       <p className={css.panel}>
                         As a Space Owner, it is your responsibility to insure your space. Speak to
@@ -595,6 +726,7 @@ const FAQPage = () => {
                   <h3 className={css.accordion} onClick={() => handleSubSection('Rwork')}>
                     How does heybarn work for renters?
                   </h3>
+                  <span className={css.symbol}>{subSectionOpen.includes('Rwork') ? '-' : '+'}</span>
                   <Collapse in={subSectionOpen.includes('Rwork')}>
                     <p className={css.panel}>
                       You can list your need for space for free. You can then either wait for an
@@ -611,6 +743,9 @@ const FAQPage = () => {
                   <h3 className={css.accordion} onClick={() => handleSubSection('Rbecome')}>
                     How do I become a heybarn renter?
                   </h3>
+                  <span className={css.symbol}>
+                    {subSectionOpen.includes('Rbecome') ? '-' : '+'}
+                  </span>
                   <Collapse in={subSectionOpen.includes('Rbecome')}>
                     <p className={css.panel}>
                       Easy! Select 'Sign up' on the heybarn homepage and follow the instructions.
@@ -624,6 +759,7 @@ const FAQPage = () => {
                   <h3 className={css.accordion} onClick={() => handleSubSection('Rneed')}>
                     What are some reasons why Kiwis may need more space?
                   </h3>
+                  <span className={css.symbol}>{subSectionOpen.includes('Rneed') ? '-' : '+'}</span>
                   <Collapse in={subSectionOpen.includes('Rneed')}>
                     <p className={css.panel}>
                       Kiwis need more space of all sizes and types for all sorts of reasons. This
@@ -637,6 +773,9 @@ const FAQPage = () => {
                     What should I be aware of when renting space on a lifestyle property or rural
                     farm?
                   </h3>
+                  <span className={css._symbol}>
+                    {subSectionOpen.includes('Raware') ? '-' : '+'}
+                  </span>
                   <Collapse in={subSectionOpen.includes('Raware')}>
                     <p className={css.panel}>
                       When you rent space via heybarn, you will be developing a connection with a
@@ -651,6 +790,7 @@ const FAQPage = () => {
                   <h3 className={css.accordion} onClick={() => handleSubSection('Ruse')}>
                     Can I use the listing for accommodation?
                   </h3>
+                  <span className={css.symbol}>{subSectionOpen.includes('Ruse') ? '-' : '+'}</span>
                   <Collapse in={subSectionOpen.includes('Ruse')}>
                     <p className={css.panel}>
                       No. You cannot rent accommodation space via the heybarn site.
@@ -665,6 +805,9 @@ const FAQPage = () => {
                     <h3 className={css.accordion} onClick={() => handleSubSection('Ccreate')}>
                       How long does it take to create a Renter Request?
                     </h3>
+                    <span className={css.symbol}>
+                      {subSectionOpen.includes('Ccreate') ? '-' : '+'}
+                    </span>
                     <Collapse in={subSectionOpen.includes('Ccreate')}>
                       <p className={css.panel}>
                         No time at all! Simply select ‘Advertise your need’ on the heybarn homepage
@@ -676,6 +819,9 @@ const FAQPage = () => {
                     <h3 className={css.accordion} onClick={() => handleSubSection('Csave')}>
                       Can I save a draft Renter Request and finish it later?
                     </h3>
+                    <span className={css.symbol}>
+                      {subSectionOpen.includes('Csave') ? '-' : '+'}
+                    </span>
                     <Collapse in={subSectionOpen.includes('Csave')}>
                       <p className={css.panel}>
                         Once you have completed the first step creating a Renter Request and saved
@@ -687,6 +833,9 @@ const FAQPage = () => {
                     <h3 className={css.accordion} onClick={() => handleSubSection('Cmake')}>
                       How can I make my Renter Request stand out from the crowd?
                     </h3>
+                    <span className={css._symbol}>
+                      {subSectionOpen.includes('Cmake') ? '-' : '+'}
+                    </span>
                     <Collapse in={subSectionOpen.includes('Cmake')}>
                       <p className={css.panel}>
                         After selecting ‘Advertise your need’, follow the steps to develop a quality
@@ -708,6 +857,9 @@ const FAQPage = () => {
                     <h3 className={css.accordion} onClick={() => handleSubSection('Ccancel')}>
                       How do I cancel a Renter Request?
                     </h3>
+                    <span className={css.symbol}>
+                      {subSectionOpen.includes('Ccancel') ? '-' : '+'}
+                    </span>
                     <Collapse in={subSectionOpen.includes('Ccancel')}>
                       <p className={css.panel}>
                         You can delete, hide or edit your Renter Request at any point, simply open
@@ -718,6 +870,9 @@ const FAQPage = () => {
                     <h3 className={css.accordion} onClick={() => handleSubSection('CturnOff')}>
                       Why has my Renter Request been turned off or deleted?
                     </h3>
+                    <span className={css.symbol}>
+                      {subSectionOpen.includes('CturnOff') ? '-' : '+'}
+                    </span>
                     <Collapse in={subSectionOpen.includes('CturnOff')}>
                       <p className={css.panel}>
                         Heybarn reserves the right to suspend or delete a Renter Request at any
@@ -742,6 +897,9 @@ const FAQPage = () => {
                     <h3 className={css.accordion} onClick={() => handleSubSection('Mcontact')}>
                       How do I contact a potential Space Owner?
                     </h3>
+                    <span className={css.symbol}>
+                      {subSectionOpen.includes('Mcontact') ? '-' : '+'}
+                    </span>
                     <Collapse in={subSectionOpen.includes('Mcontact')}>
                       <p className={css.panel}>
                         Once a Space Owner agrees to connect with you or you agree to connect with a
@@ -758,6 +916,9 @@ const FAQPage = () => {
                     <h3 className={css.accordion} onClick={() => handleSubSection('Ccost')}>
                       Does it cost me anything to list on heybarn?
                     </h3>
+                    <span className={css.symbol}>
+                      {subSectionOpen.includes('Ccost') ? '-' : '+'}
+                    </span>
                     <Collapse in={subSectionOpen.includes('Ccost')}>
                       <p className={css.panel}>
                         No. List your need for space on heybarn completely free.
@@ -767,6 +928,9 @@ const FAQPage = () => {
                     <h3 className={css.accordion} onClick={() => handleSubSection('Cconnect')}>
                       What is the heybarn Connection fee?
                     </h3>
+                    <span className={css.symbol}>
+                      {subSectionOpen.includes('Cconnect') ? '-' : '+'}
+                    </span>
                     <Collapse in={subSectionOpen.includes('Cconnect')}>
                       <p className={css.panel}>
                         When you see a Space Owner's listing that you like, Heybarn will charge a
@@ -792,6 +956,9 @@ const FAQPage = () => {
                     <h3 className={css.accordion} onClick={() => handleSubSection('Safety')}>
                       How do I ensure renting space is as low risk as possible?
                     </h3>
+                    <span className={css.symbol}>
+                      {subSectionOpen.includes('Safety') ? '-' : '+'}
+                    </span>
                     <Collapse in={subSectionOpen.includes('Safety')}>
                       <p className={css.panel}>
                         We know the process of renting space may seem daunting. Heybarn has been
@@ -808,6 +975,9 @@ const FAQPage = () => {
                     <h3 className={css.accordion} onClick={() => handleSubSection('Safe')}>
                       How do I stay safe when viewing a space with a potential Space Owner?
                     </h3>
+                    <span className={css._symbol}>
+                      {subSectionOpen.includes('Safe') ? '-' : '+'}
+                    </span>
                     <Collapse in={subSectionOpen.includes('Safe')}>
                       <p className={css.panel}>
                         When you arrange to view a new space with a potential Space Owner, heybarn
@@ -821,6 +991,9 @@ const FAQPage = () => {
                     <h3 className={css.accordion} onClick={() => handleSubSection('Strust')}>
                       Can I trust heybarn with my credit card details?
                     </h3>
+                    <span className={css.symbol}>
+                      {subSectionOpen.includes('Strust') ? '-' : '+'}
+                    </span>
                     <Collapse in={subSectionOpen.includes('Strust')}>
                       <p className={css.panel}>
                         Heybarn uses the third-party Stripe payment processing platform for secure
@@ -831,6 +1004,9 @@ const FAQPage = () => {
                     <h3 className={css.accordion} onClick={() => handleSubSection('Sdamage')}>
                       What happens if my belongings get damaged in a space rented through heybarn?
                     </h3>
+                    <span className={css._symbol}>
+                      {subSectionOpen.includes('Sdamage') ? '-' : '+'}
+                    </span>
                     <Collapse in={subSectionOpen.includes('Sdamage')}>
                       <p className={css.panel}>
                         As a renter, it is your responsibility to insure your belongings and/or
@@ -843,6 +1019,9 @@ const FAQPage = () => {
                     <h3 className={css.accordion} onClick={() => handleSubSection('Sinsure')}>
                       Do I need to insure my belongings or business?{' '}
                     </h3>
+                    <span className={css.symbol}>
+                      {subSectionOpen.includes('Sinsure') ? '-' : '+'}
+                    </span>
                     <Collapse in={subSectionOpen.includes('Sinsure')}>
                       <p className={css.panel}>
                         As a renter, it is your responsibility to insure your belongings and/or

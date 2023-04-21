@@ -240,6 +240,7 @@ select {
 li {
   @apply --marketplaceSmallFontStyles;
   font-family: var(--fontFamilySecondary);
+  padding-left: 10px;
 }
 
 p,
@@ -338,5 +339,7 @@ textarea {
   margin-top: 0px;
   padding-left: 45px;
   color: #000000;
-  letter-spacing: 1px;
+  letter-spacing: 0px;
+  font-size: 17px;
+  font-family: 'Montserrat';
 }

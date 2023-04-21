@@ -32,9 +32,9 @@
 
 .contentHeader {
   background-color: #f3ddbc;
-  background-image: url('./1.png');
-  background-size: 50% 140%;
-  background-position: 50% -258px;
+  background-image: url('./2.png');
+  background-size: 49% 150%;
+  background-position: 50% -323px;
   padding-bottom: 50px;
   padding-top: 20px;
 }
@@ -107,7 +107,6 @@
   margin-top: 200px;
   height: 1155px;
   background-color: rgb(36, 33, 33);
-  /* background-color: white; */
   padding-top: 150px;
   display: flex;
   flex-direction: row;
@@ -198,6 +197,8 @@
 .contentSearch p {
   padding-top: 58px;
   padding-bottom: 23px;
+  color: #171717;
+  font-family: 'Montserrat';
 }
 
 .contentButton {
