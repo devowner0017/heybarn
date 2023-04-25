@@ -37,6 +37,7 @@ import {
   LayoutWrapperMain,
   LayoutWrapperFooter,
   Footer,
+  PrimaryButton,
 } from '../../components';
 import { TopbarContainer } from '..';
 
@@ -49,7 +50,7 @@ import {
 import { types as sdkTypes } from '../../util/sdkLoader';
 import css from './TransactionInitPage.module.css';
 import { getPropByName } from '../../util/devHelpers';
-import { DIRECT_FLOW } from '../../components/TransactionInitPanel/SelectFlowForm';
+import { DIRECT_FLOW, SELECT_FLOW } from '../../components/TransactionInitPanel/SelectFlowForm';
 
 const { UUID } = sdkTypes;
 const PROVIDER = 'provider';
@@ -120,6 +121,7 @@ export const TransactionInitPageComponent = props => {
     host,
     listings,
     queryInProgress,
+    currentUserHasConnectionGuarantee,
   } = props;
   const scrollRef = useRef(null);
   const history = useHistory();
@@ -133,7 +135,7 @@ export const TransactionInitPageComponent = props => {
   const [selectedListing, setSelectedListing] = useState(location?.state?.listing || null);
   const [message, setMessage] = useState(location?.state?.message || null);
   const [showConfirmActionModal, setShowConfirmActionModal] = useState(
-    !!location?.state?.listing || false
+    (!!location?.state?.listing && !currentUserHasConnectionGuarantee) || false
   );
   const [isConfirmed, setIsConfirmed] = useState(false);
 
@@ -534,6 +536,84 @@ export const TransactionInitPageComponent = props => {
       });
   };
 
+  const handleSubmitWithConnectionGuarantee = () => {
+    const { onSendMessage, onCreateTransaction, dispatch } = props;
+
+    const handleSubmitGuarantee = handlePaymentParams => {
+      const { message, validCouponCode } = handlePaymentParams;
+
+      // // Step 1: CREATE A TRANSACTION
+      const fnCreateTransactionObject = fnParams => {
+        const selectedListingIdMaybe =
+          selectedFlow === DIRECT_FLOW && !selectedListing
+            ? {}
+            : { selectedListingId: selectedListing.id.uuid };
+
+        return onCreateTransaction({
+          listingId: listingId.uuid,
+          protectedData: {
+            contactingAs,
+            ...selectedListingIdMaybe,
+          },
+        }).then(tx => {
+          return { tx };
+        });
+      };
+
+      // Step 4: send initial message
+      const fnSendMessage = fnParams => {
+        if (message) {
+          return onSendMessage({
+            ...fnParams,
+            message,
+          });
+        } else {
+          return Promise.resolve({
+            ...fnParams,
+            orderId: fnParams.tx.id,
+          });
+        }
+      };
+
+      const applyAsync = (acc, val) => acc.then(val);
+      const composeAsync = (...funcs) => x => funcs.reduce(applyAsync, Promise.resolve(x));
+      const handleTransactionCreation = composeAsync(fnCreateTransactionObject, fnSendMessage);
+
+      const orderParams = { validCouponCode };
+
+      return handleTransactionCreation(orderParams);
+    };
+
+    const messageParam = message;
+
+    const requestPaymentParams = {
+      message: messageParam,
+      validCouponCode,
+    };
+
+    handleSubmitGuarantee(requestPaymentParams)
+      .then(res => {
+        const { orderId, messageSuccess } = res;
+        const routes = routeConfiguration();
+        const initialMessageFailedToTransaction = !messageParam
+          ? null
+          : messageSuccess
+          ? null
+          : orderId;
+        const orderDetailsPath = pathByRouteName('OrderDetailsPage', routes, { id: orderId.uuid });
+        const initialValues = {
+          initialMessageFailedToTransaction,
+          savePaymentMethodFailed: false,
+        };
+
+        initializeOrderPage(initialValues, routes, dispatch);
+        history.push(orderDetailsPath);
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  };
+
   const onSubmitEnquiry = values => {
     const { message } = values;
 
@@ -544,10 +624,16 @@ export const TransactionInitPageComponent = props => {
 
   const onSkipDirectFlow = () => {
     setShowCreateListingDirectFlowPopup(false);
-    setShowConfirmActionModal(true);
+
+    if (!currentUserHasConnectionGuarantee) {
+      setShowConfirmActionModal(true);
+    }
   };
 
-  const showPaymentForm = isConfirmed && (!!selectedListing || selectedFlow === DIRECT_FLOW);
+  const showPaymentForm =
+    isConfirmed &&
+    (!!selectedListing || selectedFlow === DIRECT_FLOW) &&
+    !currentUserHasConnectionGuarantee;
   // Get first and last name of the current user and use it in the StripePaymentForm to autofill the name field
   const userName =
     currentUser && currentUser.attributes
@@ -561,6 +647,25 @@ export const TransactionInitPageComponent = props => {
     ensureStripeCustomer(currentUser.stripeCustomer).attributes.stripeCustomerId &&
     ensurePaymentMethodCard(currentUser.stripeCustomer.defaultPaymentMethod).id
   );
+
+  const showGuaranteeSubmitFromReturn =
+    !!location?.state?.listing && currentUserHasConnectionGuarantee;
+
+  const shouldShowGuaranteeSubmitButton =
+    selectedFlow !== SELECT_FLOW &&
+    currentUserHasConnectionGuarantee &&
+    (!!selectedListing || selectedFlow === DIRECT_FLOW);
+
+  const guaranateeSubmitButton = shouldShowGuaranteeSubmitButton ? (
+    <div className={css.guaranteeSubmitButton}>
+      <PrimaryButton
+        rootClassName={css.guaranteeSubmitButton}
+        onClick={handleSubmitWithConnectionGuarantee}
+      >
+        Submit
+      </PrimaryButton>
+    </div>
+  ) : null;
 
   const selectListing = (
     <>
@@ -682,6 +787,9 @@ export const TransactionInitPageComponent = props => {
         setIsConfirmed={setIsConfirmed}
         isConfirmed={isConfirmed}
         setSelectedListing={setSelectedListing}
+        currentUserHasConnectionGuarantee={currentUserHasConnectionGuarantee}
+        guaranateeSubmitButton={guaranateeSubmitButton}
+        onSubmitWithConnectionGuarantee={handleSubmitWithConnectionGuarantee}
       />
       <span ref={scrollRef}></span>
     </>
@@ -806,7 +914,7 @@ const mapStateToProps = state => {
     queryInProgress,
   } = state.TransactionInitPage;
   const { currentPageResultIds } = state.ManageListingsPage;
-  const { currentUser } = state.user;
+  const { currentUser, currentUserHasConnectionGuarantee } = state.user;
 
   const listings = currentPageResultIds && getOwnListingsById(state, currentPageResultIds);
 
@@ -852,6 +960,8 @@ const mapStateToProps = state => {
     guest,
     host,
     queryInProgress,
+
+    currentUserHasConnectionGuarantee,
   };
 };
 

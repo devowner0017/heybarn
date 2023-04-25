@@ -298,7 +298,6 @@ const routeConfiguration = () => {
     },
     {
       path: '/transaction/l/:id/initial',
-      // path: '/contact-us',
       name: 'TransactionInitPageL',
       auth: true,
       authPage: 'LoginPage',

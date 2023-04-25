@@ -209,6 +209,9 @@ export class TransactionInitPanelComponent extends Component {
       setShowConfirmActionModal,
       setIsConfirmed,
       isConfirmed,
+      currentUserHasConnectionGuarantee,
+      guaranateeSubmitButton,
+      onSubmitWithConnectionGuarantee,
     } = this.props;
 
     const currentProvider = ensureUser(currentListing.author);
@@ -360,7 +363,13 @@ export class TransactionInitPanelComponent extends Component {
         <div className={css.actionButtonWrapper}>
           <PrimaryButton
             disabled={!selectedListing}
-            onClick={() => setShowConfirmActionModal(true)}
+            onClick={() => {
+              if (!currentUserHasConnectionGuarantee) {
+                setShowConfirmActionModal(true);
+              } else {
+                onSubmitWithConnectionGuarantee();
+              }
+            }}
           >
             <FormattedMessage id="TransactionInitPanel.submit" />
           </PrimaryButton>
@@ -430,6 +439,7 @@ export class TransactionInitPanelComponent extends Component {
               )}
 
               {paymentForm}
+              {guaranateeSubmitButton}
               {/* {couponCodeComp} */}
             </div>
           </div>

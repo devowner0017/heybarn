@@ -49,6 +49,13 @@ export const SEND_VERIFICATION_EMAIL_REQUEST = 'app/user/SEND_VERIFICATION_EMAIL
 export const SEND_VERIFICATION_EMAIL_SUCCESS = 'app/user/SEND_VERIFICATION_EMAIL_SUCCESS';
 export const SEND_VERIFICATION_EMAIL_ERROR = 'app/user/SEND_VERIFICATION_EMAIL_ERROR';
 
+export const FETCH_CURRENT_USER_HAS_CONNECTION_GUARANTEE_REQUEST =
+  'app/user/FETCH_CURRENT_USER_HAS_CONNECTION_GUARANTEE_REQUEST';
+export const FETCH_CURRENT_USER_HAS_CONNECTION_GUARANTEE_SUCCESS =
+  'app/user/FETCH_CURRENT_USER_HAS_CONNECTION_GUARANTEE_SUCCESS';
+export const FETCH_CURRENT_USER_HAS_CONNECTION_GUARANTEE_ERROR =
+  'app/user/FETCH_CURRENT_USER_HAS_CONNECTION_GUARANTEE_ERROR';
+
 // ================ Reducer ================ //
 
 const mergeCurrentUser = (oldCurrentUser, newCurrentUser) => {
@@ -77,6 +84,8 @@ const initialState = {
   currentUserHasOrdersError: null,
   sendVerificationEmailInProgress: false,
   sendVerificationEmailError: null,
+  currentUserHasConnectionGuarantee: null,
+  fetchCurrentUserHasConnectionGuaranteeError: null,
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -143,6 +152,13 @@ export default function reducer(state = initialState, action = {}) {
         sendVerificationEmailInProgress: false,
         sendVerificationEmailError: payload,
       };
+
+    case FETCH_CURRENT_USER_HAS_CONNECTION_GUARANTEE_REQUEST:
+      return { ...state, fetchCurrentUserHasConnectionGuaranteeError: null };
+    case FETCH_CURRENT_USER_HAS_CONNECTION_GUARANTEE_SUCCESS:
+      return { ...state, currentUserHasConnectionGuarantee: payload };
+    case FETCH_CURRENT_USER_HAS_CONNECTION_GUARANTEE_ERROR:
+      return { ...state, fetchCurrentUserHasConnectionGuaranteeError: payload };
 
     default:
       return state;
@@ -239,6 +255,19 @@ export const sendVerificationEmailError = e => ({
   type: SEND_VERIFICATION_EMAIL_ERROR,
   error: true,
   payload: e,
+});
+
+export const fetchCurrentUserHasConnectionGuaranteeRequest = () => ({
+  type: FETCH_CURRENT_USER_HAS_CONNECTION_GUARANTEE_REQUEST,
+});
+export const fetchCurrentUserHasConnectionGuaranteeSuccess = hasConnectionGuarantee => ({
+  type: FETCH_CURRENT_USER_HAS_CONNECTION_GUARANTEE_SUCCESS,
+  payload: hasConnectionGuarantee,
+});
+export const fetchCurrentUserHasConnectionGuaranteeError = error => ({
+  type: FETCH_CURRENT_USER_HAS_CONNECTION_GUARANTEE_ERROR,
+  payload: error,
+  error: true,
 });
 
 // ================ Thunks ================ //
@@ -370,6 +399,7 @@ export const fetchCurrentUser = (params = null) => (dispatch, getState, sdk) => 
     .then(currentUser => {
       dispatch(fetchCurrentUserHasListings());
       dispatch(fetchCurrentUserNotifications());
+      dispatch(fetchCurrentUserHasConnectionGuarantee());
       if (!currentUser.attributes.emailVerified) {
         dispatch(fetchCurrentUserHasOrders());
       }
@@ -394,4 +424,31 @@ export const sendVerificationEmail = () => (dispatch, getState, sdk) => {
     .sendVerificationEmail()
     .then(() => dispatch(sendVerificationEmailSuccess()))
     .catch(e => dispatch(sendVerificationEmailError(storableError(e))));
+};
+
+export const fetchCurrentUserHasConnectionGuarantee = () => (dispatch, getState, sdk) => {
+  dispatch(fetchCurrentUserHasConnectionGuaranteeRequest());
+
+  const oneMonthAgo = new Date();
+  oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+
+  return sdk.transactions
+    .query({
+      only: 'order',
+      createdAtStart: oneMonthAgo.toISOString(),
+      lastTransitions: ['transition/host-fee-paid', 'transition/renter-fee-paid'],
+    })
+    .then(res => {
+      const currentDate = new Date();
+      const hasConnectionGuarantee = res.data.data.every(transaction => {
+        const transactionCreatedDate = new Date(transaction.attributes.createdAt);
+        const daysDifference = (currentDate - transactionCreatedDate) / (1000 * 60 * 60 * 24);
+        return daysDifference <= 5;
+      });
+
+      dispatch(fetchCurrentUserHasConnectionGuaranteeSuccess(hasConnectionGuarantee));
+    })
+    .catch(e => {
+      dispatch(fetchCurrentUserHasConnectionGuaranteeError(storableError(e)));
+    });
 };
