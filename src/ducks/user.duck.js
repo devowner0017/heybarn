@@ -436,14 +436,14 @@ export const fetchCurrentUserHasConnectionGuarantee = () => (dispatch, getState,
     .query({
       only: 'order',
       createdAtStart: oneMonthAgo.toISOString(),
-      lastTransitions: ['transition/host-fee-paid', 'transition/renter-fee-paid'],
+      lastTransitions: ['transition/expire-host-enquiry', 'transition/expire-renter-enquiry'],
     })
     .then(res => {
       const currentDate = new Date();
       const hasConnectionGuarantee = res.data.data.every(transaction => {
         const transactionCreatedDate = new Date(transaction.attributes.createdAt);
         const daysDifference = (currentDate - transactionCreatedDate) / (1000 * 60 * 60 * 24);
-        return daysDifference <= 5;
+        return daysDifference >= 5;
       });
 
       dispatch(fetchCurrentUserHasConnectionGuaranteeSuccess(hasConnectionGuarantee));

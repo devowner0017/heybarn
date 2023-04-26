@@ -17,6 +17,14 @@
      ],
    :to :state/host-enquired}
 
+  {:name :transition/expire-host-enquiry,
+   :at
+   {:fn/plus
+    [{:fn/timepoint [:time/first-entered-state :state/host-enquired]}
+     {:fn/period ["P5D"]}]},
+   :from :state/host-enquired,
+   :to :state/enquiry-expired}   
+
   {:name :transition/renter-declines-communication,
    :actor :actor.role/provider,
    :actions [],
@@ -38,6 +46,14 @@
       {:name :action/update-protected-data}
     ],
    :to :state/renter-enquired}
+
+  {:name :transition/expire-renter-enquiry,
+   :at
+   {:fn/plus
+    [{:fn/timepoint [:time/first-entered-state :state/renter-enquired]}
+     {:fn/period ["P5D"]}]},
+   :from :state/renter-enquired,
+   :to :state/enquiry-expired}   
 
   {:name :transition/host-declines-communication,
    :actor :actor.role/provider,
