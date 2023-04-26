@@ -288,6 +288,7 @@ class EditListingWizard extends Component {
       stripeAccountLinkError,
       currentUser,
       isAdvert,
+      existingListings,
       ...rest
     } = this.props;
 
@@ -429,6 +430,7 @@ class EditListingWizard extends Component {
                 isAdvert={isAdvert}
                 listingType={listingType}
                 backButton={backButton}
+                existingListings={existingListings}
               />
             );
           })}

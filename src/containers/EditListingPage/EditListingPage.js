@@ -46,6 +46,7 @@ import css from './EditListingPage.module.css';
 import routeConfiguration from '../../routeConfiguration';
 import { findRouteByRouteName } from '../../util/routes';
 import { getPropByName } from '../../util/devHelpers';
+import { getOwnListingsById } from '../ManageListingsPage/ManageListingsPage.duck';
 
 const STRIPE_ONBOARDING_RETURN_URL_SUCCESS = 'success';
 const STRIPE_ONBOARDING_RETURN_URL_FAILURE = 'failure';
@@ -92,6 +93,7 @@ export const EditListingPageComponent = props => {
     stripeAccountFetched,
     stripeAccount,
     updateStripeAccountError,
+    listings: existingListings,
   } = props;
   const [locationState] = useState(location.state);
 
@@ -271,6 +273,7 @@ export const EditListingPageComponent = props => {
             createStripeAccountError || updateStripeAccountError || fetchStripeAccountError
           }
           stripeAccountLinkError={getAccountLinkError}
+          existingListings={existingListings}
         />
       </Page>
     );
@@ -359,15 +362,18 @@ const mapStateToProps = state => {
     stripeAccountFetched,
   } = state.stripeConnectAccount;
 
+  const { currentPageResultIds } = state.ManageListingsPage;
+  const listings = currentPageResultIds ? getOwnListingsById(state, currentPageResultIds) : [];
+
   const { currentUser } = state.user;
 
   const fetchInProgress = createStripeAccountInProgress;
 
   const getOwnListing = id => {
     const listings = getMarketplaceEntities(state, [{ id, type: 'ownListing' }]);
-
     return listings.length === 1 ? listings[0] : null;
   };
+
   return {
     getAccountLinkInProgress,
     getAccountLinkError,
@@ -381,6 +387,7 @@ const mapStateToProps = state => {
     getOwnListing,
     page,
     scrollingDisabled: isScrollingDisabled(state),
+    listings,
   };
 };
 

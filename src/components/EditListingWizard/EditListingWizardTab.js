@@ -40,10 +40,10 @@ export const SUPPORTED_TABS = [
   PHOTOS,
 ];
 
-const pathParamsToNextTab = (params, tab, marketplaceTabs) => {
+const pathParamsToNextTab = (params, tab, marketplaceTabs, isCloning = false) => {
   const nextTabIndex = marketplaceTabs.findIndex(s => s === tab) + 1;
   const nextTab =
-    nextTabIndex < marketplaceTabs.length
+    nextTabIndex < marketplaceTabs.length && !isCloning
       ? marketplaceTabs[nextTabIndex]
       : marketplaceTabs[marketplaceTabs.length - 1];
   return { ...params, tab: nextTab };
@@ -57,7 +57,8 @@ const redirectAfterDraftUpdate = (
   marketplaceTabs,
   history,
   isAdvert,
-  location
+  location,
+  isCloning = false
 ) => {
   const currentPathParams = {
     ...params,
@@ -79,7 +80,7 @@ const redirectAfterDraftUpdate = (
   }
 
   // Redirect to next tab
-  const nextPathParams = pathParamsToNextTab(currentPathParams, tab, marketplaceTabs);
+  const nextPathParams = pathParamsToNextTab(currentPathParams, tab, marketplaceTabs, isCloning);
   const to = createResourceLocatorString(
     isAdvert ? 'EditAdvertPage' : 'EditListingPage',
     routes,
@@ -117,6 +118,7 @@ const EditListingWizardTab = props => {
     isAdvert,
     listingType,
     backButton,
+    existingListings,
   } = props;
   const { type } = params;
   const isNewURI = type === LISTING_PAGE_PARAM_TYPE_NEW;
@@ -128,7 +130,7 @@ const EditListingWizardTab = props => {
     return images ? images.map(img => img.imageId || img.id) : null;
   };
 
-  const onCompleteEditListingWizardTab = (tab, updateValues) => {
+  const onCompleteEditListingWizardTab = (tab, updateValues, isCloning = false) => {
     // Normalize images for API call
     const { images: updatedImages, ...otherValues } = updateValues;
     const imageProperty =
@@ -158,7 +160,8 @@ const EditListingWizardTab = props => {
               marketplaceTabs,
               history,
               isAdvert,
-              location
+              location,
+              isCloning
             );
           } else {
             handlePublishListing(currentListing.id);
@@ -187,6 +190,7 @@ const EditListingWizardTab = props => {
       isAdvert,
       listingType,
       backButton,
+      existingListings,
     };
   };
 
@@ -199,8 +203,8 @@ const EditListingWizardTab = props => {
         <EditListingDescriptionPanel
           {...panelProps(DESCRIPTION)}
           submitButtonText={intl.formatMessage({ id: submitButtonTranslationKey })}
-          onSubmit={values => {
-            onCompleteEditListingWizardTab(tab, values);
+          onSubmit={(values, isCloning) => {
+            onCompleteEditListingWizardTab(tab, values, isCloning);
           }}
         />
       );

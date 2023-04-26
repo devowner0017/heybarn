@@ -34,9 +34,11 @@ const EditListingDescriptionPanel = props => {
     updateInProgress,
     errors,
     backButton,
+    existingListings,
   } = props;
   const classes = classNames(rootClassName || css.root, className);
   const currentListing = ensureOwnListing(listing);
+  const [baseListing, setBaseListing] = useState(null);
 
   const { description, title, publicData } = currentListing.attributes;
 
@@ -100,6 +102,13 @@ const EditListingDescriptionPanel = props => {
             heightOfSpace,
           } = values;
 
+          const { geolocation, publicData = {}, availabilityPlan, price, privateData = {} } =
+            baseListing?.attributes || {};
+
+          const availabilityPlanMaybe = availabilityPlan ? { availabilityPlan } : {};
+          const geolocationMaybe = geolocation ? { geolocation } : {};
+          const priceMaybe = price ? { price } : {};
+
           const isVolume = lengthOfSpace && widthOfSpace && heightOfSpace;
           const isArea = (lengthOfSpace && widthOfSpace && !heightOfSpace) || heightOfSpace === 1;
 
@@ -114,7 +123,12 @@ const EditListingDescriptionPanel = props => {
           const updateValues = {
             title: title.trim(),
             description,
+            ...geolocationMaybe,
+            ...availabilityPlanMaybe,
+            ...priceMaybe,
+            privateData,
             publicData: {
+              ...publicData,
               listingType,
               listingState,
               notDeleted,
@@ -133,7 +147,7 @@ const EditListingDescriptionPanel = props => {
           const updateValuesWithPrice =
             listingType === 'listing' ? updateValues : { ...updateValues, price: defaultPrice };
           setInitValues(updateValues);
-          onSubmit(updateValuesWithPrice);
+          onSubmit(updateValuesWithPrice, !!baseListing);
         }}
         onChange={onChange}
         disabled={disabled}
@@ -145,6 +159,9 @@ const EditListingDescriptionPanel = props => {
         preferredUse={preferredUseOptions}
         listingType={listingType}
         backButton={backButton}
+        existingListings={existingListings}
+        onSetBaseListing={setBaseListing}
+        isPublished={isPublished}
       />
     </div>
   );

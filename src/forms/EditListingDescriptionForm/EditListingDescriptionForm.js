@@ -25,6 +25,7 @@ import {
   FieldNumberInput,
 } from '../../components';
 import css from './EditListingDescriptionForm.module.css';
+import { ensureArray } from '../../util/devHelpers';
 
 const TITLE_MAX_LENGTH = 60;
 
@@ -49,6 +50,9 @@ const EditListingDescriptionFormComponent = props => (
         fetchErrors,
         listingType,
         filterConfig,
+        existingListings,
+        onSetBaseListing,
+        isPublished,
         values,
       } = formRenderProps;
 
@@ -134,11 +138,85 @@ const EditListingDescriptionFormComponent = props => (
         ? intl.formatMessage({ id: 'EditListingFeaturesForm.sizeOfSpaceAreaLabel' })
         : '';
 
+      const preferredUseOptions = findOptionsForSelectFilter('preferredUse', config.custom.filters);
+
+      const selectListing =
+        !isPublished && existingListings?.length > 0 ? (
+          <div className={css.selectListing}>
+            <label className={css.selectListingHeading}>
+              Copy listing details from existing listing
+            </label>
+            <select
+              onChange={e => {
+                const listingId = e.target.value;
+                const currentListing = existingListings.find(l => l.id.uuid === listingId);
+
+                onSetBaseListing(currentListing);
+
+                const { description, title, publicData } = currentListing.attributes;
+
+                const {
+                  preferredUse,
+                  listingState: currentListingState,
+                  sizeOfSpace,
+                  ageOfSpace,
+                  amenities,
+                  lengthOfSpace,
+                  widthOfSpace,
+                  heightOfSpace,
+                } = publicData;
+
+                const initialValues = {
+                  title,
+                  description,
+                  preferredUse: ensureArray(preferredUse).map(p =>
+                    preferredUseOptions.find(o => o.key === p)
+                  ),
+                  sizeOfSpace,
+                  ageOfSpace,
+                  amenities,
+                  lengthOfSpace,
+                  widthOfSpace,
+                  heightOfSpace,
+                };
+
+                form.batch(() => {
+                  form.change('title', initialValues.title);
+                  form.change('description', initialValues.description);
+                  form.change('preferredUse', initialValues.preferredUse);
+                  form.change('sizeOfSpace', initialValues.sizeOfSpace);
+                  form.change('ageOfSpace', initialValues.ageOfSpace);
+                  form.change('amenities', initialValues.amenities);
+                  form.change('lengthOfSpace', initialValues.lengthOfSpace);
+                  form.change('widthOfSpace', initialValues.widthOfSpace);
+                  form.change('heightOfSpace', initialValues.heightOfSpace);
+                });
+              }}
+              defaultValue=""
+            >
+              <option disabled value="">
+                Select listing
+              </option>
+              {existingListings?.map(l => {
+                if (l.attributes.state !== 'published') return null;
+                return (
+                  <option key={l.id.uuid} value={l.id.uuid}>
+                    {l.attributes.title}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+        ) : null;
+
       return (
         <Form className={classes} onSubmit={handleSubmit}>
           {errorMessageCreateListingDraft}
           {errorMessageUpdateListing}
           {errorMessageShowListing}
+
+          {selectListing}
+
           <FieldTextInput
             id="title"
             name="title"

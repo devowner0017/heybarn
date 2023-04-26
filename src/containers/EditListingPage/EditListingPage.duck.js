@@ -1,6 +1,10 @@
 import omit from 'lodash/omit';
 import { types as sdkTypes } from '../../util/sdkLoader';
-import { denormalisedResponseEntities, ensureAvailabilityException } from '../../util/data';
+import {
+  denormalisedResponseEntities,
+  ensureAvailabilityException,
+  updatedEntities,
+} from '../../util/data';
 import { isSameDate, monthIdStringInUTC } from '../../util/dates';
 import { storableError } from '../../util/errors';
 import * as log from '../../util/log';
@@ -11,6 +15,8 @@ import {
   fetchStripeAccount,
 } from '../../ducks/stripeConnectAccount.duck';
 import { fetchCurrentUser } from '../../ducks/user.duck';
+import { queryOwnListings } from '../ManageListingsPage/ManageListingsPage.duck';
+import { LISTING_LIVE } from '../../util/types';
 
 const { UUID } = sdkTypes;
 
@@ -148,6 +154,12 @@ export const SAVE_PAYOUT_DETAILS_REQUEST = 'app/EditListingPage/SAVE_PAYOUT_DETA
 export const SAVE_PAYOUT_DETAILS_SUCCESS = 'app/EditListingPage/SAVE_PAYOUT_DETAILS_SUCCESS';
 export const SAVE_PAYOUT_DETAILS_ERROR = 'app/EditListingPage/SAVE_PAYOUT_DETAILS_ERROR';
 
+export const FETCH_LISTINGS_REQUEST = 'app/EditListingPage/FETCH_LISTINGS_REQUEST';
+export const FETCH_LISTINGS_SUCCESS = 'app/EditListingPage/FETCH_LISTINGS_SUCCESS';
+export const FETCH_LISTINGS_ERROR = 'app/EditListingPage/FETCH_LISTINGS_ERROR';
+
+export const ADD_OWN_ENTITIES = 'app/EditListingPage/ADD_OWN_ENTITIES';
+
 // ================ Reducer ================ //
 
 const initialState = {
@@ -179,6 +191,22 @@ const initialState = {
   updateInProgress: false,
   payoutDetailsSaveInProgress: false,
   payoutDetailsSaved: false,
+
+  queryParams: null,
+  queryInProgress: false,
+  queryListingsError: null,
+  ownEntities: {},
+  currentPageResultIds: null,
+};
+
+const resultIds = data => data.data.map(l => l.id);
+
+const merge = (state, sdkResponse) => {
+  const apiResponse = sdkResponse.data;
+  return {
+    ...state,
+    ownEntities: updatedEntities({ ...state.ownEntities }, apiResponse),
+  };
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -393,6 +421,29 @@ export default function reducer(state = initialState, action = {}) {
     case SAVE_PAYOUT_DETAILS_SUCCESS:
       return { ...state, payoutDetailsSaveInProgress: false, payoutDetailsSaved: true };
 
+    case FETCH_LISTINGS_REQUEST:
+      return {
+        ...state,
+        queryParams: payload.queryParams,
+        queryInProgress: true,
+        queryListingsError: null,
+        currentPageResultIds: [],
+      };
+    case FETCH_LISTINGS_SUCCESS:
+      return {
+        ...state,
+        currentPageResultIds: resultIds(payload.data),
+        pagination: payload.data.meta,
+        queryInProgress: false,
+      };
+    case FETCH_LISTINGS_ERROR:
+      // eslint-disable-next-line no-console
+      console.error(payload);
+      return { ...state, queryInProgress: false, queryListingsError: payload };
+
+    case ADD_OWN_ENTITIES:
+      return merge(state, payload);
+
     default:
       return state;
   }
@@ -473,6 +524,22 @@ export const deleteAvailabilityExceptionError = errorAction(DELETE_EXCEPTION_ERR
 export const savePayoutDetailsRequest = requestAction(SAVE_PAYOUT_DETAILS_REQUEST);
 export const savePayoutDetailsSuccess = successAction(SAVE_PAYOUT_DETAILS_SUCCESS);
 export const savePayoutDetailsError = errorAction(SAVE_PAYOUT_DETAILS_ERROR);
+
+export const queryListingsRequest = queryParams => ({
+  type: FETCH_LISTINGS_REQUEST,
+  payload: { queryParams },
+});
+
+export const queryListingsSuccess = response => ({
+  type: FETCH_LISTINGS_SUCCESS,
+  payload: { data: response.data },
+});
+
+export const queryListingsError = e => ({
+  type: FETCH_LISTINGS_ERROR,
+  error: true,
+  payload: e,
+});
 
 // ================ Thunk ================ //
 
@@ -688,6 +755,52 @@ export const savePayoutDetails = (values, isUpdateCall) => (dispatch, getState, 
     .catch(() => dispatch(savePayoutDetailsError()));
 };
 
+// This works the same way as addMarketplaceEntities,
+// but we don't want to mix own listings with searched listings
+// (own listings data contains different info - e.g. exact location etc.)
+export const addOwnEntities = sdkResponse => ({
+  type: ADD_OWN_ENTITIES,
+  payload: sdkResponse,
+});
+
+export const fetchOwnListings = listingType => (dispatch, getState, sdk) => {
+  dispatch(queryListingsRequest());
+
+  return dispatch(
+    queryOwnListings({
+      page: 1,
+      pub_listingType: listingType,
+      perPage: 100,
+      include: ['images'],
+      'fields.image': ['variants.landscape-crop', 'variants.landscape-crop2x'],
+      'limit.images': 1,
+    })
+  )
+    .then(ownListingsResponse => {
+      const filteredResults = ownListingsResponse.data.data.filter(r => {
+        const {
+          publicData: { listingType: responseListingType, listingState },
+          state,
+        } = r.attributes;
+        return (
+          responseListingType === listingType &&
+          listingState === LISTING_LIVE &&
+          state === 'published'
+        );
+      });
+      let alteredResponse = ownListingsResponse;
+      alteredResponse.data.data = filteredResults;
+      alteredResponse.data.meta.totalItems = filteredResults.length;
+      dispatch(addOwnEntities(alteredResponse));
+      dispatch(queryListingsSuccess(alteredResponse));
+      return alteredResponse;
+    })
+    .catch(e => {
+      dispatch(queryListingsError(storableError(e)));
+      throw e;
+    });
+};
+
 // loadData is run for each tab of the wizard. When editing an
 // existing listing, the listing must be fetched first.
 export const loadData = params => (dispatch, getState, sdk) => {
@@ -696,7 +809,7 @@ export const loadData = params => (dispatch, getState, sdk) => {
 
   if (type === 'new') {
     // No need to listing data when creating a new listing
-    return Promise.all([dispatch(fetchCurrentUser())])
+    return Promise.all([dispatch(fetchCurrentUser()), dispatch(fetchOwnListings('listing'))])
       .then(response => {
         const currentUser = getState().user.currentUser;
         if (currentUser && currentUser.stripeAccount) {
@@ -715,7 +828,11 @@ export const loadData = params => (dispatch, getState, sdk) => {
     'fields.image': ['variants.landscape-crop', 'variants.landscape-crop2x'],
   };
 
-  return Promise.all([dispatch(requestShowListing(payload)), dispatch(fetchCurrentUser())])
+  return Promise.all([
+    dispatch(requestShowListing(payload)),
+    dispatch(fetchCurrentUser()),
+    dispatch(fetchOwnListings('listing')),
+  ])
     .then(response => {
       const currentUser = getState().user.currentUser;
       if (currentUser && currentUser.stripeAccount) {
