@@ -521,7 +521,7 @@ exports[`EditListingPoliciesForm matches snapshot 1`] = `
             },
             Object {
               "key": "Taumaranui",
-              "label": "Taumaranui",
+              "label": "Taumarunui",
               "parent": "Waikato",
             },
             Object {
@@ -816,7 +816,7 @@ exports[`EditListingPoliciesForm matches snapshot 1`] = `
             },
             Object {
               "key": "MalboroughSounds",
-              "label": "Malborough Sounds",
+              "label": "Marlborough Sounds",
               "parent": "Marlborough",
             },
             Object {
@@ -900,11 +900,6 @@ exports[`EditListingPoliciesForm matches snapshot 1`] = `
               "parent": "Canterbury",
             },
             Object {
-              "key": "Kaikoura",
-              "label": "Kaikoura",
-              "parent": "Canterbury",
-            },
-            Object {
               "key": "Lyttelton",
               "label": "Lyttelton",
               "parent": "Canterbury",
@@ -928,6 +923,31 @@ exports[`EditListingPoliciesForm matches snapshot 1`] = `
               "key": "Selwyn",
               "label": "Selwyn",
               "parent": "Canterbury",
+            },
+            Object {
+              "key": "Lyttelton",
+              "label": "Lyttelton",
+              "parent": "TimaruOtago",
+            },
+            Object {
+              "key": "MtCook",
+              "label": "Mt Cook",
+              "parent": "TimaruOtago",
+            },
+            Object {
+              "key": "Rangiora",
+              "label": "Rangiora",
+              "parent": "TimaruOtago",
+            },
+            Object {
+              "key": "Rolleston",
+              "label": "Rolleston",
+              "parent": "TimaruOtago",
+            },
+            Object {
+              "key": "Selwyn",
+              "label": "Selwyn",
+              "parent": "TimaruOtago",
             },
             Object {
               "key": "Kurow",
@@ -997,6 +1017,16 @@ exports[`EditListingPoliciesForm matches snapshot 1`] = `
             Object {
               "key": "Ranfurly",
               "label": "Ranfurly",
+              "parent": "Otago",
+            },
+            Object {
+              "key": "Roxburgh",
+              "label": "Roxburgh",
+              "parent": "Otago",
+            },
+            Object {
+              "key": "Tapanui",
+              "label": "Tapanui",
               "parent": "Otago",
             },
             Object {
