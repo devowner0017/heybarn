@@ -17,7 +17,7 @@
 }
 
 .star {
-  float: right;
+  /* float: right; */
 }
 
 .threeToTwoWrapper {
@@ -55,6 +55,7 @@
   width: 100%;
   height: 100%;
   border-radius: var(--borderRadius);
+  object-fit: cover;
 }
 
 .info {
@@ -165,6 +166,7 @@
   display: flex;
   flex-direction: column;
   margin-right: auto;
+  width: 100%;
 }
 
 .title {
@@ -176,7 +178,11 @@
   margin-top: 0;
   margin-bottom: 0;
   text-decoration: none;
-  width: 330px;
+  width: 100%;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
   @media (--viewportMedium) {
     margin-top: 0;

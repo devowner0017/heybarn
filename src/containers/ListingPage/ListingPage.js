@@ -779,7 +779,9 @@ export class ListingPageComponent extends Component {
                 <h1 className={css.modalTitle}>
                   <FormattedMessage
                     id="ListingPage.publishedListingTitle"
-                    values={{ listingType: typeOfListing }}
+                    values={{
+                      listingType: typeOfListing === 'advert' ? 'Renter Request' : typeOfListing,
+                    }}
                   />
                 </h1>
                 <div className={css.publishedListingButtonWrapper}>

@@ -7,6 +7,7 @@ import css from './SearchFiltersPrimary.module.css';
 import Css from '../../containers/LandingPage/SectionGuarantee/SectionGuarantee.module.css';
 
 import { NamedLink } from '../../components';
+import MatchingListings from './MatchingListings';
 const SearchFiltersPrimaryComponent = props => {
   const {
     rootClassName,
@@ -64,10 +65,14 @@ const SearchFiltersPrimaryComponent = props => {
 
       <div className={css.filters}>
         <div className={css.filterButtons}>
-          <div />
-          {children}
-          {children}
-          {children}
+          <div>
+            {children}
+            {children}
+            {children}
+          </div>
+          <div>
+            <MatchingListings />
+          </div>
         </div>
         <div className={css.filterLinks}>
           <div className={css.filterP}>
