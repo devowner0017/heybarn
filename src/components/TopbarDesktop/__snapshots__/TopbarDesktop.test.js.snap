@@ -65,135 +65,139 @@ exports[`TopbarDesktop data matches snapshot 1`] = `
     </div>
   </div>
   <div
-    className="buttonRecomendWrapper"
+    className="rightContainer"
   >
-    <a
-      className="buttonRecomend cloudsponge-launch"
-      name="LandingPage"
+    <div
+      className="buttonRecomendWrapper"
     >
-      <span>
-        TopbarDesktop.recommend
+      <a
+        className="buttonRecomend cloudsponge-launch"
+        name="LandingPage"
+      >
+        <span>
+          TopbarDesktop.recommend
+        </span>
+      </a>
+    </div>
+    <a
+      className="inboxLink"
+      href="/inbox"
+      onClick={[Function]}
+      onMouseOver={[Function]}
+      onTouchStart={[Function]}
+      style={Object {}}
+      title={null}
+    >
+      <span
+        className="inbox"
+      >
+        <span>
+          TopbarDesktop.inbox
+        </span>
       </span>
     </a>
-  </div>
-  <a
-    className="inboxLink"
-    href="/inbox"
-    onClick={[Function]}
-    onMouseOver={[Function]}
-    onTouchStart={[Function]}
-    style={Object {}}
-    title={null}
-  >
-    <span
-      className="inbox"
-    >
-      <span>
-        TopbarDesktop.inbox
-      </span>
-    </span>
-  </a>
-  <div
-    className="root"
-    onBlur={[Function]}
-    onKeyDown={[Function]}
-    tabIndex={0}
-  >
-    <button
-      className="root profileMenuLabel"
-      onBlur={[Function]}
-      onClick={[Function]}
-    >
-      <div
-        className="root avatar"
-        title=""
-      >
-        <span
-          className="initials"
-        >
-          FC
-        </span>
-      </div>
-    </button>
     <div
-      className="root profileMenuContent isClosed"
-      style={
-        Object {
-          "left": "-10000px",
-        }
-      }
+      className="root"
+      onBlur={[Function]}
+      onKeyDown={[Function]}
+      tabIndex={0}
     >
-      <ul
-        className="content"
+      <button
+        className="root profileMenuLabel"
+        onBlur={[Function]}
+        onClick={[Function]}
       >
-        <li
-          className="root"
-          role="menuitem"
+        <div
+          className="root avatar"
+          title=""
         >
-          <div
-            className="profileMenuWrapper"
+          <span
+            className="initials"
+          >
+            FC
+          </span>
+        </div>
+      </button>
+      <div
+        className="root profileMenuContent isClosed"
+        style={
+          Object {
+            "left": "-10000px",
+          }
+        }
+      >
+        <ul
+          className="content"
+        >
+          <li
+            className="root"
+            role="menuitem"
           >
             <div
-              className="menuAvatar"
+              className="profileMenuWrapper"
             >
               <div
-                className="mediumAvatar bigAvatar"
-                title=""
+                className="menuAvatar"
               >
-                <span
-                  className="initials"
+                <div
+                  className="mediumAvatar bigAvatar"
+                  title=""
                 >
-                  FC
-                </span>
+                  <span
+                    className="initials"
+                  >
+                    FC
+                  </span>
+                </div>
+              </div>
+              <div
+                className="profileInfoWrapper"
+              >
+                <div
+                  className="nameWrapper"
+                >
+                   
+                </div>
+                <div
+                  className="emailWrapper"
+                />
+                <div
+                  className="profileLink"
+                >
+                  <a
+                    className=""
+                    href="/profile-settings"
+                    onClick={[Function]}
+                    onMouseOver={[Function]}
+                    onTouchStart={[Function]}
+                    style={Object {}}
+                    title={null}
+                  >
+                    View account
+                  </a>
+                </div>
               </div>
             </div>
-            <div
-              className="profileInfoWrapper"
+          </li>
+          <li
+            className="root"
+            role="menuitem"
+          >
+            <button
+              className="logoutButton inlineTextButton"
+              disabled={false}
+              onClick={[Function]}
             >
-              <div
-                className="nameWrapper"
-              >
-                 
-              </div>
-              <div
-                className="emailWrapper"
+              <span
+                className="menuItemBorder"
               />
-              <div
-                className="profileLink"
-              >
-                <a
-                  className=""
-                  href="/profile-settings"
-                  onClick={[Function]}
-                  onMouseOver={[Function]}
-                  onTouchStart={[Function]}
-                  style={Object {}}
-                  title={null}
-                >
-                  View account
-                </a>
-              </div>
-            </div>
-          </div>
-        </li>
-        <li
-          className="root"
-          role="menuitem"
-        >
-          <button
-            className="logoutButton inlineTextButton"
-            disabled={false}
-            onClick={[Function]}
-          >
-            <span
-              className="menuItemBorder"
-            />
-            <span>
-              TopbarDesktop.logout
-            </span>
-          </button>
-        </li>
-      </ul>
+              <span>
+                TopbarDesktop.logout
+              </span>
+            </button>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </nav>

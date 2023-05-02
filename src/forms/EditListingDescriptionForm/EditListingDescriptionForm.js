@@ -180,17 +180,17 @@ const EditListingDescriptionFormComponent = props => (
                   heightOfSpace,
                 };
 
-                form.batch(() => {
-                  form.change('title', initialValues.title);
-                  form.change('description', initialValues.description);
-                  form.change('preferredUse', initialValues.preferredUse);
-                  form.change('sizeOfSpace', initialValues.sizeOfSpace);
-                  form.change('ageOfSpace', initialValues.ageOfSpace);
-                  form.change('amenities', initialValues.amenities);
-                  form.change('lengthOfSpace', initialValues.lengthOfSpace);
-                  form.change('widthOfSpace', initialValues.widthOfSpace);
-                  form.change('heightOfSpace', initialValues.heightOfSpace);
-                });
+                const initialValuesWithListingId = {
+                  description: initialValues.description,
+                  preferredUse: initialValues.preferredUse,
+                  sizeOfSpace: initialValues.sizeOfSpace,
+                  ageOfSpace: initialValues.ageOfSpace,
+                  amenities: initialValues.amenities,
+                  lengthOfSpace: initialValues.lengthOfSpace,
+                  widthOfSpace: initialValues.widthOfSpace,
+                  heightOfSpace: initialValues.heightOfSpace,
+                }
+                form.restart(initialValuesWithListingId)
               }}
               defaultValue=""
             >
