@@ -87,7 +87,7 @@ const PrivacyPolicy = props => {
           c. To allow you to participate in interactive features of our service, when you choose to
           do so<br></br>
           d. As part of our efforts to keep our Site safe and secure<br></br>
-          e. e. To measure or understand the effectiveness of Listings we serve to you and others,
+          e. To measure or understand the effectiveness of Listings we serve to you and others,
           and to deliver relevant Listings to you
         </p>
 

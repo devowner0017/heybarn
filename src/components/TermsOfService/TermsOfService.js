@@ -560,7 +560,7 @@ const TermsOfService = props => {
           details, including your username and password. You are wholly responsible for all
           activities which occur under your membership details (including unauthorised use of your
           credit card details). You must notify us immediately if you become aware of any
-          unauthorised use of your membership details by emailing
+          unauthorised use of your membership details by emailing&nbsp;
           <a href="mailto:enquiries@heybarn.co.nz">enquiries@heybarn.co.nz</a>. We’ll consider
           whether there are grounds for taking any action, but you won’t necessarily be contacted as
           to our decision.
@@ -849,7 +849,8 @@ const TermsOfService = props => {
           subsidiaries, and their officers, directors, employees and agents, harmless from and
           against any claims, liabilities, damages, losses, and expenses, including, without
           limitation, reasonable legal and accounting fees, arising out of or in any way connected
-          with: (a) your access to or use of the Site, Services, or Collective Content or your
+          with:<br/>
+          (a) your access to or use of the Site, Services, or Collective Content or your
           violation or breach of these Terms<br></br>
           (b) your Member Content<br></br>
           (c) any injury occurring to any person or property as a result of the use, occupancy,
@@ -961,13 +962,13 @@ const TermsOfService = props => {
         </p>
         <p>
           If, at any time, you would like to contact us with your views about our terms of use, you
-          can do so by emailing us at
+          can do so by emailing us at&nbsp;
           <a href="mailto:enquiries@heybarn.co.nz">enquiries@heybarn.co.nz</a>. It is our policy to
           terminate in appropriate circumstances the Heybarn Accounts of Members or other account
           holders who repeatedly infringe or are believed to be repeatedly infringing the rights of
           third-party copyright holders. If you are a copyright owner, or are authorized to act on
           behalf of one, please report alleged copyright infringement by submitting the following
-          information to enquiries@heybarn.co.nz. Identify the copyrighted work that you claim has
+          information to <a href="mailto:enquiries@heybarn.co.nz">enquiries@heybarn.co.nz</a>. Identify the copyrighted work that you claim has
           been infringed, or if multiple copyrighted works are covered by this Notice, provide a
           comprehensive list of the copyrighted works that you claim have been infringed.
         </p>
