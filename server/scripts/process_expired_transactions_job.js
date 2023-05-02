@@ -1,4 +1,4 @@
-const { fetchAndUpdateExpiredTransactions } = require('../cancel_expired_transactions');
+const { fetchAndUpdateExpiredTransactions } = require('./cancel_expired_transactions');
 // const cron = require('node-cron');
 
 // Schedule the cron job to run every day at 00:00 (midnight)
