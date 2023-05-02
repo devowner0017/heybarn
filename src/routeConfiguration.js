@@ -297,8 +297,8 @@ const routeConfiguration = () => {
       setInitialValues: pageDataLoadingAPI.TransactionInitPage.setInitialValues,
     },
     {
-      // path: '/transaction/l/:id/initial',
-      path: '/contact-us',
+      path: '/transaction/l/:id/initial',
+      // path: '/contact-us',
       name: 'TransactionInitPageL',
       auth: true,
       authPage: 'LoginPage',

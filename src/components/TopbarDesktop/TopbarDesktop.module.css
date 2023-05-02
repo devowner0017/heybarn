@@ -9,7 +9,7 @@
   /* Layout for child components */
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: flex-start;
   padding: 0 12px 0 0;
 
@@ -31,7 +31,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 21px 24px 21px 82px;
+  padding: 21px 0px 21px 0px;
   height: 100%;
   color: #fff;
 
@@ -346,16 +346,14 @@
 }
 
 .dropdownContainer {
-  flex-grow: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100%;
-  padding-left: 227px;
 }
 
 .dropdown {
-  margin: 0 20px;
+  margin: 0 15px;
 }
 
 .buttonRecomendWrapper {
@@ -380,7 +378,6 @@
   letter-spacing: 0px;
   color: #000000;
   vertical-align: middle;
-  margin: 0 15px;
   background-color: #f7f7f7;
   border: none;
 
@@ -395,4 +392,10 @@
   height: 100%;
   color: #fff;
   font-size: 23px;
+}
+
+.rightContainer {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
 }

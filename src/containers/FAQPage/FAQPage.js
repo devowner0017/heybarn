@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import config from '../../config';
 import { twitterPageURL } from '../../util/urlHelpers';
 import { StaticPage } from '..';
-import TopbarContainerSmall from '../TopbarContainer/TopbarContainerSmall';
+import { TopbarContainer } from '../../containers';
 import {
   LayoutSingleColumn,
   LayoutWrapperTopbar,
@@ -120,7 +120,7 @@ const FAQPage = () => {
     >
       <LayoutSingleColumn>
         <LayoutWrapperTopbar>
-          <TopbarContainerSmall />
+          <TopbarContainer currentPage="FAQPage" />
         </LayoutWrapperTopbar>
 
         <LayoutWrapperMain>
