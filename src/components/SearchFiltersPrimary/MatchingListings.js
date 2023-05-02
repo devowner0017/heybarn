@@ -1,7 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { PrimaryButton } from '../Button/Button';
+import Button, { PrimaryButton } from '../Button/Button';
 import {
   getOwnListingsById,
+  loadAdvertData,
   loadListingData,
 } from '../../containers/ManageListingsPage/ManageListingsPage.duck';
 import { useCallback, useEffect } from 'react';
@@ -12,6 +13,8 @@ import routeConfiguration from '../../routeConfiguration';
 import config from '../../config';
 import { isAnyFilterActive } from '../../util/search';
 import { useHistory } from 'react-router-dom';
+
+import css from './SearchFiltersPrimary.module.css';
 
 const cleanSearchFromConflictingParams = (searchParams, sortConfig, filterConfig) => {
   // Single out filters that should disable SortBy when an active
@@ -27,7 +30,7 @@ const cleanSearchFromConflictingParams = (searchParams, sortConfig, filterConfig
     : searchParams;
 };
 
-const MatchingListings = ({ listingType = 'listing' }) => {
+const MatchingListings = ({ searchType }) => {
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -44,7 +47,7 @@ const MatchingListings = ({ listingType = 'listing' }) => {
         } = r.attributes;
         return (
           // listingState === LISTING_LIVE &&
-          responseListingType === listingType && state === 'published'
+          responseListingType !== searchType && state === 'published'
         );
       })
       .sort((a, b) => {
@@ -59,21 +62,66 @@ const MatchingListings = ({ listingType = 'listing' }) => {
   });
 
   useEffect(() => {
-    dispatch(loadListingData());
-  }, []);
+    if (searchType === 'advert') {
+      dispatch(loadListingData());
+    } else {
+      dispatch(loadAdvertData());
+    }
+  }, [searchType]);
+
+  const filterConfig = config.custom.filters;
+  const districtConfig = filterConfig.find(f => f.id === 'locDistrict');
 
   const handleSearch = useCallback(() => {
-    console.log('handleSearch');
+    // Search schema:
+    // listing      public  ageOfSpace     long
+    // listing      public  amenities      multi-enum
+    // listing      public  availableFrom  long
+    // listing      public  availableTo    long
+    // listing      public  listingState   enum
+    // listing      public  listingType    enum
+    // listing      public  locDistrict    enum
+    // listing      public  locIsland      enum
+    // listing      public  locRegion      enum
+    // listing      public  notDeleted     boolean
+    // listing      public  notHidden      boolean
+    // listing      public  preferredUse   multi-enum
+    // listing      public  sizeOfSpace    long
+
+    const whitelistedParams = [
+      'locDistrict',
+      'locIsland',
+      'locRegion',
+      'ageOfSpace',
+      // 'amenities',
+      // 'availableFrom',
+      // 'availableTo',
+      // 'listingState',
+      'listingType',
+      'locDistrict',
+      'locIsland',
+      // 'preferredUse',
+      'sizeOfSpace',
+    ];
 
     const searchParams = {
-      ...Object.keys(matchingListing.attributes.publicData).reduce((acc, key) => {
+      ...Object.keys(matchingListing.attributes.publicData)
+      .reduce((acc, key) => {
         const value = matchingListing.attributes.publicData[key];
-        if (value) {
+        if (value && whitelistedParams.includes(key)) {
           acc[`pub_${key}`] = value;
+          if (key === 'locDistrict') {
+            const bounds = districtConfig?.config?.options?.find?.(o => o.key === value)?.bounds;
+
+            if (bounds) {
+              acc['bounds'] = bounds;
+              acc['mapSearch'] = true;
+            }
+          }
         }
         return acc;
       }, {}),
-      pub_listingType: 'advert',
+      pub_listingType: searchType,
     };
     const search = cleanSearchFromConflictingParams(
       searchParams,
@@ -84,7 +132,9 @@ const MatchingListings = ({ listingType = 'listing' }) => {
   }, [matchingListing]);
 
   return matchingListing ? (
-    <PrimaryButton onClick={handleSearch}>Show me matching renters</PrimaryButton>
+    <Button className={css.matchingButton} onClick={handleSearch}>
+      Show me matching renters
+    </Button>
   ) : null;
 };
 

@@ -6,10 +6,16 @@ export const nestedRegions = [
   {
     key: 'northIsland',
     label: 'North Island',
+    address: 'North Island, New Zealand',
+    bounds: new LatLngBounds(
+      new LatLng(-39.253291, 173.896438),
+      new LatLng(-34.391833, 179.067324)
+    ),
     subdivs: [
       {
         key: 'Northland',
         label: 'Northland Region',
+        address: 'Northland Region',
         bounds: new LatLngBounds(
           new LatLng(-34.394766, 178.898438),
           new LatLng(-41.287454, 171.245361)
@@ -101,6 +107,11 @@ export const nestedRegions = [
       {
         key: 'Auckland',
         label: 'Auckland Region',
+        address: 'Auckland Region, New Zealand',
+        bounds: new LatLngBounds(
+          new LatLng(-37.290337, 174.475926),
+          new LatLng(-36.080992, 175.818463)
+        ),
         subdivs: [
           {
             key: 'Albany',
@@ -314,6 +325,11 @@ export const nestedRegions = [
       {
         key: 'Waikato',
         label: 'Waikato Region',
+        address: 'Waikato Region, New Zealand',
+        bounds: new LatLngBounds(
+          new LatLng(-39.315615, 174.227366),
+          new LatLng(-36.158368, 176.534306)
+        ),
         subdivs: [
           {
             key: 'Cambridge',
@@ -509,6 +525,11 @@ export const nestedRegions = [
       {
         key: 'BayPlenty',
         label: 'Bay of Plenty Region',
+        address: 'Bay of Plenty Region, New Zealand',
+        bounds: new LatLngBounds(
+          new LatLng(-38.378132, 175.870152),
+          new LatLng(-36.718338, 178.836772)
+        ),
         subdivs: [
           {
             key: 'Katikati',
@@ -605,6 +626,11 @@ export const nestedRegions = [
       {
         key: 'Gisborne',
         label: 'Gisborne',
+        address: 'Gisborne, Gisborne District, New Zealand',
+        bounds: new LatLngBounds(
+          new LatLng(-38.695046, 177.911163),
+          new LatLng(-38.57889, 178.046899)
+        ),
         subdivs: [
           {
             key: 'Gisborne',
@@ -629,6 +655,11 @@ export const nestedRegions = [
       {
         key: 'HawkesBay',
         label: "Hawke's Bay District",
+        address: "Hawke's Bay, New Zealand",
+        bounds: new LatLngBounds(
+          new LatLng(-39.202468, 176.295273),
+          new LatLng(-38.701136, 178.056501)
+        ),
         subdivs: [
           {
             key: 'Hastings',
@@ -671,6 +702,11 @@ export const nestedRegions = [
       {
         key: 'Taranaki',
         label: 'Taranaki Region',
+        address: 'Taranaki, New Zealand',
+        bounds: new LatLngBounds(
+          new LatLng(-39.348757, 173.769243),
+          new LatLng(-38.660696, 174.727027)
+        ),
         subdivs: [
           {
             key: 'Hawera',
@@ -720,8 +756,12 @@ export const nestedRegions = [
         ],
       },
       {
-        key: 'Whanganui',
-        label: 'Whanganui Region',
+        label: 'Whanganui District',
+        address: 'Whanganui, Manawatū-Whanganui, New Zealand',
+        bounds: new LatLngBounds(
+          new LatLng(-39.977695, 175.031756),
+          new LatLng(-38.708037, 176.377682)
+        ),
         subdivs: [
           {
             key: 'Ohakune',
@@ -763,8 +803,12 @@ export const nestedRegions = [
       },
 
       {
-        key: 'Manawatu',
         label: 'Manawatū-Whanganui Region',
+        address: 'Manawatū-Whanganui Region, New Zealand',
+        bounds: new LatLngBounds(
+          new LatLng(-40.946914, 175.806494),
+          new LatLng(-38.803964, 178.103034)
+        ),
         subdivs: [
           {
             key: 'Bulls',
@@ -853,6 +897,11 @@ export const nestedRegions = [
       {
         key: 'Wairarapa',
         label: 'Wairarapa Region',
+        address: 'Wairarapa, Wellington, New Zealand',
+        bounds: new LatLngBounds(
+          new LatLng(-41.533116, 175.081009),
+          new LatLng(-40.813998, 176.49419)
+        ),
         subdivs: [
           {
             key: 'Carterton',
@@ -957,10 +1006,20 @@ export const nestedRegions = [
   {
     key: 'southIsland',
     label: 'South Island',
+    address: 'South Island',
+    bounds: new LatLngBounds(
+      new LatLng(-47.621841, 165.064427),
+      new LatLng(-40.962834, 173.907118)
+    ),
     subdivs: [
       {
         key: 'NelsonBays',
         label: 'Nelson Bays Region',
+        address: 'Nelson Bays, Nelson, New Zealand',
+        bounds: new LatLngBounds(
+          new LatLng(-41.710274, 173.107711),
+          new LatLng(-40.5415, 174.542221)
+        ),
         subdivs: [
           {
             key: 'GoldenBay',
@@ -1003,6 +1062,11 @@ export const nestedRegions = [
       {
         key: 'Marlborough',
         label: 'Marlborough Region',
+        address: 'Marlborough, New Zealand',
+        bounds: new LatLngBounds(
+          new LatLng(-42.913768, 173.364357),
+          new LatLng(-40.390751, 174.755038)
+        ),
         subdivs: [
           {
             key: 'Blenheim',
@@ -1036,6 +1100,11 @@ export const nestedRegions = [
       {
         key: 'WestCoast',
         label: 'West Coast Region',
+        address: 'West Coast Region',
+        bounds: new LatLngBounds(
+          new LatLng(-43.605775, 166.128719),
+          new LatLng(-41.300206, 172.506681)
+        ),
         subdivs: [
           {
             key: 'Greymouth',
@@ -1069,6 +1138,11 @@ export const nestedRegions = [
       {
         key: 'Canterbury',
         label: 'Canterbury Region',
+        address: 'Canterbury, New Zealand',
+        bounds: new LatLngBounds(
+          new LatLng(-44.430187, 169.038332),
+          new LatLng(-42.335048, 173.220051)
+        ),
         subdivs: [
           {
             key: 'Amberley',
@@ -1229,6 +1303,11 @@ export const nestedRegions = [
       {
         key: 'TimaruOtago',
         label: 'Timaru-Otago Region',
+        address: 'Timaru-Otago Region',
+        bounds: new LatLngBounds(
+          new LatLng(-44.231405, 170.212103),
+          new LatLng(-43.997128, 170.50572)
+        ),
         subdivs: [
           {
             key: 'Lyttelton',
@@ -1325,6 +1404,11 @@ export const nestedRegions = [
       {
         key: 'Otago',
         label: 'Otago Region',
+        address: 'Otago, New Zealand',
+        bounds: new LatLngBounds(
+          new LatLng(-46.754731, 167.347758),
+          new LatLng(-44.013694, 171.782249)
+        ),
         subdivs: [
           {
             key: 'Alexandra',
@@ -1457,6 +1541,11 @@ export const nestedRegions = [
       {
         key: 'Southland',
         label: 'Southland Region',
+        address: 'Southland Region, New Zealand',
+        bounds: new LatLngBounds(
+          new LatLng(-47.369182, 166.050035),
+          new LatLng(-44.32724, 169.589529)
+        ),
         subdivs: [
           {
             key: 'Bluff',

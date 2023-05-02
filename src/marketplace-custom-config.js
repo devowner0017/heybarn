@@ -214,7 +214,12 @@ export const filters = [
       options: nestedRegions.flatMap(island => {
         return island.subdivs.flatMap(region => {
           return region.subdivs.flatMap(district => {
-            return { key: district.key, label: district.label, parent: region.key };
+            return {
+              key: district.key,
+              label: district.label,
+              parent: region.key,
+              bounds: district.bounds,
+            };
           });
         });
       }),

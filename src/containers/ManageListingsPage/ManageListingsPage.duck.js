@@ -571,7 +571,7 @@ export const loadListingData = (props = {}) => {
   });
 };
 
-export const loadAdvertData = props => {
+export const loadAdvertData = (props = {}) => {
   const { params, search } = props;
   const queryParams = parse(search);
   const page = queryParams.page || 1;

@@ -242,6 +242,7 @@ export class SearchPageComponent extends Component {
             searchParamsForPagination={parse(location.search)}
             showAsModalMaxWidth={MODAL_BREAKPOINT}
             history={history}
+            location={location}
             // mapSwitch={mapSwitch}
             // isMapOpen={isMapOpen}
             searchType={pub_listingType || 'listing'}
