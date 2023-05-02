@@ -363,13 +363,7 @@ export class TransactionInitPanelComponent extends Component {
         <div className={css.actionButtonWrapper}>
           <PrimaryButton
             disabled={!selectedListing}
-            onClick={() => {
-              if (!currentUserHasConnectionGuarantee) {
-                setShowConfirmActionModal(true);
-              } else {
-                onSubmitWithConnectionGuarantee();
-              }
-            }}
+            onClick={() => setShowConfirmActionModal(true)}
           >
             <FormattedMessage id="TransactionInitPanel.submit" />
           </PrimaryButton>
@@ -533,10 +527,14 @@ export class TransactionInitPanelComponent extends Component {
             id: 'TransactionInitPanel.confirmation.title',
           })}
           contentText={intl.formatMessage({
-            id: 'TransactionInitPanel.confirmation.subtitle',
+            id: currentUserHasConnectionGuarantee
+              ? 'TransactionInitPanel.confirmation.subtitleGuarantee'
+              : 'TransactionInitPanel.confirmation.subtitle',
           })}
           affirmativeButtonText={intl.formatMessage({
-            id: 'TransactionInitPanel.confirmation.affirmativeButtonText',
+            id: currentUserHasConnectionGuarantee
+              ? 'TransactionInitPanel.confirmation.affirmativeButtonTextGuarantee'
+              : 'TransactionInitPanel.confirmation.affirmativeButtonText',
           })}
           negativeButtonText={intl.formatMessage({
             id: 'TransactionInitPanel.confirmation.negativeButtonText',

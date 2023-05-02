@@ -189,8 +189,8 @@ const EditListingDescriptionFormComponent = props => (
                   lengthOfSpace: initialValues.lengthOfSpace,
                   widthOfSpace: initialValues.widthOfSpace,
                   heightOfSpace: initialValues.heightOfSpace,
-                }
-                form.restart(initialValuesWithListingId)
+                };
+                form.restart(initialValuesWithListingId);
               }}
               defaultValue=""
             >

@@ -436,17 +436,18 @@ export const fetchCurrentUserHasConnectionGuarantee = () => (dispatch, getState,
     .query({
       only: 'order',
       createdAtStart: oneMonthAgo.toISOString(),
-      lastTransitions: ['transition/expire-host-enquiry', 'transition/expire-renter-enquiry'],
     })
     .then(res => {
-      const currentDate = new Date();
-      const hasConnectionGuarantee = res.data.data.every(transaction => {
-        const transactionCreatedDate = new Date(transaction.attributes.createdAt);
-        const daysDifference = (currentDate - transactionCreatedDate) / (1000 * 60 * 60 * 24);
-        return daysDifference >= 5;
-      });
+      const txs = res.data.data;
 
-      dispatch(fetchCurrentUserHasConnectionGuaranteeSuccess(hasConnectionGuarantee));
+      const [firstTransaction] = txs;
+
+      const hasConnectionGuarantee =
+        ['transition/expire-host-enquiry', 'transition/expire-renter-enquiry'].includes(
+          firstTransaction?.attributes?.lastTransition
+        ) && !!firstTransaction?.attributes?.protectedData?.isPaid;
+
+      dispatch(fetchCurrentUserHasConnectionGuaranteeSuccess(!!hasConnectionGuarantee));
     })
     .catch(e => {
       dispatch(fetchCurrentUserHasConnectionGuaranteeError(storableError(e)));

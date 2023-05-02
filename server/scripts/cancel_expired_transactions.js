@@ -1,5 +1,5 @@
 // Configure process.env with .env.* files
-require('./env').configureEnv();
+require('../env').configureEnv();
 
 const { createInstance } = require('sharetribe-flex-integration-sdk');
 const Bottleneck = require('bottleneck');
@@ -14,8 +14,6 @@ const limiter = new Bottleneck({
   maxConcurrent: 1,
   minTime: 1000,
 });
-
-const transactionAgeLimit = 2 * 24 * 60 * 60 * 1000; // 5 days in milliseconds
 
 async function processTransactions(transactions = []) {
   if (transactions.length === 0) {

@@ -849,9 +849,10 @@ const TermsOfService = props => {
           subsidiaries, and their officers, directors, employees and agents, harmless from and
           against any claims, liabilities, damages, losses, and expenses, including, without
           limitation, reasonable legal and accounting fees, arising out of or in any way connected
-          with:<br/>
-          (a) your access to or use of the Site, Services, or Collective Content or your
-          violation or breach of these Terms<br></br>
+          with:
+          <br />
+          (a) your access to or use of the Site, Services, or Collective Content or your violation
+          or breach of these Terms<br></br>
           (b) your Member Content<br></br>
           (c) any injury occurring to any person or property as a result of the use, occupancy,
           travel to or from, or the entry or exit from, any Space by you<br></br>
@@ -968,9 +969,10 @@ const TermsOfService = props => {
           holders who repeatedly infringe or are believed to be repeatedly infringing the rights of
           third-party copyright holders. If you are a copyright owner, or are authorized to act on
           behalf of one, please report alleged copyright infringement by submitting the following
-          information to <a href="mailto:enquiries@heybarn.co.nz">enquiries@heybarn.co.nz</a>. Identify the copyrighted work that you claim has
-          been infringed, or if multiple copyrighted works are covered by this Notice, provide a
-          comprehensive list of the copyrighted works that you claim have been infringed.
+          information to <a href="mailto:enquiries@heybarn.co.nz">enquiries@heybarn.co.nz</a>.
+          Identify the copyrighted work that you claim has been infringed, or if multiple
+          copyrighted works are covered by this Notice, provide a comprehensive list of the
+          copyrighted works that you claim have been infringed.
         </p>
         <p>
           <strong>Miscellaneous</strong>

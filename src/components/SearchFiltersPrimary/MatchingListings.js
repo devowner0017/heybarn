@@ -105,8 +105,7 @@ const MatchingListings = ({ searchType }) => {
     ];
 
     const searchParams = {
-      ...Object.keys(matchingListing.attributes.publicData)
-      .reduce((acc, key) => {
+      ...Object.keys(matchingListing.attributes.publicData).reduce((acc, key) => {
         const value = matchingListing.attributes.publicData[key];
         if (value && whitelistedParams.includes(key)) {
           acc[`pub_${key}`] = value;

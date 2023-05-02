@@ -135,7 +135,7 @@ export const TransactionInitPageComponent = props => {
   const [selectedListing, setSelectedListing] = useState(location?.state?.listing || null);
   const [message, setMessage] = useState(location?.state?.message || null);
   const [showConfirmActionModal, setShowConfirmActionModal] = useState(
-    (!!location?.state?.listing && !currentUserHasConnectionGuarantee) || false
+    !!location?.state?.listing || false
   );
   const [isConfirmed, setIsConfirmed] = useState(false);
 
@@ -367,6 +367,7 @@ export const TransactionInitPageComponent = props => {
         protectedData: {
           contactingAs,
           ...selectedListingIdMaybe,
+          isPaid: true,
         },
       }).then(tx => {
         return { tx, paymentIntent };
@@ -554,6 +555,7 @@ export const TransactionInitPageComponent = props => {
           protectedData: {
             contactingAs,
             ...selectedListingIdMaybe,
+            isPaid: false,
           },
         }).then(tx => {
           return { tx };
@@ -624,10 +626,7 @@ export const TransactionInitPageComponent = props => {
 
   const onSkipDirectFlow = () => {
     setShowCreateListingDirectFlowPopup(false);
-
-    if (!currentUserHasConnectionGuarantee) {
-      setShowConfirmActionModal(true);
-    }
+    setShowConfirmActionModal(true);
   };
 
   const showPaymentForm =
@@ -652,7 +651,7 @@ export const TransactionInitPageComponent = props => {
     !!location?.state?.listing && currentUserHasConnectionGuarantee;
 
   const shouldShowGuaranteeSubmitButton =
-    selectedFlow !== SELECT_FLOW &&
+    isConfirmed &&
     currentUserHasConnectionGuarantee &&
     (!!selectedListing || selectedFlow === DIRECT_FLOW);
 
