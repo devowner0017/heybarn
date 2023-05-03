@@ -77,6 +77,7 @@ import viewProfile from './viewProfile.png';
 import backToSearch from './backToSearch.png';
 import showAll from './showAll.png';
 import smoking from './smoking.png';
+import MatchingListings from '../../components/SearchFiltersPrimary/MatchingListings';
 
 const MIN_LENGTH_FOR_LONG_WORDS_IN_TITLE = 16;
 
@@ -785,9 +786,10 @@ export class ListingPageComponent extends Component {
                   />
                 </h1>
                 <div className={css.publishedListingButtonWrapper}>
-                  <Button onClick={() => this.setShowPublishedListingModal(false)}>
-                    Lets see it!
-                  </Button>
+                  <MatchingListings
+                    searchType={typeOfListing === 'advert' ? 'listing' : 'advert'}
+                    listing={currentListing}
+                  />
                 </div>
               </div>
             </Modal>

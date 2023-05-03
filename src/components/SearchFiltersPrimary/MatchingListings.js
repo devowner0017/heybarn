@@ -14,8 +14,6 @@ import config from '../../config';
 import { isAnyFilterActive } from '../../util/search';
 import { useHistory } from 'react-router-dom';
 
-import css from './SearchFiltersPrimary.module.css';
-
 const cleanSearchFromConflictingParams = (searchParams, sortConfig, filterConfig) => {
   // Single out filters that should disable SortBy when an active
   // keyword search sorts the listings according to relevance.
@@ -30,36 +28,38 @@ const cleanSearchFromConflictingParams = (searchParams, sortConfig, filterConfig
     : searchParams;
 };
 
-const MatchingListings = ({ searchType }) => {
+const MatchingListings = ({ searchType, listing, className }) => {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const matchingListing = useSelector(state => {
-    const { currentPageResultIds } = state.ManageListingsPage;
+  const matchingListing =
+    listing ??
+    useSelector(state => {
+      const { currentPageResultIds } = state.ManageListingsPage;
 
-    const listings = getOwnListingsById(state, currentPageResultIds);
+      const listings = getOwnListingsById(state, currentPageResultIds);
 
-    const filteredResults = (listings || [])
-      .filter(r => {
-        const {
-          publicData: { listingType: responseListingType, listingState },
-          state,
-        } = r.attributes;
-        return (
-          // listingState === LISTING_LIVE &&
-          responseListingType !== searchType && state === 'published'
-        );
-      })
-      .sort((a, b) => {
-        const aDate = new Date(a.attributes.createdAt);
-        const bDate = new Date(b.attributes.createdAt);
-        return bDate - aDate;
-      });
+      const filteredResults = (listings || [])
+        .filter(r => {
+          const {
+            publicData: { listingType: responseListingType, listingState },
+            state,
+          } = r.attributes;
+          return (
+            // listingState === LISTING_LIVE &&
+            responseListingType !== searchType && state === 'published'
+          );
+        })
+        .sort((a, b) => {
+          const aDate = new Date(a.attributes.createdAt);
+          const bDate = new Date(b.attributes.createdAt);
+          return bDate - aDate;
+        });
 
-    const listing = filteredResults[0];
+      const listing = filteredResults[0];
 
-    return listing;
-  });
+      return listing;
+    });
 
   useEffect(() => {
     if (searchType === 'advert') {
@@ -131,7 +131,7 @@ const MatchingListings = ({ searchType }) => {
   }, [matchingListing]);
 
   return matchingListing ? (
-    <Button className={css.matchingButton} onClick={handleSearch}>
+    <Button className={className} onClick={handleSearch}>
       Show me matching renters
     </Button>
   ) : null;

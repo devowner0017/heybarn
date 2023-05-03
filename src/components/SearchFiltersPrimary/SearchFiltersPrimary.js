@@ -71,7 +71,7 @@ const SearchFiltersPrimaryComponent = props => {
             {children}
           </div>
           <div>
-            <MatchingListings searchType={searchType} />
+            <MatchingListings searchType={searchType} className={css.matchingButton} />
           </div>
         </div>
         <div className={css.filterLinks}>

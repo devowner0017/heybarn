@@ -579,19 +579,51 @@ exports[`ListingPage matches snapshot 1`] = `
           <div
             className="publishedListingButtonWrapper"
           >
-            <Button
-              checkmarkClassName={null}
-              className={null}
-              disabled={false}
-              enforcePagePreloadFor={null}
-              inProgress={false}
-              onClick={[Function]}
-              ready={false}
-              rootClassName={null}
-              spinnerClassName={null}
-            >
-              Lets see it!
-            </Button>
+            <MatchingListings
+              listing={
+                Object {
+                  "attributes": Object {
+                    "deleted": false,
+                    "description": "listing1 description",
+                    "geolocation": LatLng {
+                      "_sdkType": "LatLng",
+                      "lat": 40,
+                      "lng": 60,
+                    },
+                    "price": Money {
+                      "_sdkType": "Money",
+                      "amount": 5500,
+                      "currency": "USD",
+                    },
+                    "publicData": Object {},
+                    "state": "published",
+                    "title": "listing1 title",
+                  },
+                  "author": Object {
+                    "attributes": Object {
+                      "banned": false,
+                      "deleted": false,
+                      "profile": Object {
+                        "abbreviatedName": "TT",
+                        "displayName": "user-1 display name",
+                      },
+                    },
+                    "id": UUID {
+                      "_sdkType": "UUID",
+                      "uuid": "user-1",
+                    },
+                    "type": "user",
+                  },
+                  "id": UUID {
+                    "_sdkType": "UUID",
+                    "uuid": "listing1",
+                  },
+                  "images": Array [],
+                  "type": "listing",
+                }
+              }
+              searchType="advert"
+            />
           </div>
         </div>
       </injectIntl(ModalComponent)>
