@@ -141,7 +141,7 @@ const EditListingDescriptionFormComponent = props => (
       const preferredUseOptions = findOptionsForSelectFilter('preferredUse', config.custom.filters);
 
       const selectListing =
-        !isPublished && existingListings?.length > 0 ? (
+        listingType === 'listing' && !isPublished && existingListings?.length > 0 ? (
           <div className={css.selectListing}>
             <label className={css.selectListingHeading}>
               Copy listing details from existing listing
