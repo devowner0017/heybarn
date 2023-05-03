@@ -16,6 +16,8 @@ import { getPropByName } from './devHelpers';
 // After this transition, the actual payment must be made on client-side directly to Stripe.
 export const TRANSITION_HOST_FEE_PAID = 'transition/host-fee-paid';
 export const TRANSITION_RENTER_FEE_PAID = 'transition/renter-fee-paid';
+export const TRANSITION_EXPIRE_HOST_ENQUIRY = 'transition/expire-host-enquiry';
+export const TRANSITION_EXPIRE_RENTER_ENQUIRY = 'transition/expire-renter-enquiry';
 export const TRANSITION_HOST_APPROVED_BY_RENTER = 'transition/host-approved-by-renter';
 export const TRANSITION_HOST_ACCEPTS_COMMUNICATION = 'transition/host-accepts-communication';
 export const TRANSITION_HOST_DECLINES_COMMUNICATION = 'transition/host-declines-communication';
@@ -173,6 +175,7 @@ const STATE_CANCELED = 'canceled';
 const STATE_REVIEWED = 'reviewed';
 const STATE_REVIEWED_BY_CUSTOMER = 'reviewed-by-customer';
 const STATE_REVIEWED_BY_PROVIDER = 'reviewed-by-provider';
+const STATE_ENQUIRY_EXPIRED = 'enquiry-expired';
 
 /**
  * Description of transaction process
@@ -206,6 +209,7 @@ const stateDescription = {
       on: {
         [TRANSITION_HOST_ACCEPTS_COMMUNICATION]: STATE_RENTAL_AGREEMENT_DISCUSSION,
         [TRANSITION_HOST_DECLINES_COMMUNICATION]: STATE_HOST_DECLINED_COMMUNICATION,
+        [TRANSITION_EXPIRE_RENTER_ENQUIRY]: STATE_ENQUIRY_EXPIRED,
       },
     },
 
@@ -213,8 +217,11 @@ const stateDescription = {
       on: {
         [TRANSITION_RENTER_ACCEPTS_COMMUNICATION]: STATE_REVERSED_TRANSACTION_FLOW,
         [TRANSITION_RENTER_DECLINES_COMMUNICATION]: STATE_RENTER_DECLINED_COMMUNICATION,
+        [TRANSITION_EXPIRE_HOST_ENQUIRY]: STATE_ENQUIRY_EXPIRED,
       },
     },
+
+    [STATE_ENQUIRY_EXPIRED]: {},
 
     [STATE_RENTER_DECLINED_COMMUNICATION]: {},
     [STATE_HOST_DECLINED_COMMUNICATION]: {},
@@ -348,6 +355,9 @@ export const txIsHostEnquired = tx =>
 export const txIsRenterEnquired = tx => {
   return getTransitionsToState(STATE_RENTER_ENQUIRED).includes(txLastTransition(tx));
 };
+
+export const txIsEnquiryExpired = tx =>
+  getTransitionsToState(STATE_ENQUIRY_EXPIRED).includes(txLastTransition(tx));
 
 export const txHasHostDeclined = tx =>
   getTransitionsToState(STATE_HOST_DECLINED_COMMUNICATION).includes(txLastTransition(tx));

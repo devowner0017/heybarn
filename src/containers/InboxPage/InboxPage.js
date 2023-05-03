@@ -25,6 +25,7 @@ import {
   txIsRentalAgreementSigned,
   txNeedsNotificationOrder,
   txNeedsNotificationSale,
+  txIsEnquiryExpired,
 } from '../../util/transaction';
 import { propTypes, DATE_TYPE_DATE } from '../../util/types';
 import { ensureCurrentUser } from '../../util/data';
@@ -65,6 +66,15 @@ const formatDate = (intl, date) => {
   };
 };
 
+const calculateRemainingTime = (currentDate, lastTransitionedAt, daysToAdd) => {
+  const expirationDate = new Date(lastTransitionedAt);
+  expirationDate.setDate(expirationDate.getDate() + daysToAdd);
+  const remainingTime = expirationDate - currentDate;
+  const remainingDays = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
+  const remainingHours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  return { remainingDays, remainingHours };
+};
+
 // Translated name of the state of the given transaction
 export const txState = (intl, tx, type) => {
   const isOrder = type === 'order';
@@ -74,6 +84,7 @@ export const txState = (intl, tx, type) => {
       // bookingClassName: isOrder ? css.bookingNoActionNeeded : css.bookingActionNeeded,
       lastTransitionedAtClassName: css.lastTransitionedAtEmphasized,
       stateClassName: !isOrder ? css.stateNoActionNeeded : css.stateActionNeeded,
+      showRemainingTimeMessage: true,
       state: intl.formatMessage({
         id: 'InboxPage.stateEnquiry',
       }),
@@ -84,8 +95,20 @@ export const txState = (intl, tx, type) => {
       // bookingClassName: isOrder ? css.bookingNoActionNeeded : css.bookingActionNeeded,
       lastTransitionedAtClassName: css.lastTransitionedAtEmphasized,
       stateClassName: !isOrder ? css.stateNoActionNeeded : css.stateActionNeeded,
+      showRemainingTimeMessage: true,
       state: intl.formatMessage({
         id: 'InboxPage.stateEnquiry',
+      }),
+    };
+  } else if (txIsEnquiryExpired(tx)) {
+    return {
+      nameClassName: isOrder ? css.nameNotEmphasized : css.nameEmphasized,
+      // bookingClassName: isOrder ? css.bookingNoActionNeeded : css.bookingActionNeeded,
+      lastTransitionedAtClassName: css.lastTransitionedAtEmphasized,
+      stateClassName: !isOrder ? css.stateNoActionNeeded : css.stateActionNeeded,
+      showGuarantyMessage: !!tx?.attributes?.protectedData?.isPaid,
+      state: intl.formatMessage({
+        id: 'InboxPage.stateExpired',
       }),
     };
   } else if (txHasHostDeclined(tx)) {
@@ -278,6 +301,16 @@ export const InboxItem = props => {
   const rowNotificationDot = isSaleNotification ? <div className={css.notificationDot} /> : null;
   const lastTransitionedAt = formatDate(intl, tx.attributes.lastTransitionedAt);
 
+  // show elapsed time to the next transition lastTransitionedAt + 5 days (i.e. 4 days 12 hours left)
+
+  const currentDate = new Date();
+  const { remainingDays, remainingHours } = calculateRemainingTime(
+    currentDate,
+    tx.attributes.lastTransitionedAt,
+    5
+  );
+  const remainingTimeMessage = `Expires in ${remainingDays} days ${remainingHours} hours`;
+
   const linkClasses = classNames(css.itemLink, {
     [css.bannedUserLink]: isOtherUserBanned,
   });
@@ -318,6 +351,14 @@ export const InboxItem = props => {
           >
             {lastTransitionedAt.short}
           </div>
+          {stateData?.showRemainingTimeMessage && (
+            <div className={css.remainingTime}>{remainingTimeMessage}</div>
+          )}
+          {stateData?.showGuarantyMessage && (
+            <div className={css.guarantyMessage}>
+              You have connection guarantee for this expired request
+            </div>
+          )}
         </div>
       </NamedLink>
     </div>
