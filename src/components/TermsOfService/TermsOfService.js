@@ -36,7 +36,7 @@ const TermsOfService = props => {
               The terms “<strong>Service</strong>” or “<strong>Services</strong>” refer to any
               services we offer, including all Heybarn web applications, and other software,
               helpdesk services, beta versions, and the web site accessible at www.heybarn.co.nz and
-              its associated content(collectively, the “<strong>Site</strong>”) as well as any and
+              its associated content (collectively, the “<strong>Site</strong>”) as well as any and
               all marketing channels where Collective Content may be disseminated at Heybarn’s sole
               discretion.
             </p>
