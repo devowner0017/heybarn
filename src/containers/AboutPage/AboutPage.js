@@ -3,7 +3,7 @@ import Slider from 'react-slick';
 import config from '../../config';
 import { twitterPageURL } from '../../util/urlHelpers';
 import { StaticPage } from '../../containers';
-import TopbarContainerSmall from '../TopbarContainer/TopbarContainerSmall';
+import TopbarContainer from '../TopbarContainer/TopbarContainer';
 import {
   LayoutSingleColumn,
   LayoutWrapperTopbar,
@@ -82,7 +82,7 @@ const AboutPage = () => {
     >
       <LayoutSingleColumn>
         <LayoutWrapperTopbar>
-          <TopbarContainerSmall />
+        <TopbarContainer desktopClassName={css.desktopTopBar} />
         </LayoutWrapperTopbar>
 
         <LayoutWrapperMain className={css.staticPageWrapper}>

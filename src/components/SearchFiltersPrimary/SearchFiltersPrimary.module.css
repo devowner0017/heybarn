@@ -28,6 +28,9 @@
 
 .filterLinks {
   flex-basis: 39%;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
   /* display: flex; */
 }
 
@@ -38,10 +41,8 @@
 }
 
 .filterR {
-  max-width: 315px;
-  margin-top: -53px;
-  margin-left: 400px;
-  margin-left: 400px;
+  width: 250px;
+  
 }
 
 .searchOptionslogo {
